@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-I-GOD BTC Copilot V7.1 — REAL AUTO EXECUTOR for Bitunix
+I-GOD BTC Copilot V7.2 — REAL AUTO EXECUTOR for Bitunix
 ======================================================
 
 REAL MONEY CODE.
@@ -55,6 +55,16 @@ LIVE_MARGIN_USDT = float(os.getenv("LIVE_MARGIN_USDT", "2"))
 LIVE_LEVERAGE = int(os.getenv("LIVE_LEVERAGE", "20"))
 LIVE_MARGIN_MODE = os.getenv("LIVE_MARGIN_MODE", "CROSS").strip().upper()
 LIVE_MAX_RISK_USDT = float(os.getenv("LIVE_MAX_RISK_USDT", "10"))
+
+# V7.2 dynamic equity compounding.
+# EQUITY mode reinvests account growth automatically.
+LIVE_SIZING_MODE = os.getenv("LIVE_SIZING_MODE", "EQUITY").strip().upper()
+LIVE_EQUITY_ALLOC_PCT = float(
+    os.getenv("LIVE_EQUITY_ALLOC_PCT", "95")
+) / 100
+LIVE_RISK_PCT = float(
+    os.getenv("LIVE_RISK_PCT", "10")
+) / 100
 
 LIVE_MAX_TRADES_DAY = int(os.getenv("LIVE_MAX_TRADES_DAY", "2"))
 LIVE_COOLDOWN_MIN = int(os.getenv("LIVE_COOLDOWN_MIN", "60"))
@@ -823,16 +833,71 @@ class RealAuto:
     # Sizing / cost guard
     # -----------------------------
 
-    def calc_qty(self, price: float, stop: float, risk_multiplier: float = 1.0):
+    def sizing_budget(self, risk_multiplier: float = 1.0):
+        """
+        Dynamic per-entry budget.
+
+        EQUITY:
+          base margin = min(equity, available) * allocation %
+          risk cap    = equity * risk %
+          both are reduced by Profit Lock multiplier when active.
+
+        FIXED:
+          preserves legacy LIVE_MARGIN_USDT / LIVE_MAX_RISK_USDT.
+        """
         risk_multiplier = max(0.05, min(1.0, float(risk_multiplier)))
-        desired_notional = LIVE_MARGIN_USDT * LIVE_LEVERAGE * risk_multiplier
+
+        if LIVE_SIZING_MODE == "EQUITY":
+            a = self.account_snapshot()
+            equity = max(0.0, fnum(a.get("equity_est")))
+            available = max(0.0, fnum(a.get("available")))
+
+            if equity <= 0 or available <= 0:
+                raise RuntimeError(
+                    f"Invalid sizing data: equity={equity}, available={available}"
+                )
+
+            alloc = max(0.05, min(1.0, LIVE_EQUITY_ALLOC_PCT))
+            risk_pct = max(0.001, min(0.50, LIVE_RISK_PCT))
+
+            base_margin = min(equity, available) * alloc * risk_multiplier
+            risk_cap = equity * risk_pct * risk_multiplier
+
+            return {
+                "mode": "EQUITY",
+                "equity": equity,
+                "available": available,
+                "base_margin": base_margin,
+                "risk_cap": risk_cap,
+                "alloc_pct": alloc,
+                "risk_pct": risk_pct,
+            }
+
+        return {
+            "mode": "FIXED",
+            "equity": 0.0,
+            "available": 0.0,
+            "base_margin": LIVE_MARGIN_USDT * risk_multiplier,
+            "risk_cap": LIVE_MAX_RISK_USDT * risk_multiplier,
+            "alloc_pct": 0.0,
+            "risk_pct": 0.0,
+        }
+
+    def calc_qty(
+        self,
+        price: float,
+        stop: float,
+        base_margin: float,
+        risk_cap: float,
+    ):
+        desired_notional = base_margin * LIVE_LEVERAGE
         qty_by_exposure = desired_notional / price
 
         stop_distance = abs(price - stop)
         if stop_distance <= 0:
             raise RuntimeError("Invalid stop distance; cannot size position.")
 
-        qty_by_risk = (LIVE_MAX_RISK_USDT * risk_multiplier) / stop_distance
+        qty_by_risk = risk_cap / stop_distance
         raw_qty = min(qty_by_exposure, qty_by_risk)
         qty = floor_prec(raw_qty, self.base_precision)
 
@@ -1089,6 +1154,7 @@ class RealAuto:
             if self.profit_lock_active()
             else 1.0
         )
+        sizing = self.sizing_budget(risk_mult)
         (
             qty,
             intended_notional,
@@ -1097,7 +1163,10 @@ class RealAuto:
             runner_qty,
             estimated_sl_risk,
         ) = self.calc_qty(
-            fnum(plan.price), fnum(plan.stop), risk_multiplier=risk_mult
+            fnum(plan.price),
+            fnum(plan.stop),
+            base_margin=sizing["base_margin"],
+            risk_cap=sizing["risk_cap"],
         )
 
         cost_ok, cost_reason, costs = self.net_rr_guard(plan, qty)
@@ -1128,7 +1197,10 @@ class RealAuto:
             title + "\n\n"
             f"{side_name} {SYMBOL}\n"
             f"Señal: <code>{client_id}</code>\n"
-            f"Base sizing: <b>{LIVE_MARGIN_USDT:.2f} USDT</b>\n"
+            f"Sizing: <b>{sizing['mode']}</b>\n"
+            f"Equity referencia: <b>{sizing['equity']:.2f} USDT</b>\n"
+            f"Base margen dinámica: <b>{sizing['base_margin']:.2f} USDT</b>\n"
+            f"Risk cap dinámico: <b>{sizing['risk_cap']:.2f} USDT</b>\n"
             f"Leverage esperado: <b>{LIVE_LEVERAGE}x</b>\n"
             f"Nominal calculado: <b>{intended_notional:.2f} USDT</b>\n"
             f"Riesgo precio al SL: <b>{estimated_sl_risk:.2f} USDT</b>\n"
@@ -1903,7 +1975,7 @@ class RealAuto:
         )
 
         return (
-            "📊 <b>I-GOD V7.1 — STATUS REAL</b>\n\n"
+            "📊 <b>I-GOD V7.2 — STATUS REAL</b>\n\n"
             "<b>💰 BITUNIX</b>\n"
             + acct_lines
             + f"Posición exchange: <b>{C.html.escape(ex_text)}</b>\n\n"
@@ -1917,6 +1989,9 @@ class RealAuto:
             f"Trades bot hoy: <b>{self.state.trades_today}/"
             f"{LIVE_MAX_TRADES_DAY + (LIVE_PROFIT_LOCK_EXTRA_TRADES if self.profit_lock_active() else 0)}</b>\n"
             f"PnL neto bot hoy: <b>{money(self.state.day_pnl)}</b>\n"
+            f"Sizing mode: <b>{LIVE_SIZING_MODE}</b>\n"
+            f"Equity allocation: <b>{LIVE_EQUITY_ALLOC_PCT*100:.0f}%</b>\n"
+            f"Risk/trade: <b>{LIVE_RISK_PCT*100:.1f}% equity</b>\n"
             f"PnL cuenta hoy usado por Profit Lock: <b>{money(self.profit_lock_day_pnl())}</b>\n"
             f"Objetivo diario soft: <b>{money(self.daily_profit_target_usdt())}</b>\n"
             f"Profit lock: <b>{self.profit_lock_active()}</b>\n"
@@ -2032,6 +2107,27 @@ class RealAuto:
             details.append(
                 f"✅ Profit Lock aún no activo: día {lock_pnl:+.2f} / target {target:.2f}"
             )
+
+        try:
+            preview_mult = (
+                LIVE_PROFIT_LOCK_RISK_MULT
+                if self.profit_lock_active()
+                else 1.0
+            )
+            preview = self.sizing_budget(preview_mult)
+            if preview["mode"] == "EQUITY":
+                details.append(
+                    f"✅ Sizing EQUITY: equity {preview['equity']:.2f} -> "
+                    f"base {preview['base_margin']:.2f} USDT -> "
+                    f"risk cap {preview['risk_cap']:.2f} USDT"
+                )
+            else:
+                details.append(
+                    f"✅ Sizing FIXED: base {preview['base_margin']:.2f} -> "
+                    f"risk cap {preview['risk_cap']:.2f} USDT"
+                )
+        except Exception as e:
+            problems.append(f"sizing dinámico: {e}")
 
         plan_text = (
             f"{self.plan.bias} | {self.plan.action} | {self.plan.setup}"
@@ -2169,7 +2265,7 @@ class RealAuto:
 
             elif cmd == "/help":
                 self.tg.send(
-                    "<b>I-GOD V7.1 comandos</b>\n"
+                    "<b>I-GOD V7.2 comandos</b>\n"
                     "/status — cuenta + bot + mercado\n"
                     "/account — cuenta Futures real\n"
                     "/position — posición/SL/TP reales\n"
@@ -2189,8 +2285,10 @@ class RealAuto:
         self.live.start()
 
         self.tg.send(
-            "🔴🤖 <b>I-GOD V7.1 REAL AUTO conectado</b>\n\n"
-            f"{SYMBOL} | base sizing {LIVE_MARGIN_USDT:.2f} USDT "
+            "🔴🤖 <b>I-GOD V7.2 REAL AUTO conectado</b>\n\n"
+            f"{SYMBOL} | sizing {LIVE_SIZING_MODE} "
+            f"{LIVE_EQUITY_ALLOC_PCT*100:.0f}% equity "
+            f"| risk {LIVE_RISK_PCT*100:.1f}% "
             f"| leverage esperado {LIVE_LEVERAGE}x\n"
             f"LIVE_EXECUTION: <b>{LIVE_EXECUTION}</b>\n"
             f"AUTO: <b>{self.state.auto_enabled}</b>\n"
