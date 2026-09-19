@@ -472,6 +472,7 @@ class RealAuto:
 
         self.last_analysis = 0.0
         self.plan = None
+        self.last_block_notice = {}
 
         self.load_pair_rules()
         self.auth_preflight()
@@ -523,7 +524,10 @@ class RealAuto:
         except Exception:
             ts = int(time.time() // 900 * 900_000)
 
-        raw = f"{ts}|{plan.action}|{plan.setup}|{round(plan.price,1)}"
+        # One-shot fingerprint for the current 15m signal cycle.
+        # Do NOT include live price: price changes every minute and would create
+        # a different clientId for the same ENTER NOW cycle.
+        raw = f"{ts}|{plan.action}|{plan.setup}"
         h = hashlib.sha256(raw.encode()).hexdigest()[:6]
         side = "L" if "LONG" in plan.action else "S"
         dt = C.datetime.fromtimestamp(ts/1000, C.TZ)
@@ -531,15 +535,36 @@ class RealAuto:
         return f"igod{dt:%y%m%d%H%M}{side}{h}"
 
     def exchange_has_signal(self, client_id: str) -> bool:
+        """
+        Return True only if Bitunix returns an order whose clientId EXACTLY
+        matches this signal. Some API responses may contain rows even when a
+        filter is not applied as expected, so a non-empty list alone is not
+        sufficient evidence that this signal was already traded.
+        """
         try:
-            if self.api.pending_orders(client_id):
+            pending = self.api.pending_orders(client_id)
+            if any(str(x.get("clientId", "")) == client_id for x in pending):
                 return True
-            if self.api.history_orders(client_id):
+            if pending:
+                log(
+                    f"Pending-order response contained {len(pending)} row(s) "
+                    f"but none matched clientId={client_id}; ignoring them."
+                )
+
+            history = self.api.history_orders(client_id)
+            if any(str(x.get("clientId", "")) == client_id for x in history):
                 return True
+            if history:
+                log(
+                    f"History response contained {len(history)} row(s) "
+                    f"but none matched clientId={client_id}; ignoring them."
+                )
+
         except Exception as e:
             log(f"Signal-history check error: {e}")
-            # Fail closed: don't open if we cannot check.
+            # Fail closed on a real API failure.
             return True
+
         return False
 
     def can_enter(self, plan, client_id):
@@ -741,15 +766,35 @@ class RealAuto:
         if problems:
             raise RuntimeError("; ".join(problems))
 
+    def notify_entry_blocked(self, plan, client_id: str, reason: str):
+        # Avoid Telegram spam while the same ENTER NOW remains active.
+        key = f"{client_id}|{reason}"
+        now = time.time()
+        if now - self.last_block_notice.get(key, 0) < 900:
+            return
+        self.last_block_notice[key] = now
+
+        self.tg.send(
+            "🚨 <b>ENTER NOW DETECTADO, PERO NO EJECUTADO</b>\n\n"
+            f"Señal: <code>{client_id}</code>\n"
+            f"Acción: <b>{C.html.escape(str(plan.action))}</b>\n"
+            f"Setup: <b>{C.html.escape(str(plan.setup))}</b>\n"
+            f"Precio: <b>{p(plan.price)}</b>\n"
+            f"Motivo: <b>{C.html.escape(reason)}</b>"
+        )
+
     def open_real(self, plan):
         client_id = self.signal_id(plan)
         ok, why = self.can_enter(plan, client_id)
         if not ok:
             log(f"Entry blocked: {why}")
+            self.notify_entry_blocked(plan, client_id, why)
             return
 
         if None in (plan.stop, plan.tp1, plan.tp2, plan.tp3):
-            log("Entry blocked: incomplete SL/TP plan.")
+            reason = "incomplete SL/TP plan"
+            log(f"Entry blocked: {reason}.")
+            self.notify_entry_blocked(plan, client_id, reason)
             return
 
         side = "BUY" if plan.action == "ENTER LONG NOW" else "SELL"
@@ -1013,11 +1058,17 @@ class RealAuto:
 
     def status(self):
         ps = self.state.position
+        current_action = self.plan.action if self.plan is not None else "-"
+        current_setup = self.plan.setup if self.plan is not None else "-"
         base = (
             "💰 <b>LIVE STATUS</b>\n"
             f"Ejecución real permitida: <b>{LIVE_EXECUTION}</b>\n"
             f"Auto entradas: <b>{self.state.auto_enabled}</b>\n"
+            f"Entry armed: <b>{self.state.entry_armed}</b>\n"
             f"Bloqueado: <b>{self.state.locked}</b>\n"
+            f"Señal actual: <b>{C.html.escape(str(current_action))}</b>\n"
+            f"Setup actual: <b>{C.html.escape(str(current_setup))}</b>\n"
+            f"Señales consumidas: <b>{len(self.state.consumed)}</b>\n"
             f"Base de sizing/trade: <b>{LIVE_MARGIN_USDT:.2f} USDT</b>\n"
             f"Leverage esperado: <b>{LIVE_LEVERAGE}x</b>\n"
             f"Margin mode esperado: <b>{LIVE_MARGIN_MODE}</b>\n"
