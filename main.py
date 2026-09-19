@@ -53,6 +53,7 @@ ZONE_ALERT_COOLDOWN_MIN = int(os.getenv("ZONE_ALERT_COOLDOWN_MIN", "20"))
 APPROACH_ATR = float(os.getenv("APPROACH_ATR", "0.35"))
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "").strip()
+TELEGRAM_ALERT_CHAT_ID = os.getenv("TELEGRAM_ALERT_CHAT_ID", "").strip()
 
 INTERVAL_MS = {
     "5m": 5 * 60_000,
@@ -94,7 +95,7 @@ def price_fmt(v: Optional[float]) -> str:
 def pct_fmt(v: Optional[float]) -> str:
     if v is None or not finite(v):
         return "-"
-    return f"{float(v)*100:+.4f}%"
+    return f"{float(v):+.4f}%"
 
 
 # ---------------------------------------------------------------------
@@ -104,12 +105,23 @@ def pct_fmt(v: Optional[float]) -> str:
 class Telegram:
     def __init__(self, token: str, chat_id: str):
         self.token = token
-        self.chat_id = chat_id
+        self.chat_id = str(chat_id).strip()
+        self.owner_chat_id = self.chat_id
         self.offset = None
         self.base = f"https://api.telegram.org/bot{token}" if token else ""
 
+        extras = [
+            x.strip()
+            for x in TELEGRAM_ALERT_CHAT_ID.split(",")
+            if x.strip()
+        ]
+        self.recipient_ids = []
+        for cid in [self.owner_chat_id] + extras:
+            if cid and cid not in self.recipient_ids:
+                self.recipient_ids.append(cid)
+
     def ready(self) -> bool:
-        return bool(self.token and self.chat_id)
+        return bool(self.token and self.recipient_ids)
 
     def api(self, method: str, *, params=None, data=None, timeout=15):
         if not self.token:
@@ -126,14 +138,12 @@ class Telegram:
             raise RuntimeError(f"Telegram error: {payload}")
         return payload.get("result")
 
-    def send(self, text: str, disable_notification=False) -> bool:
-        if not self.ready():
-            return False
+    def _send_to(self, chat_id: str, text: str, disable_notification=False) -> bool:
         try:
             self.api(
                 "sendMessage",
                 data={
-                    "chat_id": self.chat_id,
+                    "chat_id": str(chat_id),
                     "text": text,
                     "parse_mode": "HTML",
                     "disable_web_page_preview": "true",
@@ -142,8 +152,17 @@ class Telegram:
             )
             return True
         except Exception as e:
-            log(f"Telegram send error: {e}")
+            log(f"Telegram send error to {chat_id}: {e}")
             return False
+
+    def send(self, text: str, disable_notification=False) -> bool:
+        if not self.ready():
+            return False
+
+        ok = False
+        for cid in self.recipient_ids:
+            ok = self._send_to(cid, text, disable_notification) or ok
+        return ok
 
     def poll_commands(self) -> List[str]:
         """Poll only this user's bot commands; never blocks the trading loop."""
@@ -160,11 +179,25 @@ class Telegram:
                 self.offset = max(self.offset or 0, uid + 1)
                 msg = u.get("message") or {}
                 chat = msg.get("chat") or {}
-                if self.chat_id and str(chat.get("id")) != str(self.chat_id):
-                    continue
                 txt = str(msg.get("text", "")).strip()
-                if txt.startswith("/"):
-                    commands.append(txt.split()[0].lower())
+                if not txt.startswith("/"):
+                    continue
+
+                cmd = txt.split()[0].split("@")[0].lower()
+                incoming_chat_id = str(chat.get("id", ""))
+
+                if cmd == "/chatid":
+                    self._send_to(
+                        incoming_chat_id,
+                        f"🆔 Chat ID: <code>{html.escape(incoming_chat_id)}</code>",
+                    )
+                    continue
+
+                # Solo el chat privado propietario puede ejecutar controles.
+                if self.owner_chat_id and incoming_chat_id != self.owner_chat_id:
+                    continue
+
+                commands.append(cmd)
             return commands
         except Exception as e:
             log(f"Telegram getUpdates error: {e}")
@@ -689,11 +722,10 @@ class Analyzer:
             if ws_fresh and finite(ws["price"])
             else num(tick.get("lastPrice") or tick.get("last"))
         )
-        funding = (
-            ws["funding"]
-            if ws_fresh and finite(ws["funding"])
-            else num(fund.get("fundingRate"))
-        )
+        # Bitunix REST funding_rate devuelve actualmente puntos porcentuales:
+        # -0.01 corresponde a -0.0100% en la interfaz de Bitunix.
+        # Usamos REST como fuente unica para evitar mezclar unidades con WebSocket.
+        funding = num(fund.get("fundingRate"))
         book = (
             ws["book"]
             if ws_fresh and ws["book"] is not None
