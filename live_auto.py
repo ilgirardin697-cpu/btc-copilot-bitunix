@@ -58,6 +58,7 @@ LIVE_AUTO_START = os.getenv("LIVE_AUTO_START", "false").lower() == "true"
 LIVE_MARGIN_USDT = float(os.getenv("LIVE_MARGIN_USDT", "2"))
 LIVE_LEVERAGE = int(os.getenv("LIVE_LEVERAGE", "20"))
 LIVE_MARGIN_MODE = os.getenv("LIVE_MARGIN_MODE", "CROSS").strip().upper()
+LIVE_MAX_RISK_USDT = float(os.getenv("LIVE_MAX_RISK_USDT", "10"))
 
 LIVE_MAX_TRADES_DAY = int(os.getenv("LIVE_MAX_TRADES_DAY", "2"))
 LIVE_COOLDOWN_MIN = int(os.getenv("LIVE_COOLDOWN_MIN", "60"))
@@ -575,23 +576,53 @@ class RealAuto:
 
         return True, "ok"
 
-    def calc_qty(self, price: float):
-        notional = LIVE_MARGIN_USDT * LIVE_LEVERAGE
-        qty = floor_prec(notional / price, self.base_precision)
+    def calc_qty(self, price: float, stop: float):
+        """
+        Position sizing uses TWO caps:
 
-        # Need enough size to preserve TP1/TP2/TP3 + runner.
-        chunk = floor_prec(qty * 0.25, self.base_precision)
+        1) Exposure cap:
+           LIVE_MARGIN_USDT * LIVE_LEVERAGE
+
+        2) Stop-loss risk cap:
+           LIVE_MAX_RISK_USDT / distance(entry, stop)
+
+        The smaller quantity wins.
+
+        In CROSS mode, LIVE_MARGIN_USDT is only a sizing basis, not a hard
+        maximum loss. LIVE_MAX_RISK_USDT is the real per-trade SL risk cap
+        used by this bot.
+        """
+        desired_notional = LIVE_MARGIN_USDT * LIVE_LEVERAGE
+        qty_by_exposure = desired_notional / price
+
+        stop_distance = abs(price - stop)
+        if stop_distance <= 0:
+            raise RuntimeError("Invalid stop distance; cannot size position.")
+
+        qty_by_risk = LIVE_MAX_RISK_USDT / stop_distance
+
+        raw_qty = min(qty_by_exposure, qty_by_risk)
+        qty = floor_prec(raw_qty, self.base_precision)
+
         if qty < self.min_qty:
             raise RuntimeError(
                 f"Calculated qty {qty} < minTradeVolume {self.min_qty}."
             )
+
+        actual_notional = qty * price
+        estimated_sl_risk = qty * stop_distance
+
+        # Need enough size to preserve TP1/TP2/TP3 + runner.
+        chunk = floor_prec(qty * 0.25, self.base_precision)
         if chunk < self.min_qty:
             raise RuntimeError(
                 f"Position qty {qty} is too small for 25% partial TPs. "
                 f"Each chunk={chunk}, minimum={self.min_qty}. "
-                f"Raise LIVE_MARGIN_USDT or leverage."
+                f"Increase LIVE_MARGIN_USDT, LIVE_LEVERAGE, or "
+                f"LIVE_MAX_RISK_USDT."
             )
-        return qty, notional, chunk
+
+        return qty, actual_notional, chunk, estimated_sl_risk
 
     def wait_for_position(self, timeout=18):
         end = time.time() + timeout
@@ -723,7 +754,9 @@ class RealAuto:
 
         side = "BUY" if plan.action == "ENTER LONG NOW" else "SELL"
         side_name = "LONG" if side == "BUY" else "SHORT"
-        qty, intended_notional, chunk = self.calc_qty(float(plan.price))
+        qty, intended_notional, chunk, estimated_sl_risk = self.calc_qty(
+            float(plan.price), float(plan.stop)
+        )
 
         # Consume/lock BEFORE sending. If request times out after exchange accepts it,
         # the bot will not submit a second order blindly.
@@ -737,8 +770,11 @@ class RealAuto:
             f"Señal: <code>{client_id}</code>\n"
             f"Base sizing: <b>{LIVE_MARGIN_USDT:.2f} USDT</b>\n"
             f"Leverage esperado: <b>{LIVE_LEVERAGE}x</b>\n"
+            f"Riesgo máx. por SL: <b>{LIVE_MAX_RISK_USDT:.2f} USDT</b>\n"
             f"Margin mode esperado: <b>{LIVE_MARGIN_MODE}</b>\n"
-            f"Nominal objetivo: <b>{intended_notional:.2f} USDT</b>\n"
+            f"Nominal calculado: <b>{intended_notional:.2f} USDT</b>\n"
+            f"Riesgo aprox. al SL: <b>{estimated_sl_risk:.2f} USDT</b> "
+            f"(máx. {LIVE_MAX_RISK_USDT:.2f})\n"
             f"Qty solicitada: <b>{fmt_qty(qty, self.base_precision)} BTC</b>\n"
             f"SL inicial: <b>{p(plan.stop)}</b>\n"
             f"TP1/2/3: <b>{p(plan.tp1)} / {p(plan.tp2)} / {p(plan.tp3)}</b>"
