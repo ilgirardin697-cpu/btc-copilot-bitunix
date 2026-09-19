@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-I-GOD BTC Copilot V7 — REAL AUTO EXECUTOR for Bitunix
+I-GOD BTC Copilot V7.1 — REAL AUTO EXECUTOR for Bitunix
 ======================================================
 
 REAL MONEY CODE.
@@ -756,11 +756,24 @@ class RealAuto:
 
         return True, "profit-lock A+ accepted"
 
+    def account_position_mode(self) -> str:
+        try:
+            a = self.api.account(MARGIN_COIN)
+            return str(a.get("positionMode", "")).upper()
+        except Exception:
+            return ""
+
     def can_enter(self, plan, client_id, bypass_cooldown=False):
         self.state.new_day()
 
         if not LIVE_EXECUTION:
             return False, "LIVE_EXECUTION=false"
+
+        acct_mode = self.account_position_mode()
+        if acct_mode != "ONE_WAY":
+            return False, (
+                f"account position mode {acct_mode or 'UNKNOWN'} != ONE_WAY"
+            )
         if not self.state.auto_enabled:
             return False, "auto disabled"
         if self.state.locked:
@@ -1890,7 +1903,7 @@ class RealAuto:
         )
 
         return (
-            "📊 <b>I-GOD V7 — STATUS REAL</b>\n\n"
+            "📊 <b>I-GOD V7.1 — STATUS REAL</b>\n\n"
             "<b>💰 BITUNIX</b>\n"
             + acct_lines
             + f"Posición exchange: <b>{C.html.escape(ex_text)}</b>\n\n"
@@ -1922,6 +1935,14 @@ class RealAuto:
         try:
             a = self.api.account(MARGIN_COIN)
             details.append("✅ API privada / cuenta")
+            account_mode = str(a.get("positionMode", "")).upper()
+            if account_mode == "ONE_WAY":
+                details.append("✅ Position mode ONE_WAY")
+            else:
+                problems.append(
+                    f"Position mode cuenta = {account_mode or 'UNKNOWN'}; "
+                    f"debe ser ONE_WAY"
+                )
         except Exception as e:
             problems.append(f"API privada: {e}")
 
@@ -2114,6 +2135,11 @@ class RealAuto:
                         "⛔ Bot BLOQUEADO:\n"
                         + C.html.escape(self.state.lock_reason)
                     )
+                elif self.account_position_mode() != "ONE_WAY":
+                    self.tg.send(
+                        "⛔ Position mode de Bitunix no es ONE_WAY. "
+                        "Cámbialo antes de activar dinero real."
+                    )
                 elif self.api.positions(SYMBOL) and self.state.position is None:
                     self.tg.send(
                         "⛔ Hay una posición BTCUSDT manual/externa. "
@@ -2143,7 +2169,7 @@ class RealAuto:
 
             elif cmd == "/help":
                 self.tg.send(
-                    "<b>I-GOD V7 comandos</b>\n"
+                    "<b>I-GOD V7.1 comandos</b>\n"
                     "/status — cuenta + bot + mercado\n"
                     "/account — cuenta Futures real\n"
                     "/position — posición/SL/TP reales\n"
@@ -2163,7 +2189,7 @@ class RealAuto:
         self.live.start()
 
         self.tg.send(
-            "🔴🤖 <b>I-GOD V7 REAL AUTO conectado</b>\n\n"
+            "🔴🤖 <b>I-GOD V7.1 REAL AUTO conectado</b>\n\n"
             f"{SYMBOL} | base sizing {LIVE_MARGIN_USDT:.2f} USDT "
             f"| leverage esperado {LIVE_LEVERAGE}x\n"
             f"LIVE_EXECUTION: <b>{LIVE_EXECUTION}</b>\n"
