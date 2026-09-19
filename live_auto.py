@@ -2,28 +2,27 @@
 # -*- coding: utf-8 -*-
 
 """
-I-GOD BTC Copilot V5 — REAL AUTO EXECUTOR for Bitunix
+I-GOD BTC Copilot V7 — REAL AUTO EXECUTOR for Bitunix
 ======================================================
 
-WARNING: THIS FILE CAN PLACE REAL ORDERS when BOTH are true:
-    LIVE_EXECUTION=true
-    LIVE_AUTO_START=true
+REAL MONEY CODE.
 
-Design:
-- Reuses main.py (V3 Planner) for analysis.
-- ONE signal cycle = ONE real entry.
-- Never re-enters while the same ENTER NOW cycle remains active.
-- Checks Bitunix for an existing BTCUSDT position before every entry.
-- Uses deterministic clientId and checks exchange order history for duplicates.
-- Market entry, native protective SL, native partial TP1/TP2/TP3.
-- After TP1 -> stop ~breakeven.
-- After TP2 -> stop +1R.
-- After TP3 -> stop +2R, then runner trailing.
-- Verifies REAL leverage, margin mode, position mode, qty, margin and entry.
-- If leverage/margin mode/position mode is wrong after entry: emergency close + lock.
-- State persists to Railway Volume when mounted at /data.
-
-This is intentionally strict because it can move real money.
+Key features:
+- Reuses main.py planner/analyzer.
+- One ENTER cycle -> at most one real entry.
+- Exact clientId duplicate verification.
+- Market entry + native SL + 2 partial TPs + larger runner.
+- TP1 -> fee/funding-aware net-profit protection.
+- TP2 -> 40% runner starts wide structural trailing; no TP3 order.
+- Runner stop never loosens and survives normal pullbacks better.
+- Real Bitunix account/position status from private API.
+- Distinguishes BOT position from MANUAL/EXTERNAL position.
+- Net PnL from Bitunix realizedPNL - fee + funding.
+- Fee/slippage guard before entry.
+- Thesis invalidation exit.
+- Confirmed opposite ENTER can close current bot position and reverse.
+- Never adopts or modifies a manual position.
+- Persistent state in Railway volume.
 """
 
 from __future__ import annotations
@@ -34,13 +33,11 @@ import math
 import os
 import secrets
 import time
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, fields
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from urllib.parse import urlencode
 
 import requests
-
 import main as C
 
 
@@ -54,7 +51,6 @@ SECRET_KEY = os.getenv("BITUNIX_SECRET_KEY", "").strip()
 LIVE_EXECUTION = os.getenv("LIVE_EXECUTION", "false").lower() == "true"
 LIVE_AUTO_START = os.getenv("LIVE_AUTO_START", "false").lower() == "true"
 
-# FIRST REAL RUN DEFAULTS ARE DELIBERATELY SMALL.
 LIVE_MARGIN_USDT = float(os.getenv("LIVE_MARGIN_USDT", "2"))
 LIVE_LEVERAGE = int(os.getenv("LIVE_LEVERAGE", "20"))
 LIVE_MARGIN_MODE = os.getenv("LIVE_MARGIN_MODE", "CROSS").strip().upper()
@@ -64,22 +60,70 @@ LIVE_MAX_TRADES_DAY = int(os.getenv("LIVE_MAX_TRADES_DAY", "2"))
 LIVE_COOLDOWN_MIN = int(os.getenv("LIVE_COOLDOWN_MIN", "60"))
 LIVE_MAX_DAILY_LOSS_USDT = float(os.getenv("LIVE_MAX_DAILY_LOSS_USDT", "2"))
 
-LIVE_TP1_PCT = float(os.getenv("LIVE_TP1_PCT", "25")) / 100
-LIVE_TP2_PCT = float(os.getenv("LIVE_TP2_PCT", "25")) / 100
-LIVE_TP3_PCT = float(os.getenv("LIVE_TP3_PCT", "25")) / 100
-LIVE_RUNNER_TRAIL_R = float(os.getenv("LIVE_RUNNER_TRAIL_R", "1.5"))
-LIVE_BE_BUFFER_PCT = float(os.getenv("LIVE_BE_BUFFER_PCT", "0.0015"))
+# Exit distribution: 30% TP1 + 30% TP2 + 40% runner.
+# TP3 from the planner is kept only as a market reference; no TP3 order is placed.
+LIVE_TP1_PCT = float(os.getenv("LIVE_TP1_PCT", "30")) / 100
+LIVE_TP2_PCT = float(os.getenv("LIVE_TP2_PCT", "30")) / 100
+LIVE_RUNNER_PCT = max(0.0, 1.0 - LIVE_TP1_PCT - LIVE_TP2_PCT)
+
+# Wide runner after TP2. Use the wider R/ATR distance and respect 15m structure.
+LIVE_RUNNER_TRAIL_R = float(os.getenv("LIVE_RUNNER_TRAIL_R", "2.0"))
+LIVE_RUNNER_TRAIL_ATR = float(os.getenv("LIVE_RUNNER_TRAIL_ATR", "1.25"))
+LIVE_RUNNER_STRUCTURE_ATR = float(os.getenv("LIVE_RUNNER_STRUCTURE_ATR", "0.25"))
+LIVE_TRAIL_STEP_R = float(os.getenv("LIVE_TRAIL_STEP_R", "0.25"))
+
+# Net-profit protection after partials.
+LIVE_TP1_NET_LOCK_USDT = float(os.getenv("LIVE_TP1_NET_LOCK_USDT", "0.25"))
+LIVE_TP2_KEEP_REALIZED_PCT = float(os.getenv("LIVE_TP2_KEEP_REALIZED_PCT", "0.50"))
+LIVE_STOP_MARK_BUFFER_PCT = float(os.getenv("LIVE_STOP_MARK_BUFFER_PCT", "0.0004"))
+
+# Conservative cost assumptions for the PRE-TRADE guard.
+# Actual PnL/fees after trading are read from Bitunix.
+LIVE_TAKER_FEE_RATE = float(os.getenv("LIVE_TAKER_FEE_RATE", "0.0006"))
+LIVE_SLIPPAGE_RATE = float(os.getenv("LIVE_SLIPPAGE_RATE", "0.00015"))
+LIVE_MIN_NET_RR = float(os.getenv("LIVE_MIN_NET_RR", "1.25"))
+
+# PROFIT LOCK: el +10% diario NO apaga el bot.
+LIVE_DAILY_PROFIT_TARGET_PCT = float(
+    os.getenv("LIVE_DAILY_PROFIT_TARGET_PCT", "10")
+) / 100
+LIVE_PROFIT_LOCK_RISK_MULT = float(
+    os.getenv("LIVE_PROFIT_LOCK_RISK_MULT", "0.50")
+)
+LIVE_PROFIT_LOCK_MIN_NET_RR = float(
+    os.getenv("LIVE_PROFIT_LOCK_MIN_NET_RR", "1.75")
+)
+LIVE_PROFIT_LOCK_RETAIN_PCT = float(
+    os.getenv("LIVE_PROFIT_LOCK_RETAIN_PCT", "0.75")
+)
+LIVE_PROFIT_LOCK_EXTRA_TRADES = int(
+    os.getenv("LIVE_PROFIT_LOCK_EXTRA_TRADES", "1")
+)
+LIVE_PROFIT_LOCK_USE_ACCOUNT_DAY = (
+    os.getenv("LIVE_PROFIT_LOCK_USE_ACCOUNT_DAY", "true").lower() == "true"
+)
+
+# Smart exit / reversal.
+LIVE_EXIT_ON_THESIS_FLIP = (
+    os.getenv("LIVE_EXIT_ON_THESIS_FLIP", "true").lower() == "true"
+)
+LIVE_REVERSE_ON_CONFIRMED = (
+    os.getenv("LIVE_REVERSE_ON_CONFIRMED", "true").lower() == "true"
+)
+LIVE_EXIT_CONFIRM_CYCLES = int(os.getenv("LIVE_EXIT_CONFIRM_CYCLES", "2"))
 
 VERIFY_MARGIN_TOL_PCT = float(os.getenv("VERIFY_MARGIN_TOL_PCT", "35")) / 100
 MANAGE_SECONDS = int(os.getenv("LIVE_MANAGE_SECONDS", "10"))
 
 SYMBOL = os.getenv("SYMBOL", "BTCUSDT").upper()
+MARGIN_COIN = os.getenv("MARGIN_COIN", "USDT").upper()
 
 volume = os.getenv("RAILWAY_VOLUME_MOUNT_PATH", "").strip()
-if volume:
-    STATE_FILE = Path(volume) / "igod_live_state.json"
-else:
-    STATE_FILE = Path("igod_live_state.json")
+STATE_FILE = (
+    Path(volume) / "igod_live_state.json"
+    if volume
+    else Path("igod_live_state.json")
+)
 
 
 # ---------------------------------------------------------------------
@@ -94,6 +138,13 @@ def sf(v) -> str:
     if isinstance(v, bool):
         return "true" if v else "false"
     return str(v)
+
+
+def fnum(v, default=0.0) -> float:
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return float(default)
 
 
 def floor_prec(value: float, precision: int) -> float:
@@ -113,6 +164,14 @@ def p(v) -> str:
     return f"{float(v):,.1f}"
 
 
+def money(v) -> str:
+    return f"{float(v):+,.4f} USDT"
+
+
+def side_icon(side: str) -> str:
+    return "🟢" if str(side).upper() == "LONG" else "🔴"
+
+
 class BitunixAPIError(RuntimeError):
     def __init__(self, code, msg, payload=None):
         self.code = code
@@ -122,7 +181,7 @@ class BitunixAPIError(RuntimeError):
 
 
 # ---------------------------------------------------------------------
-# Private signed API
+# Private signed Bitunix API
 # ---------------------------------------------------------------------
 
 class BitunixPrivate:
@@ -133,7 +192,7 @@ class BitunixPrivate:
         self.secret = secret
         self.s = requests.Session()
         self.s.headers.update({
-            "User-Agent": "IGOD-BTC-Copilot-Live/5.0",
+            "User-Agent": "IGOD-BTC-Copilot-Live/7.0",
             "language": "en-US",
         })
 
@@ -142,18 +201,16 @@ class BitunixPrivate:
         return hashlib.sha256(s.encode("utf-8")).hexdigest()
 
     def _headers(self, params: Optional[dict], body_str: str) -> dict:
-        nonce = secrets.token_hex(16)  # 32 chars
+        nonce = secrets.token_hex(16)
         ts = str(int(time.time() * 1000))
-
         params = params or {}
+
         query_sig = "".join(
             f"{k}{sf(v)}"
             for k, v in sorted(params.items(), key=lambda x: x[0])
             if v is not None
         )
-        digest = self._sha(
-            nonce + ts + self.api_key + query_sig + body_str
-        )
+        digest = self._sha(nonce + ts + self.api_key + query_sig + body_str)
         sign = self._sha(digest + self.secret)
 
         return {
@@ -204,12 +261,32 @@ class BitunixPrivate:
             )
         return payload.get("data")
 
+    @staticmethod
+    def _rows(data, key):
+        if isinstance(data, list):
+            return data
+        if isinstance(data, dict):
+            v = data.get(key, [])
+            return v if isinstance(v, list) else []
+        return []
+
+    def account(self, margin_coin=MARGIN_COIN):
+        d = self.request(
+            "GET",
+            "/api/v1/futures/account",
+            {"marginCoin": margin_coin},
+        ) or {}
+        if isinstance(d, list):
+            return d[0] if d else {}
+        return d if isinstance(d, dict) else {}
+
     def positions(self, symbol=SYMBOL):
-        return self.request(
+        d = self.request(
             "GET",
             "/api/v1/futures/position/get_pending_positions",
             {"symbol": symbol},
         ) or []
+        return d if isinstance(d, list) else self._rows(d, "positionList")
 
     def position_by_id(self, position_id: str):
         data = self.request(
@@ -217,44 +294,53 @@ class BitunixPrivate:
             "/api/v1/futures/position/get_pending_positions",
             {"symbol": SYMBOL, "positionId": position_id},
         ) or []
-        return data[0] if data else None
+        rows = data if isinstance(data, list) else self._rows(data, "positionList")
+        return rows[0] if rows else None
+
+    def history_positions(self, limit=100):
+        d = self.request(
+            "GET",
+            "/api/v1/futures/position/get_history_positions",
+            {"symbol": SYMBOL, "limit": limit},
+        ) or {}
+        return self._rows(d, "positionList")
 
     def history_position(self, position_id: str):
         d = self.request(
             "GET",
             "/api/v1/futures/position/get_history_positions",
-            {
-                "symbol": SYMBOL,
-                "positionId": position_id,
-                "limit": 10,
-            },
+            {"symbol": SYMBOL, "positionId": position_id, "limit": 10},
         ) or {}
-        rows = d.get("positionList", []) if isinstance(d, dict) else []
+        rows = self._rows(d, "positionList")
         return rows[0] if rows else None
 
     def pending_orders(self, client_id=None):
         d = self.request(
             "GET",
             "/api/v1/futures/trade/get_pending_orders",
-            {
-                "symbol": SYMBOL,
-                "clientId": client_id,
-                "limit": 100,
-            },
+            {"symbol": SYMBOL, "clientId": client_id, "limit": 100},
         ) or {}
-        return d.get("orderList", []) if isinstance(d, dict) else []
+        return self._rows(d, "orderList")
 
     def history_orders(self, client_id=None):
         d = self.request(
             "GET",
             "/api/v1/futures/trade/get_history_orders",
+            {"symbol": SYMBOL, "clientId": client_id, "limit": 100},
+        ) or {}
+        return self._rows(d, "orderList")
+
+    def history_trades(self, position_id=None, limit=100):
+        d = self.request(
+            "GET",
+            "/api/v1/futures/trade/get_history_trades",
             {
                 "symbol": SYMBOL,
-                "clientId": client_id,
-                "limit": 100,
+                "positionId": position_id,
+                "limit": limit,
             },
         ) or {}
-        return d.get("orderList", []) if isinstance(d, dict) else []
+        return self._rows(d, "tradeList")
 
     def order_detail(self, order_id=None, client_id=None):
         return self.request(
@@ -262,6 +348,20 @@ class BitunixPrivate:
             "/api/v1/futures/trade/get_order_detail",
             {"orderId": order_id, "clientId": client_id},
         ) or {}
+
+    def pending_tpsl(self, position_id: Optional[str] = None):
+        d = self.request(
+            "GET",
+            "/api/v1/futures/tpsl/get_pending_orders",
+            {
+                "symbol": SYMBOL,
+                "positionId": position_id,
+                "limit": 100,
+            },
+        ) or []
+        if isinstance(d, list):
+            return d
+        return self._rows(d, "orderList")
 
     def place_market(
         self,
@@ -277,7 +377,6 @@ class BitunixPrivate:
             "orderType": "MARKET",
             "clientId": client_id,
             "reduceOnly": False,
-            # Immediate native protection.
             "slPrice": sl_price,
             "slStopType": "MARK_PRICE",
             "slOrderType": "MARKET",
@@ -288,23 +387,12 @@ class BitunixPrivate:
             body=body,
         ) or {}
 
-    def close_all_btc(self):
+    def flash_close_position(self, position_id: str):
         return self.request(
             "POST",
-            "/api/v1/futures/trade/close_all_position",
-            body={"symbol": SYMBOL},
-        )
-
-    def pending_tpsl(self, position_id: str):
-        return self.request(
-            "GET",
-            "/api/v1/futures/tpsl/get_pending_orders",
-            {
-                "symbol": SYMBOL,
-                "positionId": position_id,
-                "limit": 100,
-            },
-        ) or []
+            "/api/v1/futures/trade/flash_close_position",
+            body={"positionId": position_id},
+        ) or {}
 
     def place_partial_tp(
         self,
@@ -325,11 +413,7 @@ class BitunixPrivate:
             },
         ) or {}
 
-    def place_position_stop(
-        self,
-        position_id: str,
-        stop_price: str,
-    ):
+    def place_position_stop(self, position_id: str, stop_price: str):
         return self.request(
             "POST",
             "/api/v1/futures/tpsl/position/place_order",
@@ -341,11 +425,7 @@ class BitunixPrivate:
             },
         ) or {}
 
-    def modify_position_stop(
-        self,
-        position_id: str,
-        stop_price: str,
-    ):
+    def modify_position_stop(self, position_id: str, stop_price: str):
         return self.request(
             "POST",
             "/api/v1/futures/tpsl/position/modify_order",
@@ -374,6 +454,10 @@ class LivePositionState:
     tp1: float
     tp2: float
     tp3: float
+
+    # Entry-time market thesis level ("LONG deteriorates below..." / inverse).
+    thesis_invalidation: float = 0.0
+
     stop_stage: int = 0
     current_stop: float = 0.0
     peak_price: float = 0.0
@@ -392,6 +476,8 @@ class State:
         self.day = C.datetime.now(C.TZ).date().isoformat()
         self.trades_today = 0
         self.day_pnl = 0.0
+        self.day_start_equity = 0.0
+        self.day_peak_pnl = 0.0
         self.last_close_time = 0.0
         self.position: Optional[LivePositionState] = None
         self.consumed: List[str] = []
@@ -409,10 +495,16 @@ class State:
             self.day = str(d.get("day", self.day))
             self.trades_today = int(d.get("trades_today", 0))
             self.day_pnl = float(d.get("day_pnl", 0))
+            self.day_start_equity = float(d.get("day_start_equity", 0))
+            self.day_peak_pnl = float(d.get("day_peak_pnl", self.day_pnl))
             self.last_close_time = float(d.get("last_close_time", 0))
             self.consumed = list(d.get("consumed", []))[-100:]
-            if d.get("position"):
-                self.position = LivePositionState(**d["position"])
+
+            raw_pos = d.get("position")
+            if raw_pos:
+                allowed = {f.name for f in fields(LivePositionState)}
+                clean = {k: v for k, v in raw_pos.items() if k in allowed}
+                self.position = LivePositionState(**clean)
         except Exception as e:
             log(f"Could not load state: {e}")
 
@@ -426,14 +518,13 @@ class State:
             "day": self.day,
             "trades_today": self.trades_today,
             "day_pnl": self.day_pnl,
+            "day_start_equity": self.day_start_equity,
+            "day_peak_pnl": self.day_peak_pnl,
             "last_close_time": self.last_close_time,
             "consumed": self.consumed[-100:],
             "position": asdict(self.position) if self.position else None,
         }
-        STATE_FILE.write_text(
-            json.dumps(d, indent=2),
-            encoding="utf-8",
-        )
+        STATE_FILE.write_text(json.dumps(d, indent=2), encoding="utf-8")
 
     def new_day(self):
         today = C.datetime.now(C.TZ).date().isoformat()
@@ -441,6 +532,8 @@ class State:
             self.day = today
             self.trades_today = 0
             self.day_pnl = 0.0
+            self.day_start_equity = 0.0
+            self.day_peak_pnl = 0.0
             self.save()
 
 
@@ -455,10 +548,7 @@ class RealAuto:
                 "Missing BITUNIX_API_KEY / BITUNIX_SECRET_KEY."
             )
 
-        self.tg = C.Telegram(
-            C.TELEGRAM_BOT_TOKEN,
-            C.TELEGRAM_CHAT_ID,
-        )
+        self.tg = C.Telegram(C.TELEGRAM_BOT_TOKEN, C.TELEGRAM_CHAT_ID)
         self.pub = C.BitunixPublic()
         self.live = C.LiveMarket()
         self.analyzer = C.Analyzer(self.pub, self.live)
@@ -473,9 +563,19 @@ class RealAuto:
         self.last_analysis = 0.0
         self.plan = None
         self.last_block_notice = {}
+        self._closed_day_cache_at = 0.0
+        self._closed_day_cache = None
+
+        # Smart-exit confirmation state.
+        self.flip_count = 0
+        self.flip_key = ""
 
         self.load_pair_rules()
         self.auth_preflight()
+
+    # -----------------------------
+    # Market / startup checks
+    # -----------------------------
 
     def load_pair_rules(self):
         rows = self.pub.get(
@@ -487,8 +587,10 @@ class RealAuto:
 
         x = rows[0]
         self.base_precision = int(x.get("basePrecision", 4))
-        self.price_precision = int(x.get("quotePrecision", x.get("pricePrecision", 1)))
-        self.min_qty = float(x.get("minTradeVolume", 0.0001))
+        self.price_precision = int(
+            x.get("quotePrecision", x.get("pricePrecision", 1))
+        )
+        self.min_qty = fnum(x.get("minTradeVolume", 0.0001), 0.0001)
         self.max_leverage = int(x.get("maxLeverage", LIVE_LEVERAGE))
 
         if LIVE_LEVERAGE > self.max_leverage:
@@ -498,12 +600,12 @@ class RealAuto:
             )
 
     def auth_preflight(self):
-        # Signed call proves auth/signing works.
+        # Signed calls prove credentials/signature work.
+        _ = self.api.account(MARGIN_COIN)
         pos = self.api.positions(SYMBOL)
         log(f"Private API OK. Existing positions={len(pos)}")
 
         if pos and self.state.position is None:
-            # We refuse to take control of a position we cannot prove is ours.
             self.state.auto_enabled = False
             self.state.locked = True
             self.state.lock_reason = (
@@ -513,33 +615,31 @@ class RealAuto:
             self.tg.send(
                 "🛑 <b>LIVE AUTO BLOQUEADO</b>\n\n"
                 "Hay una posición BTCUSDT real abierta que este bot no puede "
-                "demostrar que sea suya. No abriré nada ni la modificaré.\n"
-                "Cierra/revisa esa posición manualmente antes de reactivar."
+                "demostrar que sea suya.\n"
+                "NO la adoptaré, NO la modificaré y NO abriré otra.\n\n"
+                "Cuando ya no exista esa posición usa /unlock y después /live_on."
             )
 
+    # -----------------------------
+    # Signal one-shot / duplicate
+    # -----------------------------
+
     def signal_id(self, plan) -> str:
-        # Fingerprint uses the last CLOSED 15m candle.
         try:
             ts = int(self.analyzer.frames["15m"].iloc[-1]["time"])
         except Exception:
             ts = int(time.time() // 900 * 900_000)
 
-        # One-shot fingerprint for the current 15m signal cycle.
-        # Do NOT include live price: price changes every minute and would create
-        # a different clientId for the same ENTER NOW cycle.
         raw = f"{ts}|{plan.action}|{plan.setup}"
         h = hashlib.sha256(raw.encode()).hexdigest()[:6]
         side = "L" if "LONG" in plan.action else "S"
-        dt = C.datetime.fromtimestamp(ts/1000, C.TZ)
-        # <= 32 chars.
+        dt = C.datetime.fromtimestamp(ts / 1000, C.TZ)
         return f"igod{dt:%y%m%d%H%M}{side}{h}"
 
     def exchange_has_signal(self, client_id: str) -> bool:
         """
-        Return True only if Bitunix returns an order whose clientId EXACTLY
-        matches this signal. Some API responses may contain rows even when a
-        filter is not applied as expected, so a non-empty list alone is not
-        sufficient evidence that this signal was already traded.
+        Duplicate exists ONLY when returned clientId exactly equals ours.
+        A non-empty API response by itself is NOT treated as a duplicate.
         """
         try:
             pending = self.api.pending_orders(client_id)
@@ -547,8 +647,8 @@ class RealAuto:
                 return True
             if pending:
                 log(
-                    f"Pending-order response contained {len(pending)} row(s) "
-                    f"but none matched clientId={client_id}; ignoring them."
+                    f"Pending response had {len(pending)} row(s) but none "
+                    f"matched clientId={client_id}; ignored."
                 )
 
             history = self.api.history_orders(client_id)
@@ -556,18 +656,107 @@ class RealAuto:
                 return True
             if history:
                 log(
-                    f"History response contained {len(history)} row(s) "
-                    f"but none matched clientId={client_id}; ignoring them."
+                    f"History response had {len(history)} row(s) but none "
+                    f"matched clientId={client_id}; ignored."
                 )
-
         except Exception as e:
+            # Fail closed: if duplicate verification itself fails, do not trade.
             log(f"Signal-history check error: {e}")
-            # Fail closed on a real API failure.
             return True
 
         return False
 
-    def can_enter(self, plan, client_id):
+    def closed_today_metrics_cached(self, ttl=30):
+        now = time.time()
+        if (
+            self._closed_day_cache is not None
+            and now - self._closed_day_cache_at < ttl
+        ):
+            return self._closed_day_cache
+        d = self.closed_today_metrics()
+        self._closed_day_cache = d
+        self._closed_day_cache_at = now
+        return d
+
+    def profit_lock_day_pnl(self):
+        if LIVE_PROFIT_LOCK_USE_ACCOUNT_DAY:
+            try:
+                return fnum(self.closed_today_metrics_cached().get("net"))
+            except Exception as e:
+                log(f"Account-day PnL unavailable for profit lock: {e}")
+        return self.state.day_pnl
+
+    def ensure_day_equity_baseline(self):
+        if self.state.day_start_equity > 0:
+            return self.state.day_start_equity
+        try:
+            a = self.account_snapshot()
+            day_net = self.profit_lock_day_pnl()
+            base = fnum(a.get("wallet_est")) - day_net
+            if base <= 0:
+                base = fnum(a.get("equity_est"))
+            if base > 0:
+                self.state.day_start_equity = base
+                self.state.save()
+                log(f"Day equity baseline estimated at {base:.4f} USDT")
+                return base
+        except Exception as e:
+            log(f"Could not set day equity baseline: {e}")
+        return 0.0
+
+    def daily_profit_target_usdt(self):
+        eq = self.ensure_day_equity_baseline()
+        return eq * LIVE_DAILY_PROFIT_TARGET_PCT if eq > 0 else 0.0
+
+    def refresh_profit_lock_peak(self):
+        pnl = self.profit_lock_day_pnl()
+        if pnl > self.state.day_peak_pnl:
+            self.state.day_peak_pnl = pnl
+            self.state.save()
+        return pnl
+
+    def profit_lock_active(self):
+        self.refresh_profit_lock_peak()
+        target = self.daily_profit_target_usdt()
+        return target > 0 and self.state.day_peak_pnl >= target
+
+    def profit_lock_floor(self):
+        return (
+            self.state.day_peak_pnl * LIVE_PROFIT_LOCK_RETAIN_PCT
+            if self.profit_lock_active()
+            else 0.0
+        )
+
+    def profit_lock_guard(self, plan, net_rr):
+        if not self.profit_lock_active():
+            return True, "normal mode"
+
+        needed_bias = (
+            "LONG STRONG"
+            if plan.action == "ENTER LONG NOW"
+            else "SHORT STRONG"
+        )
+        if str(plan.bias).upper() != needed_bias:
+            return False, (
+                f"profit-lock: requires {needed_bias}, got {plan.bias}"
+            )
+
+        if net_rr < LIVE_PROFIT_LOCK_MIN_NET_RR:
+            return False, (
+                f"profit-lock: net R:R {net_rr:.2f} < "
+                f"{LIVE_PROFIT_LOCK_MIN_NET_RR:.2f}"
+            )
+
+        floor = self.profit_lock_floor()
+        day_pnl = self.profit_lock_day_pnl()
+        if floor > 0 and day_pnl <= floor:
+            return False, (
+                f"profit-lock floor reached: {day_pnl:.2f} <= {floor:.2f}"
+            )
+
+        return True, "profit-lock A+ accepted"
+
+    def can_enter(self, plan, client_id, bypass_cooldown=False):
         self.state.new_day()
 
         if not LIVE_EXECUTION:
@@ -582,50 +771,55 @@ class RealAuto:
             return False, "exchange BTCUSDT position already active"
         if self.api.pending_orders():
             return False, "pending BTCUSDT order exists"
+        if self.api.pending_tpsl():
+            return False, "pending BTCUSDT TP/SL order exists"
         if not self.state.entry_armed:
             return False, "same ENTER cycle already consumed"
         if client_id in self.state.consumed:
             return False, "signal already consumed locally"
         if self.exchange_has_signal(client_id):
             return False, "signal already exists in Bitunix history"
-        if self.state.trades_today >= LIVE_MAX_TRADES_DAY:
-            return False, "daily trade limit reached"
+        max_trades_now = LIVE_MAX_TRADES_DAY + (
+            LIVE_PROFIT_LOCK_EXTRA_TRADES if self.profit_lock_active() else 0
+        )
+        if self.state.trades_today >= max_trades_now:
+            return False, f"daily trade limit reached ({max_trades_now})"
         if self.state.day_pnl <= -abs(LIVE_MAX_DAILY_LOSS_USDT):
             return False, "daily loss limit reached"
+
+        if self.profit_lock_active():
+            floor = self.profit_lock_floor()
+            day_pnl = self.profit_lock_day_pnl()
+            if floor > 0 and day_pnl <= floor:
+                return False, (
+                    f"daily profit protected: {day_pnl:.2f} "
+                    f"<= floor {floor:.2f}"
+                )
+
         if (
-            self.state.last_close_time
+            not bypass_cooldown
+            and self.state.last_close_time
             and time.time() - self.state.last_close_time
-            < LIVE_COOLDOWN_MIN * 60
+                < LIVE_COOLDOWN_MIN * 60
         ):
             return False, "post-trade cooldown"
 
         return True, "ok"
 
-    def calc_qty(self, price: float, stop: float):
-        """
-        Position sizing uses TWO caps:
+    # -----------------------------
+    # Sizing / cost guard
+    # -----------------------------
 
-        1) Exposure cap:
-           LIVE_MARGIN_USDT * LIVE_LEVERAGE
-
-        2) Stop-loss risk cap:
-           LIVE_MAX_RISK_USDT / distance(entry, stop)
-
-        The smaller quantity wins.
-
-        In CROSS mode, LIVE_MARGIN_USDT is only a sizing basis, not a hard
-        maximum loss. LIVE_MAX_RISK_USDT is the real per-trade SL risk cap
-        used by this bot.
-        """
-        desired_notional = LIVE_MARGIN_USDT * LIVE_LEVERAGE
+    def calc_qty(self, price: float, stop: float, risk_multiplier: float = 1.0):
+        risk_multiplier = max(0.05, min(1.0, float(risk_multiplier)))
+        desired_notional = LIVE_MARGIN_USDT * LIVE_LEVERAGE * risk_multiplier
         qty_by_exposure = desired_notional / price
 
         stop_distance = abs(price - stop)
         if stop_distance <= 0:
             raise RuntimeError("Invalid stop distance; cannot size position.")
 
-        qty_by_risk = LIVE_MAX_RISK_USDT / stop_distance
-
+        qty_by_risk = (LIVE_MAX_RISK_USDT * risk_multiplier) / stop_distance
         raw_qty = min(qty_by_exposure, qty_by_risk)
         qty = floor_prec(raw_qty, self.base_precision)
 
@@ -634,20 +828,89 @@ class RealAuto:
                 f"Calculated qty {qty} < minTradeVolume {self.min_qty}."
             )
 
+        if LIVE_TP1_PCT <= 0 or LIVE_TP2_PCT <= 0 or LIVE_RUNNER_PCT <= 0:
+            raise RuntimeError(
+                "Invalid exit split: TP1 + TP2 must leave a positive runner."
+            )
+
         actual_notional = qty * price
         estimated_sl_risk = qty * stop_distance
 
-        # Need enough size to preserve TP1/TP2/TP3 + runner.
-        chunk = floor_prec(qty * 0.25, self.base_precision)
-        if chunk < self.min_qty:
+        q1 = floor_prec(qty * LIVE_TP1_PCT, self.base_precision)
+        q2 = floor_prec(qty * LIVE_TP2_PCT, self.base_precision)
+        runner = floor_prec(qty - q1 - q2, self.base_precision)
+
+        if q1 < self.min_qty or q2 < self.min_qty or runner < self.min_qty:
             raise RuntimeError(
-                f"Position qty {qty} is too small for 25% partial TPs. "
-                f"Each chunk={chunk}, minimum={self.min_qty}. "
-                f"Increase LIVE_MARGIN_USDT, LIVE_LEVERAGE, or "
-                f"LIVE_MAX_RISK_USDT."
+                f"Position qty {qty} too small for exit split "
+                f"TP1={q1}, TP2={q2}, runner={runner}, min={self.min_qty}."
             )
 
-        return qty, actual_notional, chunk, estimated_sl_risk
+        return qty, actual_notional, q1, q2, runner, estimated_sl_risk
+
+    def net_rr_guard(self, plan, qty: float):
+        """
+        Conservative pre-trade estimate:
+        whole position compared from entry to TP2 vs entry to SL,
+        charging taker fee + slippage on both legs.
+        This is only a guard. Actual PnL later comes from Bitunix.
+        """
+        entry = fnum(plan.price)
+        stop = fnum(plan.stop)
+        tp2 = fnum(plan.tp2)
+        if entry <= 0 or stop <= 0 or tp2 <= 0:
+            return False, "invalid prices for net-RR guard", {}
+
+        side_long = plan.action == "ENTER LONG NOW"
+        gross_reward = (
+            (tp2 - entry) * qty
+            if side_long else
+            (entry - tp2) * qty
+        )
+        gross_risk = abs(entry - stop) * qty
+
+        entry_notional = entry * qty
+        tp_notional = tp2 * qty
+        stop_notional = stop * qty
+
+        reward_cost = (
+            entry_notional * LIVE_TAKER_FEE_RATE
+            + tp_notional * LIVE_TAKER_FEE_RATE
+            + (entry_notional + tp_notional) * LIVE_SLIPPAGE_RATE
+        )
+        risk_cost = (
+            entry_notional * LIVE_TAKER_FEE_RATE
+            + stop_notional * LIVE_TAKER_FEE_RATE
+            + (entry_notional + stop_notional) * LIVE_SLIPPAGE_RATE
+        )
+
+        net_reward = gross_reward - reward_cost
+        net_risk = gross_risk + risk_cost
+        net_rr = net_reward / max(net_risk, 1e-9)
+
+        data = {
+            "gross_reward": gross_reward,
+            "gross_risk": gross_risk,
+            "reward_cost": reward_cost,
+            "risk_cost": risk_cost,
+            "net_reward": net_reward,
+            "net_risk": net_risk,
+            "net_rr": net_rr,
+        }
+
+        if net_reward <= 0:
+            return False, "expected TP2 reward is <= 0 after estimated costs", data
+        if net_rr < LIVE_MIN_NET_RR:
+            return (
+                False,
+                f"net R:R {net_rr:.2f} < minimum {LIVE_MIN_NET_RR:.2f}",
+                data,
+            )
+        return True, "ok", data
+
+    # -----------------------------
+    # Position opening / protection
+    # -----------------------------
 
     def wait_for_position(self, timeout=18):
         end = time.time() + timeout
@@ -658,11 +921,21 @@ class RealAuto:
             time.sleep(1)
         return None
 
+    def wait_position_gone(self, position_id: str, timeout=18):
+        end = time.time() + timeout
+        while time.time() < end:
+            if self.api.position_by_id(position_id) is None:
+                return True
+            time.sleep(1)
+        return False
+
     def emergency_close_and_lock(self, reason):
-        try:
-            self.api.close_all_btc()
-        except Exception as e:
-            reason += f" | close error: {e}"
+        ps = self.state.position
+        if ps:
+            try:
+                self.api.flash_close_position(ps.position_id)
+            except Exception as e:
+                reason += f" | close error: {e}"
 
         self.state.auto_enabled = False
         self.state.locked = True
@@ -672,71 +945,69 @@ class RealAuto:
         self.tg.send(
             "🚨🛑 <b>EMERGENCY LIVE LOCK</b>\n\n"
             f"{C.html.escape(reason)}\n\n"
-            "He desactivado nuevas entradas. Revisa Bitunix manualmente."
+            "Nuevas entradas desactivadas. Revisa Bitunix."
         )
 
     def ensure_stop(self, position_id: str, stop: float):
         stop_s = fmt_price(stop, self.price_precision)
-
-        # If the SL attached to the entry became the position SL,
-        # modify succeeds. If there isn't one, create it.
         try:
             self.api.modify_position_stop(position_id, stop_s)
-            return
         except Exception:
-            pass
+            self.api.place_position_stop(position_id, stop_s)
 
-        self.api.place_position_stop(position_id, stop_s)
-
-        # Verify there is at least one SL in exchange TP/SL state.
         time.sleep(0.8)
         orders = self.api.pending_tpsl(position_id)
         if not any(str(x.get("slPrice", "")).strip() for x in orders):
             raise RuntimeError("Native stop not visible after placement.")
 
-    def place_native_tps(self, pos_state: LivePositionState, chunk: float):
-        ids = []
-        for target in (pos_state.tp1, pos_state.tp2, pos_state.tp3):
-            d = self.api.place_partial_tp(
-                pos_state.position_id,
-                fmt_price(target, self.price_precision),
-                fmt_qty(chunk, self.base_precision),
-            )
-            ids.append(str(d.get("orderId", "")))
-            time.sleep(0.35)
+    def place_native_tps(
+        self,
+        pos_state: LivePositionState,
+        qty_tp1: float,
+        qty_tp2: float,
+    ):
+        """Place exactly two native partial TPs. TP3 is reference only."""
+        d1 = self.api.place_partial_tp(
+            pos_state.position_id,
+            fmt_price(pos_state.tp1, self.price_precision),
+            fmt_qty(qty_tp1, self.base_precision),
+        )
+        time.sleep(0.35)
+        d2 = self.api.place_partial_tp(
+            pos_state.position_id,
+            fmt_price(pos_state.tp2, self.price_precision),
+            fmt_qty(qty_tp2, self.base_precision),
+        )
 
-        pos_state.tp1_order_id = ids[0]
-        pos_state.tp2_order_id = ids[1]
-        pos_state.tp3_order_id = ids[2]
+        pos_state.tp1_order_id = str(d1.get("orderId", d1.get("id", "")))
+        pos_state.tp2_order_id = str(d2.get("orderId", d2.get("id", "")))
+        pos_state.tp3_order_id = ""
 
-        # Verify 3 TP orders are visible.
         time.sleep(0.8)
         rows = self.api.pending_tpsl(pos_state.position_id)
         tp_rows = [x for x in rows if str(x.get("tpPrice", "")).strip()]
-        if len(tp_rows) < 3:
+        if len(tp_rows) < 2:
             raise RuntimeError(
-                f"Expected >=3 native TP orders, found {len(tp_rows)}."
+                f"Expected >=2 native TP orders, found {len(tp_rows)}."
             )
 
     def verify_real_position(self, pos: dict, qty_requested: float):
         problems = []
 
-        lev = int(float(pos.get("leverage", 0) or 0))
+        lev = int(fnum(pos.get("leverage", 0)))
         margin_mode = str(pos.get("marginMode", "")).upper()
         position_mode = str(pos.get("positionMode", "")).upper()
-        qty_real = float(pos.get("qty", 0) or 0)
-        margin_real = float(pos.get("margin", 0) or 0)
+        qty_real = fnum(pos.get("qty", 0))
+        margin_real = fnum(pos.get("margin", 0))
 
         if lev != LIVE_LEVERAGE:
             problems.append(
                 f"leverage real {lev}x != requested {LIVE_LEVERAGE}x"
             )
-
         if margin_mode != LIVE_MARGIN_MODE:
             problems.append(
                 f"marginMode real {margin_mode} != expected {LIVE_MARGIN_MODE}"
             )
-
         if position_mode != "ONE_WAY":
             problems.append(
                 f"positionMode real {position_mode} != ONE_WAY"
@@ -748,9 +1019,6 @@ class RealAuto:
                 f"qty real {qty_real} differs from requested {qty_requested}"
             )
 
-        # Only validate a fixed margin amount in ISOLATION.
-        # In CROSS, margin is shared across the futures account and is not a
-        # reliable hard-cap/target value for one position.
         if (
             LIVE_MARGIN_MODE == "ISOLATION"
             and LIVE_MARGIN_USDT > 0
@@ -759,7 +1027,7 @@ class RealAuto:
             diff = abs(margin_real - LIVE_MARGIN_USDT) / LIVE_MARGIN_USDT
             if diff > VERIFY_MARGIN_TOL_PCT:
                 problems.append(
-                    f"margin real {margin_real:.3f} USDT differs too much "
+                    f"margin real {margin_real:.3f} differs too much "
                     f"from target {LIVE_MARGIN_USDT:.3f}"
                 )
 
@@ -767,7 +1035,6 @@ class RealAuto:
             raise RuntimeError("; ".join(problems))
 
     def notify_entry_blocked(self, plan, client_id: str, reason: str):
-        # Avoid Telegram spam while the same ENTER NOW remains active.
         key = f"{client_id}|{reason}"
         now = time.time()
         if now - self.last_block_notice.get(key, 0) < 900:
@@ -783,46 +1050,86 @@ class RealAuto:
             f"Motivo: <b>{C.html.escape(reason)}</b>"
         )
 
-    def open_real(self, plan):
+    def open_real(self, plan, bypass_cooldown=False, reversal=False):
         client_id = self.signal_id(plan)
-        ok, why = self.can_enter(plan, client_id)
+        ok, why = self.can_enter(
+            plan,
+            client_id,
+            bypass_cooldown=bypass_cooldown,
+        )
         if not ok:
             log(f"Entry blocked: {why}")
             self.notify_entry_blocked(plan, client_id, why)
-            return
+            return False
 
-        if None in (plan.stop, plan.tp1, plan.tp2, plan.tp3):
+        if None in (plan.stop, plan.tp1, plan.tp2):
             reason = "incomplete SL/TP plan"
-            log(f"Entry blocked: {reason}.")
+            log(f"Entry blocked: {reason}")
             self.notify_entry_blocked(plan, client_id, reason)
-            return
+            return False
 
         side = "BUY" if plan.action == "ENTER LONG NOW" else "SELL"
         side_name = "LONG" if side == "BUY" else "SHORT"
-        qty, intended_notional, chunk, estimated_sl_risk = self.calc_qty(
-            float(plan.price), float(plan.stop)
+
+        risk_mult = (
+            LIVE_PROFIT_LOCK_RISK_MULT
+            if self.profit_lock_active()
+            else 1.0
+        )
+        (
+            qty,
+            intended_notional,
+            qty_tp1,
+            qty_tp2,
+            runner_qty,
+            estimated_sl_risk,
+        ) = self.calc_qty(
+            fnum(plan.price), fnum(plan.stop), risk_multiplier=risk_mult
         )
 
-        # Consume/lock BEFORE sending. If request times out after exchange accepts it,
-        # the bot will not submit a second order blindly.
+        cost_ok, cost_reason, costs = self.net_rr_guard(plan, qty)
+        if not cost_ok:
+            reason = f"fees/slippage guard: {cost_reason}"
+            log(f"Entry blocked: {reason}")
+            self.notify_entry_blocked(plan, client_id, reason)
+            return False
+
+        lock_ok, lock_reason = self.profit_lock_guard(
+            plan, costs["net_rr"]
+        )
+        if not lock_ok:
+            log(f"Entry blocked: {lock_reason}")
+            self.notify_entry_blocked(plan, client_id, lock_reason)
+            return False
+
         self.state.entry_armed = False
         self.state.consumed.append(client_id)
         self.state.save()
 
+        title = (
+            "🔄🚨 <b>ENVIANDO REVERSAL REAL</b>"
+            if reversal else
+            "⚠️🚨 <b>ENVIANDO ORDEN REAL</b>"
+        )
         self.tg.send(
-            "⚠️🚨 <b>ENVIANDO ORDEN REAL</b>\n\n"
+            title + "\n\n"
             f"{side_name} {SYMBOL}\n"
             f"Señal: <code>{client_id}</code>\n"
             f"Base sizing: <b>{LIVE_MARGIN_USDT:.2f} USDT</b>\n"
             f"Leverage esperado: <b>{LIVE_LEVERAGE}x</b>\n"
-            f"Riesgo máx. por SL: <b>{LIVE_MAX_RISK_USDT:.2f} USDT</b>\n"
-            f"Margin mode esperado: <b>{LIVE_MARGIN_MODE}</b>\n"
             f"Nominal calculado: <b>{intended_notional:.2f} USDT</b>\n"
-            f"Riesgo aprox. al SL: <b>{estimated_sl_risk:.2f} USDT</b> "
-            f"(máx. {LIVE_MAX_RISK_USDT:.2f})\n"
-            f"Qty solicitada: <b>{fmt_qty(qty, self.base_precision)} BTC</b>\n"
-            f"SL inicial: <b>{p(plan.stop)}</b>\n"
-            f"TP1/2/3: <b>{p(plan.tp1)} / {p(plan.tp2)} / {p(plan.tp3)}</b>"
+            f"Riesgo precio al SL: <b>{estimated_sl_risk:.2f} USDT</b>\n"
+            f"Modo diario: <b>{'PROFIT LOCK' if self.profit_lock_active() else 'NORMAL'}</b>\n"
+            f"Multiplicador riesgo: <b>{risk_mult:.2f}x</b>\n"
+            f"R:R NETO estimado a TP2: <b>{costs['net_rr']:.2f}R</b>\n"
+            f"Costes estimados ida/vuelta TP2: "
+            f"<b>{costs['reward_cost']:.2f} USDT</b>\n"
+            f"Qty: <b>{fmt_qty(qty, self.base_precision)} BTC</b>\n"
+            f"SL: <b>{p(plan.stop)}</b>\n"
+            f"TP1 {LIVE_TP1_PCT*100:.0f}%: <b>{p(plan.tp1)}</b>\n"
+            f"TP2 {LIVE_TP2_PCT*100:.0f}%: <b>{p(plan.tp2)}</b>\n"
+            f"Runner esperado: <b>{LIVE_RUNNER_PCT*100:.0f}%</b>\n"
+            f"TP3 planner (solo referencia): <b>{p(plan.tp3) if plan.tp3 else '-'}</b>"
         )
 
         try:
@@ -833,14 +1140,23 @@ class RealAuto:
                 sl_price=fmt_price(plan.stop, self.price_precision),
             )
         except BitunixAPIError as e:
-            # Duplicate client ID means exchange may already have accepted this signal.
-            # Do NOT retry blindly.
             self.tg.send(
                 "❌ <b>Bitunix rechazó/contestó la entrada</b>\n\n"
                 f"code={e.code}\n{C.html.escape(e.msg)}\n"
                 "No reenviaré automáticamente esta señal."
             )
-            return
+            return False
+        except Exception as e:
+            self.state.auto_enabled = False
+            self.state.locked = True
+            self.state.lock_reason = f"Order send uncertainty: {e}"
+            self.state.save()
+            self.tg.send(
+                "🚨 <b>ERROR/INCERTIDUMBRE AL ENVIAR ORDEN</b>\n\n"
+                f"{C.html.escape(str(e))}\n"
+                "He bloqueado nuevas entradas para evitar duplicados."
+            )
+            return False
 
         order_id = str(order.get("orderId", ""))
         pos = self.wait_for_position()
@@ -862,25 +1178,48 @@ class RealAuto:
             self.tg.send(
                 "🚨 <b>NO PUDE VERIFICAR LA POSICIÓN</b>\n\n"
                 f"Order ID: {C.html.escape(order_id)}\n"
-                f"Estado order: {C.html.escape(str(detail.get('status','?')))}\n"
-                "He bloqueado nuevas entradas. Revisa Bitunix AHORA."
+                f"Estado: {C.html.escape(str(detail.get('status','?')))}\n"
+                "He bloqueado nuevas entradas. Revisa Bitunix."
             )
-            return
+            return False
 
         try:
             self.verify_real_position(pos, qty)
         except Exception as e:
+            self.state.position = LivePositionState(
+                position_id=str(pos.get("positionId", "")),
+                client_id=client_id,
+                side=side_name,
+                entry=fnum(pos.get("avgOpenPrice")),
+                qty_initial=fnum(pos.get("qty")),
+                stop_initial=fnum(plan.stop),
+                r_value=abs(fnum(pos.get("avgOpenPrice")) - fnum(plan.stop)),
+                tp1=fnum(plan.tp1),
+                tp2=fnum(plan.tp2),
+                tp3=fnum(plan.tp3),
+            )
+            self.state.save()
             self.emergency_close_and_lock(
                 "POSITION VERIFICATION FAILED: " + str(e)
             )
-            return
+            return False
 
         position_id = str(pos["positionId"])
-        real_entry = float(pos.get("avgOpenPrice", 0) or 0)
-        real_qty = float(pos.get("qty", 0) or 0)
-        real_margin = float(pos.get("margin", 0) or 0)
-        liq = float(pos.get("liqPrice", 0) or 0)
-        r_value = abs(real_entry - float(plan.stop))
+        real_entry = fnum(pos.get("avgOpenPrice"))
+        real_qty = fnum(pos.get("qty"))
+        real_margin = fnum(pos.get("margin"))
+        liq = fnum(pos.get("liqPrice"))
+        r_value = abs(real_entry - fnum(plan.stop))
+
+        invalidation = fnum(plan.stop)
+        try:
+            if (
+                str(plan.primary_side).upper() == side_name
+                and plan.primary_invalidation is not None
+            ):
+                invalidation = fnum(plan.primary_invalidation, fnum(plan.stop))
+        except Exception:
+            pass
 
         ps = LivePositionState(
             position_id=position_id,
@@ -888,12 +1227,13 @@ class RealAuto:
             side=side_name,
             entry=real_entry,
             qty_initial=real_qty,
-            stop_initial=float(plan.stop),
+            stop_initial=fnum(plan.stop),
             r_value=r_value,
-            tp1=float(plan.tp1),
-            tp2=float(plan.tp2),
-            tp3=float(plan.tp3),
-            current_stop=float(plan.stop),
+            tp1=fnum(plan.tp1),
+            tp2=fnum(plan.tp2),
+            tp3=fnum(plan.tp3),
+            thesis_invalidation=invalidation,
+            current_stop=fnum(plan.stop),
             peak_price=real_entry,
             opened_at=time.time(),
         )
@@ -903,21 +1243,25 @@ class RealAuto:
         self.state.save()
 
         try:
-            # Native stop first.
-            self.ensure_stop(position_id, float(plan.stop))
-            # Native partial TPs after stop is confirmed.
-            real_chunk = floor_prec(real_qty * 0.25, self.base_precision)
-            if real_chunk < self.min_qty:
+            self.ensure_stop(position_id, fnum(plan.stop))
+            real_tp1 = floor_prec(real_qty * LIVE_TP1_PCT, self.base_precision)
+            real_tp2 = floor_prec(real_qty * LIVE_TP2_PCT, self.base_precision)
+            real_runner = floor_prec(
+                real_qty - real_tp1 - real_tp2,
+                self.base_precision,
+            )
+            if min(real_tp1, real_tp2, real_runner) < self.min_qty:
                 raise RuntimeError(
-                    f"Real filled qty too small for partial TP: chunk={real_chunk}"
+                    "Real filled qty too small for 2TP+runner split: "
+                    f"tp1={real_tp1}, tp2={real_tp2}, runner={real_runner}"
                 )
-            self.place_native_tps(ps, real_chunk)
+            self.place_native_tps(ps, real_tp1, real_tp2)
             self.state.save()
         except Exception as e:
             self.emergency_close_and_lock(
                 "PROTECTION SETUP FAILED: " + str(e)
             )
-            return
+            return False
 
         self.tg.send(
             "✅🟢 <b>POSICIÓN REAL VERIFICADA Y PROTEGIDA</b>\n\n"
@@ -925,37 +1269,41 @@ class RealAuto:
             f"Position ID: <code>{position_id}</code>\n"
             f"Entrada REAL: <b>{p(real_entry)}</b>\n"
             f"Qty REAL: <b>{fmt_qty(real_qty, self.base_precision)} BTC</b>\n"
-            f"Margen REAL: <b>{real_margin:.3f} USDT</b>\n"
-            f"Leverage REAL: <b>{pos.get('leverage')}x</b>\n"
-            f"Modo REAL: <b>{pos.get('marginMode')} / {pos.get('positionMode')}</b>\n"
-            f"Liquidación estimada: <b>{p(liq) if liq > 0 else '-'}</b>\n\n"
-            f"SL nativo: <b>{p(plan.stop)}</b>\n"
-            f"TP1 25%: <b>{p(plan.tp1)}</b>\n"
-            f"TP2 25%: <b>{p(plan.tp2)}</b>\n"
-            f"TP3 25%: <b>{p(plan.tp3)}</b>\n"
-            "Runner restante: <b>~25%</b>\n\n"
-            "No se abrirá otra operación mientras esta posición exista."
+            f"Margen API: <b>{real_margin:.3f} USDT</b>\n"
+            f"Leverage: <b>{pos.get('leverage')}x</b>\n"
+            f"Modo: <b>{pos.get('marginMode')} / {pos.get('positionMode')}</b>\n"
+            f"Liquidación: <b>{p(liq) if liq > 0 else '-'}</b>\n"
+            f"Invalidación tesis: <b>{p(invalidation)}</b>\n\n"
+            f"SL: <b>{p(plan.stop)}</b>\n"
+            f"TP1 {LIVE_TP1_PCT*100:.0f}%: <b>{p(plan.tp1)}</b>\n"
+            f"TP2 {LIVE_TP2_PCT*100:.0f}%: <b>{p(plan.tp2)}</b>\n"
+            f"Runner tras TP2: <b>~{LIVE_RUNNER_PCT*100:.0f}%</b>\n"
+            f"TP3 planner: <b>{p(plan.tp3) if plan.tp3 else '-'}</b> (referencia; SIN orden)\n\n"
+            "A partir de aquí el bot gestiona SL/TP y vigila cambio de tesis."
         )
+        return True
+
+    # -----------------------------
+    # Active bot-position management
+    # -----------------------------
 
     def safe_move_stop(self, new_stop: float, mark: float, stage: int):
         ps = self.state.position
         if not ps:
-            return
+            return False
 
-        # Never loosen the stop.
         if ps.side == "LONG":
             if new_stop <= ps.current_stop:
-                return
-            # Stop for LONG must stay below current market.
-            new_stop = min(new_stop, mark * 0.9985)
+                return False
+            new_stop = min(new_stop, mark * (1 - LIVE_STOP_MARK_BUFFER_PCT))
             if new_stop <= ps.current_stop:
-                return
+                return False
         else:
             if new_stop >= ps.current_stop:
-                return
-            new_stop = max(new_stop, mark * 1.0015)
+                return False
+            new_stop = max(new_stop, mark * (1 + LIVE_STOP_MARK_BUFFER_PCT))
             if new_stop >= ps.current_stop:
-                return
+                return False
 
         self.ensure_stop(ps.position_id, new_stop)
         ps.current_stop = new_stop
@@ -968,6 +1316,116 @@ class RealAuto:
             f"Nuevo SL: <b>{p(new_stop)}</b>\n"
             f"Etapa: <b>{ps.stop_stage}</b>"
         )
+        return True
+
+    def close_metrics(self, ps: LivePositionState):
+        hist = None
+        for _ in range(5):
+            try:
+                hist = self.api.history_position(ps.position_id)
+                if hist:
+                    break
+            except Exception:
+                pass
+            time.sleep(1)
+
+        realized = fnum(hist.get("realizedPNL")) if hist else 0.0
+        fee = fnum(hist.get("fee")) if hist else 0.0
+        funding = fnum(hist.get("funding")) if hist else 0.0
+        net = realized - fee + funding
+        return hist, realized, fee, funding, net
+
+    def finalize_closed_position(self, ps: LivePositionState, reason: str):
+        hist, realized, fee, funding, net = self.close_metrics(ps)
+
+        self.state.day_pnl += net
+        self.state.day_peak_pnl = max(
+            self.state.day_peak_pnl,
+            self.state.day_pnl,
+        )
+        self.state.last_close_time = time.time()
+        self.state.position = None
+        self.state.save()
+
+        self.tg.send(
+            "🏁 <b>POSICIÓN REAL CERRADA</b>\n\n"
+            f"Motivo: <b>{C.html.escape(reason)}</b>\n"
+            f"Position ID: <code>{ps.position_id}</code>\n"
+            f"PnL bruto realizado: <b>{money(realized)}</b>\n"
+            f"Fees: <b>-{abs(fee):.4f} USDT</b>\n"
+            f"Funding: <b>{money(funding)}</b>\n"
+            f"NETO API: <b>{money(net)}</b>\n"
+            f"PnL neto bot hoy: <b>{money(self.state.day_pnl)}</b>"
+        )
+        return net
+
+    def position_closed_net_now(self, pos: dict) -> float:
+        return (
+            fnum(pos.get("realizedPNL"))
+            - abs(fnum(pos.get("fee")))
+            + fnum(pos.get("funding"))
+        )
+
+    def stop_for_target_net(
+        self,
+        ps: LivePositionState,
+        pos: dict,
+        target_net_usdt: float,
+    ) -> float:
+        """Estimate a stop that targets a desired final net result."""
+        qty = fnum(pos.get("qty"))
+        if qty <= 0:
+            return ps.current_stop
+
+        realized = fnum(pos.get("realizedPNL"))
+        fee_paid = abs(fnum(pos.get("fee")))
+        funding = fnum(pos.get("funding"))
+        c = max(0.0, LIVE_TAKER_FEE_RATE + LIVE_SLIPPAGE_RATE)
+        target = float(target_net_usdt)
+
+        if ps.side == "LONG":
+            denom = qty * max(1e-9, 1.0 - c)
+            return (
+                target - realized + fee_paid - funding + qty * ps.entry
+            ) / denom
+
+        denom = qty * (1.0 + c)
+        return (
+            realized - fee_paid + funding + qty * ps.entry - target
+        ) / max(denom, 1e-9)
+
+    def runner_trail_candidate(self, ps: LivePositionState):
+        atr15 = 0.0
+        ema20 = None
+        try:
+            row = self.analyzer.frames["15m"].iloc[-1]
+            atr15 = fnum(row.get("atr"))
+            ema20 = fnum(row.get("ema20"))
+        except Exception:
+            pass
+
+        distance = LIVE_RUNNER_TRAIL_R * ps.r_value
+        if atr15 > 0:
+            distance = max(distance, LIVE_RUNNER_TRAIL_ATR * atr15)
+
+        if ps.side == "LONG":
+            peak_based = ps.peak_price - distance
+            if ema20 and atr15 > 0:
+                structural = ema20 - LIVE_RUNNER_STRUCTURE_ATR * atr15
+                candidate = min(peak_based, structural)
+            else:
+                candidate = peak_based
+            improvement = candidate - ps.current_stop
+        else:
+            peak_based = ps.peak_price + distance
+            if ema20 and atr15 > 0:
+                structural = ema20 + LIVE_RUNNER_STRUCTURE_ATR * atr15
+                candidate = max(peak_based, structural)
+            else:
+                candidate = peak_based
+            improvement = ps.current_stop - candidate
+
+        return candidate, improvement, distance, atr15
 
     def manage_real(self, mark: float):
         ps = self.state.position
@@ -975,137 +1433,691 @@ class RealAuto:
             return
 
         pos = self.api.position_by_id(ps.position_id)
-
         if pos is None:
-            hist = None
-            for _ in range(4):
-                try:
-                    hist = self.api.history_position(ps.position_id)
-                    if hist:
-                        break
-                except Exception:
-                    pass
-                time.sleep(1)
-
-            net = 0.0
-            if hist:
-                realized = float(hist.get("realizedPNL", 0) or 0)
-                fee = float(hist.get("fee", 0) or 0)
-                funding = float(hist.get("funding", 0) or 0)
-                net = realized - fee + funding
-
-            self.state.day_pnl += net
-            self.state.last_close_time = time.time()
-            self.state.position = None
-            # Do NOT re-arm here. It re-arms only once ENTER NOW disappears.
-            self.state.save()
-
-            self.tg.send(
-                "🏁 <b>POSICIÓN REAL CERRADA</b>\n\n"
-                f"Position ID: <code>{ps.position_id}</code>\n"
-                f"PnL neto registrado aprox.: <b>{net:+.4f} USDT</b>\n"
-                f"PnL bot hoy: <b>{self.state.day_pnl:+.4f} USDT</b>\n\n"
-                "La misma señal NO se volverá a ejecutar."
-            )
+            self.finalize_closed_position(ps, "TP / SL / cierre en exchange")
             return
 
-        qty_now = float(pos.get("qty", 0) or 0)
+        qty_now = fnum(pos.get("qty"))
         ratio = qty_now / ps.qty_initial if ps.qty_initial > 0 else 1.0
 
         if ps.side == "LONG":
             ps.peak_price = max(ps.peak_price, mark)
         else:
+            if ps.peak_price <= 0:
+                ps.peak_price = ps.entry
             ps.peak_price = min(ps.peak_price, mark)
 
-        # Infer partial TP milestones from actual position size at Bitunix.
-        # This survives notification delays and does not depend on Telegram.
-        if ratio <= 0.76 and ps.stop_stage < 1:
-            if ps.side == "LONG":
-                be = ps.entry * (1 + LIVE_BE_BUFFER_PCT)
-            else:
-                be = ps.entry * (1 - LIVE_BE_BUFFER_PCT)
-            self.safe_move_stop(be, mark, 1)
+        after_tp1 = max(0.0, 1.0 - LIVE_TP1_PCT)
+        runner_ratio = max(0.0, LIVE_RUNNER_PCT)
+        ratio_tol = 0.025
 
-        if ratio <= 0.51 and ps.stop_stage < 2:
-            target = (
-                ps.entry + ps.r_value
-                if ps.side == "LONG"
-                else ps.entry - ps.r_value
+        # TP1: try to protect a small NET profit using actual Bitunix fees/funding.
+        if ratio <= after_tp1 + ratio_tol and ps.stop_stage < 1:
+            target_net = max(0.0, LIVE_TP1_NET_LOCK_USDT)
+            target_stop = self.stop_for_target_net(ps, pos, target_net)
+            moved = self.safe_move_stop(target_stop, mark, 1)
+            ps.stop_stage = max(ps.stop_stage, 1)
+            self.state.save()
+            self.tg.send(
+                "💰 <b>TP1 DETECTADO</b>\n"
+                f"Qty restante: <b>{fmt_qty(qty_now, self.base_precision)} BTC</b>\n"
+                f"Neto cerrado/API ahora: <b>{money(self.position_closed_net_now(pos))}</b>\n"
+                f"Objetivo neto si salta SL restante: <b>~{target_net:.2f} USDT</b>\n"
+                f"SL bot actual: <b>{p(ps.current_stop)}</b>\n"
+                + ("Protección neta aplicada." if moved else
+                   "El SL existente ya era igual/mejor o no podía apretarse más.")
             )
-            self.safe_move_stop(target, mark, 2)
 
-        if ratio <= 0.26 and ps.stop_stage < 3:
-            target = (
-                ps.entry + 2 * ps.r_value
-                if ps.side == "LONG"
-                else ps.entry - 2 * ps.r_value
+        # TP2: do NOT jump to +1R. Protect part of realized profit and let ~40% run.
+        if ratio <= runner_ratio + ratio_tol and ps.stop_stage < 2:
+            closed_net = self.position_closed_net_now(pos)
+            target_net = max(
+                LIVE_TP1_NET_LOCK_USDT,
+                closed_net * LIVE_TP2_KEEP_REALIZED_PCT,
             )
-            self.safe_move_stop(target, mark, 3)
+            floor_stop = self.stop_for_target_net(ps, pos, target_net)
+            self.safe_move_stop(floor_stop, mark, 2)
+            ps.stop_stage = max(ps.stop_stage, 2)
+            self.state.save()
+            self.tg.send(
+                "💰💰 <b>TP2 DETECTADO — RUNNER ACTIVADO</b>\n"
+                f"Qty runner: <b>{fmt_qty(qty_now, self.base_precision)} BTC</b> "
+                f"(~{LIVE_RUNNER_PCT*100:.0f}%)\n"
+                f"Neto cerrado/API: <b>{money(closed_net)}</b>\n"
+                f"Objetivo de beneficio protegido: <b>~{target_net:.2f} USDT</b>\n"
+                f"Trailing: <b>máx({LIVE_RUNNER_TRAIL_R:.2f}R, "
+                f"{LIVE_RUNNER_TRAIL_ATR:.2f}×ATR15)</b>, respetando estructura.\n"
+                f"TP3 {p(ps.tp3)} queda SOLO como referencia; no hay orden TP3."
+            )
 
-        # Runner trailing only after the three partials.
-        if ps.stop_stage >= 3 and ratio > 0:
-            if ps.side == "LONG":
-                trail = ps.peak_price - LIVE_RUNNER_TRAIL_R * ps.r_value
-                improvement = trail - ps.current_stop
-            else:
-                trail = ps.peak_price + LIVE_RUNNER_TRAIL_R * ps.r_value
-                improvement = ps.current_stop - trail
-
-            if improvement >= 0.25 * ps.r_value:
-                self.safe_move_stop(trail, mark, 4)
+        # From TP2 onward, trail the runner. Never loosen the native stop.
+        if ps.stop_stage >= 2 and ratio > 0:
+            trail, improvement, distance, atr15 = self.runner_trail_candidate(ps)
+            step = LIVE_TRAIL_STEP_R * ps.r_value
+            if improvement >= step and self.safe_move_stop(trail, mark, 3):
+                self.tg.send(
+                    "🏃 <b>RUNNER TRAILING ACTUALIZADO</b>\n"
+                    f"Peak favorable: <b>{p(ps.peak_price)}</b>\n"
+                    f"Distancia trailing: <b>{distance:.1f} USDT</b>\n"
+                    f"ATR15: <b>{atr15:.1f}</b>\n"
+                    f"Nuevo SL: <b>{p(ps.current_stop)}</b>"
+                )
 
         self.state.save()
 
-    def status(self):
+    # -----------------------------
+    # Thesis invalidation / reversal
+    # -----------------------------
+
+    def opposite_action_for(self, side: str) -> str:
+        return (
+            "ENTER SHORT NOW"
+            if side == "LONG"
+            else "ENTER LONG NOW"
+        )
+
+    def opposite_bias(self, side: str, bias: str) -> bool:
+        bias = str(bias).upper()
+        if side == "LONG":
+            return bias in ("SHORT", "SHORT STRONG")
+        return bias in ("LONG", "LONG STRONG")
+
+    def thesis_invalidated(self, ps: LivePositionState, mark: float) -> bool:
+        level = ps.thesis_invalidation
+        if level <= 0:
+            return False
+        if ps.side == "LONG":
+            return mark < level
+        return mark > level
+
+    def close_bot_position_for_thesis(self, reason: str):
         ps = self.state.position
+        if not ps:
+            return False
+
+        self.tg.send(
+            "⚠️🔄 <b>SALIDA ANTICIPADA POR CAMBIO DE TESIS</b>\n\n"
+            f"{ps.side} {SYMBOL}\n"
+            f"Motivo: <b>{C.html.escape(reason)}</b>\n"
+            "Cierro por positionId y verificaré que quede a cero."
+        )
+
+        try:
+            self.api.flash_close_position(ps.position_id)
+        except Exception as e:
+            self.emergency_close_and_lock(
+                "THESIS EXIT FAILED TO SEND: " + str(e)
+            )
+            return False
+
+        if not self.wait_position_gone(ps.position_id):
+            self.emergency_close_and_lock(
+                "THESIS EXIT SENT BUT POSITION STILL VISIBLE"
+            )
+            return False
+
+        self.finalize_closed_position(ps, reason)
+        return True
+
+    def evaluate_thesis_change(self, mark: float):
+        if not LIVE_EXIT_ON_THESIS_FLIP:
+            return
+
+        ps = self.state.position
+        plan = self.plan
+        if not ps or plan is None:
+            self.flip_count = 0
+            self.flip_key = ""
+            return
+
+        invalid = self.thesis_invalidated(ps, mark)
+        opposite_action = str(plan.action) == self.opposite_action_for(ps.side)
+        opp_bias = self.opposite_bias(ps.side, plan.bias)
+
+        # Strongest case: opposite ENTER NOW is already a confirmed entry signal
+        # AND the entry-time thesis invalidation level has been crossed.
+        immediate_reverse = invalid and opposite_action
+
+        key = f"{ps.side}|{plan.bias}|{invalid}"
+        if invalid and opp_bias:
+            if key == self.flip_key:
+                self.flip_count += 1
+            else:
+                self.flip_key = key
+                self.flip_count = 1
+        else:
+            self.flip_key = ""
+            self.flip_count = 0
+
+        confirmed_exit = self.flip_count >= max(1, LIVE_EXIT_CONFIRM_CYCLES)
+
+        if not immediate_reverse and not confirmed_exit:
+            return
+
+        old_side = ps.side
+        reason = (
+            f"opposite ENTER confirmed + invalidation crossed "
+            f"({ps.thesis_invalidation:.1f})"
+            if immediate_reverse else
+            f"thesis invalidated for {self.flip_count} analyses; "
+            f"bias={plan.bias}"
+        )
+
+        if not self.close_bot_position_for_thesis(reason):
+            return
+
+        self.flip_count = 0
+        self.flip_key = ""
+
+        # Only reverse when the planner is currently giving the exact
+        # opposite ENTER NOW. A mere bias flip is exit-only.
+        if (
+            LIVE_REVERSE_ON_CONFIRMED
+            and str(plan.action) == self.opposite_action_for(old_side)
+        ):
+            # New opposite signal is a new signal cycle; allow its own one-shot.
+            self.state.entry_armed = True
+            self.state.save()
+
+            self.tg.send(
+                "🔄 <b>REVERSAL CONFIRMADO</b>\n\n"
+                f"El {old_side} está cerrado.\n"
+                f"Nueva señal: <b>{C.html.escape(str(plan.action))}</b>\n"
+                "Verifico límites/riesgo/costes antes de abrir el lado contrario."
+            )
+            self.open_real(
+                plan,
+                bypass_cooldown=True,
+                reversal=True,
+            )
+        else:
+            self.tg.send(
+                "🟡 <b>POSICIÓN CERRADA; NO HAY REVERSAL EJECUTABLE</b>\n"
+                "Me quedo fuera hasta un nuevo ENTER NOW válido."
+            )
+
+    # -----------------------------
+    # Real status / account
+    # -----------------------------
+
+    def get_mark(self) -> float:
+        snap = self.live.snapshot()
+        mark = snap.get("price")
+        if mark is None and self.plan is not None:
+            mark = self.plan.price
+        return fnum(mark)
+
+    def account_snapshot(self):
+        a = self.api.account(MARGIN_COIN)
+        available = fnum(a.get("available"))
+        frozen = fnum(a.get("frozen"))
+        margin = fnum(a.get("margin"))
+        transfer = fnum(a.get("transfer"))
+        cross_u = fnum(a.get("crossUnrealizedPNL"))
+        iso_u = fnum(a.get("isolationUnrealizedPNL"))
+        upnl = cross_u + iso_u
+        bonus = fnum(a.get("bonus"))
+
+        # Derived estimate from fields exposed by the account endpoint.
+        wallet_est = available + frozen + margin
+        equity_est = wallet_est + upnl
+
+        return {
+            "raw": a,
+            "available": available,
+            "frozen": frozen,
+            "margin": margin,
+            "transfer": transfer,
+            "upnl": upnl,
+            "bonus": bonus,
+            "wallet_est": wallet_est,
+            "equity_est": equity_est,
+            "positionMode": str(a.get("positionMode", "-")),
+        }
+
+    def closed_today_metrics(self):
+        now = C.datetime.now(C.TZ)
+        start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        start_ms = int(start.timestamp() * 1000)
+
+        realized = fee = funding = 0.0
+        n = 0
+        try:
+            for x in self.api.history_positions(limit=100):
+                mtime = int(fnum(x.get("mtime"), 0))
+                if mtime >= start_ms:
+                    n += 1
+                    realized += fnum(x.get("realizedPNL"))
+                    fee += fnum(x.get("fee"))
+                    funding += fnum(x.get("funding"))
+        except Exception:
+            pass
+
+        return {
+            "count": n,
+            "realized": realized,
+            "fee": fee,
+            "funding": funding,
+            "net": realized - fee + funding,
+        }
+
+    def tpsl_summary_lines(self, position_id: str, side: str):
+        try:
+            rows = self.api.pending_tpsl(position_id)
+        except Exception as e:
+            return [f"TP/SL API: error {C.html.escape(str(e))}"]
+
+        tps = []
+        sls = []
+        for x in rows:
+            tp = fnum(x.get("tpPrice"))
+            sl = fnum(x.get("slPrice"))
+            if tp > 0:
+                tps.append((tp, fnum(x.get("tpQty"))))
+            if sl > 0:
+                sls.append((sl, fnum(x.get("slQty"))))
+
+        reverse = str(side).upper() == "SHORT"
+        tps.sort(key=lambda z: z[0], reverse=reverse)
+
+        lines = []
+        if sls:
+            # Position SL usually has no qty; show every unique level.
+            uniq = []
+            for sl, qty in sls:
+                if all(abs(sl - u[0]) > 1e-9 for u in uniq):
+                    uniq.append((sl, qty))
+            for i, (sl, qty) in enumerate(uniq[:3], 1):
+                q = f" — {fmt_qty(qty, self.base_precision)} BTC" if qty > 0 else ""
+                lines.append(f"SL{i if len(uniq)>1 else ''}: <b>{p(sl)}</b>{q}")
+        else:
+            lines.append("SL visible por API: <b>NO ENCONTRADO ⚠️</b>")
+
+        for i, (tp, qty) in enumerate(tps[:5], 1):
+            q = f" — {fmt_qty(qty, self.base_precision)} BTC" if qty > 0 else ""
+            lines.append(f"TP{i}: <b>{p(tp)}</b>{q}")
+
+        if not tps:
+            lines.append("TP visibles por API: <b>NINGUNO</b>")
+
+        return lines
+
+    def position_message(self):
+        rows = self.api.positions(SYMBOL)
+        if not rows:
+            return (
+                "📈 <b>POSICIÓN REAL BITUNIX</b>\n\n"
+                "BTCUSDT: <b>NINGUNA</b>\n"
+                f"Posición registrada por bot: "
+                f"<b>{'SÍ ⚠️' if self.state.position else 'NO ✅'}</b>"
+            )
+
+        pos = rows[0]
+        pid = str(pos.get("positionId", ""))
+        side = str(pos.get("side", "-")).upper()
+        qty = fnum(pos.get("qty"))
+        entry = fnum(pos.get("avgOpenPrice"))
+        liq = fnum(pos.get("liqPrice"))
+        margin = fnum(pos.get("margin"))
+        upnl = fnum(pos.get("unrealizedPNL"))
+        realized = fnum(pos.get("realizedPNL"))
+        fee = fnum(pos.get("fee"))
+        funding = fnum(pos.get("funding"))
+        net_now = realized + upnl - fee + funding
+        mark = self.get_mark()
+
+        owned = (
+            self.state.position is not None
+            and self.state.position.position_id == pid
+        )
+        origin = "BOT ✅" if owned else "MANUAL / EXTERNA ⚠️"
+        management = "AUTOMÁTICA ✅" if owned else "NO ADOPTADA / NO TOCARÉ ⚠️"
+
+        lines = [
+            "📈 <b>POSICIÓN REAL BITUNIX</b>",
+            "",
+            f"{side_icon(side)} <b>{side} {SYMBOL}</b>",
+            f"Origen: <b>{origin}</b>",
+            f"Gestión I-GOD: <b>{management}</b>",
+            f"Position ID: <code>{pid}</code>",
+            "",
+            f"Entrada: <b>{p(entry)}</b>",
+            f"Mark/último: <b>{p(mark) if mark else '-'}</b>",
+            f"Qty: <b>{fmt_qty(qty, self.base_precision)} BTC</b>",
+            f"Nominal aprox.: <b>{qty*mark:,.2f} USDT</b>" if mark else "",
+            f"Leverage: <b>{pos.get('leverage')}x</b>",
+            f"Modo: <b>{pos.get('marginMode')} / {pos.get('positionMode')}</b>",
+            f"Margen API: <b>{margin:.4f} USDT</b>",
+            f"Liquidación: <b>{p(liq) if liq > 0 else '-'}</b>",
+            "",
+            f"PnL no realizado: <b>{money(upnl)}</b>",
+            f"PnL realizado parcial: <b>{money(realized)}</b>",
+            f"Fees acumuladas posición: <b>-{abs(fee):.4f} USDT</b>",
+            f"Funding acumulado: <b>{money(funding)}</b>",
+            f"Neto aprox. posición ahora: <b>{money(net_now)}</b>",
+            "",
+            "<b>🛡 PROTECCIONES EN EXCHANGE</b>",
+        ]
+        lines += self.tpsl_summary_lines(pid, side)
+
+        if owned and self.state.position:
+            ps = self.state.position
+            lines += [
+                "",
+                "<b>🤖 GESTIÓN BOT</b>",
+                f"SL interno actual: <b>{p(ps.current_stop)}</b>",
+                f"Etapa SL: <b>{ps.stop_stage}</b>",
+                f"Invalidación de tesis guardada: "
+                f"<b>{p(ps.thesis_invalidation) if ps.thesis_invalidation else '-'}</b>",
+                f"Runner trailing: <b>{LIVE_RUNNER_TRAIL_R:.2f}R / {LIVE_RUNNER_TRAIL_ATR:.2f}×ATR15</b> "
+                "(desde TP2)",
+            ]
+
+        return "\n".join(x for x in lines if x != "")[:4090]
+
+    def account_message(self):
+        a = self.account_snapshot()
+        d = self.closed_today_metrics()
+
+        return (
+            "💰 <b>CUENTA FUTURES BITUNIX — EN VIVO</b>\n\n"
+            f"Disponible: <b>{a['available']:,.4f} USDT</b>\n"
+            f"Margen usado/API: <b>{a['margin']:,.4f} USDT</b>\n"
+            f"Frozen: <b>{a['frozen']:,.4f} USDT</b>\n"
+            f"PnL no realizado cuenta: <b>{money(a['upnl'])}</b>\n"
+            f"Wallet estimada API: <b>{a['wallet_est']:,.4f} USDT</b>\n"
+            f"Equity estimada API: <b>{a['equity_est']:,.4f} USDT</b>\n"
+            f"Transferible API: <b>{a['transfer']:,.4f} USDT</b>\n"
+            f"Bonus: <b>{a['bonus']:,.4f} USDT</b>\n"
+            f"Position mode cuenta: <b>{C.html.escape(a['positionMode'])}</b>\n\n"
+            "<b>📅 CIERRES DE HOY (API)</b>\n"
+            f"Posiciones cerradas: <b>{d['count']}</b>\n"
+            f"Realized bruto: <b>{money(d['realized'])}</b>\n"
+            f"Fees: <b>-{abs(d['fee']):.4f} USDT</b>\n"
+            f"Funding: <b>{money(d['funding'])}</b>\n"
+            f"Neto cierres hoy: <b>{money(d['net'])}</b>\n\n"
+            f"PnL NETO registrado por I-GOD hoy: "
+            f"<b>{money(self.state.day_pnl)}</b>\n\n"
+            "<i>Wallet/equity son estimaciones derivadas de los campos "
+            "que devuelve la API; PnL/fees/funding de posiciones se leen "
+            "directamente de Bitunix.</i>"
+        )[:4090]
+
+    def status(self):
         current_action = self.plan.action if self.plan is not None else "-"
         current_setup = self.plan.setup if self.plan is not None else "-"
-        base = (
-            "💰 <b>LIVE STATUS</b>\n"
-            f"Ejecución real permitida: <b>{LIVE_EXECUTION}</b>\n"
+        current_bias = self.plan.bias if self.plan is not None else "-"
+
+        try:
+            a = self.account_snapshot()
+            rows = self.api.positions(SYMBOL)
+            ex = rows[0] if rows else None
+            ex_pid = str(ex.get("positionId", "")) if ex else ""
+            bot_owned = (
+                ex is not None
+                and self.state.position is not None
+                and self.state.position.position_id == ex_pid
+            )
+            ex_text = (
+                f"{ex.get('side')} {ex.get('qty')} BTC "
+                f"({'BOT' if bot_owned else 'MANUAL/EXTERNA'})"
+                if ex else
+                "NINGUNA"
+            )
+            acct_lines = (
+                f"Equity est.: <b>{a['equity_est']:,.4f} USDT</b>\n"
+                f"Disponible: <b>{a['available']:,.4f} USDT</b>\n"
+                f"Margen API: <b>{a['margin']:,.4f} USDT</b>\n"
+                f"uPnL cuenta: <b>{money(a['upnl'])}</b>\n"
+            )
+        except Exception as e:
+            ex_text = "ERROR API"
+            acct_lines = (
+                f"Cuenta API: <b>ERROR {C.html.escape(str(e))}</b>\n"
+            )
+
+        ps = self.state.position
+        bot_pos = "NINGUNA"
+        if ps:
+            bot_pos = (
+                f"{ps.side} @ {p(ps.entry)} | "
+                f"SL {p(ps.current_stop)} | stage {ps.stop_stage}"
+            )
+
+        lock_reason = (
+            f"\nMotivo lock: <b>{C.html.escape(self.state.lock_reason)}</b>"
+            if self.state.locked and self.state.lock_reason else ""
+        )
+
+        return (
+            "📊 <b>I-GOD V7 — STATUS REAL</b>\n\n"
+            "<b>💰 BITUNIX</b>\n"
+            + acct_lines
+            + f"Posición exchange: <b>{C.html.escape(ex_text)}</b>\n\n"
+            "<b>🤖 BOT</b>\n"
+            f"LIVE_EXECUTION: <b>{LIVE_EXECUTION}</b>\n"
             f"Auto entradas: <b>{self.state.auto_enabled}</b>\n"
             f"Entry armed: <b>{self.state.entry_armed}</b>\n"
-            f"Bloqueado: <b>{self.state.locked}</b>\n"
-            f"Señal actual: <b>{C.html.escape(str(current_action))}</b>\n"
-            f"Setup actual: <b>{C.html.escape(str(current_setup))}</b>\n"
-            f"Señales consumidas: <b>{len(self.state.consumed)}</b>\n"
-            f"Base de sizing/trade: <b>{LIVE_MARGIN_USDT:.2f} USDT</b>\n"
-            f"Leverage esperado: <b>{LIVE_LEVERAGE}x</b>\n"
-            f"Margin mode esperado: <b>{LIVE_MARGIN_MODE}</b>\n"
-            f"Trades hoy: <b>{self.state.trades_today}/{LIVE_MAX_TRADES_DAY}</b>\n"
-            f"PnL bot hoy aprox.: <b>{self.state.day_pnl:+.4f} USDT</b>\n"
+            f"Bloqueado: <b>{self.state.locked}</b>"
+            + lock_reason + "\n"
+            f"Posición bot: <b>{C.html.escape(bot_pos)}</b>\n"
+            f"Trades bot hoy: <b>{self.state.trades_today}/"
+            f"{LIVE_MAX_TRADES_DAY + (LIVE_PROFIT_LOCK_EXTRA_TRADES if self.profit_lock_active() else 0)}</b>\n"
+            f"PnL neto bot hoy: <b>{money(self.state.day_pnl)}</b>\n"
+            f"PnL cuenta hoy usado por Profit Lock: <b>{money(self.profit_lock_day_pnl())}</b>\n"
+            f"Objetivo diario soft: <b>{money(self.daily_profit_target_usdt())}</b>\n"
+            f"Profit lock: <b>{self.profit_lock_active()}</b>\n"
+            f"Suelo protegido: <b>{money(self.profit_lock_floor())}</b>\n\n"
+            "<b>🧠 MERCADO</b>\n"
+            f"Sesgo: <b>{C.html.escape(str(current_bias))}</b>\n"
+            f"Acción: <b>{C.html.escape(str(current_action))}</b>\n"
+            f"Setup: <b>{C.html.escape(str(current_setup))}</b>\n"
+            f"Señales consumidas: <b>{len(self.state.consumed)}</b>"
+        )[:4090]
+
+    def readiness_message(self):
+        problems = []
+        details = []
+
+        try:
+            a = self.api.account(MARGIN_COIN)
+            details.append("✅ API privada / cuenta")
+        except Exception as e:
+            problems.append(f"API privada: {e}")
+
+        try:
+            positions = self.api.positions(SYMBOL)
+            if positions:
+                problems.append(
+                    "hay una posición BTCUSDT real abierta"
+                )
+            else:
+                details.append("✅ Sin posición BTCUSDT")
+        except Exception as e:
+            problems.append(f"consulta posiciones: {e}")
+
+        try:
+            pending = self.api.pending_orders()
+            if pending:
+                problems.append(
+                    f"hay {len(pending)} orden(es) normal(es) pendientes"
+                )
+            else:
+                details.append("✅ Sin órdenes normales pendientes")
+        except Exception as e:
+            problems.append(f"consulta órdenes: {e}")
+
+        try:
+            pending_tpsl = self.api.pending_tpsl()
+            if pending_tpsl:
+                problems.append(
+                    f"hay {len(pending_tpsl)} TP/SL pendiente(s) en BTCUSDT"
+                )
+            else:
+                details.append("✅ Sin TP/SL huérfanos pendientes")
+        except Exception as e:
+            problems.append(f"consulta TP/SL: {e}")
+
+        if not LIVE_EXECUTION:
+            problems.append("LIVE_EXECUTION=false")
+        else:
+            details.append("✅ LIVE_EXECUTION=true")
+
+        if not self.state.auto_enabled:
+            problems.append("AUTO desactivado")
+        else:
+            details.append("✅ AUTO activado")
+
+        if self.state.locked:
+            problems.append(f"LOCK: {self.state.lock_reason}")
+        else:
+            details.append("✅ Sin lock")
+
+        if not self.state.entry_armed:
+            problems.append("entry_armed=false (ciclo ENTER ya consumido)")
+        else:
+            details.append("✅ Entry armed")
+
+        max_trades_now = LIVE_MAX_TRADES_DAY + (
+            LIVE_PROFIT_LOCK_EXTRA_TRADES if self.profit_lock_active() else 0
         )
-        if not ps:
-            return base + "Posición bot: <b>NINGUNA</b>"
+        if self.state.trades_today >= max_trades_now:
+            problems.append(f"límite diario de trades alcanzado ({max_trades_now})")
+        else:
+            details.append(
+                f"✅ Trades hoy {self.state.trades_today}/{max_trades_now}"
+            )
+
+        if self.state.day_pnl <= -abs(LIVE_MAX_DAILY_LOSS_USDT):
+            problems.append("límite diario de pérdida alcanzado")
+        else:
+            details.append(
+                f"✅ PnL bot hoy {self.state.day_pnl:+.4f} USDT"
+            )
+
+        target = self.daily_profit_target_usdt()
+        lock_pnl = self.profit_lock_day_pnl()
+        if self.profit_lock_active():
+            floor = self.profit_lock_floor()
+            if lock_pnl <= floor:
+                problems.append(
+                    f"profit-lock floor alcanzado ({floor:.2f} USDT)"
+                )
+            else:
+                details.append(
+                    f"🏆 Profit Lock: día {lock_pnl:+.2f}, target {target:.2f}, floor {floor:.2f}"
+                )
+        elif target > 0:
+            details.append(
+                f"✅ Profit Lock aún no activo: día {lock_pnl:+.2f} / target {target:.2f}"
+            )
+
+        plan_text = (
+            f"{self.plan.bias} | {self.plan.action} | {self.plan.setup}"
+            if self.plan is not None else
+            "todavía sin análisis"
+        )
+
+        if problems:
+            return (
+                "🧪 <b>PRE-FLIGHT CHECK — NO READY</b>\n\n"
+                + "\n".join(details)
+                + "\n\n<b>Bloqueos:</b>\n"
+                + "\n".join(
+                    f"❌ {C.html.escape(x)}" for x in problems
+                )
+                + f"\n\nPlan actual: <b>{C.html.escape(plan_text)}</b>"
+            )[:4090]
+
         return (
-            base
-            + f"Posición bot: <b>{ps.side}</b>\n"
-            + f"Entrada: <b>{p(ps.entry)}</b>\n"
-            + f"SL actual: <b>{p(ps.current_stop)}</b>\n"
-            + f"Etapa SL: <b>{ps.stop_stage}</b>"
+            "🧪✅ <b>PRE-FLIGHT CHECK — READY</b>\n\n"
+            + "\n".join(details)
+            + "\n\n"
+            "El bot está preparado para que el próximo ENTER NOW válido "
+            "pase por sizing + riesgo + fees/slippage y, si todo cumple, "
+            "envíe una orden REAL.\n\n"
+            f"Plan actual: <b>{C.html.escape(plan_text)}</b>"
+        )[:4090]
+
+    # -----------------------------
+    # Telegram commands
+    # -----------------------------
+
+    def try_unlock(self):
+        if self.api.positions(SYMBOL):
+            return (
+                "⛔ No desbloqueo: todavía existe una posición BTCUSDT real."
+            )
+        if self.api.pending_orders():
+            return (
+                "⛔ No desbloqueo: todavía existen órdenes normales pendientes."
+            )
+
+        self.state.locked = False
+        self.state.lock_reason = ""
+        self.state.auto_enabled = False
+        self.state.entry_armed = True
+        self.state.save()
+
+        return (
+            "🔓 <b>LOCK QUITADO</b>\n"
+            "AUTO queda OFF por seguridad. Revisa /check y después usa /live_on."
         )
 
     def commands(self):
         for cmd in self.tg.poll_commands():
             if cmd in ("/status", "/live"):
                 self.tg.send(self.status())
+
+            elif cmd == "/account":
+                try:
+                    self.tg.send(self.account_message())
+                except Exception as e:
+                    self.tg.send(
+                        "❌ Error leyendo cuenta Bitunix:\n"
+                        + C.html.escape(str(e))
+                    )
+
+            elif cmd == "/position":
+                try:
+                    self.tg.send(self.position_message())
+                except Exception as e:
+                    self.tg.send(
+                        "❌ Error leyendo posición Bitunix:\n"
+                        + C.html.escape(str(e))
+                    )
+
+            elif cmd == "/check":
+                try:
+                    self.tg.send(self.readiness_message())
+                except Exception as e:
+                    self.tg.send(
+                        "❌ Pre-flight falló:\n"
+                        + C.html.escape(str(e))
+                    )
+
             elif cmd == "/live_off":
                 self.state.auto_enabled = False
                 self.state.save()
                 self.tg.send(
                     "🔕 <b>NUEVAS ENTRADAS LIVE DESACTIVADAS</b>\n"
-                    "Si hay una posición del bot, SEGUIRÁ gestionándose."
+                    "Una posición DEL BOT ya abierta seguirá gestionándose."
                 )
+
             elif cmd == "/live_on":
                 if not LIVE_EXECUTION:
                     self.tg.send(
-                        "⛔ LIVE_EXECUTION=false en Railway. "
-                        "No puedo activar dinero real desde Telegram."
+                        "⛔ LIVE_EXECUTION=false en Railway."
                     )
                 elif self.state.locked:
                     self.tg.send(
-                        "⛔ El bot está BLOQUEADO por seguridad:\n"
+                        "⛔ Bot BLOQUEADO:\n"
                         + C.html.escape(self.state.lock_reason)
+                    )
+                elif self.api.positions(SYMBOL) and self.state.position is None:
+                    self.tg.send(
+                        "⛔ Hay una posición BTCUSDT manual/externa. "
+                        "No activo nuevas entradas."
                     )
                 else:
                     self.state.auto_enabled = True
@@ -1114,23 +2126,58 @@ class RealAuto:
                         "🔴 <b>NUEVAS ENTRADAS LIVE ACTIVADAS</b>\n"
                         "El próximo ENTER NOW válido puede enviar una orden REAL."
                     )
+
+            elif cmd == "/unlock":
+                try:
+                    self.tg.send(self.try_unlock())
+                except Exception as e:
+                    self.tg.send(
+                        "❌ No pude comprobar si es seguro desbloquear:\n"
+                        + C.html.escape(str(e))
+                    )
+
             elif cmd == "/plan" and self.plan is not None:
                 self.tg.send(
                     C.plan_message(self.plan, "📍 PLAN LIVE ACTUAL")
                 )
 
+            elif cmd == "/help":
+                self.tg.send(
+                    "<b>I-GOD V7 comandos</b>\n"
+                    "/status — cuenta + bot + mercado\n"
+                    "/account — cuenta Futures real\n"
+                    "/position — posición/SL/TP reales\n"
+                    "/check — pre-flight READY/NO READY\n"
+                    "/plan — plan de mercado\n"
+                    "/live_on — permitir nuevas entradas\n"
+                    "/live_off — bloquear nuevas entradas\n"
+                    "/unlock — quitar lock solo si no hay posición/órdenes\n"
+                    "/help — ayuda"
+                )
+
+    # -----------------------------
+    # Main loop
+    # -----------------------------
+
     def run(self):
         self.live.start()
 
         self.tg.send(
-            "🔴🤖 <b>I-GOD V5 REAL AUTO conectado</b>\n\n"
-            f"BTCUSDT | base sizing {LIVE_MARGIN_USDT:.2f} USDT "
+            "🔴🤖 <b>I-GOD V7 REAL AUTO conectado</b>\n\n"
+            f"{SYMBOL} | base sizing {LIVE_MARGIN_USDT:.2f} USDT "
             f"| leverage esperado {LIVE_LEVERAGE}x\n"
             f"LIVE_EXECUTION: <b>{LIVE_EXECUTION}</b>\n"
-            f"AUTO START: <b>{self.state.auto_enabled}</b>\n"
-            f"State persistente: <b>{bool(volume)}</b>\n\n"
-            "ONE SHOT: un ciclo ENTER NOW solo puede abrir UNA operación.\n"
-            "Mientras haya posición, no abre otra."
+            f"AUTO: <b>{self.state.auto_enabled}</b>\n"
+            f"State persistente: <b>{bool(volume)}</b>\n"
+            f"Fee guard mínimo: <b>{LIVE_MIN_NET_RR:.2f}R neto</b>\n"
+            f"Daily target soft: <b>{LIVE_DAILY_PROFIT_TARGET_PCT*100:.1f}%</b>\n"
+            f"Profit-lock risk: <b>{LIVE_PROFIT_LOCK_RISK_MULT:.2f}x</b>\n"
+            f"Salidas: <b>{LIVE_TP1_PCT*100:.0f}% TP1 + {LIVE_TP2_PCT*100:.0f}% TP2 + {LIVE_RUNNER_PCT*100:.0f}% runner</b>\n"
+            f"Runner desde TP2: <b>{LIVE_RUNNER_TRAIL_R:.2f}R / {LIVE_RUNNER_TRAIL_ATR:.2f}×ATR15</b>\n"
+            f"Exit thesis flip: <b>{LIVE_EXIT_ON_THESIS_FLIP}</b>\n"
+            f"Reverse confirmed: <b>{LIVE_REVERSE_ON_CONFIRMED}</b>\n\n"
+            "ONE SHOT activo. Posiciones manuales NO se adoptan.\n"
+            "Usa /check para comprobar si está READY."
         )
 
         while not C.STOP_EVENT.is_set():
@@ -1146,12 +2193,19 @@ class RealAuto:
                         f"{self.plan.setup} | {self.plan.price:.1f}"
                     )
 
+                    mark = fnum(self.plan.price)
+
+                    # Existing BOT position: first evaluate whether the thesis
+                    # changed enough to close/reverse.
+                    if self.state.position is not None:
+                        self.evaluate_thesis_change(mark)
+
                     is_enter = self.plan.action in (
                         "ENTER LONG NOW",
                         "ENTER SHORT NOW",
                     )
 
-                    # Re-arm only after the signal leaves ENTER state.
+                    # Re-arm only after leaving ENTER when flat.
                     if (
                         not is_enter
                         and self.state.position is None
@@ -1166,13 +2220,9 @@ class RealAuto:
 
                     self.last_analysis = now
 
-                snap = self.live.snapshot()
-                mark = snap.get("price")
-                if mark is None and self.plan is not None:
-                    mark = self.plan.price
-
-                if mark is not None and self.state.position is not None:
-                    self.manage_real(float(mark))
+                mark = self.get_mark()
+                if mark > 0 and self.state.position is not None:
+                    self.manage_real(mark)
 
                 C.STOP_EVENT.wait(MANAGE_SECONDS)
 
