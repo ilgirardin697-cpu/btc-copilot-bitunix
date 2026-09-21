@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-I-GOD BTC Copilot V7.2 — REAL AUTO EXECUTOR for Bitunix
+I-GOD BTC Copilot V7.2.1 — REAL AUTO EXECUTOR for Bitunix
 ======================================================
 
 REAL MONEY CODE.
@@ -280,6 +280,18 @@ class BitunixPrivate:
             return v if isinstance(v, list) else []
         return []
 
+    @staticmethod
+    def _one(data):
+        """Normalize order responses that may be dict or one-element list."""
+        if isinstance(data, dict):
+            return data
+        if isinstance(data, list):
+            for x in data:
+                if isinstance(x, dict):
+                    return x
+            return {}
+        return {}
+
     def account(self, margin_coin=MARGIN_COIN):
         d = self.request(
             "GET",
@@ -353,11 +365,13 @@ class BitunixPrivate:
         return self._rows(d, "tradeList")
 
     def order_detail(self, order_id=None, client_id=None):
-        return self.request(
-            "GET",
-            "/api/v1/futures/trade/get_order_detail",
-            {"orderId": order_id, "clientId": client_id},
-        ) or {}
+        return self._one(
+            self.request(
+                "GET",
+                "/api/v1/futures/trade/get_order_detail",
+                {"orderId": order_id, "clientId": client_id},
+            )
+        )
 
     def pending_tpsl(self, position_id: Optional[str] = None):
         d = self.request(
@@ -391,11 +405,13 @@ class BitunixPrivate:
             "slStopType": "MARK_PRICE",
             "slOrderType": "MARKET",
         }
-        return self.request(
-            "POST",
-            "/api/v1/futures/trade/place_order",
-            body=body,
-        ) or {}
+        return self._one(
+            self.request(
+                "POST",
+                "/api/v1/futures/trade/place_order",
+                body=body,
+            )
+        )
 
     def flash_close_position(self, position_id: str):
         return self.request(
@@ -410,42 +426,48 @@ class BitunixPrivate:
         tp_price: str,
         qty: str,
     ):
-        return self.request(
-            "POST",
-            "/api/v1/futures/tpsl/place_order",
-            body={
-                "symbol": SYMBOL,
-                "positionId": position_id,
-                "tpPrice": tp_price,
-                "tpStopType": "MARK_PRICE",
-                "tpOrderType": "MARKET",
-                "tpQty": qty,
-            },
-        ) or {}
+        return self._one(
+            self.request(
+                "POST",
+                "/api/v1/futures/tpsl/place_order",
+                body={
+                    "symbol": SYMBOL,
+                    "positionId": position_id,
+                    "tpPrice": tp_price,
+                    "tpStopType": "MARK_PRICE",
+                    "tpOrderType": "MARKET",
+                    "tpQty": qty,
+                },
+            )
+        )
 
     def place_position_stop(self, position_id: str, stop_price: str):
-        return self.request(
-            "POST",
-            "/api/v1/futures/tpsl/position/place_order",
-            body={
-                "symbol": SYMBOL,
-                "positionId": position_id,
-                "slPrice": stop_price,
-                "slStopType": "MARK_PRICE",
-            },
-        ) or {}
+        return self._one(
+            self.request(
+                "POST",
+                "/api/v1/futures/tpsl/position/place_order",
+                body={
+                    "symbol": SYMBOL,
+                    "positionId": position_id,
+                    "slPrice": stop_price,
+                    "slStopType": "MARK_PRICE",
+                },
+            )
+        )
 
     def modify_position_stop(self, position_id: str, stop_price: str):
-        return self.request(
-            "POST",
-            "/api/v1/futures/tpsl/position/modify_order",
-            body={
-                "symbol": SYMBOL,
-                "positionId": position_id,
-                "slPrice": stop_price,
-                "slStopType": "MARK_PRICE",
-            },
-        ) or {}
+        return self._one(
+            self.request(
+                "POST",
+                "/api/v1/futures/tpsl/position/modify_order",
+                body={
+                    "symbol": SYMBOL,
+                    "positionId": position_id,
+                    "slPrice": stop_price,
+                    "slStopType": "MARK_PRICE",
+                },
+            )
+        )
 
 
 # ---------------------------------------------------------------------
@@ -1035,7 +1057,10 @@ class RealAuto:
 
         time.sleep(0.8)
         orders = self.api.pending_tpsl(position_id)
-        if not any(str(x.get("slPrice", "")).strip() for x in orders):
+        if not any(
+            isinstance(x, dict) and str(x.get("slPrice", "")).strip()
+            for x in orders
+        ):
             raise RuntimeError("Native stop not visible after placement.")
 
     def place_native_tps(
@@ -1057,16 +1082,39 @@ class RealAuto:
             fmt_qty(qty_tp2, self.base_precision),
         )
 
-        pos_state.tp1_order_id = str(d1.get("orderId", d1.get("id", "")))
-        pos_state.tp2_order_id = str(d2.get("orderId", d2.get("id", "")))
-        pos_state.tp3_order_id = ""
+        post_id1 = str(d1.get("orderId", d1.get("id", ""))) if isinstance(d1, dict) else ""
+        post_id2 = str(d2.get("orderId", d2.get("id", ""))) if isinstance(d2, dict) else ""
 
         time.sleep(0.8)
         rows = self.api.pending_tpsl(pos_state.position_id)
-        tp_rows = [x for x in rows if str(x.get("tpPrice", "")).strip()]
+        tp_rows = [
+            x for x in rows
+            if isinstance(x, dict) and str(x.get("tpPrice", "")).strip()
+        ]
         if len(tp_rows) < 2:
             raise RuntimeError(
                 f"Expected >=2 native TP orders, found {len(tp_rows)}."
+            )
+
+        def nearest_tp_id(target):
+            candidates = []
+            for row in tp_rows:
+                try:
+                    px = float(row.get("tpPrice"))
+                except Exception:
+                    continue
+                oid = str(row.get("id", row.get("orderId", "")))
+                candidates.append((abs(px - float(target)), oid))
+            candidates.sort(key=lambda z: z[0])
+            return candidates[0][1] if candidates else ""
+
+        pos_state.tp1_order_id = nearest_tp_id(pos_state.tp1) or post_id1
+        pos_state.tp2_order_id = nearest_tp_id(pos_state.tp2) or post_id2
+        pos_state.tp3_order_id = ""
+
+        if not pos_state.tp1_order_id or not pos_state.tp2_order_id:
+            raise RuntimeError(
+                "Native TPs visible but order IDs could not be resolved."
             )
 
     def verify_real_position(self, pos: dict, qty_requested: float):
@@ -1975,7 +2023,7 @@ class RealAuto:
         )
 
         return (
-            "📊 <b>I-GOD V7.2 — STATUS REAL</b>\n\n"
+            "📊 <b>I-GOD V7.2.1 — STATUS REAL</b>\n\n"
             "<b>💰 BITUNIX</b>\n"
             + acct_lines
             + f"Posición exchange: <b>{C.html.escape(ex_text)}</b>\n\n"
@@ -2265,7 +2313,7 @@ class RealAuto:
 
             elif cmd == "/help":
                 self.tg.send(
-                    "<b>I-GOD V7.2 comandos</b>\n"
+                    "<b>I-GOD V7.2.1 comandos</b>\n"
                     "/status — cuenta + bot + mercado\n"
                     "/account — cuenta Futures real\n"
                     "/position — posición/SL/TP reales\n"
@@ -2285,7 +2333,7 @@ class RealAuto:
         self.live.start()
 
         self.tg.send(
-            "🔴🤖 <b>I-GOD V7.2 REAL AUTO conectado</b>\n\n"
+            "🔴🤖 <b>I-GOD V7.2.1 REAL AUTO conectado</b>\n\n"
             f"{SYMBOL} | sizing {LIVE_SIZING_MODE} "
             f"{LIVE_EQUITY_ALLOC_PCT*100:.0f}% equity "
             f"| risk {LIVE_RISK_PCT*100:.1f}% "
