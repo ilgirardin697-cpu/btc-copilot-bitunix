@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-I-GOD BTC Copilot V7.2.1 — REAL AUTO EXECUTOR for Bitunix
+I-GOD BTC Copilot V7.3 — REAL AUTO EXECUTOR for Bitunix
 ======================================================
 
 REAL MONEY CODE.
@@ -14,6 +14,8 @@ Key features:
 - Market entry + native SL + 2 partial TPs + larger runner.
 - TP1 -> fee/funding-aware net-profit protection.
 - TP2 -> 40% runner starts wide structural trailing; no TP3 order.
+- Every SL move is re-read from Bitunix and must match before state advances.
+- Dynamic leverage AUTO 20-50x by stop-risk need (exchange/tier capped).
 - Runner stop never loosens and survives normal pullbacks better.
 - Real Bitunix account/position status from private API.
 - Distinguishes BOT position from MANUAL/EXTERNAL position.
@@ -52,7 +54,10 @@ LIVE_EXECUTION = os.getenv("LIVE_EXECUTION", "false").lower() == "true"
 LIVE_AUTO_START = os.getenv("LIVE_AUTO_START", "false").lower() == "true"
 
 LIVE_MARGIN_USDT = float(os.getenv("LIVE_MARGIN_USDT", "2"))
-LIVE_LEVERAGE = int(os.getenv("LIVE_LEVERAGE", "20"))
+LIVE_LEVERAGE = int(os.getenv("LIVE_LEVERAGE", "20"))  # legacy/fallback fixed leverage
+LIVE_DYNAMIC_LEVERAGE = os.getenv("LIVE_DYNAMIC_LEVERAGE", "true").lower() == "true"
+LIVE_MIN_LEVERAGE = int(os.getenv("LIVE_MIN_LEVERAGE", "20"))
+LIVE_MAX_LEVERAGE = int(os.getenv("LIVE_MAX_LEVERAGE", "50"))
 LIVE_MARGIN_MODE = os.getenv("LIVE_MARGIN_MODE", "CROSS").strip().upper()
 LIVE_MAX_RISK_USDT = float(os.getenv("LIVE_MAX_RISK_USDT", "10"))
 
@@ -66,7 +71,7 @@ LIVE_RISK_PCT = float(
     os.getenv("LIVE_RISK_PCT", "10")
 ) / 100
 
-LIVE_MAX_TRADES_DAY = int(os.getenv("LIVE_MAX_TRADES_DAY", "2"))
+LIVE_MAX_TRADES_DAY = int(os.getenv("LIVE_MAX_TRADES_DAY", "3"))
 LIVE_COOLDOWN_MIN = int(os.getenv("LIVE_COOLDOWN_MIN", "60"))
 LIVE_MAX_DAILY_LOSS_USDT = float(os.getenv("LIVE_MAX_DAILY_LOSS_USDT", "2"))
 
@@ -469,6 +474,47 @@ class BitunixPrivate:
             )
         )
 
+    def modify_tpsl_stop(
+        self,
+        order_id: str,
+        stop_price: str,
+        qty: str,
+    ):
+        return self._one(
+            self.request(
+                "POST",
+                "/api/v1/futures/tpsl/modify_order",
+                body={
+                    "orderId": order_id,
+                    "slPrice": stop_price,
+                    "slStopType": "MARK_PRICE",
+                    "slOrderType": "MARKET",
+                    "slQty": qty,
+                },
+            )
+        )
+
+    def change_leverage(self, leverage: int):
+        data = self.request(
+            "POST",
+            "/api/v1/futures/account/change_leverage",
+            body={
+                "symbol": SYMBOL,
+                "leverage": int(leverage),
+                "marginCoin": MARGIN_COIN,
+            },
+        )
+        rows = data if isinstance(data, list) else ([data] if isinstance(data, dict) else [])
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            lev = int(fnum(row.get("leverage", leverage), leverage))
+            if lev != int(leverage):
+                raise RuntimeError(
+                    f"Bitunix leverage response {lev}x != requested {leverage}x"
+                )
+        return rows
+
 
 # ---------------------------------------------------------------------
 # Persistent state
@@ -486,6 +532,7 @@ class LivePositionState:
     tp1: float
     tp2: float
     tp3: float
+    leverage: int = 0
 
     # Entry-time market thesis level ("LONG deteriorates below..." / inverse).
     thesis_invalidation: float = 0.0
@@ -590,7 +637,7 @@ class RealAuto:
         self.base_precision = 4
         self.price_precision = 1
         self.min_qty = 0.0001
-        self.max_leverage = LIVE_LEVERAGE
+        self.max_leverage = LIVE_MAX_LEVERAGE if LIVE_DYNAMIC_LEVERAGE else LIVE_LEVERAGE
 
         self.last_analysis = 0.0
         self.plan = None
@@ -623,13 +670,39 @@ class RealAuto:
             x.get("quotePrecision", x.get("pricePrecision", 1))
         )
         self.min_qty = fnum(x.get("minTradeVolume", 0.0001), 0.0001)
-        self.max_leverage = int(x.get("maxLeverage", LIVE_LEVERAGE))
+        self.max_leverage = int(x.get("maxLeverage", LIVE_MAX_LEVERAGE))
 
-        if LIVE_LEVERAGE > self.max_leverage:
+        if LIVE_MIN_LEVERAGE <= 0 or LIVE_MAX_LEVERAGE <= 0:
+            raise RuntimeError("Leverage bounds must be positive.")
+        if LIVE_MIN_LEVERAGE > LIVE_MAX_LEVERAGE:
             raise RuntimeError(
-                f"LIVE_LEVERAGE={LIVE_LEVERAGE} > Bitunix maxLeverage "
-                f"{self.max_leverage} for {SYMBOL}."
+                f"LIVE_MIN_LEVERAGE={LIVE_MIN_LEVERAGE} > "
+                f"LIVE_MAX_LEVERAGE={LIVE_MAX_LEVERAGE}."
             )
+        configured_max = LIVE_MAX_LEVERAGE if LIVE_DYNAMIC_LEVERAGE else LIVE_LEVERAGE
+        configured_min = LIVE_MIN_LEVERAGE if LIVE_DYNAMIC_LEVERAGE else LIVE_LEVERAGE
+        if configured_min > self.max_leverage:
+            raise RuntimeError(
+                f"Minimum/fixed leverage {configured_min}x > Bitunix maxLeverage "
+                f"{self.max_leverage}x for {SYMBOL}."
+            )
+        if configured_max > self.max_leverage:
+            log(
+                f"Configured leverage max {configured_max}x exceeds pair max "
+                f"{self.max_leverage}x; clamping to exchange max."
+            )
+
+        # Position tiers can impose a lower leverage cap as notional grows.
+        self.position_tiers = []
+        try:
+            tiers = self.pub.get(
+                "/api/v1/futures/position/get_position_tiers",
+                {"symbol": SYMBOL},
+            ) or []
+            if isinstance(tiers, list):
+                self.position_tiers = [t for t in tiers if isinstance(t, dict)]
+        except Exception as e:
+            log(f"Position tiers unavailable; using pair max leverage only: {e}")
 
     def auth_preflight(self):
         # Signed calls prove credentials/signature work.
@@ -905,14 +978,76 @@ class RealAuto:
             "risk_pct": 0.0,
         }
 
-    def calc_qty(
+    def tier_leverage_cap(self, notional: float) -> int:
+        cap = max(1, int(self.max_leverage))
+        n = max(0.0, float(notional))
+        for tier in getattr(self, "position_tiers", []):
+            start = fnum(tier.get("startValue"), 0.0)
+            end = fnum(tier.get("endValue"), 0.0)
+            lev = int(fnum(tier.get("leverage"), cap))
+            if n >= start and (end <= 0 or n <= end):
+                cap = min(cap, max(1, lev))
+                break
+        return cap
+
+    def choose_leverage(
         self,
         price: float,
         stop: float,
         base_margin: float,
         risk_cap: float,
     ):
-        desired_notional = base_margin * LIVE_LEVERAGE
+        """
+        Choose only as much leverage as is useful to express the configured
+        stop-risk budget. Leverage is NOT a confidence score.
+        """
+        if not LIVE_DYNAMIC_LEVERAGE:
+            lev = min(int(LIVE_LEVERAGE), int(self.max_leverage))
+            if lev <= 0:
+                raise RuntimeError("Invalid fixed leverage.")
+            return lev, {
+                "mode": "FIXED",
+                "needed": lev,
+                "tier_cap": int(self.max_leverage),
+                "risk_notional": 0.0,
+            }
+
+        stop_distance = abs(float(price) - float(stop))
+        if price <= 0 or stop_distance <= 0 or base_margin <= 0 or risk_cap <= 0:
+            raise RuntimeError("Invalid inputs for dynamic leverage selection.")
+
+        risk_qty = risk_cap / stop_distance
+        risk_notional = risk_qty * price
+        pair_cap = min(int(self.max_leverage), int(LIVE_MAX_LEVERAGE))
+        target_notional = min(risk_notional, base_margin * pair_cap)
+        tier_cap = min(pair_cap, self.tier_leverage_cap(target_notional))
+
+        if tier_cap < LIVE_MIN_LEVERAGE:
+            raise RuntimeError(
+                f"Exchange/tier leverage cap {tier_cap}x is below configured "
+                f"minimum {LIVE_MIN_LEVERAGE}x for this notional."
+            )
+
+        needed = int(math.ceil(risk_notional / max(base_margin, 1e-9)))
+        selected = max(int(LIVE_MIN_LEVERAGE), needed)
+        selected = min(selected, int(LIVE_MAX_LEVERAGE), int(tier_cap))
+
+        return selected, {
+            "mode": "AUTO",
+            "needed": needed,
+            "tier_cap": tier_cap,
+            "risk_notional": risk_notional,
+        }
+
+    def calc_qty(
+        self,
+        price: float,
+        stop: float,
+        base_margin: float,
+        risk_cap: float,
+        leverage: int,
+    ):
+        desired_notional = base_margin * leverage
         qty_by_exposure = desired_notional / price
 
         stop_distance = abs(price - stop)
@@ -1049,19 +1184,78 @@ class RealAuto:
         )
 
     def ensure_stop(self, position_id: str, stop: float):
-        stop_s = fmt_price(stop, self.price_precision)
+        """
+        Ensure the EXCHANGE itself shows the requested stop price.
+        Never treat "some SL exists" as proof that the modification succeeded.
+        """
+        target = round(float(stop), self.price_precision)
+        stop_s = fmt_price(target, self.price_precision)
+        tol = max(10 ** (-self.price_precision) / 2, 1e-9)
+
+        def read_stop_rows():
+            rows = self.api.pending_tpsl(position_id)
+            return [
+                x for x in rows
+                if isinstance(x, dict) and fnum(x.get("slPrice")) > 0
+            ]
+
+        def exact_row(rows):
+            for row in rows:
+                if abs(fnum(row.get("slPrice")) - target) <= tol:
+                    return row
+            return None
+
+        # First try the documented position-level modify endpoint.
+        first_error = None
         try:
             self.api.modify_position_stop(position_id, stop_s)
-        except Exception:
-            self.api.place_position_stop(position_id, stop_s)
+        except Exception as e:
+            first_error = e
 
-        time.sleep(0.8)
-        orders = self.api.pending_tpsl(position_id)
-        if not any(
-            isinstance(x, dict) and str(x.get("slPrice", "")).strip()
-            for x in orders
-        ):
-            raise RuntimeError("Native stop not visible after placement.")
+        for _ in range(4):
+            time.sleep(0.45)
+            rows = read_stop_rows()
+            hit = exact_row(rows)
+            if hit is not None:
+                return fnum(hit.get("slPrice"))
+
+        # If a concrete SL order exists, modify that exact order by its ID.
+        rows = read_stop_rows()
+        for row in rows:
+            oid = str(row.get("id", row.get("orderId", ""))).strip()
+            qty = fnum(row.get("slQty"))
+            if oid and qty > 0:
+                self.api.modify_tpsl_stop(
+                    oid,
+                    stop_s,
+                    fmt_qty(qty, self.base_precision),
+                )
+                for _ in range(4):
+                    time.sleep(0.45)
+                    rows2 = read_stop_rows()
+                    hit = exact_row(rows2)
+                    if hit is not None:
+                        return fnum(hit.get("slPrice"))
+
+        # Only place a new position-level stop when there is no SL at all.
+        rows = read_stop_rows()
+        if not rows:
+            self.api.place_position_stop(position_id, stop_s)
+            for _ in range(4):
+                time.sleep(0.45)
+                rows2 = read_stop_rows()
+                hit = exact_row(rows2)
+                if hit is not None:
+                    return fnum(hit.get("slPrice"))
+
+        actual = sorted(
+            {round(fnum(x.get("slPrice")), self.price_precision) for x in read_stop_rows()}
+        )
+        extra = f" | first modify error: {first_error}" if first_error else ""
+        raise RuntimeError(
+            f"Requested SL {stop_s} NOT confirmed on exchange; "
+            f"exchange SL(s)={actual or 'NONE'}{extra}"
+        )
 
     def place_native_tps(
         self,
@@ -1117,7 +1311,7 @@ class RealAuto:
                 "Native TPs visible but order IDs could not be resolved."
             )
 
-    def verify_real_position(self, pos: dict, qty_requested: float):
+    def verify_real_position(self, pos: dict, qty_requested: float, expected_leverage: int):
         problems = []
 
         lev = int(fnum(pos.get("leverage", 0)))
@@ -1126,9 +1320,9 @@ class RealAuto:
         qty_real = fnum(pos.get("qty", 0))
         margin_real = fnum(pos.get("margin", 0))
 
-        if lev != LIVE_LEVERAGE:
+        if lev != int(expected_leverage):
             problems.append(
-                f"leverage real {lev}x != requested {LIVE_LEVERAGE}x"
+                f"leverage real {lev}x != requested {expected_leverage}x"
             )
         if margin_mode != LIVE_MARGIN_MODE:
             problems.append(
@@ -1203,6 +1397,12 @@ class RealAuto:
             else 1.0
         )
         sizing = self.sizing_budget(risk_mult)
+        selected_leverage, lev_info = self.choose_leverage(
+            fnum(plan.price),
+            fnum(plan.stop),
+            base_margin=sizing["base_margin"],
+            risk_cap=sizing["risk_cap"],
+        )
         (
             qty,
             intended_notional,
@@ -1215,6 +1415,7 @@ class RealAuto:
             fnum(plan.stop),
             base_margin=sizing["base_margin"],
             risk_cap=sizing["risk_cap"],
+            leverage=selected_leverage,
         )
 
         cost_ok, cost_reason, costs = self.net_rr_guard(plan, qty)
@@ -1230,6 +1431,18 @@ class RealAuto:
         if not lock_ok:
             log(f"Entry blocked: {lock_reason}")
             self.notify_entry_blocked(plan, client_id, lock_reason)
+            return False
+
+        try:
+            self.api.change_leverage(selected_leverage)
+            log(
+                f"Leverage prepared at {selected_leverage}x "
+                f"(needed={lev_info['needed']}x, tier_cap={lev_info['tier_cap']}x)."
+            )
+        except Exception as e:
+            reason = f"could not set leverage {selected_leverage}x: {e}"
+            log(f"Entry blocked: {reason}")
+            self.notify_entry_blocked(plan, client_id, reason)
             return False
 
         self.state.entry_armed = False
@@ -1249,7 +1462,8 @@ class RealAuto:
             f"Equity referencia: <b>{sizing['equity']:.2f} USDT</b>\n"
             f"Base margen dinámica: <b>{sizing['base_margin']:.2f} USDT</b>\n"
             f"Risk cap dinámico: <b>{sizing['risk_cap']:.2f} USDT</b>\n"
-            f"Leverage esperado: <b>{LIVE_LEVERAGE}x</b>\n"
+            f"Leverage AUTO seleccionado: <b>{selected_leverage}x</b> "
+            f"(rango {LIVE_MIN_LEVERAGE}–{min(LIVE_MAX_LEVERAGE, self.max_leverage)}x)\n"
             f"Nominal calculado: <b>{intended_notional:.2f} USDT</b>\n"
             f"Riesgo precio al SL: <b>{estimated_sl_risk:.2f} USDT</b>\n"
             f"Modo diario: <b>{'PROFIT LOCK' if self.profit_lock_active() else 'NORMAL'}</b>\n"
@@ -1317,7 +1531,7 @@ class RealAuto:
             return False
 
         try:
-            self.verify_real_position(pos, qty)
+            self.verify_real_position(pos, qty, selected_leverage)
         except Exception as e:
             self.state.position = LivePositionState(
                 position_id=str(pos.get("positionId", "")),
@@ -1330,6 +1544,7 @@ class RealAuto:
                 tp1=fnum(plan.tp1),
                 tp2=fnum(plan.tp2),
                 tp3=fnum(plan.tp3),
+                leverage=selected_leverage,
             )
             self.state.save()
             self.emergency_close_and_lock(
@@ -1365,6 +1580,7 @@ class RealAuto:
             tp1=fnum(plan.tp1),
             tp2=fnum(plan.tp2),
             tp3=fnum(plan.tp3),
+            leverage=selected_leverage,
             thesis_invalidation=invalidation,
             current_stop=fnum(plan.stop),
             peak_price=real_entry,
@@ -1403,7 +1619,7 @@ class RealAuto:
             f"Entrada REAL: <b>{p(real_entry)}</b>\n"
             f"Qty REAL: <b>{fmt_qty(real_qty, self.base_precision)} BTC</b>\n"
             f"Margen API: <b>{real_margin:.3f} USDT</b>\n"
-            f"Leverage: <b>{pos.get('leverage')}x</b>\n"
+            f"Leverage: <b>{pos.get('leverage')}x</b> (AUTO esperado {selected_leverage}x)\n"
             f"Modo: <b>{pos.get('marginMode')} / {pos.get('positionMode')}</b>\n"
             f"Liquidación: <b>{p(liq) if liq > 0 else '-'}</b>\n"
             f"Invalidación tesis: <b>{p(invalidation)}</b>\n\n"
@@ -1438,15 +1654,33 @@ class RealAuto:
             if new_stop >= ps.current_stop:
                 return False
 
-        self.ensure_stop(ps.position_id, new_stop)
-        ps.current_stop = new_stop
+        try:
+            verified_stop = self.ensure_stop(ps.position_id, new_stop)
+        except Exception as e:
+            # Keep the current position and its existing exchange SL, but stop
+            # allowing new entries until the discrepancy is reviewed.
+            self.state.auto_enabled = False
+            self.state.locked = True
+            self.state.lock_reason = "STOP MOVE NOT CONFIRMED: " + str(e)
+            self.state.save()
+            self.tg.send(
+                "🚨🛡 <b>CAMBIO DE SL NO CONFIRMADO</b>\n\n"
+                f"{ps.side} {SYMBOL}\n"
+                f"SL solicitado: <b>{p(new_stop)}</b>\n"
+                f"{C.html.escape(str(e))}\n\n"
+                "NO actualizo el SL interno. Nuevas entradas quedan bloqueadas. "
+                "La posición actual conserva la protección que siga visible en Bitunix."
+            )
+            return False
+
+        ps.current_stop = verified_stop
         ps.stop_stage = max(ps.stop_stage, stage)
         self.state.save()
 
         self.tg.send(
-            "🔒 <b>SL REAL MODIFICADO</b>\n\n"
+            "🔒 <b>SL REAL MODIFICADO Y VERIFICADO</b>\n\n"
             f"{ps.side} {SYMBOL}\n"
-            f"Nuevo SL: <b>{p(new_stop)}</b>\n"
+            f"Nuevo SL exchange: <b>{p(verified_stop)}</b>\n"
             f"Etapa: <b>{ps.stop_stage}</b>"
         )
         return True
@@ -1463,7 +1697,7 @@ class RealAuto:
             time.sleep(1)
 
         realized = fnum(hist.get("realizedPNL")) if hist else 0.0
-        fee = fnum(hist.get("fee")) if hist else 0.0
+        fee = abs(fnum(hist.get("fee"))) if hist else 0.0
         funding = fnum(hist.get("funding")) if hist else 0.0
         net = realized - fee + funding
         return hist, realized, fee, funding, net
@@ -1589,6 +1823,8 @@ class RealAuto:
             target_net = max(0.0, LIVE_TP1_NET_LOCK_USDT)
             target_stop = self.stop_for_target_net(ps, pos, target_net)
             moved = self.safe_move_stop(target_stop, mark, 1)
+            if self.state.locked:
+                return
             ps.stop_stage = max(ps.stop_stage, 1)
             self.state.save()
             self.tg.send(
@@ -1610,6 +1846,8 @@ class RealAuto:
             )
             floor_stop = self.stop_for_target_net(ps, pos, target_net)
             self.safe_move_stop(floor_stop, mark, 2)
+            if self.state.locked:
+                return
             ps.stop_stage = max(ps.stop_stage, 2)
             self.state.save()
             self.tg.send(
@@ -1821,7 +2059,7 @@ class RealAuto:
                 if mtime >= start_ms:
                     n += 1
                     realized += fnum(x.get("realizedPNL"))
-                    fee += fnum(x.get("fee"))
+                    fee += abs(fnum(x.get("fee")))
                     funding += fnum(x.get("funding"))
         except Exception:
             pass
@@ -1894,7 +2132,7 @@ class RealAuto:
         margin = fnum(pos.get("margin"))
         upnl = fnum(pos.get("unrealizedPNL"))
         realized = fnum(pos.get("realizedPNL"))
-        fee = fnum(pos.get("fee"))
+        fee = abs(fnum(pos.get("fee")))
         funding = fnum(pos.get("funding"))
         net_now = realized + upnl - fee + funding
         mark = self.get_mark()
@@ -2023,7 +2261,7 @@ class RealAuto:
         )
 
         return (
-            "📊 <b>I-GOD V7.2.1 — STATUS REAL</b>\n\n"
+            "📊 <b>I-GOD V7.3 — STATUS REAL</b>\n\n"
             "<b>💰 BITUNIX</b>\n"
             + acct_lines
             + f"Posición exchange: <b>{C.html.escape(ex_text)}</b>\n\n"
@@ -2040,6 +2278,7 @@ class RealAuto:
             f"Sizing mode: <b>{LIVE_SIZING_MODE}</b>\n"
             f"Equity allocation: <b>{LIVE_EQUITY_ALLOC_PCT*100:.0f}%</b>\n"
             f"Risk/trade: <b>{LIVE_RISK_PCT*100:.1f}% equity</b>\n"
+            f"Leverage: <b>{'AUTO ' + str(LIVE_MIN_LEVERAGE) + '–' + str(min(LIVE_MAX_LEVERAGE, self.max_leverage)) + 'x' if LIVE_DYNAMIC_LEVERAGE else str(LIVE_LEVERAGE) + 'x fijo'}</b>\n"
             f"PnL cuenta hoy usado por Profit Lock: <b>{money(self.profit_lock_day_pnl())}</b>\n"
             f"Objetivo diario soft: <b>{money(self.daily_profit_target_usdt())}</b>\n"
             f"Profit lock: <b>{self.profit_lock_active()}</b>\n"
@@ -2169,6 +2408,14 @@ class RealAuto:
                     f"base {preview['base_margin']:.2f} USDT -> "
                     f"risk cap {preview['risk_cap']:.2f} USDT"
                 )
+                if LIVE_DYNAMIC_LEVERAGE:
+                    details.append(
+                        f"✅ Leverage AUTO {LIVE_MIN_LEVERAGE}–"
+                        f"{min(LIVE_MAX_LEVERAGE, self.max_leverage)}x "
+                        f"(pair max {self.max_leverage}x)"
+                    )
+                else:
+                    details.append(f"✅ Leverage fijo {LIVE_LEVERAGE}x")
             else:
                 details.append(
                     f"✅ Sizing FIXED: base {preview['base_margin']:.2f} -> "
@@ -2313,7 +2560,7 @@ class RealAuto:
 
             elif cmd == "/help":
                 self.tg.send(
-                    "<b>I-GOD V7.2.1 comandos</b>\n"
+                    "<b>I-GOD V7.3 comandos</b>\n"
                     "/status — cuenta + bot + mercado\n"
                     "/account — cuenta Futures real\n"
                     "/position — posición/SL/TP reales\n"
@@ -2333,11 +2580,11 @@ class RealAuto:
         self.live.start()
 
         self.tg.send(
-            "🔴🤖 <b>I-GOD V7.2.1 REAL AUTO conectado</b>\n\n"
+            "🔴🤖 <b>I-GOD V7.3 REAL AUTO conectado</b>\n\n"
             f"{SYMBOL} | sizing {LIVE_SIZING_MODE} "
             f"{LIVE_EQUITY_ALLOC_PCT*100:.0f}% equity "
             f"| risk {LIVE_RISK_PCT*100:.1f}% "
-            f"| leverage esperado {LIVE_LEVERAGE}x\n"
+            f"| leverage {'AUTO ' + str(LIVE_MIN_LEVERAGE) + '–' + str(min(LIVE_MAX_LEVERAGE, self.max_leverage)) + 'x' if LIVE_DYNAMIC_LEVERAGE else str(LIVE_LEVERAGE) + 'x fijo'}\n"
             f"LIVE_EXECUTION: <b>{LIVE_EXECUTION}</b>\n"
             f"AUTO: <b>{self.state.auto_enabled}</b>\n"
             f"State persistente: <b>{bool(volume)}</b>\n"
