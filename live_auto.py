@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-I-GOD BTC Copilot V7.3 — REAL AUTO EXECUTOR for Bitunix
+I-GOD BTC Copilot V7.3.1 — REAL AUTO EXECUTOR for Bitunix
 ======================================================
 
 REAL MONEY CODE.
@@ -60,6 +60,11 @@ LIVE_MIN_LEVERAGE = int(os.getenv("LIVE_MIN_LEVERAGE", "20"))
 LIVE_MAX_LEVERAGE = int(os.getenv("LIVE_MAX_LEVERAGE", "50"))
 LIVE_MARGIN_MODE = os.getenv("LIVE_MARGIN_MODE", "CROSS").strip().upper()
 LIVE_MAX_RISK_USDT = float(os.getenv("LIVE_MAX_RISK_USDT", "10"))
+
+# Keep explicit cash headroom for fees/slippage and exchange margin checks.
+LIVE_EXECUTION_CASH_RESERVE_PCT = float(
+    os.getenv("LIVE_EXECUTION_CASH_RESERVE_PCT", "5")
+) / 100
 
 # V7.2 dynamic equity compounding.
 # EQUITY mode reinvests account growth automatically.
@@ -514,6 +519,40 @@ class BitunixPrivate:
                     f"Bitunix leverage response {lev}x != requested {leverage}x"
                 )
         return rows
+
+    def leverage_margin_mode(self):
+        data = self.request(
+            "GET",
+            "/api/v1/futures/account/get_leverage_margin_mode",
+            {
+                "symbol": SYMBOL,
+                "marginCoin": MARGIN_COIN,
+            },
+        ) or {}
+        if isinstance(data, list):
+            data = data[0] if data else {}
+        return data if isinstance(data, dict) else {}
+
+    def change_leverage_verified(self, leverage: int):
+        target = int(leverage)
+        self.change_leverage(target)
+
+        last = {}
+        for _ in range(6):
+            time.sleep(0.35)
+            last = self.leverage_margin_mode()
+            real_lev = int(fnum(last.get("leverage", 0)))
+            real_mode = str(last.get("marginMode", "")).upper()
+            if real_lev == target and (
+                not real_mode or real_mode == LIVE_MARGIN_MODE
+            ):
+                return last
+
+        raise RuntimeError(
+            f"leverage NOT confirmed: requested {target}x; "
+            f"exchange says leverage={last.get('leverage','?')} "
+            f"marginMode={last.get('marginMode','?')}"
+        )
 
 
 # ---------------------------------------------------------------------
@@ -1039,6 +1078,47 @@ class RealAuto:
             "risk_notional": risk_notional,
         }
 
+    def execution_margin_cap(
+        self,
+        available: float,
+        configured_base_margin: float,
+        leverage: int,
+    ):
+        """
+        Maximum margin we are willing to consume for this order.
+
+        Reserve:
+        - explicit wallet cash buffer;
+        - estimated round-trip taker fee + slippage on the leveraged notional.
+
+        This prevents high leverage from turning a 95% allocation into an
+        exchange-side 'Insufficient balance' rejection.
+        """
+        available = max(0.0, float(available))
+        configured_base_margin = max(0.0, float(configured_base_margin))
+        lev = max(1, int(leverage))
+
+        cash_keep = available * max(
+            0.0, min(0.50, LIVE_EXECUTION_CASH_RESERVE_PCT)
+        )
+        roundtrip_rate = 2.0 * max(
+            0.0, LIVE_TAKER_FEE_RATE + LIVE_SLIPPAGE_RATE
+        )
+
+        spendable_before_costs = max(0.0, available - cash_keep)
+        safe_margin = spendable_before_costs / max(
+            1.0 + lev * roundtrip_rate,
+            1e-9,
+        )
+        safe_margin = min(configured_base_margin, safe_margin)
+
+        return {
+            "safe_margin": safe_margin,
+            "cash_keep": cash_keep,
+            "roundtrip_rate": roundtrip_rate,
+            "available": available,
+        }
+
     def calc_qty(
         self,
         price: float,
@@ -1403,6 +1483,19 @@ class RealAuto:
             base_margin=sizing["base_margin"],
             risk_cap=sizing["risk_cap"],
         )
+
+        margin_guard = self.execution_margin_cap(
+            available=sizing.get("available", sizing["base_margin"]),
+            configured_base_margin=sizing["base_margin"],
+            leverage=selected_leverage,
+        )
+        execution_base_margin = margin_guard["safe_margin"]
+        if execution_base_margin <= 0:
+            reason = "no executable margin remains after fee/cash reserve"
+            log(f"Entry blocked: {reason}")
+            self.notify_entry_blocked(plan, client_id, reason)
+            return False
+
         (
             qty,
             intended_notional,
@@ -1413,7 +1506,7 @@ class RealAuto:
         ) = self.calc_qty(
             fnum(plan.price),
             fnum(plan.stop),
-            base_margin=sizing["base_margin"],
+            base_margin=execution_base_margin,
             risk_cap=sizing["risk_cap"],
             leverage=selected_leverage,
         )
@@ -1434,10 +1527,12 @@ class RealAuto:
             return False
 
         try:
-            self.api.change_leverage(selected_leverage)
+            lev_state = self.api.change_leverage_verified(selected_leverage)
             log(
-                f"Leverage prepared at {selected_leverage}x "
-                f"(needed={lev_info['needed']}x, tier_cap={lev_info['tier_cap']}x)."
+                f"Leverage VERIFIED at {selected_leverage}x "
+                f"(exchange={lev_state.get('leverage')}x, "
+                f"mode={lev_state.get('marginMode','?')}, "
+                f"needed={lev_info['needed']}x, tier_cap={lev_info['tier_cap']}x)."
             )
         except Exception as e:
             reason = f"could not set leverage {selected_leverage}x: {e}"
@@ -1461,8 +1556,10 @@ class RealAuto:
             f"Sizing: <b>{sizing['mode']}</b>\n"
             f"Equity referencia: <b>{sizing['equity']:.2f} USDT</b>\n"
             f"Base margen dinámica: <b>{sizing['base_margin']:.2f} USDT</b>\n"
+            f"Margen ejecutable tras reserva: <b>{execution_base_margin:.2f} USDT</b>\n"
+            f"Reserva cash mínima: <b>{margin_guard['cash_keep']:.2f} USDT</b>\n"
             f"Risk cap dinámico: <b>{sizing['risk_cap']:.2f} USDT</b>\n"
-            f"Leverage AUTO seleccionado: <b>{selected_leverage}x</b> "
+            f"Leverage AUTO seleccionado y verificado: <b>{selected_leverage}x</b> "
             f"(rango {LIVE_MIN_LEVERAGE}–{min(LIVE_MAX_LEVERAGE, self.max_leverage)}x)\n"
             f"Nominal calculado: <b>{intended_notional:.2f} USDT</b>\n"
             f"Riesgo precio al SL: <b>{estimated_sl_risk:.2f} USDT</b>\n"
@@ -2261,7 +2358,7 @@ class RealAuto:
         )
 
         return (
-            "📊 <b>I-GOD V7.3 — STATUS REAL</b>\n\n"
+            "📊 <b>I-GOD V7.3.1 — STATUS REAL</b>\n\n"
             "<b>💰 BITUNIX</b>\n"
             + acct_lines
             + f"Posición exchange: <b>{C.html.escape(ex_text)}</b>\n\n"
@@ -2560,7 +2657,7 @@ class RealAuto:
 
             elif cmd == "/help":
                 self.tg.send(
-                    "<b>I-GOD V7.3 comandos</b>\n"
+                    "<b>I-GOD V7.3.1 comandos</b>\n"
                     "/status — cuenta + bot + mercado\n"
                     "/account — cuenta Futures real\n"
                     "/position — posición/SL/TP reales\n"
@@ -2580,7 +2677,7 @@ class RealAuto:
         self.live.start()
 
         self.tg.send(
-            "🔴🤖 <b>I-GOD V7.3 REAL AUTO conectado</b>\n\n"
+            "🔴🤖 <b>I-GOD V7.3.1 REAL AUTO conectado</b>\n\n"
             f"{SYMBOL} | sizing {LIVE_SIZING_MODE} "
             f"{LIVE_EQUITY_ALLOC_PCT*100:.0f}% equity "
             f"| risk {LIVE_RISK_PCT*100:.1f}% "
@@ -2589,6 +2686,7 @@ class RealAuto:
             f"AUTO: <b>{self.state.auto_enabled}</b>\n"
             f"State persistente: <b>{bool(volume)}</b>\n"
             f"Fee guard mínimo: <b>{LIVE_MIN_NET_RR:.2f}R neto</b>\n"
+            f"Reserva cash ejecución: <b>{LIVE_EXECUTION_CASH_RESERVE_PCT*100:.1f}% + costes estimados</b>\n"
             f"Daily target soft: <b>{LIVE_DAILY_PROFIT_TARGET_PCT*100:.1f}%</b>\n"
             f"Profit-lock risk: <b>{LIVE_PROFIT_LOCK_RISK_MULT:.2f}x</b>\n"
             f"Salidas: <b>{LIVE_TP1_PCT*100:.0f}% TP1 + {LIVE_TP2_PCT*100:.0f}% TP2 + {LIVE_RUNNER_PCT*100:.0f}% runner</b>\n"
