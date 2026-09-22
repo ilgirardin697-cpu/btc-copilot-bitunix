@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-I-GOD BTC Copilot V7.3.1 — REAL AUTO EXECUTOR for Bitunix
+I-GOD BTC Copilot V7.3.2 — REAL AUTO EXECUTOR for Bitunix
 ======================================================
 
 REAL MONEY CODE.
@@ -101,6 +101,14 @@ LIVE_STOP_MARK_BUFFER_PCT = float(os.getenv("LIVE_STOP_MARK_BUFFER_PCT", "0.0004
 # Actual PnL/fees after trading are read from Bitunix.
 LIVE_TAKER_FEE_RATE = float(os.getenv("LIVE_TAKER_FEE_RATE", "0.0006"))
 LIVE_SLIPPAGE_RATE = float(os.getenv("LIVE_SLIPPAGE_RATE", "0.00015"))
+
+# Extra adverse-fill reserve for STOP-MARKET execution.
+# 0.10% is deliberately wider than the generic slippage assumption because
+# the stop is triggered first and then executed at market.
+LIVE_STOP_SLIPPAGE_RATE = float(
+    os.getenv("LIVE_STOP_SLIPPAGE_RATE", "0.0010")
+)
+
 LIVE_MIN_NET_RR = float(os.getenv("LIVE_MIN_NET_RR", "1.25"))
 
 # PROFIT LOCK: el +10% diario NO apaga el bot.
@@ -690,6 +698,7 @@ class RealAuto:
 
         self.load_pair_rules()
         self.auth_preflight()
+        self.reconcile_bot_day_pnl_from_fills()
 
     # -----------------------------
     # Market / startup checks
@@ -847,6 +856,52 @@ class RealAuto:
         except Exception as e:
             log(f"Could not set day equity baseline: {e}")
         return 0.0
+
+    def reconcile_bot_day_pnl_from_fills(self):
+        """
+        Rebuild bot-only day PnL from closed positions whose fills contain an
+        I-GOD clientId. This repairs stale persisted PnL after a restart.
+        """
+        now = C.datetime.now(C.TZ)
+        start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        start_ms = int(start.timestamp() * 1000)
+
+        total = 0.0
+        found = 0
+        try:
+            for x in self.api.history_positions(limit=100):
+                if int(fnum(x.get("mtime"), 0)) < start_ms:
+                    continue
+                pid = str(x.get("positionId", ""))
+                if not pid:
+                    continue
+                rows = self.api.history_trades(position_id=pid, limit=100)
+                is_bot = any(
+                    str(r.get("clientId", "")).startswith("igod")
+                    for r in rows
+                    if isinstance(r, dict)
+                )
+                if not is_bot:
+                    continue
+                fm = self.trade_fill_metrics(
+                    pid,
+                    funding=fnum(x.get("funding")),
+                )
+                total += fm["net"]
+                found += 1
+
+            if found:
+                if abs(self.state.day_pnl - total) > 1e-6:
+                    log(
+                        f"Reconciled bot day PnL from fills: "
+                        f"{self.state.day_pnl:+.4f} -> {total:+.4f}"
+                    )
+                self.state.day_pnl = total
+                self.state.save()
+            return total, found
+        except Exception as e:
+            log(f"Could not reconcile bot day PnL from fills: {e}")
+            return self.state.day_pnl, 0
 
     def daily_profit_target_usdt(self):
         eq = self.ensure_day_equity_baseline()
@@ -1134,7 +1189,22 @@ class RealAuto:
         if stop_distance <= 0:
             raise RuntimeError("Invalid stop distance; cannot size position.")
 
-        qty_by_risk = risk_cap / stop_distance
+        # Risk cap is applied to an estimated NET stop-out, not only to the
+        # chart distance. Include both taker fees, normal entry slippage and a
+        # wider adverse-fill reserve for the stop-market execution.
+        entry_cost_per_btc = (
+            price * LIVE_TAKER_FEE_RATE
+            + price * LIVE_SLIPPAGE_RATE
+        )
+        stop_cost_per_btc = (
+            stop * LIVE_TAKER_FEE_RATE
+            + stop * LIVE_STOP_SLIPPAGE_RATE
+        )
+        net_stop_risk_per_btc = (
+            stop_distance + entry_cost_per_btc + stop_cost_per_btc
+        )
+
+        qty_by_risk = risk_cap / max(net_stop_risk_per_btc, 1e-9)
         raw_qty = min(qty_by_exposure, qty_by_risk)
         qty = floor_prec(raw_qty, self.base_precision)
 
@@ -1149,7 +1219,8 @@ class RealAuto:
             )
 
         actual_notional = qty * price
-        estimated_sl_risk = qty * stop_distance
+        estimated_price_sl_risk = qty * stop_distance
+        estimated_net_sl_risk = qty * net_stop_risk_per_btc
 
         q1 = floor_prec(qty * LIVE_TP1_PCT, self.base_precision)
         q2 = floor_prec(qty * LIVE_TP2_PCT, self.base_precision)
@@ -1161,7 +1232,15 @@ class RealAuto:
                 f"TP1={q1}, TP2={q2}, runner={runner}, min={self.min_qty}."
             )
 
-        return qty, actual_notional, q1, q2, runner, estimated_sl_risk
+        return (
+            qty,
+            actual_notional,
+            q1,
+            q2,
+            runner,
+            estimated_price_sl_risk,
+            estimated_net_sl_risk,
+        )
 
     def net_rr_guard(self, plan, qty: float):
         """
@@ -1502,7 +1581,8 @@ class RealAuto:
             qty_tp1,
             qty_tp2,
             runner_qty,
-            estimated_sl_risk,
+            estimated_price_sl_risk,
+            estimated_net_sl_risk,
         ) = self.calc_qty(
             fnum(plan.price),
             fnum(plan.stop),
@@ -1562,7 +1642,9 @@ class RealAuto:
             f"Leverage AUTO seleccionado y verificado: <b>{selected_leverage}x</b> "
             f"(rango {LIVE_MIN_LEVERAGE}–{min(LIVE_MAX_LEVERAGE, self.max_leverage)}x)\n"
             f"Nominal calculado: <b>{intended_notional:.2f} USDT</b>\n"
-            f"Riesgo precio al SL: <b>{estimated_sl_risk:.2f} USDT</b>\n"
+            f"Riesgo precio al SL: <b>{estimated_price_sl_risk:.2f} USDT</b>\n"
+            f"Riesgo NETO estimado al SL: <b>{estimated_net_sl_risk:.2f} USDT</b> "
+            f"(cap {sizing['risk_cap']:.2f})\n"
             f"Modo diario: <b>{'PROFIT LOCK' if self.profit_lock_active() else 'NORMAL'}</b>\n"
             f"Multiplicador riesgo: <b>{risk_mult:.2f}x</b>\n"
             f"R:R NETO estimado a TP2: <b>{costs['net_rr']:.2f}R</b>\n"
@@ -1782,6 +1864,38 @@ class RealAuto:
         )
         return True
 
+    def trade_fill_metrics(self, position_id: str, funding: float = 0.0):
+        """
+        Canonical PnL source for I-GOD.
+
+        We deliberately calculate from actual trade fills because the live
+        Bitunix position-history realizedPNL observed in production can differ
+        from the semantics documented for that field. Fill rows expose PnL and
+        fee separately and match the account transaction ledger.
+        """
+        rows = self.api.history_trades(position_id=position_id, limit=100)
+        if not rows:
+            raise RuntimeError(
+                f"No trade fills returned for position {position_id}"
+            )
+
+        gross = 0.0
+        fee = 0.0
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            gross += fnum(row.get("realizedPNL"))
+            fee += abs(fnum(row.get("fee")))
+
+        net = gross - fee + float(funding)
+        return {
+            "gross": gross,
+            "fee": fee,
+            "funding": float(funding),
+            "net": net,
+            "fills": len(rows),
+        }
+
     def close_metrics(self, ps: LivePositionState):
         hist = None
         for _ in range(5):
@@ -1793,11 +1907,11 @@ class RealAuto:
                 pass
             time.sleep(1)
 
-        realized = fnum(hist.get("realizedPNL")) if hist else 0.0
-        fee = abs(fnum(hist.get("fee"))) if hist else 0.0
         funding = fnum(hist.get("funding")) if hist else 0.0
-        net = realized - fee + funding
-        return hist, realized, fee, funding, net
+
+        # Fill-level accounting is the source of truth for gross/fees/net.
+        m = self.trade_fill_metrics(ps.position_id, funding=funding)
+        return hist, m["gross"], m["fee"], m["funding"], m["net"]
 
     def finalize_closed_position(self, ps: LivePositionState, reason: str):
         hist, realized, fee, funding, net = self.close_metrics(ps)
@@ -1824,11 +1938,11 @@ class RealAuto:
         return net
 
     def position_closed_net_now(self, pos: dict) -> float:
-        return (
-            fnum(pos.get("realizedPNL"))
-            - abs(fnum(pos.get("fee")))
-            + fnum(pos.get("funding"))
-        )
+        pid = str(pos.get("positionId", ""))
+        if not pid:
+            raise RuntimeError("Position has no positionId for fill PnL lookup.")
+        funding = fnum(pos.get("funding"))
+        return self.trade_fill_metrics(pid, funding=funding)["net"]
 
     def stop_for_target_net(
         self,
@@ -1836,26 +1950,35 @@ class RealAuto:
         pos: dict,
         target_net_usdt: float,
     ) -> float:
-        """Estimate a stop that targets a desired final net result."""
+        """Estimate a stop targeting FINAL net PnL using actual fill accounting."""
         qty = fnum(pos.get("qty"))
         if qty <= 0:
             return ps.current_stop
 
-        realized = fnum(pos.get("realizedPNL"))
-        fee_paid = abs(fnum(pos.get("fee")))
         funding = fnum(pos.get("funding"))
-        c = max(0.0, LIVE_TAKER_FEE_RATE + LIVE_SLIPPAGE_RATE)
+        net_so_far = self.trade_fill_metrics(
+            ps.position_id,
+            funding=funding,
+        )["net"]
+
         target = float(target_net_usdt)
 
+        # Entry/partial-exit fees already exist inside net_so_far. Only reserve
+        # the cost/slippage of closing the REMAINING quantity at the new stop.
+        exit_c = max(
+            0.0,
+            LIVE_TAKER_FEE_RATE + LIVE_STOP_SLIPPAGE_RATE,
+        )
+
         if ps.side == "LONG":
-            denom = qty * max(1e-9, 1.0 - c)
+            denom = qty * max(1e-9, 1.0 - exit_c)
             return (
-                target - realized + fee_paid - funding + qty * ps.entry
+                target - net_so_far + qty * ps.entry
             ) / denom
 
-        denom = qty * (1.0 + c)
+        denom = qty * (1.0 + exit_c)
         return (
-            realized - fee_paid + funding + qty * ps.entry - target
+            net_so_far + qty * ps.entry - target
         ) / max(denom, 1e-9)
 
     def runner_trail_candidate(self, ps: LivePositionState):
@@ -2148,25 +2271,36 @@ class RealAuto:
         start = now.replace(hour=0, minute=0, second=0, microsecond=0)
         start_ms = int(start.timestamp() * 1000)
 
-        realized = fee = funding = 0.0
+        gross = fee = funding = 0.0
         n = 0
+
         try:
             for x in self.api.history_positions(limit=100):
                 mtime = int(fnum(x.get("mtime"), 0))
-                if mtime >= start_ms:
-                    n += 1
-                    realized += fnum(x.get("realizedPNL"))
-                    fee += abs(fnum(x.get("fee")))
-                    funding += fnum(x.get("funding"))
-        except Exception:
-            pass
+                if mtime < start_ms:
+                    continue
+
+                pid = str(x.get("positionId", ""))
+                if not pid:
+                    continue
+
+                fm = self.trade_fill_metrics(
+                    pid,
+                    funding=fnum(x.get("funding")),
+                )
+                n += 1
+                gross += fm["gross"]
+                fee += fm["fee"]
+                funding += fm["funding"]
+        except Exception as e:
+            log(f"Could not build fill-based day metrics: {e}")
 
         return {
             "count": n,
-            "realized": realized,
+            "realized": gross,
             "fee": fee,
             "funding": funding,
-            "net": realized - fee + funding,
+            "net": gross - fee + funding,
         }
 
     def tpsl_summary_lines(self, position_id: str, side: str):
@@ -2228,10 +2362,19 @@ class RealAuto:
         liq = fnum(pos.get("liqPrice"))
         margin = fnum(pos.get("margin"))
         upnl = fnum(pos.get("unrealizedPNL"))
-        realized = fnum(pos.get("realizedPNL"))
-        fee = abs(fnum(pos.get("fee")))
         funding = fnum(pos.get("funding"))
-        net_now = realized + upnl - fee + funding
+        try:
+            fm = self.trade_fill_metrics(pid, funding=funding)
+            realized = fm["gross"]
+            fee = fm["fee"]
+            closed_net = fm["net"]
+        except Exception:
+            # Display fallback only. Trading protection does not rely on this
+            # fallback because TP management uses fill-level accounting.
+            realized = fnum(pos.get("realizedPNL"))
+            fee = abs(fnum(pos.get("fee")))
+            closed_net = realized
+        net_now = closed_net + upnl
         mark = self.get_mark()
 
         owned = (
@@ -2358,7 +2501,7 @@ class RealAuto:
         )
 
         return (
-            "📊 <b>I-GOD V7.3.1 — STATUS REAL</b>\n\n"
+            "📊 <b>I-GOD V7.3.2 — STATUS REAL</b>\n\n"
             "<b>💰 BITUNIX</b>\n"
             + acct_lines
             + f"Posición exchange: <b>{C.html.escape(ex_text)}</b>\n\n"
@@ -2657,7 +2800,7 @@ class RealAuto:
 
             elif cmd == "/help":
                 self.tg.send(
-                    "<b>I-GOD V7.3.1 comandos</b>\n"
+                    "<b>I-GOD V7.3.2 comandos</b>\n"
                     "/status — cuenta + bot + mercado\n"
                     "/account — cuenta Futures real\n"
                     "/position — posición/SL/TP reales\n"
@@ -2677,7 +2820,7 @@ class RealAuto:
         self.live.start()
 
         self.tg.send(
-            "🔴🤖 <b>I-GOD V7.3.1 REAL AUTO conectado</b>\n\n"
+            "🔴🤖 <b>I-GOD V7.3.2 REAL AUTO conectado</b>\n\n"
             f"{SYMBOL} | sizing {LIVE_SIZING_MODE} "
             f"{LIVE_EQUITY_ALLOC_PCT*100:.0f}% equity "
             f"| risk {LIVE_RISK_PCT*100:.1f}% "
@@ -2687,6 +2830,7 @@ class RealAuto:
             f"State persistente: <b>{bool(volume)}</b>\n"
             f"Fee guard mínimo: <b>{LIVE_MIN_NET_RR:.2f}R neto</b>\n"
             f"Reserva cash ejecución: <b>{LIVE_EXECUTION_CASH_RESERVE_PCT*100:.1f}% + costes estimados</b>\n"
+            f"Reserva slippage STOP: <b>{LIVE_STOP_SLIPPAGE_RATE*100:.2f}%</b>\n"
             f"Daily target soft: <b>{LIVE_DAILY_PROFIT_TARGET_PCT*100:.1f}%</b>\n"
             f"Profit-lock risk: <b>{LIVE_PROFIT_LOCK_RISK_MULT:.2f}x</b>\n"
             f"Salidas: <b>{LIVE_TP1_PCT*100:.0f}% TP1 + {LIVE_TP2_PCT*100:.0f}% TP2 + {LIVE_RUNNER_PCT*100:.0f}% runner</b>\n"
