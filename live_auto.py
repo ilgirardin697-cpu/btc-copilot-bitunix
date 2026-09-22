@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-I-GOD BTC Copilot V7.3.2 — REAL AUTO EXECUTOR for Bitunix
+I-GOD BTC Copilot V7.3.3 — REAL AUTO EXECUTOR for Bitunix
 ======================================================
 
 REAL MONEY CODE.
@@ -607,6 +607,7 @@ class State:
         self.last_close_time = 0.0
         self.position: Optional[LivePositionState] = None
         self.consumed: List[str] = []
+        self.bot_closed_position_ids: List[str] = []
         self.load()
 
     def load(self):
@@ -625,6 +626,10 @@ class State:
             self.day_peak_pnl = float(d.get("day_peak_pnl", self.day_pnl))
             self.last_close_time = float(d.get("last_close_time", 0))
             self.consumed = list(d.get("consumed", []))[-100:]
+            self.bot_closed_position_ids = [
+                str(x) for x in d.get("bot_closed_position_ids", [])
+                if str(x)
+            ][-50:]
 
             raw_pos = d.get("position")
             if raw_pos:
@@ -648,6 +653,7 @@ class State:
             "day_peak_pnl": self.day_peak_pnl,
             "last_close_time": self.last_close_time,
             "consumed": self.consumed[-100:],
+            "bot_closed_position_ids": self.bot_closed_position_ids[-50:],
             "position": asdict(self.position) if self.position else None,
         }
         STATE_FILE.write_text(json.dumps(d, indent=2), encoding="utf-8")
@@ -660,6 +666,7 @@ class State:
             self.day_pnl = 0.0
             self.day_start_equity = 0.0
             self.day_peak_pnl = 0.0
+            self.bot_closed_position_ids = []
             self.save()
 
 
@@ -857,50 +864,144 @@ class RealAuto:
             log(f"Could not set day equity baseline: {e}")
         return 0.0
 
-    def reconcile_bot_day_pnl_from_fills(self):
+    def discover_bot_position_ids_today(self):
         """
-        Rebuild bot-only day PnL from closed positions whose fills contain an
-        I-GOD clientId. This repairs stale persisted PnL after a restart.
+        Recover closed I-GOD positionIds after a restart.
+
+        Bitunix does not expose positionId on history-order rows. We therefore:
+        1) query exact consumed I-GOD clientIds;
+        2) keep FILLED opening orders;
+        3) match them to history positions using creation time, direction,
+           leverage and quantity.
+
+        Matching is intentionally strict to avoid adopting manual trades.
         """
         now = C.datetime.now(C.TZ)
         start = now.replace(hour=0, minute=0, second=0, microsecond=0)
         start_ms = int(start.timestamp() * 1000)
+        today_prefix = f"igod{now:%y%m%d}"
 
-        total = 0.0
-        found = 0
-        try:
-            for x in self.api.history_positions(limit=100):
-                if int(fnum(x.get("mtime"), 0)) < start_ms:
+        positions = [
+            x for x in self.api.history_positions(limit=100)
+            if int(fnum(x.get("ctime"), 0)) >= start_ms
+        ]
+
+        found = set(self.state.bot_closed_position_ids)
+
+        for client_id in self.state.consumed:
+            client_id = str(client_id)
+            if not client_id.startswith(today_prefix):
+                continue
+
+            try:
+                orders = self.api.history_orders(client_id)
+            except Exception as e:
+                log(f"Bot-PnL recovery history order error {client_id}: {e}")
+                continue
+
+            exact = [
+                o for o in orders
+                if isinstance(o, dict)
+                and str(o.get("clientId", "")) == client_id
+                and str(o.get("status", "")).upper() == "FILLED"
+                and not bool(o.get("reduceOnly", False))
+            ]
+            if not exact:
+                continue
+
+            # There should be only one opening order for our one-shot clientId.
+            o = exact[0]
+            oqty = fnum(o.get("tradeQty")) or fnum(o.get("qty"))
+            octime = int(fnum(o.get("ctime"), 0))
+            olev = int(fnum(o.get("leverage"), 0))
+            oside = str(o.get("side", "")).upper()
+            pside = "LONG" if oside == "BUY" else "SHORT"
+
+            candidates = []
+            for p0 in positions:
+                pid = str(p0.get("positionId", ""))
+                if not pid or pid in found:
                     continue
-                pid = str(x.get("positionId", ""))
-                if not pid:
+                if str(p0.get("side", "")).upper() != pside:
                     continue
-                rows = self.api.history_trades(position_id=pid, limit=100)
-                is_bot = any(
-                    str(r.get("clientId", "")).startswith("igod")
-                    for r in rows
-                    if isinstance(r, dict)
+
+                pctime = int(fnum(p0.get("ctime"), 0))
+                dt = abs(pctime - octime)
+                if octime <= 0 or dt > 180_000:
+                    continue
+
+                plev = int(fnum(p0.get("leverage"), 0))
+                if olev > 0 and plev > 0 and olev != plev:
+                    continue
+
+                pqty = fnum(p0.get("maxQty"))
+                if oqty > 0 and pqty > 0:
+                    rel = abs(pqty - oqty) / max(oqty, 1e-9)
+                    if rel > 0.08:
+                        continue
+                else:
+                    rel = 1.0
+
+                # Lower score is better; time dominates, qty breaks ties.
+                score = dt + rel * 10_000
+                candidates.append((score, pid))
+
+            candidates.sort(key=lambda x: x[0])
+            if candidates:
+                pid = candidates[0][1]
+                found.add(pid)
+                log(
+                    f"Recovered I-GOD closed position {pid} "
+                    f"from clientId={client_id}."
                 )
-                if not is_bot:
+
+        return sorted(found)
+
+    def reconcile_bot_day_pnl_from_fills(self):
+        """
+        Rebuild bot-only day PnL from confirmed I-GOD positionIds.
+
+        This is independent from manual trades and is the value used by the
+        bot's own daily-loss guard.
+        """
+        try:
+            ids = self.discover_bot_position_ids_today()
+            if not ids:
+                log(
+                    "No I-GOD closed position IDs recovered today; "
+                    "keeping persisted bot day PnL."
+                )
+                return self.state.day_pnl, 0
+
+            total = 0.0
+            valid_ids = []
+            for pid in ids:
+                hist = self.api.history_position(pid)
+                if not hist:
                     continue
                 fm = self.trade_fill_metrics(
                     pid,
-                    funding=fnum(x.get("funding")),
+                    funding=fnum(hist.get("funding")),
                 )
                 total += fm["net"]
-                found += 1
+                valid_ids.append(pid)
 
-            if found:
-                if abs(self.state.day_pnl - total) > 1e-6:
-                    log(
-                        f"Reconciled bot day PnL from fills: "
-                        f"{self.state.day_pnl:+.4f} -> {total:+.4f}"
-                    )
-                self.state.day_pnl = total
-                self.state.save()
-            return total, found
+            if not valid_ids:
+                return self.state.day_pnl, 0
+
+            if abs(self.state.day_pnl - total) > 1e-6:
+                log(
+                    f"Reconciled bot day PnL from confirmed positions: "
+                    f"{self.state.day_pnl:+.4f} -> {total:+.4f}"
+                )
+
+            self.state.bot_closed_position_ids = valid_ids
+            self.state.day_pnl = total
+            self.state.save()
+            return total, len(valid_ids)
+
         except Exception as e:
-            log(f"Could not reconcile bot day PnL from fills: {e}")
+            log(f"Could not reconcile bot day PnL: {e}")
             return self.state.day_pnl, 0
 
     def daily_profit_target_usdt(self):
@@ -1922,6 +2023,8 @@ class RealAuto:
             self.state.day_pnl,
         )
         self.state.last_close_time = time.time()
+        if ps.position_id not in self.state.bot_closed_position_ids:
+            self.state.bot_closed_position_ids.append(ps.position_id)
         self.state.position = None
         self.state.save()
 
@@ -2429,6 +2532,7 @@ class RealAuto:
     def account_message(self):
         a = self.account_snapshot()
         d = self.closed_today_metrics()
+        self.reconcile_bot_day_pnl_from_fills()
 
         return (
             "💰 <b>CUENTA FUTURES BITUNIX — EN VIVO</b>\n\n"
@@ -2501,7 +2605,7 @@ class RealAuto:
         )
 
         return (
-            "📊 <b>I-GOD V7.3.2 — STATUS REAL</b>\n\n"
+            "📊 <b>I-GOD V7.3.3 — STATUS REAL</b>\n\n"
             "<b>💰 BITUNIX</b>\n"
             + acct_lines
             + f"Posición exchange: <b>{C.html.escape(ex_text)}</b>\n\n"
@@ -2515,6 +2619,7 @@ class RealAuto:
             f"Trades bot hoy: <b>{self.state.trades_today}/"
             f"{LIVE_MAX_TRADES_DAY + (LIVE_PROFIT_LOCK_EXTRA_TRADES if self.profit_lock_active() else 0)}</b>\n"
             f"PnL neto bot hoy: <b>{money(self.state.day_pnl)}</b>\n"
+            f"Cierres I-GOD identificados hoy: <b>{len(self.state.bot_closed_position_ids)}</b>\n"
             f"Sizing mode: <b>{LIVE_SIZING_MODE}</b>\n"
             f"Equity allocation: <b>{LIVE_EQUITY_ALLOC_PCT*100:.0f}%</b>\n"
             f"Risk/trade: <b>{LIVE_RISK_PCT*100:.1f}% equity</b>\n"
@@ -2800,7 +2905,7 @@ class RealAuto:
 
             elif cmd == "/help":
                 self.tg.send(
-                    "<b>I-GOD V7.3.2 comandos</b>\n"
+                    "<b>I-GOD V7.3.3 comandos</b>\n"
                     "/status — cuenta + bot + mercado\n"
                     "/account — cuenta Futures real\n"
                     "/position — posición/SL/TP reales\n"
@@ -2820,7 +2925,7 @@ class RealAuto:
         self.live.start()
 
         self.tg.send(
-            "🔴🤖 <b>I-GOD V7.3.2 REAL AUTO conectado</b>\n\n"
+            "🔴🤖 <b>I-GOD V7.3.3 REAL AUTO conectado</b>\n\n"
             f"{SYMBOL} | sizing {LIVE_SIZING_MODE} "
             f"{LIVE_EQUITY_ALLOC_PCT*100:.0f}% equity "
             f"| risk {LIVE_RISK_PCT*100:.1f}% "
