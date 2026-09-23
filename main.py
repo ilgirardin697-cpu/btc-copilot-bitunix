@@ -1101,19 +1101,21 @@ class Analyzer:
 
                 if setup == "BREAKOUT":
                     structural_stop = max(
-                        float(x15.ema20) - 0.25*atr15,
-                        breakout - 0.55*atr15,
+                        float(x15.ema20) - 0.35*atr15,
+                        breakout - 0.70*atr15,
                     )
-                    stop = min(price - 0.45*atr15, structural_stop)
+                    stop = min(price - 0.70*atr15, structural_stop)
+
                 elif setup == "CONTINUATION":
                     structural_stop = max(
-                        float(x15.ema20) - 0.35*atr15,
+                        float(x15.ema20) - 0.40*atr15,
                         recent_swing,
                     )
-                    stop = min(price - 0.40*atr15, structural_stop)
+                    stop = min(price - 0.55*atr15, structural_stop)
+
                 else:
                     structural_stop = min(float(x15.ema50), recent_swing)
-                    stop = structural_stop - 0.15*atr15
+                    stop = structural_stop - 0.30*atr15
 
                 tp1, tp2, tp3 = self.make_targets(
                     lev, price, "LONG", atr1
@@ -1231,19 +1233,21 @@ class Analyzer:
 
                 if setup == "BREAKDOWN":
                     structural_stop = min(
-                        float(x15.ema20) + 0.25*atr15,
-                        breakout + 0.55*atr15,
+                        float(x15.ema20) + 0.35*atr15,
+                        breakout + 0.70*atr15,
                     )
-                    stop = max(price + 0.45*atr15, structural_stop)
+                    stop = max(price + 0.70*atr15, structural_stop)
+
                 elif setup == "CONTINUATION":
                     structural_stop = min(
-                        float(x15.ema20) + 0.35*atr15,
+                        float(x15.ema20) + 0.40*atr15,
                         recent_swing,
                     )
-                    stop = max(price + 0.40*atr15, structural_stop)
+                    stop = max(price + 0.55*atr15, structural_stop)
+
                 else:
                     structural_stop = max(float(x15.ema50), recent_swing)
-                    stop = structural_stop + 0.15*atr15
+                    stop = structural_stop + 0.30*atr15
 
                 tp1, tp2, tp3 = self.make_targets(
                     lev, price, "SHORT", atr1
