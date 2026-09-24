@@ -1084,12 +1084,26 @@ class Analyzer:
             if div_veto:
                 warnings.append("Bearish divergence on BOTH 1H and 15m: LONG veto")
 
+            # Execution guard: never open LONG while the current market
+            # or the latest closed 15m candle is below thesis invalidation.
+            # A wick below is allowed only after price has reclaimed the level
+            # and a 15m candle has closed back above it.
+            thesis_ok = (
+                price > invalidation
+                and x15.close > invalidation
+            )
+            if not thesis_ok:
+                warnings.append(
+                    f"LONG blocked: thesis invalidation {price_fmt(invalidation)} "
+                    "has not been reclaimed/confirmed on 15m"
+                )
+
             candidates = []
-            if pullback_ok:
+            if thesis_ok and pullback_ok:
                 candidates.append("PULLBACK / RECLAIM")
-            if breakout_ok:
+            if thesis_ok and breakout_ok:
                 candidates.append("BREAKOUT")
-            if continuation_ok:
+            if thesis_ok and continuation_ok:
                 candidates.append("CONTINUATION")
 
             if candidates and not div_veto:
@@ -1216,12 +1230,26 @@ class Analyzer:
             if div_veto:
                 warnings.append("Bullish RSI divergence present: SHORT veto")
 
+            # Execution guard: never open SHORT while the current market
+            # or the latest closed 15m candle is above thesis invalidation.
+            # A wick above is allowed only after price has rejected the level
+            # and a 15m candle has closed back below it.
+            thesis_ok = (
+                price < invalidation
+                and x15.close < invalidation
+            )
+            if not thesis_ok:
+                warnings.append(
+                    f"SHORT blocked: thesis invalidation {price_fmt(invalidation)} "
+                    "has not been rejected/confirmed on 15m"
+                )
+
             candidates = []
-            if pullback_ok:
+            if thesis_ok and pullback_ok:
                 candidates.append("PULLBACK / REJECTION")
-            if breakout_ok:
+            if thesis_ok and breakout_ok:
                 candidates.append("BREAKDOWN")
-            if continuation_ok:
+            if thesis_ok and continuation_ok:
                 candidates.append("CONTINUATION")
 
             if candidates and not div_veto:
