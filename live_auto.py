@@ -452,7 +452,7 @@ class BitunixPrivate:
                     "symbol": SYMBOL,
                     "positionId": position_id,
                     "tpPrice": tp_price,
-                    "tpStopType": "MARK_PRICE",
+                    "tpStopType": "LAST_PRICE",
                     "tpOrderType": "MARKET",
                     "tpQty": qty,
                 },
@@ -2335,11 +2335,30 @@ class RealAuto:
     # -----------------------------
 
     def get_mark(self) -> float:
+        """
+        Return Bitunix MARK_PRICE for stop/trailing risk management.
+
+        Planner entries and TP levels use LAST_PRICE. Native SL orders use
+        MARK_PRICE, so active-position stop management must compare against
+        MARK_PRICE as well.
+        """
         snap = self.live.snapshot()
-        mark = snap.get("price")
-        if mark is None and self.plan is not None:
-            mark = self.plan.price
-        return fnum(mark)
+        mark = fnum(snap.get("mark_price"))
+
+        # REST fallback is explicit and authoritative for markPrice.
+        if mark <= 0:
+            try:
+                tick = self.pub.ticker()
+                mark = fnum(tick.get("markPrice"))
+            except Exception as e:
+                log(f"MARK_PRICE REST fallback failed: {e}")
+
+        # Last-resort continuity fallback only. This should be rare.
+        if mark <= 0 and self.plan is not None:
+            log("MARK_PRICE unavailable; temporarily falling back to plan LAST_PRICE.")
+            mark = fnum(self.plan.price)
+
+        return mark
 
     def account_snapshot(self):
         a = self.api.account(MARGIN_COIN)
@@ -2605,7 +2624,7 @@ class RealAuto:
         )
 
         return (
-            "📊 <b>I-GOD V7.3.3 — STATUS REAL</b>\n\n"
+            "📊 <b>I-GOD V7.3.4 — STATUS REAL</b>\n\n"
             "<b>💰 BITUNIX</b>\n"
             + acct_lines
             + f"Posición exchange: <b>{C.html.escape(ex_text)}</b>\n\n"
@@ -2905,7 +2924,7 @@ class RealAuto:
 
             elif cmd == "/help":
                 self.tg.send(
-                    "<b>I-GOD V7.3.3 comandos</b>\n"
+                    "<b>I-GOD V7.3.4 comandos</b>\n"
                     "/status — cuenta + bot + mercado\n"
                     "/account — cuenta Futures real\n"
                     "/position — posición/SL/TP reales\n"
@@ -2925,7 +2944,7 @@ class RealAuto:
         self.live.start()
 
         self.tg.send(
-            "🔴🤖 <b>I-GOD V7.3.3 REAL AUTO conectado</b>\n\n"
+            "🔴🤖 <b>I-GOD V7.3.4 REAL AUTO conectado</b>\n\n"
             f"{SYMBOL} | sizing {LIVE_SIZING_MODE} "
             f"{LIVE_EQUITY_ALLOC_PCT*100:.0f}% equity "
             f"| risk {LIVE_RISK_PCT*100:.1f}% "

@@ -303,7 +303,11 @@ class BitunixPublic:
 class LiveMarket:
     def __init__(self):
         self.lock = threading.Lock()
-        self.price = None
+        # Keep LAST_PRICE and MARK_PRICE separate. They serve different roles:
+        # - LAST_PRICE: analysis, entries and take-profit logic.
+        # - MARK_PRICE: risk management and native stop-loss triggers.
+        self.last_price = None
+        self.mark_price = None
         self.index_price = None
         self.funding = None
         self.bids = []
@@ -370,7 +374,7 @@ class LiveMarket:
                     ip = num(d.get("ip"))
                     fr = num(d.get("fr"))
                     if finite(mp):
-                        self.price = mp
+                        self.mark_price = mp
                     if finite(ip):
                         self.index_price = ip
                     if finite(fr):
@@ -391,7 +395,7 @@ class LiveMarket:
                         v = num(t.get("v"), 0.0)
                         s = str(t.get("s", "")).lower()
                         if finite(p0):
-                            self.price = p0
+                            self.last_price = p0
                         if v > 0:
                             if s == "buy":
                                 self.buy_vol += v
@@ -417,7 +421,10 @@ class LiveMarket:
                 else None
             )
             return {
-                "price": self.price,
+                # Backward-compatible alias: "price" now always means LAST_PRICE.
+                "price": self.last_price,
+                "last_price": self.last_price,
+                "mark_price": self.mark_price,
                 "funding": self.funding,
                 "book": book,
                 "flow": flow,
@@ -717,11 +724,17 @@ class Analyzer:
             and ws["age"] < 20
         )
 
-        price = (
-            ws["price"]
-            if ws_fresh and finite(ws["price"])
+        last_price = (
+            ws["last_price"]
+            if ws_fresh and finite(ws["last_price"])
             else num(tick.get("lastPrice") or tick.get("last"))
         )
+        mark_price = (
+            ws["mark_price"]
+            if ws_fresh and finite(ws["mark_price"])
+            else num(tick.get("markPrice"))
+        )
+
         # Bitunix REST funding_rate devuelve actualmente puntos porcentuales:
         # -0.01 corresponde a -0.0100% en la interfaz de Bitunix.
         # Usamos REST como fuente unica para evitar mezclar unidades con WebSocket.
@@ -732,11 +745,14 @@ class Analyzer:
             else rest_book
         )
 
-        if not finite(price):
-            raise RuntimeError("No pude obtener precio BTCUSDT de Bitunix.")
+        if not finite(last_price):
+            raise RuntimeError("No pude obtener LAST_PRICE BTCUSDT de Bitunix.")
 
         return {
-            "price": float(price),
+            # Planner/execution reference: LAST_PRICE only.
+            "price": float(last_price),
+            "last_price": float(last_price),
+            "mark_price": float(mark_price) if finite(mark_price) else None,
             "funding": funding if finite(funding) else None,
             "book": book,
             "flow": ws["flow"],
