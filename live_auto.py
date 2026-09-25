@@ -80,6 +80,12 @@ LIVE_MAX_TRADES_DAY = int(os.getenv("LIVE_MAX_TRADES_DAY", "3"))
 LIVE_COOLDOWN_MIN = int(os.getenv("LIVE_COOLDOWN_MIN", "60"))
 LIVE_MAX_DAILY_LOSS_USDT = float(os.getenv("LIVE_MAX_DAILY_LOSS_USDT", "2"))
 
+# V7.3.5 daily risk budget. Reserve the hard daily-loss allowance across a
+# small number of meaningful losing attempts instead of spending almost all of
+# it on trade #1. A third trade remains possible when earlier trades leave
+# enough daily budget (for example after a winner).
+LIVE_DAILY_RISK_SLOTS = max(1, int(os.getenv("LIVE_DAILY_RISK_SLOTS", "2")))
+
 # Exit distribution: 30% TP1 + 30% TP2 + 40% runner.
 # TP3 from the planner is kept only as a market reference; no TP3 order is placed.
 LIVE_TP1_PCT = float(os.getenv("LIVE_TP1_PCT", "30")) / 100
@@ -1123,19 +1129,53 @@ class RealAuto:
     # Sizing / cost guard
     # -----------------------------
 
+    def daily_risk_budget(self):
+        """
+        Hard daily-loss budget available for the NEXT entry.
+
+        LIVE_DAILY_RISK_SLOTS=2 means:
+        - before trade #1, reserve the distance to the daily-loss floor across
+          two meaningful losing attempts;
+        - after trade #1, the remaining distance may be used by the next trade;
+        - trade #3 is still allowed by LIVE_MAX_TRADES_DAY when prior results
+          leave enough hard-loss budget.
+
+        This does not raise the configured daily-loss floor.
+        """
+        hard_limit = abs(float(LIVE_MAX_DAILY_LOSS_USDT))
+        day_pnl = float(self.state.day_pnl)
+
+        if hard_limit <= 0:
+            return {
+                "hard_limit": 0.0,
+                "remaining": float("inf"),
+                "slots_left": 1,
+                "slot_cap": float("inf"),
+            }
+
+        # Distance from current bot-day PnL to the hard floor (-hard_limit).
+        # Example: limit=12, pnl=-4 -> remaining=8; pnl=+5 -> remaining=17.
+        remaining = max(0.0, hard_limit + day_pnl)
+        slots_left = max(1, LIVE_DAILY_RISK_SLOTS - self.state.trades_today)
+        slot_cap = remaining / slots_left
+
+        return {
+            "hard_limit": hard_limit,
+            "remaining": remaining,
+            "slots_left": slots_left,
+            "slot_cap": slot_cap,
+        }
+
     def sizing_budget(self, risk_multiplier: float = 1.0):
         """
         Dynamic per-entry budget.
 
-        EQUITY:
-          base margin = min(equity, available) * allocation %
-          risk cap    = equity * risk %
-          both are reduced by Profit Lock multiplier when active.
-
-        FIXED:
-          preserves legacy LIVE_MARGIN_USDT / LIVE_MAX_RISK_USDT.
+        The configured per-trade cap (10% equity in the current setup) is now
+        an UPPER bound. V7.3.5 also caps it by the remaining hard daily-loss
+        budget so one early loss does not consume nearly the whole day.
         """
         risk_multiplier = max(0.05, min(1.0, float(risk_multiplier)))
+        daily = self.daily_risk_budget()
 
         if LIVE_SIZING_MODE == "EQUITY":
             a = self.account_snapshot()
@@ -1151,7 +1191,11 @@ class RealAuto:
             risk_pct = max(0.001, min(0.50, LIVE_RISK_PCT))
 
             base_margin = min(equity, available) * alloc * risk_multiplier
-            risk_cap = equity * risk_pct * risk_multiplier
+            configured_risk_cap = equity * risk_pct * risk_multiplier
+            risk_cap = min(configured_risk_cap, daily["slot_cap"])
+
+            if risk_cap <= 0:
+                raise RuntimeError("No daily loss budget remains for a new entry.")
 
             return {
                 "mode": "EQUITY",
@@ -1159,16 +1203,31 @@ class RealAuto:
                 "available": available,
                 "base_margin": base_margin,
                 "risk_cap": risk_cap,
+                "configured_risk_cap": configured_risk_cap,
+                "daily_hard_limit": daily["hard_limit"],
+                "daily_remaining": daily["remaining"],
+                "daily_slots_left": daily["slots_left"],
+                "daily_slot_cap": daily["slot_cap"],
                 "alloc_pct": alloc,
                 "risk_pct": risk_pct,
             }
+
+        configured_risk_cap = LIVE_MAX_RISK_USDT * risk_multiplier
+        risk_cap = min(configured_risk_cap, daily["slot_cap"])
+        if risk_cap <= 0:
+            raise RuntimeError("No daily loss budget remains for a new entry.")
 
         return {
             "mode": "FIXED",
             "equity": 0.0,
             "available": 0.0,
             "base_margin": LIVE_MARGIN_USDT * risk_multiplier,
-            "risk_cap": LIVE_MAX_RISK_USDT * risk_multiplier,
+            "risk_cap": risk_cap,
+            "configured_risk_cap": configured_risk_cap,
+            "daily_hard_limit": daily["hard_limit"],
+            "daily_remaining": daily["remaining"],
+            "daily_slots_left": daily["slots_left"],
+            "daily_slot_cap": daily["slot_cap"],
             "alloc_pct": 0.0,
             "risk_pct": 0.0,
         }
@@ -1739,7 +1798,10 @@ class RealAuto:
             f"Base margen dinámica: <b>{sizing['base_margin']:.2f} USDT</b>\n"
             f"Margen ejecutable tras reserva: <b>{execution_base_margin:.2f} USDT</b>\n"
             f"Reserva cash mínima: <b>{margin_guard['cash_keep']:.2f} USDT</b>\n"
-            f"Risk cap dinámico: <b>{sizing['risk_cap']:.2f} USDT</b>\n"
+            f"Risk cap base configurado: <b>{sizing['configured_risk_cap']:.2f} USDT</b>\n"
+            f"Presupuesto diario restante: <b>{sizing['daily_remaining']:.2f} USDT</b> "
+            f"({sizing['daily_slots_left']} slot(s) de riesgo)\n"
+            f"Risk cap EFECTIVO: <b>{sizing['risk_cap']:.2f} USDT</b>\n"
             f"Leverage AUTO seleccionado y verificado: <b>{selected_leverage}x</b> "
             f"(rango {LIVE_MIN_LEVERAGE}–{min(LIVE_MAX_LEVERAGE, self.max_leverage)}x)\n"
             f"Nominal calculado: <b>{intended_notional:.2f} USDT</b>\n"
@@ -2624,7 +2686,7 @@ class RealAuto:
         )
 
         return (
-            "📊 <b>I-GOD V7.3.4 — STATUS REAL</b>\n\n"
+            "📊 <b>I-GOD V7.3.5 — STATUS REAL</b>\n\n"
             "<b>💰 BITUNIX</b>\n"
             + acct_lines
             + f"Posición exchange: <b>{C.html.escape(ex_text)}</b>\n\n"
@@ -2641,7 +2703,9 @@ class RealAuto:
             f"Cierres I-GOD identificados hoy: <b>{len(self.state.bot_closed_position_ids)}</b>\n"
             f"Sizing mode: <b>{LIVE_SIZING_MODE}</b>\n"
             f"Equity allocation: <b>{LIVE_EQUITY_ALLOC_PCT*100:.0f}%</b>\n"
-            f"Risk/trade: <b>{LIVE_RISK_PCT*100:.1f}% equity</b>\n"
+            f"Risk/trade máximo: <b>{LIVE_RISK_PCT*100:.1f}% equity</b>\n"
+            f"Daily risk slots: <b>{LIVE_DAILY_RISK_SLOTS}</b>\n"
+            f"Daily loss hard: <b>{abs(LIVE_MAX_DAILY_LOSS_USDT):.2f} USDT</b>\n"
             f"Leverage: <b>{'AUTO ' + str(LIVE_MIN_LEVERAGE) + '–' + str(min(LIVE_MAX_LEVERAGE, self.max_leverage)) + 'x' if LIVE_DYNAMIC_LEVERAGE else str(LIVE_LEVERAGE) + 'x fijo'}</b>\n"
             f"PnL cuenta hoy usado por Profit Lock: <b>{money(self.profit_lock_day_pnl())}</b>\n"
             f"Objetivo diario soft: <b>{money(self.daily_profit_target_usdt())}</b>\n"
@@ -2770,7 +2834,14 @@ class RealAuto:
                 details.append(
                     f"✅ Sizing EQUITY: equity {preview['equity']:.2f} -> "
                     f"base {preview['base_margin']:.2f} USDT -> "
-                    f"risk cap {preview['risk_cap']:.2f} USDT"
+                    f"risk cap efectivo {preview['risk_cap']:.2f} USDT "
+                    f"(base {preview['configured_risk_cap']:.2f})"
+                )
+                details.append(
+                    f"✅ Daily risk budget: límite {preview['daily_hard_limit']:.2f} -> "
+                    f"restante {preview['daily_remaining']:.2f} USDT -> "
+                    f"{preview['daily_slots_left']} slot(s) -> "
+                    f"cap/slot {preview['daily_slot_cap']:.2f} USDT"
                 )
                 if LIVE_DYNAMIC_LEVERAGE:
                     details.append(
@@ -2783,7 +2854,14 @@ class RealAuto:
             else:
                 details.append(
                     f"✅ Sizing FIXED: base {preview['base_margin']:.2f} -> "
-                    f"risk cap {preview['risk_cap']:.2f} USDT"
+                    f"risk cap efectivo {preview['risk_cap']:.2f} USDT "
+                    f"(base {preview['configured_risk_cap']:.2f})"
+                )
+                details.append(
+                    f"✅ Daily risk budget: límite {preview['daily_hard_limit']:.2f} -> "
+                    f"restante {preview['daily_remaining']:.2f} USDT -> "
+                    f"{preview['daily_slots_left']} slot(s) -> "
+                    f"cap/slot {preview['daily_slot_cap']:.2f} USDT"
                 )
         except Exception as e:
             problems.append(f"sizing dinámico: {e}")
@@ -2924,7 +3002,7 @@ class RealAuto:
 
             elif cmd == "/help":
                 self.tg.send(
-                    "<b>I-GOD V7.3.4 comandos</b>\n"
+                    "<b>I-GOD V7.3.5 comandos</b>\n"
                     "/status — cuenta + bot + mercado\n"
                     "/account — cuenta Futures real\n"
                     "/position — posición/SL/TP reales\n"
@@ -2944,7 +3022,7 @@ class RealAuto:
         self.live.start()
 
         self.tg.send(
-            "🔴🤖 <b>I-GOD V7.3.4 REAL AUTO conectado</b>\n\n"
+            "🔴🤖 <b>I-GOD V7.3.5 REAL AUTO conectado</b>\n\n"
             f"{SYMBOL} | sizing {LIVE_SIZING_MODE} "
             f"{LIVE_EQUITY_ALLOC_PCT*100:.0f}% equity "
             f"| risk {LIVE_RISK_PCT*100:.1f}% "
@@ -2955,6 +3033,8 @@ class RealAuto:
             f"Fee guard mínimo: <b>{LIVE_MIN_NET_RR:.2f}R neto</b>\n"
             f"Reserva cash ejecución: <b>{LIVE_EXECUTION_CASH_RESERVE_PCT*100:.1f}% + costes estimados</b>\n"
             f"Reserva slippage STOP: <b>{LIVE_STOP_SLIPPAGE_RATE*100:.2f}%</b>\n"
+            f"Daily loss hard: <b>{abs(LIVE_MAX_DAILY_LOSS_USDT):.2f} USDT</b> | "
+            f"risk slots: <b>{LIVE_DAILY_RISK_SLOTS}</b>\n"
             f"Daily target soft: <b>{LIVE_DAILY_PROFIT_TARGET_PCT*100:.1f}%</b>\n"
             f"Profit-lock risk: <b>{LIVE_PROFIT_LOCK_RISK_MULT:.2f}x</b>\n"
             f"Salidas: <b>{LIVE_TP1_PCT*100:.0f}% TP1 + {LIVE_TP2_PCT*100:.0f}% TP2 + {LIVE_RUNNER_PCT*100:.0f}% runner</b>\n"
