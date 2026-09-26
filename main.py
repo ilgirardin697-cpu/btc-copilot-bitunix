@@ -45,9 +45,17 @@ TZ = ZoneInfo(TZ_NAME)
 ANALYSIS_SECONDS = int(os.getenv("ANALYSIS_SECONDS", "60"))
 LIVE_SECONDS = int(os.getenv("LIVE_SECONDS", "15"))
 DAILY_PLAN_HOUR = int(os.getenv("DAILY_PLAN_HOUR", "8"))
-MIN_RR_ENTER = float(os.getenv("MIN_RR_ENTER", "1.8"))
+# V7.3.6: technical geometry first. 1.25R is the planner hard floor;
+# 1.80R remains the preferred/ideal quality level, not a hard blocker.
+# Use a new env name so an old Railway MIN_RR_ENTER=1.8 cannot silently
+# keep the former behaviour after this update.
+MIN_RR_ENTER = float(os.getenv("TECHNICAL_MIN_RR_ENTER", "1.25"))
+PREFERRED_RR_ENTER = float(os.getenv("PREFERRED_RR_ENTER", "1.8"))
 MIN_RR_LATE = float(os.getenv("MIN_RR_LATE", "1.2"))
 MAX_EXTENSION_ATR = float(os.getenv("MAX_EXTENSION_ATR", "1.35"))
+# Hard protective SL must sit beyond thesis invalidation, with volatility room.
+# Position sizing absorbs the wider stop so cash risk does not increase.
+THESIS_STOP_BUFFER_ATR = float(os.getenv("THESIS_STOP_BUFFER_ATR", "0.20"))
 ALERT_COOLDOWN_MIN = int(os.getenv("ALERT_COOLDOWN_MIN", "45"))
 ZONE_ALERT_COOLDOWN_MIN = int(os.getenv("ZONE_ALERT_COOLDOWN_MIN", "20"))
 APPROACH_ATR = float(os.getenv("APPROACH_ATR", "0.35"))
@@ -1147,6 +1155,20 @@ class Analyzer:
                     structural_stop = min(float(x15.ema50), recent_swing)
                     stop = structural_stop - 0.30*atr15
 
+                # V7.3.6: the hard SL must be beyond the level that actually
+                # invalidates the LONG thesis, not inside it. This gives normal
+                # liquidity sweeps/wicks some room. Wider stop => smaller qty;
+                # live_auto.py keeps the same monetary risk cap.
+                if finite(invalidation):
+                    thesis_stop = invalidation - THESIS_STOP_BUFFER_ATR * atr15
+                    if thesis_stop < stop:
+                        stop = thesis_stop
+                        why.append(
+                            f"LONG SL beyond thesis invalidation: "
+                            f"{price_fmt(invalidation)} - "
+                            f"{THESIS_STOP_BUFFER_ATR:.2f} ATR15"
+                        )
+
                 tp1, tp2, tp3 = self.make_targets(
                     lev, price, "LONG", atr1
                 )
@@ -1173,6 +1195,12 @@ class Analyzer:
                     )
                 elif rr2 is not None and rr2 >= MIN_RR_ENTER:
                     action = "ENTER LONG NOW"
+                    if rr2 < PREFERRED_RR_ENTER:
+                        warnings.append(
+                            f"Technical LONG valid at {rr2:.2f}R gross; "
+                            f"below preferred {PREFERRED_RR_ENTER:.2f}R. "
+                            "Executor must still pass the NET fee/slippage guard."
+                        )
                 else:
                     action = "WAIT"
                     wait.append("LONG direction valid, but current price is not attractive enough.")
@@ -1293,6 +1321,19 @@ class Analyzer:
                     structural_stop = max(float(x15.ema50), recent_swing)
                     stop = structural_stop + 0.30*atr15
 
+                # V7.3.6: symmetric SHORT protection. Keep the hard SL above
+                # thesis invalidation plus a volatility buffer; sizing reduces
+                # qty automatically so the cash risk cap is unchanged.
+                if finite(invalidation):
+                    thesis_stop = invalidation + THESIS_STOP_BUFFER_ATR * atr15
+                    if thesis_stop > stop:
+                        stop = thesis_stop
+                        why.append(
+                            f"SHORT SL beyond thesis invalidation: "
+                            f"{price_fmt(invalidation)} + "
+                            f"{THESIS_STOP_BUFFER_ATR:.2f} ATR15"
+                        )
+
                 tp1, tp2, tp3 = self.make_targets(
                     lev, price, "SHORT", atr1
                 )
@@ -1319,6 +1360,12 @@ class Analyzer:
                     )
                 elif rr2 is not None and rr2 >= MIN_RR_ENTER:
                     action = "ENTER SHORT NOW"
+                    if rr2 < PREFERRED_RR_ENTER:
+                        warnings.append(
+                            f"Technical SHORT valid at {rr2:.2f}R gross; "
+                            f"below preferred {PREFERRED_RR_ENTER:.2f}R. "
+                            "Executor must still pass the NET fee/slippage guard."
+                        )
                 else:
                     action = "WAIT"
                     wait.append("SHORT direction valid, but current price is not attractive enough.")

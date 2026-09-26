@@ -2686,7 +2686,7 @@ class RealAuto:
         )
 
         return (
-            "📊 <b>I-GOD V7.3.5 — STATUS REAL</b>\n\n"
+            "📊 <b>I-GOD V7.3.6 — STATUS REAL</b>\n\n"
             "<b>💰 BITUNIX</b>\n"
             + acct_lines
             + f"Posición exchange: <b>{C.html.escape(ex_text)}</b>\n\n"
@@ -3002,7 +3002,7 @@ class RealAuto:
 
             elif cmd == "/help":
                 self.tg.send(
-                    "<b>I-GOD V7.3.5 comandos</b>\n"
+                    "<b>I-GOD V7.3.6 comandos</b>\n"
                     "/status — cuenta + bot + mercado\n"
                     "/account — cuenta Futures real\n"
                     "/position — posición/SL/TP reales\n"
@@ -3022,7 +3022,7 @@ class RealAuto:
         self.live.start()
 
         self.tg.send(
-            "🔴🤖 <b>I-GOD V7.3.5 REAL AUTO conectado</b>\n\n"
+            "🔴🤖 <b>I-GOD V7.3.6 REAL AUTO conectado</b>\n\n"
             f"{SYMBOL} | sizing {LIVE_SIZING_MODE} "
             f"{LIVE_EQUITY_ALLOC_PCT*100:.0f}% equity "
             f"| risk {LIVE_RISK_PCT*100:.1f}% "
@@ -3031,8 +3031,10 @@ class RealAuto:
             f"AUTO: <b>{self.state.auto_enabled}</b>\n"
             f"State persistente: <b>{bool(volume)}</b>\n"
             f"Fee guard mínimo: <b>{LIVE_MIN_NET_RR:.2f}R neto</b>\n"
+            f"Planner R:R: <b>{C.MIN_RR_ENTER:.2f}R mínimo técnico / {C.PREFERRED_RR_ENTER:.2f}R preferido</b>\n"
             f"Reserva cash ejecución: <b>{LIVE_EXECUTION_CASH_RESERVE_PCT*100:.1f}% + costes estimados</b>\n"
             f"Reserva slippage STOP: <b>{LIVE_STOP_SLIPPAGE_RATE*100:.2f}%</b>\n"
+            f"SL tesis: <b>más allá de invalidación + {C.THESIS_STOP_BUFFER_ATR:.2f}×ATR15</b>\n"
             f"Daily loss hard: <b>{abs(LIVE_MAX_DAILY_LOSS_USDT):.2f} USDT</b> | "
             f"risk slots: <b>{LIVE_DAILY_RISK_SLOTS}</b>\n"
             f"Daily target soft: <b>{LIVE_DAILY_PROFIT_TARGET_PCT*100:.1f}%</b>\n"
