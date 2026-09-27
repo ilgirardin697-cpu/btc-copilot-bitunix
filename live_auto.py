@@ -159,6 +159,29 @@ STATE_FILE = (
     else Path("igod_live_state.json")
 )
 
+# V7.3.8 passive DATA + SHADOW observer. These files are deliberately
+# separate from the live trading state: observer failures must never alter
+# entry, exit, risk, TP/SL or lock decisions.
+DATA_OBSERVER_ENABLED = os.getenv("DATA_OBSERVER_ENABLED", "true").lower() == "true"
+SHADOW_ENABLED = os.getenv("SHADOW_ENABLED", "true").lower() == "true"
+SHADOW_STOP_BUFFERS_ATR = tuple(
+    float(x.strip())
+    for x in os.getenv("SHADOW_STOP_BUFFERS_ATR", "0.10,0.20,0.30").split(",")
+    if x.strip()
+)
+DATA_JOURNAL_FILE = (
+    Path(volume) / "igod_trade_journal.jsonl"
+    if volume else Path("igod_trade_journal.jsonl")
+)
+SHADOW_JOURNAL_FILE = (
+    Path(volume) / "igod_shadow_journal.jsonl"
+    if volume else Path("igod_shadow_journal.jsonl")
+)
+OBSERVER_STATE_FILE = (
+    Path(volume) / "igod_observer_state.json"
+    if volume else Path("igod_observer_state.json")
+)
+
 
 # ---------------------------------------------------------------------
 # Helpers
@@ -677,6 +700,316 @@ class State:
 
 
 # ---------------------------------------------------------------------
+# Passive DATA + SHADOW observer (V7.3.8)
+# ---------------------------------------------------------------------
+
+class PassiveObserver:
+    """Best-effort telemetry only. NEVER allowed to raise into live trading."""
+
+    def __init__(self):
+        self.enabled = DATA_OBSERVER_ENABLED
+        self.shadow_enabled = SHADOW_ENABLED
+        self.real = {}
+        self.shadow = {}
+        self.seen_signals = []
+        self._load()
+
+    def _now_iso(self):
+        return C.datetime.now(C.TZ).isoformat()
+
+    def _append(self, path: Path, event: str, payload: dict):
+        if not self.enabled:
+            return
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            row = {
+                "ts": self._now_iso(),
+                "event": event,
+                **payload,
+            }
+            with path.open("a", encoding="utf-8") as f:
+                f.write(json.dumps(row, ensure_ascii=False, separators=(",", ":")) + "\n")
+        except Exception as e:
+            log(f"Observer journal error ({event}): {e}")
+
+    def _save(self):
+        if not self.enabled:
+            return
+        try:
+            OBSERVER_STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+            data = {
+                "real": self.real,
+                "shadow": self.shadow,
+                "seen_signals": self.seen_signals[-300:],
+            }
+            tmp = OBSERVER_STATE_FILE.with_suffix(".tmp")
+            tmp.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+            tmp.replace(OBSERVER_STATE_FILE)
+        except Exception as e:
+            log(f"Observer state save error: {e}")
+
+    def _load(self):
+        if not self.enabled or not OBSERVER_STATE_FILE.exists():
+            return
+        try:
+            d = json.loads(OBSERVER_STATE_FILE.read_text(encoding="utf-8"))
+            self.real = d.get("real", {}) if isinstance(d.get("real", {}), dict) else {}
+            self.shadow = d.get("shadow", {}) if isinstance(d.get("shadow", {}), dict) else {}
+            self.seen_signals = list(d.get("seen_signals", []))[-300:]
+        except Exception as e:
+            log(f"Observer state load error: {e}")
+
+    def safe_event(self, event: str, payload: dict, shadow=False):
+        try:
+            self._append(SHADOW_JOURNAL_FILE if shadow else DATA_JOURNAL_FILE, event, payload)
+        except Exception as e:
+            log(f"Observer event ignored: {e}")
+
+    def _atr15(self, analyzer) -> float:
+        try:
+            row = analyzer.frames["15m"].iloc[-1]
+            return max(0.0, fnum(row.get("atr")))
+        except Exception:
+            return 0.0
+
+    def _market_snapshot(self, plan, analyzer) -> dict:
+        return {
+            "bias": str(getattr(plan, "bias", "")),
+            "action": str(getattr(plan, "action", "")),
+            "setup": str(getattr(plan, "setup", "")),
+            "price": fnum(getattr(plan, "price", 0)),
+            "stop": fnum(getattr(plan, "stop", 0)),
+            "tp1": fnum(getattr(plan, "tp1", 0)),
+            "tp2": fnum(getattr(plan, "tp2", 0)),
+            "tp3": fnum(getattr(plan, "tp3", 0)),
+            "invalidation": fnum(getattr(plan, "primary_invalidation", 0)),
+            "rr2_gross": fnum(getattr(plan, "rr2", 0)),
+            "atr15": self._atr15(analyzer),
+            "rsi1h": fnum(getattr(plan, "rsi1h", 0)),
+            "rsi15": fnum(getattr(plan, "rsi15", 0)),
+            "adx4h": fnum(getattr(plan, "adx4h", 0)),
+            "adx1h": fnum(getattr(plan, "adx1h", 0)),
+            "funding": fnum(getattr(plan, "funding", 0)),
+            "book": getattr(plan, "book", None),
+            "flow": getattr(plan, "flow", None),
+        }
+
+    def observe_signal(self, signal_id: str, plan, analyzer):
+        """Record each actionable signal once and start virtual stop-buffer variants."""
+        if not self.enabled or signal_id in self.seen_signals:
+            return
+        try:
+            snap = self._market_snapshot(plan, analyzer)
+            self.seen_signals.append(signal_id)
+            self.safe_event("SIGNAL", {"signal_id": signal_id, **snap})
+
+            if not self.shadow_enabled:
+                self._save()
+                return
+
+            side = "LONG" if str(plan.action) == "ENTER LONG NOW" else "SHORT"
+            entry = fnum(plan.price)
+            inv = fnum(getattr(plan, "primary_invalidation", 0))
+            atr15 = snap["atr15"]
+            tp1, tp2 = fnum(plan.tp1), fnum(plan.tp2)
+            if entry <= 0 or inv <= 0 or atr15 <= 0 or tp2 <= 0:
+                self._save()
+                return
+
+            for buf in SHADOW_STOP_BUFFERS_ATR:
+                stop = inv - buf * atr15 if side == "LONG" else inv + buf * atr15
+                risk = abs(entry - stop)
+                reward2 = (tp2 - entry) if side == "LONG" else (entry - tp2)
+                rr = reward2 / risk if risk > 0 else 0.0
+                key = f"{signal_id}|buf={buf:.2f}"
+                row = {
+                    "shadow_id": key,
+                    "signal_id": signal_id,
+                    "side": side,
+                    "setup": snap["setup"],
+                    "bias": snap["bias"],
+                    "entry": entry,
+                    "invalidation": inv,
+                    "buffer_atr": buf,
+                    "atr15_entry": atr15,
+                    "stop": stop,
+                    "tp1": tp1,
+                    "tp2": tp2,
+                    "tp3": fnum(plan.tp3),
+                    "risk_price": risk,
+                    "rr2_gross": rr,
+                    "passes_1_25": rr >= 1.25,
+                    "passes_1_50": rr >= 1.50,
+                    "passes_1_80": rr >= 1.80,
+                    "opened_at": time.time(),
+                    "min_price": entry,
+                    "max_price": entry,
+                    "tp1_seen": False,
+                    "status": "OPEN" if rr >= 1.25 else "REJECTED_RR",
+                }
+                self.shadow[key] = row
+                self.safe_event("SHADOW_OPEN", row.copy(), shadow=True)
+
+            # prevent unbounded state growth; closed/rejected rows are already journaled
+            if len(self.shadow) > 500:
+                removable = [k for k,v in self.shadow.items() if v.get("status") != "OPEN"]
+                for k in removable[:max(0, len(self.shadow)-400)]:
+                    self.shadow.pop(k, None)
+            self._save()
+        except Exception as e:
+            log(f"Observer signal ignored: {e}")
+
+    def real_open(self, ps, plan, analyzer, net_rr=None):
+        if not self.enabled:
+            return
+        try:
+            snap = self._market_snapshot(plan, analyzer)
+            row = {
+                "position_id": ps.position_id,
+                "client_id": ps.client_id,
+                "side": ps.side,
+                "setup": snap["setup"],
+                "bias": snap["bias"],
+                "entry": ps.entry,
+                "stop_initial": ps.stop_initial,
+                "invalidation": ps.thesis_invalidation,
+                "r_value": ps.r_value,
+                "tp1": ps.tp1,
+                "tp2": ps.tp2,
+                "tp3": ps.tp3,
+                "qty_initial": ps.qty_initial,
+                "leverage": ps.leverage,
+                "atr15_entry": snap["atr15"],
+                "rr2_gross": snap["rr2_gross"],
+                "rr2_net_est": fnum(net_rr),
+                "rsi1h": snap["rsi1h"],
+                "rsi15": snap["rsi15"],
+                "adx4h": snap["adx4h"],
+                "adx1h": snap["adx1h"],
+                "funding_entry": snap["funding"],
+                "opened_at": time.time(),
+                "min_mark": ps.entry,
+                "max_mark": ps.entry,
+            }
+            self.real[str(ps.position_id)] = row
+            self.safe_event("REAL_OPEN", row.copy())
+            self._save()
+        except Exception as e:
+            log(f"Observer real_open ignored: {e}")
+
+    def tick(self, mark: float):
+        if not self.enabled or mark <= 0:
+            return
+        changed = False
+        try:
+            for row in self.real.values():
+                row["min_mark"] = min(fnum(row.get("min_mark"), mark), mark)
+                row["max_mark"] = max(fnum(row.get("max_mark"), mark), mark)
+                changed = True
+
+            if self.shadow_enabled:
+                now = time.time()
+                for key, row in list(self.shadow.items()):
+                    if row.get("status") != "OPEN":
+                        continue
+                    row["min_price"] = min(fnum(row.get("min_price"), mark), mark)
+                    row["max_price"] = max(fnum(row.get("max_price"), mark), mark)
+                    side = row.get("side")
+                    if side == "LONG":
+                        if mark >= fnum(row.get("tp1")):
+                            row["tp1_seen"] = True
+                        hit_stop = mark <= fnum(row.get("stop"))
+                        hit_tp2 = mark >= fnum(row.get("tp2"))
+                    else:
+                        if mark <= fnum(row.get("tp1")):
+                            row["tp1_seen"] = True
+                        hit_stop = mark >= fnum(row.get("stop"))
+                        hit_tp2 = mark <= fnum(row.get("tp2"))
+
+                    # Shadow is deliberately simple: first observed touch of hard SL or TP2.
+                    if hit_stop or hit_tp2:
+                        risk = max(1e-9, fnum(row.get("risk_price")))
+                        entry = fnum(row.get("entry"))
+                        mfe = (fnum(row.get("max_price"))-entry) if side == "LONG" else (entry-fnum(row.get("min_price")))
+                        mae = (entry-fnum(row.get("min_price"))) if side == "LONG" else (fnum(row.get("max_price"))-entry)
+                        row.update({
+                            "status": "TP2" if hit_tp2 else "STOP",
+                            "closed_at": now,
+                            "duration_sec": max(0.0, now-fnum(row.get("opened_at"))),
+                            "mfe_price": max(0.0, mfe),
+                            "mae_price": max(0.0, mae),
+                            "mfe_r": max(0.0, mfe)/risk,
+                            "mae_r": max(0.0, mae)/risk,
+                        })
+                        self.safe_event("SHADOW_CLOSE", row.copy(), shadow=True)
+                    changed = True
+
+            if changed:
+                self._save()
+        except Exception as e:
+            log(f"Observer tick ignored: {e}")
+
+    def real_event(self, position_id: str, event: str, extra=None):
+        if not self.enabled:
+            return
+        try:
+            payload = {"position_id": str(position_id)}
+            if extra:
+                payload.update(extra)
+            self.safe_event(event, payload)
+        except Exception as e:
+            log(f"Observer real event ignored: {e}")
+
+    def real_close(self, ps, reason: str, realized: float, fee: float, funding: float, net: float):
+        if not self.enabled:
+            return
+        try:
+            row = self.real.pop(str(ps.position_id), {})
+            entry = fnum(row.get("entry"), ps.entry)
+            risk = max(1e-9, fnum(row.get("r_value"), ps.r_value))
+            min_mark = fnum(row.get("min_mark"), entry)
+            max_mark = fnum(row.get("max_mark"), entry)
+            if ps.side == "LONG":
+                mfe, mae = max_mark-entry, entry-min_mark
+            else:
+                mfe, mae = entry-min_mark, max_mark-entry
+            payload = {
+                **row,
+                "position_id": ps.position_id,
+                "reason": reason,
+                "closed_at": time.time(),
+                "duration_sec": max(0.0, time.time()-fnum(row.get("opened_at"), ps.opened_at)),
+                "mfe_price": max(0.0, mfe),
+                "mae_price": max(0.0, mae),
+                "mfe_r": max(0.0, mfe)/risk,
+                "mae_r": max(0.0, mae)/risk,
+                "gross": realized,
+                "fee": fee,
+                "funding": funding,
+                "net": net,
+            }
+            self.safe_event("REAL_CLOSE", payload)
+            self._save()
+        except Exception as e:
+            log(f"Observer real_close ignored: {e}")
+
+    def status_text(self):
+        try:
+            open_shadow = sum(1 for x in self.shadow.values() if x.get("status") == "OPEN")
+            return (
+                "📚 <b>DATA + SHADOW V7.3.8</b>\n\n"
+                f"Observer: <b>{'ON' if self.enabled else 'OFF'}</b>\n"
+                f"Shadow: <b>{'ON' if self.shadow_enabled else 'OFF'}</b>\n"
+                f"Señales registradas: <b>{len(self.seen_signals)}</b>\n"
+                f"Trades reales monitorizados ahora: <b>{len(self.real)}</b>\n"
+                f"Variantes shadow abiertas: <b>{open_shadow}</b>\n"
+                f"Buffers shadow ATR: <b>{', '.join(f'{x:.2f}' for x in SHADOW_STOP_BUFFERS_ATR)}</b>\n\n"
+                "Shadow NO envía órdenes ni modifica el state operativo."
+            )
+        except Exception as e:
+            return "📚 DATA observer activo, pero no pude resumirlo: " + C.html.escape(str(e))
+
+# ---------------------------------------------------------------------
 # Executor
 # ---------------------------------------------------------------------
 
@@ -693,6 +1026,7 @@ class RealAuto:
         self.analyzer = C.Analyzer(self.pub, self.live)
         self.api = BitunixPrivate(API_KEY, SECRET_KEY)
         self.state = State()
+        self.observer = PassiveObserver()
 
         self.base_precision = 4
         self.price_precision = 1
@@ -1948,6 +2282,10 @@ class RealAuto:
                 )
             self.place_native_tps(ps, real_tp1, real_tp2)
             self.state.save()
+            self.observer.real_open(
+                ps, plan, self.analyzer,
+                net_rr=costs.get("net_rr"),
+            )
         except Exception as e:
             self.emergency_close_and_lock(
                 "PROTECTION SETUP FAILED: " + str(e)
@@ -2089,6 +2427,7 @@ class RealAuto:
             self.state.bot_closed_position_ids.append(ps.position_id)
         self.state.position = None
         self.state.save()
+        self.observer.real_close(ps, reason, realized, fee, funding, net)
 
         self.tg.send(
             "🏁 <b>POSICIÓN REAL CERRADA</b>\n\n"
@@ -2221,6 +2560,11 @@ class RealAuto:
                 + ("Protección neta aplicada." if moved else
                    "El SL existente ya era igual/mejor o no podía apretarse más.")
             )
+            self.observer.real_event(ps.position_id, "REAL_TP1", {
+                "qty_remaining": qty_now,
+                "stop": ps.current_stop,
+                "target_net_floor": target_net,
+            })
 
         # TP2: do NOT jump to +1R. Protect part of realized profit and let ~40% run.
         if ratio <= runner_ratio + ratio_tol and ps.stop_stage < 2:
@@ -2245,6 +2589,11 @@ class RealAuto:
                 f"{LIVE_RUNNER_TRAIL_ATR:.2f}×ATR15)</b>, respetando estructura.\n"
                 f"TP3 {p(ps.tp3)} queda SOLO como referencia; no hay orden TP3."
             )
+            self.observer.real_event(ps.position_id, "REAL_TP2", {
+                "qty_runner": qty_now,
+                "closed_net": closed_net,
+                "target_net_floor": target_net,
+            })
 
         # From TP2 onward, trail the runner. Never loosen the native stop.
         if ps.stop_stage >= 2 and ratio > 0:
@@ -2258,6 +2607,12 @@ class RealAuto:
                     f"ATR15: <b>{atr15:.1f}</b>\n"
                     f"Nuevo SL: <b>{p(ps.current_stop)}</b>"
                 )
+                self.observer.real_event(ps.position_id, "REAL_TRAIL", {
+                    "peak": ps.peak_price,
+                    "distance": distance,
+                    "atr15": atr15,
+                    "stop": ps.current_stop,
+                })
 
         self.state.save()
 
@@ -2686,7 +3041,7 @@ class RealAuto:
         )
 
         return (
-            "📊 <b>I-GOD V7.3.7 — STATUS REAL</b>\n\n"
+            "📊 <b>I-GOD V7.3.8 — STATUS REAL</b>\n\n"
             "<b>💰 BITUNIX</b>\n"
             + acct_lines
             + f"Posición exchange: <b>{C.html.escape(ex_text)}</b>\n\n"
@@ -3000,9 +3355,12 @@ class RealAuto:
                     C.plan_message(self.plan, "📍 PLAN LIVE ACTUAL")
                 )
 
+            elif cmd == "/data":
+                self.tg.send(self.observer.status_text())
+
             elif cmd == "/help":
                 self.tg.send(
-                    "<b>I-GOD V7.3.7 comandos</b>\n"
+                    "<b>I-GOD V7.3.8 comandos</b>\n"
                     "/status — cuenta + bot + mercado\n"
                     "/account — cuenta Futures real\n"
                     "/position — posición/SL/TP reales\n"
@@ -3011,6 +3369,7 @@ class RealAuto:
                     "/live_on — permitir nuevas entradas\n"
                     "/live_off — bloquear nuevas entradas\n"
                     "/unlock — quitar lock solo si no hay posición/órdenes\n"
+                    "/data — estado del journal + shadow (solo observación)\n"
                     "/help — ayuda"
                 )
 
@@ -3022,7 +3381,7 @@ class RealAuto:
         self.live.start()
 
         self.tg.send(
-            "🔴🤖 <b>I-GOD V7.3.7 REAL AUTO conectado</b>\n\n"
+            "🔴🤖 <b>I-GOD V7.3.8 REAL AUTO conectado</b>\n\n"
             f"{SYMBOL} | sizing {LIVE_SIZING_MODE} "
             f"{LIVE_EQUITY_ALLOC_PCT*100:.0f}% equity "
             f"| risk {LIVE_RISK_PCT*100:.1f}% "
@@ -3035,6 +3394,8 @@ class RealAuto:
             f"Reserva cash ejecución: <b>{LIVE_EXECUTION_CASH_RESERVE_PCT*100:.1f}% + costes estimados</b>\n"
             f"Reserva slippage STOP: <b>{LIVE_STOP_SLIPPAGE_RATE*100:.2f}%</b>\n"
             f"SL tesis autoritativo: <b>invalidación ± {C.THESIS_STOP_BUFFER_ATR:.2f}×ATR15</b>\n"
+            f"DATA observer: <b>{DATA_OBSERVER_ENABLED}</b> | SHADOW: <b>{SHADOW_ENABLED}</b> "
+            f"(NO envía órdenes)\n"
             f"Daily loss hard: <b>{abs(LIVE_MAX_DAILY_LOSS_USDT):.2f} USDT</b> | "
             f"risk slots: <b>{LIVE_DAILY_RISK_SLOTS}</b>\n"
             f"Daily target soft: <b>{LIVE_DAILY_PROFIT_TARGET_PCT*100:.1f}%</b>\n"
@@ -3072,6 +3433,16 @@ class RealAuto:
                         "ENTER SHORT NOW",
                     )
 
+                    if is_enter:
+                        try:
+                            self.observer.observe_signal(
+                                self.signal_id(self.plan),
+                                self.plan,
+                                self.analyzer,
+                            )
+                        except Exception as e:
+                            log(f"Observer signal wrapper ignored: {e}")
+
                     # Re-arm only after leaving ENTER when flat.
                     if (
                         not is_enter
@@ -3088,6 +3459,8 @@ class RealAuto:
                     self.last_analysis = now
 
                 mark = self.get_mark()
+                if mark > 0:
+                    self.observer.tick(mark)
                 if mark > 0 and self.state.position is not None:
                     self.manage_real(mark)
 
