@@ -45,7 +45,7 @@ TZ = ZoneInfo(TZ_NAME)
 ANALYSIS_SECONDS = int(os.getenv("ANALYSIS_SECONDS", "60"))
 LIVE_SECONDS = int(os.getenv("LIVE_SECONDS", "15"))
 DAILY_PLAN_HOUR = int(os.getenv("DAILY_PLAN_HOUR", "8"))
-# V7.3.6: technical geometry first. 1.25R is the planner hard floor;
+# V7.3.7: technical geometry first. 1.25R is the planner hard floor;
 # 1.80R remains the preferred/ideal quality level, not a hard blocker.
 # Use a new env name so an old Railway MIN_RR_ENTER=1.8 cannot silently
 # keep the former behaviour after this update.
@@ -53,8 +53,8 @@ MIN_RR_ENTER = float(os.getenv("TECHNICAL_MIN_RR_ENTER", "1.25"))
 PREFERRED_RR_ENTER = float(os.getenv("PREFERRED_RR_ENTER", "1.8"))
 MIN_RR_LATE = float(os.getenv("MIN_RR_LATE", "1.2"))
 MAX_EXTENSION_ATR = float(os.getenv("MAX_EXTENSION_ATR", "1.35"))
-# Hard protective SL must sit beyond thesis invalidation, with volatility room.
-# Position sizing absorbs the wider stop so cash risk does not increase.
+# Hard protective SL is anchored directly to thesis invalidation plus volatility room.
+# Old EMA/swing stops are advisory only and cannot push the hard SL farther away.
 THESIS_STOP_BUFFER_ATR = float(os.getenv("THESIS_STOP_BUFFER_ATR", "0.20"))
 ALERT_COOLDOWN_MIN = int(os.getenv("ALERT_COOLDOWN_MIN", "45"))
 ZONE_ALERT_COOLDOWN_MIN = int(os.getenv("ZONE_ALERT_COOLDOWN_MIN", "20"))
@@ -1155,19 +1155,17 @@ class Analyzer:
                     structural_stop = min(float(x15.ema50), recent_swing)
                     stop = structural_stop - 0.30*atr15
 
-                # V7.3.6: the hard SL must be beyond the level that actually
-                # invalidates the LONG thesis, not inside it. This gives normal
-                # liquidity sweeps/wicks some room. Wider stop => smaller qty;
-                # live_auto.py keeps the same monetary risk cap.
+                # V7.3.7: thesis invalidation is the authoritative hard-stop
+                # anchor. Do NOT preserve an older EMA/swing stop merely because
+                # it is farther away: that can create unnecessarily wide losses.
+                # LONG hard SL = invalidation - volatility buffer.
                 if finite(invalidation):
-                    thesis_stop = invalidation - THESIS_STOP_BUFFER_ATR * atr15
-                    if thesis_stop < stop:
-                        stop = thesis_stop
-                        why.append(
-                            f"LONG SL beyond thesis invalidation: "
-                            f"{price_fmt(invalidation)} - "
-                            f"{THESIS_STOP_BUFFER_ATR:.2f} ATR15"
-                        )
+                    stop = invalidation - THESIS_STOP_BUFFER_ATR * atr15
+                    why.append(
+                        f"LONG SL anchored to thesis invalidation: "
+                        f"{price_fmt(invalidation)} - "
+                        f"{THESIS_STOP_BUFFER_ATR:.2f} ATR15"
+                    )
 
                 tp1, tp2, tp3 = self.make_targets(
                     lev, price, "LONG", atr1
@@ -1321,18 +1319,16 @@ class Analyzer:
                     structural_stop = max(float(x15.ema50), recent_swing)
                     stop = structural_stop + 0.30*atr15
 
-                # V7.3.6: symmetric SHORT protection. Keep the hard SL above
-                # thesis invalidation plus a volatility buffer; sizing reduces
-                # qty automatically so the cash risk cap is unchanged.
+                # V7.3.7: thesis invalidation is the authoritative hard-stop
+                # anchor. Do NOT preserve an older EMA/swing stop merely because
+                # it is farther away. SHORT hard SL = invalidation + buffer.
                 if finite(invalidation):
-                    thesis_stop = invalidation + THESIS_STOP_BUFFER_ATR * atr15
-                    if thesis_stop > stop:
-                        stop = thesis_stop
-                        why.append(
-                            f"SHORT SL beyond thesis invalidation: "
-                            f"{price_fmt(invalidation)} + "
-                            f"{THESIS_STOP_BUFFER_ATR:.2f} ATR15"
-                        )
+                    stop = invalidation + THESIS_STOP_BUFFER_ATR * atr15
+                    why.append(
+                        f"SHORT SL anchored to thesis invalidation: "
+                        f"{price_fmt(invalidation)} + "
+                        f"{THESIS_STOP_BUFFER_ATR:.2f} ATR15"
+                    )
 
                 tp1, tp2, tp3 = self.make_targets(
                     lev, price, "SHORT", atr1
