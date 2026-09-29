@@ -159,7 +159,7 @@ STATE_FILE = (
     else Path("igod_live_state.json")
 )
 
-# V7.3.8.2 passive DATA + SHADOW observer. These files are deliberately
+# V7.3.8.3 passive DATA + SHADOW observer. These files are deliberately
 # separate from the live trading state: observer failures must never alter
 # entry, exit, risk, TP/SL or lock decisions.
 DATA_OBSERVER_ENABLED = os.getenv("DATA_OBSERVER_ENABLED", "true").lower() == "true"
@@ -700,7 +700,7 @@ class State:
 
 
 # ---------------------------------------------------------------------
-# Passive DATA + SHADOW observer (V7.3.8.2)
+# Passive DATA + SHADOW observer (V7.3.8.3)
 # ---------------------------------------------------------------------
 
 class PassiveObserver:
@@ -769,6 +769,15 @@ class PassiveObserver:
         try:
             row = analyzer.frames["15m"].iloc[-1]
             return max(0.0, fnum(row.get("atr")))
+        except Exception:
+            return 0.0
+
+    def _pivot1h_invalidation(self, analyzer, side: str) -> float:
+        """Confirmed 1H structural pivot for SHADOW comparison only."""
+        try:
+            df = analyzer.frames["1h"]
+            kind = "low" if side == "LONG" else "high"
+            return max(0.0, fnum(C.last_pivot_price(df, kind)))
         except Exception:
             return 0.0
 
@@ -852,6 +861,7 @@ class PassiveObserver:
                     "entry": entry,
                     "invalidation": inv,
                     "buffer_atr": buf,
+                    "stop_model": "CURRENT_THESIS_BUFFER",
                     "atr15_entry": atr15,
                     "stop": stop,
                     "tp1": tp1,
@@ -872,6 +882,71 @@ class PassiveObserver:
                     "status": (
                         "OPEN" if net_rr >= 1.25 else "REJECTED_NET_RR"
                     ),
+                }
+                self.shadow[key] = row
+                self.safe_event("SHADOW_OPEN", row.copy(), shadow=True)
+
+            # V7.3.8.3: compare the live thesis stop against a confirmed 1H
+            # structural pivot. SHADOW ONLY: this never changes live orders, qty,
+            # state, gates or exits. It answers whether wider 1H structure would
+            # have survived noise and whether the resulting NET R:R was still valid.
+            pivot1h = self._pivot1h_invalidation(analyzer, side)
+            pivot_valid = (
+                pivot1h > 0
+                and ((side == "LONG" and pivot1h < entry) or (side == "SHORT" and pivot1h > entry))
+            )
+            if pivot_valid:
+                buf = C.THESIS_STOP_BUFFER_ATR
+                stop = pivot1h - buf * atr15 if side == "LONG" else pivot1h + buf * atr15
+                risk = abs(entry - stop)
+                reward2 = (tp2 - entry) if side == "LONG" else (entry - tp2)
+                rr = reward2 / risk if risk > 0 else 0.0
+                reward_cost_1btc = (
+                    entry * LIVE_TAKER_FEE_RATE
+                    + tp2 * LIVE_TAKER_FEE_RATE
+                    + (entry + tp2) * LIVE_SLIPPAGE_RATE
+                )
+                risk_cost_1btc = (
+                    entry * LIVE_TAKER_FEE_RATE
+                    + stop * LIVE_TAKER_FEE_RATE
+                    + entry * LIVE_SLIPPAGE_RATE
+                    + stop * LIVE_STOP_SLIPPAGE_RATE
+                )
+                net_reward_1btc = reward2 - reward_cost_1btc
+                net_risk_1btc = risk + risk_cost_1btc
+                net_rr = (
+                    net_reward_1btc / max(net_risk_1btc, 1e-9)
+                    if net_reward_1btc > 0 else 0.0
+                )
+                key = f"{signal_id}|model=1H_STRUCT"
+                row = {
+                    "shadow_id": key,
+                    "signal_id": signal_id,
+                    "side": side,
+                    "setup": snap["setup"],
+                    "bias": snap["bias"],
+                    "entry": entry,
+                    "invalidation": pivot1h,
+                    "buffer_atr": buf,
+                    "stop_model": "CONFIRMED_1H_PIVOT_BUFFER",
+                    "atr15_entry": atr15,
+                    "stop": stop,
+                    "tp1": tp1,
+                    "tp2": tp2,
+                    "tp3": fnum(plan.tp3),
+                    "risk_price": risk,
+                    "rr2_gross": rr,
+                    "rr2_net_est": net_rr,
+                    "reward_cost_1btc": reward_cost_1btc,
+                    "risk_cost_1btc": risk_cost_1btc,
+                    "passes_1_25": net_rr >= 1.25,
+                    "passes_1_50": net_rr >= 1.50,
+                    "passes_1_80": net_rr >= 1.80,
+                    "opened_at": time.time(),
+                    "min_price": entry,
+                    "max_price": entry,
+                    "tp1_seen": False,
+                    "status": ("OPEN" if net_rr >= 1.25 else "REJECTED_NET_RR"),
                 }
                 self.shadow[key] = row
                 self.safe_event("SHADOW_OPEN", row.copy(), shadow=True)
@@ -1023,13 +1098,14 @@ class PassiveObserver:
         try:
             open_shadow = sum(1 for x in self.shadow.values() if x.get("status") == "OPEN")
             return (
-                "📚 <b>DATA + SHADOW V7.3.8.2</b>\n\n"
+                "📚 <b>DATA + SHADOW V7.3.8.3</b>\n\n"
                 f"Observer: <b>{'ON' if self.enabled else 'OFF'}</b>\n"
                 f"Shadow: <b>{'ON' if self.shadow_enabled else 'OFF'}</b>\n"
                 f"Señales registradas: <b>{len(self.seen_signals)}</b>\n"
                 f"Trades reales monitorizados ahora: <b>{len(self.real)}</b>\n"
                 f"Variantes shadow abiertas: <b>{open_shadow}</b>\n"
-                f"Buffers shadow ATR: <b>{', '.join(f'{x:.2f}' for x in SHADOW_STOP_BUFFERS_ATR)}</b>\n\n"
+                f"Buffers shadow ATR: <b>{', '.join(f'{x:.2f}' for x in SHADOW_STOP_BUFFERS_ATR)}</b>\n"
+                "Comparador stop estructural 1H: <b>ON (SHADOW ONLY)</b>\n\n"
                 "Shadow NO envía órdenes ni modifica el state operativo."
             )
         except Exception as e:
@@ -3127,7 +3203,7 @@ class RealAuto:
         )
 
         return (
-            "📊 <b>I-GOD V7.3.8.2 — STATUS REAL</b>\n\n"
+            "📊 <b>I-GOD V7.3.8.3 — STATUS REAL</b>\n\n"
             "<b>💰 BITUNIX</b>\n"
             + acct_lines
             + f"Posición exchange: <b>{C.html.escape(ex_text)}</b>\n\n"
@@ -3446,7 +3522,7 @@ class RealAuto:
 
             elif cmd == "/help":
                 self.tg.send(
-                    "<b>I-GOD V7.3.8.2 comandos</b>\n"
+                    "<b>I-GOD V7.3.8.3 comandos</b>\n"
                     "/status — cuenta + bot + mercado\n"
                     "/account — cuenta Futures real\n"
                     "/position — posición/SL/TP reales\n"
@@ -3467,7 +3543,7 @@ class RealAuto:
         self.live.start()
 
         self.tg.send(
-            "🔴🤖 <b>I-GOD V7.3.8.2 REAL AUTO conectado</b>\n\n"
+            "🔴🤖 <b>I-GOD V7.3.8.3 REAL AUTO conectado</b>\n\n"
             f"{SYMBOL} | sizing {LIVE_SIZING_MODE} "
             f"{LIVE_EQUITY_ALLOC_PCT*100:.0f}% equity "
             f"| risk {LIVE_RISK_PCT*100:.1f}% "
