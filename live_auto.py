@@ -115,7 +115,7 @@ LIVE_STOP_SLIPPAGE_RATE = float(
     os.getenv("LIVE_STOP_SLIPPAGE_RATE", "0.0010")
 )
 
-LIVE_MIN_NET_RR = float(os.getenv("LIVE_MIN_NET_RR", "1.25"))
+LIVE_MIN_NET_RR = float(os.getenv("LIVE_MIN_NET_RR", "1.50"))
 
 # PROFIT LOCK: el +10% diario NO apaga el bot.
 LIVE_DAILY_PROFIT_TARGET_PCT = float(
@@ -159,7 +159,7 @@ STATE_FILE = (
     else Path("igod_live_state.json")
 )
 
-# V7.3.8.3 passive DATA + SHADOW observer. These files are deliberately
+# V7.3.8.4 passive DATA + SHADOW observer. These files are deliberately
 # separate from the live trading state: observer failures must never alter
 # entry, exit, risk, TP/SL or lock decisions.
 DATA_OBSERVER_ENABLED = os.getenv("DATA_OBSERVER_ENABLED", "true").lower() == "true"
@@ -700,7 +700,7 @@ class State:
 
 
 # ---------------------------------------------------------------------
-# Passive DATA + SHADOW observer (V7.3.8.3)
+# Passive DATA + SHADOW observer (V7.3.8.4)
 # ---------------------------------------------------------------------
 
 class PassiveObserver:
@@ -886,7 +886,7 @@ class PassiveObserver:
                 self.shadow[key] = row
                 self.safe_event("SHADOW_OPEN", row.copy(), shadow=True)
 
-            # V7.3.8.3: compare the live thesis stop against a confirmed 1H
+            # V7.3.8.4: compare the live thesis stop against a confirmed 1H
             # structural pivot. SHADOW ONLY: this never changes live orders, qty,
             # state, gates or exits. It answers whether wider 1H structure would
             # have survived noise and whether the resulting NET R:R was still valid.
@@ -1098,7 +1098,7 @@ class PassiveObserver:
         try:
             open_shadow = sum(1 for x in self.shadow.values() if x.get("status") == "OPEN")
             return (
-                "📚 <b>DATA + SHADOW V7.3.8.3</b>\n\n"
+                "📚 <b>DATA + SHADOW V7.3.8.4</b>\n\n"
                 f"Observer: <b>{'ON' if self.enabled else 'OFF'}</b>\n"
                 f"Shadow: <b>{'ON' if self.shadow_enabled else 'OFF'}</b>\n"
                 f"Señales registradas: <b>{len(self.seen_signals)}</b>\n"
@@ -3203,7 +3203,7 @@ class RealAuto:
         )
 
         return (
-            "📊 <b>I-GOD V7.3.8.3 — STATUS REAL</b>\n\n"
+            "📊 <b>I-GOD V7.3.8.4 — STATUS REAL</b>\n\n"
             "<b>💰 BITUNIX</b>\n"
             + acct_lines
             + f"Posición exchange: <b>{C.html.escape(ex_text)}</b>\n\n"
@@ -3522,7 +3522,7 @@ class RealAuto:
 
             elif cmd == "/help":
                 self.tg.send(
-                    "<b>I-GOD V7.3.8.3 comandos</b>\n"
+                    "<b>I-GOD V7.3.8.4 comandos</b>\n"
                     "/status — cuenta + bot + mercado\n"
                     "/account — cuenta Futures real\n"
                     "/position — posición/SL/TP reales\n"
@@ -3543,7 +3543,7 @@ class RealAuto:
         self.live.start()
 
         self.tg.send(
-            "🔴🤖 <b>I-GOD V7.3.8.3 REAL AUTO conectado</b>\n\n"
+            "🔴🤖 <b>I-GOD V7.3.8.4 REAL AUTO conectado</b>\n\n"
             f"{SYMBOL} | sizing {LIVE_SIZING_MODE} "
             f"{LIVE_EQUITY_ALLOC_PCT*100:.0f}% equity "
             f"| risk {LIVE_RISK_PCT*100:.1f}% "
