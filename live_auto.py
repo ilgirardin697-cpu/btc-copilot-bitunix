@@ -159,7 +159,7 @@ STATE_FILE = (
     else Path("igod_live_state.json")
 )
 
-# V7.3.8 passive DATA + SHADOW observer. These files are deliberately
+# V7.3.8.1 passive DATA + SHADOW observer. These files are deliberately
 # separate from the live trading state: observer failures must never alter
 # entry, exit, risk, TP/SL or lock decisions.
 DATA_OBSERVER_ENABLED = os.getenv("DATA_OBSERVER_ENABLED", "true").lower() == "true"
@@ -700,7 +700,7 @@ class State:
 
 
 # ---------------------------------------------------------------------
-# Passive DATA + SHADOW observer (V7.3.8)
+# Passive DATA + SHADOW observer (V7.3.8.1)
 # ---------------------------------------------------------------------
 
 class PassiveObserver:
@@ -821,6 +821,27 @@ class PassiveObserver:
                 risk = abs(entry - stop)
                 reward2 = (tp2 - entry) if side == "LONG" else (entry - tp2)
                 rr = reward2 / risk if risk > 0 else 0.0
+
+                # Cost-aware RR per 1 BTC (qty cancels from the ratio).  Use the
+                # same conservative STOP-market slippage model as live sizing.
+                reward_cost_1btc = (
+                    entry * LIVE_TAKER_FEE_RATE
+                    + tp2 * LIVE_TAKER_FEE_RATE
+                    + (entry + tp2) * LIVE_SLIPPAGE_RATE
+                )
+                risk_cost_1btc = (
+                    entry * LIVE_TAKER_FEE_RATE
+                    + stop * LIVE_TAKER_FEE_RATE
+                    + entry * LIVE_SLIPPAGE_RATE
+                    + stop * LIVE_STOP_SLIPPAGE_RATE
+                )
+                net_reward_1btc = reward2 - reward_cost_1btc
+                net_risk_1btc = risk + risk_cost_1btc
+                net_rr = (
+                    net_reward_1btc / max(net_risk_1btc, 1e-9)
+                    if net_reward_1btc > 0 else 0.0
+                )
+
                 key = f"{signal_id}|buf={buf:.2f}"
                 row = {
                     "shadow_id": key,
@@ -838,14 +859,19 @@ class PassiveObserver:
                     "tp3": fnum(plan.tp3),
                     "risk_price": risk,
                     "rr2_gross": rr,
-                    "passes_1_25": rr >= 1.25,
-                    "passes_1_50": rr >= 1.50,
-                    "passes_1_80": rr >= 1.80,
+                    "rr2_net_est": net_rr,
+                    "reward_cost_1btc": reward_cost_1btc,
+                    "risk_cost_1btc": risk_cost_1btc,
+                    "passes_1_25": net_rr >= 1.25,
+                    "passes_1_50": net_rr >= 1.50,
+                    "passes_1_80": net_rr >= 1.80,
                     "opened_at": time.time(),
                     "min_price": entry,
                     "max_price": entry,
                     "tp1_seen": False,
-                    "status": "OPEN" if rr >= 1.25 else "REJECTED_RR",
+                    "status": (
+                        "OPEN" if net_rr >= 1.25 else "REJECTED_NET_RR"
+                    ),
                 }
                 self.shadow[key] = row
                 self.safe_event("SHADOW_OPEN", row.copy(), shadow=True)
@@ -997,7 +1023,7 @@ class PassiveObserver:
         try:
             open_shadow = sum(1 for x in self.shadow.values() if x.get("status") == "OPEN")
             return (
-                "📚 <b>DATA + SHADOW V7.3.8</b>\n\n"
+                "📚 <b>DATA + SHADOW V7.3.8.1</b>\n\n"
                 f"Observer: <b>{'ON' if self.enabled else 'OFF'}</b>\n"
                 f"Shadow: <b>{'ON' if self.shadow_enabled else 'OFF'}</b>\n"
                 f"Señales registradas: <b>{len(self.seen_signals)}</b>\n"
@@ -1766,10 +1792,15 @@ class RealAuto:
             + tp_notional * LIVE_TAKER_FEE_RATE
             + (entry_notional + tp_notional) * LIVE_SLIPPAGE_RATE
         )
+        # IMPORTANT: the stop leg must use the SAME adverse-fill reserve as
+        # calc_qty().  Before V7.3.8.1 this guard used generic slippage on the
+        # stop leg, which understated net stop risk and inflated the displayed
+        # / gated net R:R (e.g. ~1.79R instead of ~1.40R on 2026-09-29).
         risk_cost = (
             entry_notional * LIVE_TAKER_FEE_RATE
             + stop_notional * LIVE_TAKER_FEE_RATE
-            + (entry_notional + stop_notional) * LIVE_SLIPPAGE_RATE
+            + entry_notional * LIVE_SLIPPAGE_RATE
+            + stop_notional * LIVE_STOP_SLIPPAGE_RATE
         )
 
         net_reward = gross_reward - reward_cost
@@ -2014,6 +2045,24 @@ class RealAuto:
             return
         self.last_block_notice[key] = now
 
+        # V7.3.8.1: keep the exact gate that rejected an otherwise actionable
+        # signal.  This lets DATA measure cooldown / profit-lock / fee-guard
+        # false negatives instead of relying on Telegram history.
+        try:
+            self.observer.safe_event("REAL_ENTRY_BLOCKED", {
+                "signal_id": client_id,
+                "action": str(getattr(plan, "action", "")),
+                "setup": str(getattr(plan, "setup", "")),
+                "bias": str(getattr(plan, "bias", "")),
+                "price": fnum(getattr(plan, "price", 0)),
+                "stop": fnum(getattr(plan, "stop", 0)),
+                "tp2": fnum(getattr(plan, "tp2", 0)),
+                "rr2_gross": fnum(getattr(plan, "rr2", 0)),
+                "reason": str(reason),
+            })
+        except Exception as e:
+            log(f"Observer blocked-entry event ignored: {e}")
+
         self.tg.send(
             "🚨 <b>ENTER NOW DETECTADO, PERO NO EJECUTADO</b>\n\n"
             f"Señal: <code>{client_id}</code>\n"
@@ -2092,6 +2141,23 @@ class RealAuto:
             self.notify_entry_blocked(plan, client_id, reason)
             return False
 
+        # The net-RR denominator and the sizing risk cap must describe the same
+        # stop-out model.  If a future edit makes them diverge, fail closed
+        # instead of allowing an artificially attractive R:R through.
+        risk_model_gap = abs(
+            fnum(costs.get("net_risk")) - fnum(estimated_net_sl_risk)
+        )
+        risk_model_tol = max(0.02, 0.01 * max(estimated_net_sl_risk, 1.0))
+        if risk_model_gap > risk_model_tol:
+            reason = (
+                "internal net-risk model mismatch: "
+                f"RR={costs.get('net_risk', 0):.4f} vs "
+                f"sizing={estimated_net_sl_risk:.4f}"
+            )
+            log(f"Entry blocked: {reason}")
+            self.notify_entry_blocked(plan, client_id, reason)
+            return False
+
         lock_ok, lock_reason = self.profit_lock_guard(
             plan, costs["net_rr"]
         )
@@ -2145,6 +2211,8 @@ class RealAuto:
             f"Modo diario: <b>{'PROFIT LOCK' if self.profit_lock_active() else 'NORMAL'}</b>\n"
             f"Multiplicador riesgo: <b>{risk_mult:.2f}x</b>\n"
             f"R:R NETO estimado a TP2: <b>{costs['net_rr']:.2f}R</b>\n"
+            f"Beneficio NETO estimado a TP2: <b>{costs['net_reward']:.2f} USDT</b>\n"
+            f"Riesgo NETO usado por R:R: <b>{costs['net_risk']:.2f} USDT</b>\n"
             f"Costes estimados ida/vuelta TP2: "
             f"<b>{costs['reward_cost']:.2f} USDT</b>\n"
             f"Qty: <b>{fmt_qty(qty, self.base_precision)} BTC</b>\n"
@@ -3041,7 +3109,7 @@ class RealAuto:
         )
 
         return (
-            "📊 <b>I-GOD V7.3.8 — STATUS REAL</b>\n\n"
+            "📊 <b>I-GOD V7.3.8.1 — STATUS REAL</b>\n\n"
             "<b>💰 BITUNIX</b>\n"
             + acct_lines
             + f"Posición exchange: <b>{C.html.escape(ex_text)}</b>\n\n"
@@ -3360,7 +3428,7 @@ class RealAuto:
 
             elif cmd == "/help":
                 self.tg.send(
-                    "<b>I-GOD V7.3.8 comandos</b>\n"
+                    "<b>I-GOD V7.3.8.1 comandos</b>\n"
                     "/status — cuenta + bot + mercado\n"
                     "/account — cuenta Futures real\n"
                     "/position — posición/SL/TP reales\n"
@@ -3381,7 +3449,7 @@ class RealAuto:
         self.live.start()
 
         self.tg.send(
-            "🔴🤖 <b>I-GOD V7.3.8 REAL AUTO conectado</b>\n\n"
+            "🔴🤖 <b>I-GOD V7.3.8.1 REAL AUTO conectado</b>\n\n"
             f"{SYMBOL} | sizing {LIVE_SIZING_MODE} "
             f"{LIVE_EQUITY_ALLOC_PCT*100:.0f}% equity "
             f"| risk {LIVE_RISK_PCT*100:.1f}% "
