@@ -159,7 +159,7 @@ STATE_FILE = (
     else Path("igod_live_state.json")
 )
 
-# V7.3.8.1 passive DATA + SHADOW observer. These files are deliberately
+# V7.3.8.2 passive DATA + SHADOW observer. These files are deliberately
 # separate from the live trading state: observer failures must never alter
 # entry, exit, risk, TP/SL or lock decisions.
 DATA_OBSERVER_ENABLED = os.getenv("DATA_OBSERVER_ENABLED", "true").lower() == "true"
@@ -700,7 +700,7 @@ class State:
 
 
 # ---------------------------------------------------------------------
-# Passive DATA + SHADOW observer (V7.3.8.1)
+# Passive DATA + SHADOW observer (V7.3.8.2)
 # ---------------------------------------------------------------------
 
 class PassiveObserver:
@@ -1023,7 +1023,7 @@ class PassiveObserver:
         try:
             open_shadow = sum(1 for x in self.shadow.values() if x.get("status") == "OPEN")
             return (
-                "📚 <b>DATA + SHADOW V7.3.8.1</b>\n\n"
+                "📚 <b>DATA + SHADOW V7.3.8.2</b>\n\n"
                 f"Observer: <b>{'ON' if self.enabled else 'OFF'}</b>\n"
                 f"Shadow: <b>{'ON' if self.shadow_enabled else 'OFF'}</b>\n"
                 f"Señales registradas: <b>{len(self.seen_signals)}</b>\n"
@@ -1517,12 +1517,21 @@ class RealAuto:
         # Example: limit=12, pnl=-4 -> remaining=8; pnl=+5 -> remaining=17.
         remaining = max(0.0, hard_limit + day_pnl)
         slots_left = max(1, LIVE_DAILY_RISK_SLOTS - self.state.trades_today)
-        slot_cap = remaining / slots_left
+
+        # V7.3.8.2 — RISK CAP STABILITY
+        # Never let the per-entry cap INCREASE just because fewer planned
+        # risk slots remain. With a 12 USDT hard limit and 2 slots, the normal
+        # per-slot ceiling is 6 USDT for the whole day. If earlier losses leave
+        # less room to the hard floor, the cap shrinks further. This avoids
+        # accidental loss-chasing (e.g. 6 -> 7.61 after a losing trade).
+        base_slot_cap = hard_limit / max(1, LIVE_DAILY_RISK_SLOTS)
+        slot_cap = min(remaining / slots_left, base_slot_cap)
 
         return {
             "hard_limit": hard_limit,
             "remaining": remaining,
             "slots_left": slots_left,
+            "base_slot_cap": base_slot_cap,
             "slot_cap": slot_cap,
         }
 
@@ -1552,7 +1561,11 @@ class RealAuto:
 
             base_margin = min(equity, available) * alloc * risk_multiplier
             configured_risk_cap = equity * risk_pct * risk_multiplier
-            risk_cap = min(configured_risk_cap, daily["slot_cap"])
+            # Apply the same mode multiplier to the DAILY slot ceiling too.
+            # Otherwise Profit Lock 0.50x could still leave the effective risk
+            # unchanged when the daily cap was the binding constraint.
+            effective_daily_slot_cap = daily["slot_cap"] * risk_multiplier
+            risk_cap = min(configured_risk_cap, effective_daily_slot_cap)
 
             if risk_cap <= 0:
                 raise RuntimeError("No daily loss budget remains for a new entry.")
@@ -1567,13 +1580,16 @@ class RealAuto:
                 "daily_hard_limit": daily["hard_limit"],
                 "daily_remaining": daily["remaining"],
                 "daily_slots_left": daily["slots_left"],
+                "daily_base_slot_cap": daily.get("base_slot_cap", daily["slot_cap"]),
                 "daily_slot_cap": daily["slot_cap"],
+                "daily_effective_slot_cap": effective_daily_slot_cap,
                 "alloc_pct": alloc,
                 "risk_pct": risk_pct,
             }
 
         configured_risk_cap = LIVE_MAX_RISK_USDT * risk_multiplier
-        risk_cap = min(configured_risk_cap, daily["slot_cap"])
+        effective_daily_slot_cap = daily["slot_cap"] * risk_multiplier
+        risk_cap = min(configured_risk_cap, effective_daily_slot_cap)
         if risk_cap <= 0:
             raise RuntimeError("No daily loss budget remains for a new entry.")
 
@@ -1587,7 +1603,9 @@ class RealAuto:
             "daily_hard_limit": daily["hard_limit"],
             "daily_remaining": daily["remaining"],
             "daily_slots_left": daily["slots_left"],
+            "daily_base_slot_cap": daily.get("base_slot_cap", daily["slot_cap"]),
             "daily_slot_cap": daily["slot_cap"],
+            "daily_effective_slot_cap": effective_daily_slot_cap,
             "alloc_pct": 0.0,
             "risk_pct": 0.0,
         }
@@ -1793,7 +1811,7 @@ class RealAuto:
             + (entry_notional + tp_notional) * LIVE_SLIPPAGE_RATE
         )
         # IMPORTANT: the stop leg must use the SAME adverse-fill reserve as
-        # calc_qty().  Before V7.3.8.1 this guard used generic slippage on the
+        # calc_qty().  Before V7.3.8.2 this guard used generic slippage on the
         # stop leg, which understated net stop risk and inflated the displayed
         # / gated net R:R (e.g. ~1.79R instead of ~1.40R on 2026-09-29).
         risk_cost = (
@@ -2045,7 +2063,7 @@ class RealAuto:
             return
         self.last_block_notice[key] = now
 
-        # V7.3.8.1: keep the exact gate that rejected an otherwise actionable
+        # V7.3.8.2: keep the exact gate that rejected an otherwise actionable
         # signal.  This lets DATA measure cooldown / profit-lock / fee-guard
         # false negatives instead of relying on Telegram history.
         try:
@@ -3109,7 +3127,7 @@ class RealAuto:
         )
 
         return (
-            "📊 <b>I-GOD V7.3.8.1 — STATUS REAL</b>\n\n"
+            "📊 <b>I-GOD V7.3.8.2 — STATUS REAL</b>\n\n"
             "<b>💰 BITUNIX</b>\n"
             + acct_lines
             + f"Posición exchange: <b>{C.html.escape(ex_text)}</b>\n\n"
@@ -3264,7 +3282,7 @@ class RealAuto:
                     f"✅ Daily risk budget: límite {preview['daily_hard_limit']:.2f} -> "
                     f"restante {preview['daily_remaining']:.2f} USDT -> "
                     f"{preview['daily_slots_left']} slot(s) -> "
-                    f"cap/slot {preview['daily_slot_cap']:.2f} USDT"
+                    f"cap/slot {preview['daily_slot_cap']:.2f} USDT" + (f" -> efectivo {preview['daily_effective_slot_cap']:.2f} USDT" if abs(preview['daily_effective_slot_cap']-preview['daily_slot_cap']) > 1e-9 else "")
                 )
                 if LIVE_DYNAMIC_LEVERAGE:
                     details.append(
@@ -3284,7 +3302,7 @@ class RealAuto:
                     f"✅ Daily risk budget: límite {preview['daily_hard_limit']:.2f} -> "
                     f"restante {preview['daily_remaining']:.2f} USDT -> "
                     f"{preview['daily_slots_left']} slot(s) -> "
-                    f"cap/slot {preview['daily_slot_cap']:.2f} USDT"
+                    f"cap/slot {preview['daily_slot_cap']:.2f} USDT" + (f" -> efectivo {preview['daily_effective_slot_cap']:.2f} USDT" if abs(preview['daily_effective_slot_cap']-preview['daily_slot_cap']) > 1e-9 else "")
                 )
         except Exception as e:
             problems.append(f"sizing dinámico: {e}")
@@ -3428,7 +3446,7 @@ class RealAuto:
 
             elif cmd == "/help":
                 self.tg.send(
-                    "<b>I-GOD V7.3.8.1 comandos</b>\n"
+                    "<b>I-GOD V7.3.8.2 comandos</b>\n"
                     "/status — cuenta + bot + mercado\n"
                     "/account — cuenta Futures real\n"
                     "/position — posición/SL/TP reales\n"
@@ -3449,7 +3467,7 @@ class RealAuto:
         self.live.start()
 
         self.tg.send(
-            "🔴🤖 <b>I-GOD V7.3.8.1 REAL AUTO conectado</b>\n\n"
+            "🔴🤖 <b>I-GOD V7.3.8.2 REAL AUTO conectado</b>\n\n"
             f"{SYMBOL} | sizing {LIVE_SIZING_MODE} "
             f"{LIVE_EQUITY_ALLOC_PCT*100:.0f}% equity "
             f"| risk {LIVE_RISK_PCT*100:.1f}% "
