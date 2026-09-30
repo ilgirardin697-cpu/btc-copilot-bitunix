@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-I-GOD BTC Copilot V7.3.3 — REAL AUTO EXECUTOR for Bitunix
+I-GOD BTC Copilot V7.3.8.5 — REAL AUTO EXECUTOR for Bitunix
 ======================================================
 
 REAL MONEY CODE.
@@ -159,7 +159,7 @@ STATE_FILE = (
     else Path("igod_live_state.json")
 )
 
-# V7.3.8.4 passive DATA + SHADOW observer. These files are deliberately
+# V7.3.8.5 passive DATA + SHADOW observer + visibility telemetry. These files are deliberately
 # separate from the live trading state: observer failures must never alter
 # entry, exit, risk, TP/SL or lock decisions.
 DATA_OBSERVER_ENABLED = os.getenv("DATA_OBSERVER_ENABLED", "true").lower() == "true"
@@ -181,6 +181,11 @@ OBSERVER_STATE_FILE = (
     Path(volume) / "igod_observer_state.json"
     if volume else Path("igod_observer_state.json")
 )
+
+# V7.3.8.5 visibility-only telemetry. These settings NEVER alter entry logic.
+LIVE_VISIBILITY_ALERTS = os.getenv("LIVE_VISIBILITY_ALERTS", "true").lower() == "true"
+LIVE_VISIBILITY_COOLDOWN_MIN = int(os.getenv("LIVE_VISIBILITY_COOLDOWN_MIN", "20"))
+LIVE_PLAN_SNAPSHOT_MIN = max(1, int(os.getenv("LIVE_PLAN_SNAPSHOT_MIN", "5")))
 
 
 # ---------------------------------------------------------------------
@@ -712,6 +717,7 @@ class PassiveObserver:
         self.real = {}
         self.shadow = {}
         self.seen_signals = []
+        self.plan_snapshots = 0
         self._load()
 
     def _now_iso(self):
@@ -741,6 +747,7 @@ class PassiveObserver:
                 "real": self.real,
                 "shadow": self.shadow,
                 "seen_signals": self.seen_signals[-300:],
+                "plan_snapshots": int(self.plan_snapshots),
             }
             tmp = OBSERVER_STATE_FILE.with_suffix(".tmp")
             tmp.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
@@ -756,6 +763,7 @@ class PassiveObserver:
             self.real = d.get("real", {}) if isinstance(d.get("real", {}), dict) else {}
             self.shadow = d.get("shadow", {}) if isinstance(d.get("shadow", {}), dict) else {}
             self.seen_signals = list(d.get("seen_signals", []))[-300:]
+            self.plan_snapshots = int(d.get("plan_snapshots", 0) or 0)
         except Exception as e:
             log(f"Observer state load error: {e}")
 
@@ -802,6 +810,34 @@ class PassiveObserver:
             "book": getattr(plan, "book", None),
             "flow": getattr(plan, "flow", None),
         }
+
+    def observe_plan(self, plan, analyzer, reason: str = "periodic"):
+        """Record WAIT/NO-TRADE/TOO-LATE states too. TELEMETRY ONLY."""
+        if not self.enabled:
+            return
+        try:
+            snap = self._market_snapshot(plan, analyzer)
+            payload = {
+                **snap,
+                "reason": str(reason),
+                "stage": str(getattr(plan, "stage", "")),
+                "macro_bias": str(getattr(plan, "macro_bias", "")),
+                "primary_side": str(getattr(plan, "primary_side", "")),
+                "primary_pullback_low": fnum(getattr(plan, "primary_pullback_low", 0)),
+                "primary_pullback_high": fnum(getattr(plan, "primary_pullback_high", 0)),
+                "primary_breakout": fnum(getattr(plan, "primary_breakout", 0)),
+                "primary_invalidation": fnum(getattr(plan, "primary_invalidation", 0)),
+                "alt_trigger": fnum(getattr(plan, "alt_trigger", 0)),
+                "trends": dict(getattr(plan, "trends", {}) or {}),
+                "why": list(getattr(plan, "why", []) or []),
+                "wait": list(getattr(plan, "wait", []) or []),
+                "warnings": list(getattr(plan, "warnings", []) or []),
+            }
+            self.plan_snapshots += 1
+            self.safe_event("PLAN_SNAPSHOT", payload)
+            self._save()
+        except Exception as e:
+            log(f"Observer plan snapshot ignored: {e}")
 
     def observe_signal(self, signal_id: str, plan, analyzer):
         """Record each actionable signal once and start virtual stop-buffer variants."""
@@ -1098,10 +1134,11 @@ class PassiveObserver:
         try:
             open_shadow = sum(1 for x in self.shadow.values() if x.get("status") == "OPEN")
             return (
-                "📚 <b>DATA + SHADOW V7.3.8.4</b>\n\n"
+                "📚 <b>DATA + SHADOW V7.3.8.5</b>\n\n"
                 f"Observer: <b>{'ON' if self.enabled else 'OFF'}</b>\n"
                 f"Shadow: <b>{'ON' if self.shadow_enabled else 'OFF'}</b>\n"
-                f"Señales registradas: <b>{len(self.seen_signals)}</b>\n"
+                f"Señales ENTER registradas: <b>{len(self.seen_signals)}</b>\n"
+                f"Snapshots de mercado registrados: <b>{self.plan_snapshots}</b>\n"
                 f"Trades reales monitorizados ahora: <b>{len(self.real)}</b>\n"
                 f"Variantes shadow abiertas: <b>{open_shadow}</b>\n"
                 f"Buffers shadow ATR: <b>{', '.join(f'{x:.2f}' for x in SHADOW_STOP_BUFFERS_ATR)}</b>\n"
@@ -1138,6 +1175,13 @@ class RealAuto:
         self.last_analysis = 0.0
         self.plan = None
         self.last_block_notice = {}
+        # V7.3.8.5 visibility-only state. Never used by entry/risk decisions.
+        self.last_visibility_action = None
+        self.last_visibility_bias = None
+        self.last_visibility_stage = None
+        self.last_visibility_alert_at = {}
+        self.last_plan_snapshot_at = 0.0
+        self.last_plan_snapshot_key = ""
         self._closed_day_cache_at = 0.0
         self._closed_day_cache = None
 
@@ -3435,6 +3479,188 @@ class RealAuto:
             "AUTO queda OFF por seguridad. Revisa /check y después usa /live_on."
         )
 
+    # -----------------------------
+    # V7.3.8.5 visibility-only diagnostics
+    # -----------------------------
+
+    def visibility_alert_allowed(self, key: str, cooldown_min: int = None) -> bool:
+        if cooldown_min is None:
+            cooldown_min = LIVE_VISIBILITY_COOLDOWN_MIN
+        return time.time() - self.last_visibility_alert_at.get(key, 0.0) >= cooldown_min * 60
+
+    def remember_visibility_alert(self, key: str):
+        self.last_visibility_alert_at[key] = time.time()
+
+    def visibility_stage(self, plan) -> str:
+        """Expose neutral-break proximity without changing planner decisions."""
+        stage = str(getattr(plan, "stage", "") or "")
+        try:
+            if str(getattr(plan, "bias", "")) != "NEUTRAL":
+                return stage
+            x15 = self.analyzer.frames["15m"].iloc[-1]
+            atr15 = max(fnum(x15.get("atr")), 1e-9)
+            price = fnum(getattr(plan, "price", 0))
+            long_break = fnum(getattr(plan, "primary_breakout", 0))
+            short_break = fnum(getattr(plan, "alt_trigger", 0))
+            if long_break > 0:
+                if price >= long_break:
+                    return "NEUTRAL LONG BREAKOUT ACTIVE"
+                if abs(price - long_break) <= 0.28 * atr15:
+                    return "NEUTRAL LONG BREAKOUT WATCH"
+            if short_break > 0:
+                if price <= short_break:
+                    return "NEUTRAL SHORT BREAKDOWN ACTIVE"
+                if abs(price - short_break) <= 0.28 * atr15:
+                    return "NEUTRAL SHORT BREAKDOWN WATCH"
+        except Exception:
+            pass
+        return stage
+
+    def record_plan_visibility(self, plan):
+        """Persist non-actionable market states so missed moves can be studied."""
+        try:
+            stage = self.visibility_stage(plan)
+            key = "|".join([
+                str(getattr(plan, "bias", "")),
+                str(getattr(plan, "action", "")),
+                stage,
+                str(getattr(plan, "setup", "")),
+            ])
+            now = time.time()
+            changed = key != self.last_plan_snapshot_key
+            periodic = now - self.last_plan_snapshot_at >= LIVE_PLAN_SNAPSHOT_MIN * 60
+            if changed or periodic:
+                reason = "state_change" if changed else "periodic"
+                self.observer.observe_plan(plan, self.analyzer, reason=reason)
+                self.last_plan_snapshot_at = now
+                self.last_plan_snapshot_key = key
+        except Exception as e:
+            log(f"Visibility snapshot ignored: {e}")
+
+    def maybe_visibility_alert(self, plan):
+        """Quiet pre-entry alerts only; does not alter or trigger live execution."""
+        if not LIVE_VISIBILITY_ALERTS:
+            return
+        try:
+            action = str(getattr(plan, "action", ""))
+            bias = str(getattr(plan, "bias", ""))
+            stage = self.visibility_stage(plan)
+
+            # ENTER notifications are already handled by the real executor.
+            if action not in ("ENTER LONG NOW", "ENTER SHORT NOW"):
+                interesting = (
+                    stage.startswith("APPROACHING")
+                    or stage.startswith("IN ")
+                    or "BREAKOUT WATCH" in stage
+                    or "BREAKOUT ACTIVE" in stage
+                    or "BREAKDOWN WATCH" in stage
+                    or "BREAKDOWN ACTIVE" in stage
+                )
+                if interesting and stage != self.last_visibility_stage:
+                    key = f"STAGE:{stage}:{bias}"
+                    if self.visibility_alert_allowed(key):
+                        self.tg.send(
+                            "👀 <b>I-GOD WATCH — movimiento en desarrollo</b>\n"
+                            f"Precio: <b>{p(getattr(plan, 'price', 0))}</b>\n"
+                            f"Sesgo: <b>{C.html.escape(bias)}</b>\n"
+                            f"Fase: <b>{C.html.escape(stage)}</b>\n"
+                            f"Acción REAL: <b>{C.html.escape(action)}</b>\n\n"
+                            "Esto es aviso previo; NO abre una operación.",
+                            disable_notification=True,
+                        )
+                        self.remember_visibility_alert(key)
+
+                if action == "TOO LATE" and self.last_visibility_action != "TOO LATE":
+                    key = f"TOOLATE:{bias}"
+                    if self.visibility_alert_allowed(key, 20):
+                        self.tg.send(
+                            C.plan_message(plan, "⛔ MOVIMIENTO VISTO, PERO YA EXTENDIDO"),
+                            disable_notification=True,
+                        )
+                        self.remember_visibility_alert(key)
+
+            if self.last_visibility_bias is not None and bias != self.last_visibility_bias:
+                key = f"BIAS:{bias}"
+                if self.visibility_alert_allowed(key, 15):
+                    self.tg.send(
+                        C.plan_message(plan, "🔄 CAMBIO DE SESGO / NUEVO MAPA"),
+                        disable_notification=True,
+                    )
+                    self.remember_visibility_alert(key)
+
+            self.last_visibility_action = action
+            self.last_visibility_bias = bias
+            self.last_visibility_stage = stage
+        except Exception as e:
+            log(f"Visibility alert ignored: {e}")
+
+    def why_message(self) -> str:
+        """Human-readable current gate diagnostics; diagnostic only."""
+        if self.plan is None:
+            return "🧠 Todavía no hay plan calculado."
+        q = self.plan
+        yes = lambda v: "✅" if bool(v) else "❌"
+        lines = [
+            "🧠 <b>WHY — por qué I-GOD entra o espera</b>",
+            "",
+            f"Precio: <b>{p(q.price)}</b>",
+            f"Sesgo: <b>{C.html.escape(str(q.bias))}</b>",
+            f"Acción: <b>{C.html.escape(str(q.action))}</b>",
+            f"Fase visible: <b>{C.html.escape(self.visibility_stage(q))}</b>",
+            f"Setup: <b>{C.html.escape(str(q.setup))}</b>",
+            f"1D {q.trends.get('1d','?')} | 4H {q.trends.get('4h','?')} | 1H {q.trends.get('1h','?')}",
+            f"RSI 1H {q.rsi1h:.1f} | RSI 15m {q.rsi15:.1f} | ADX 1H {q.adx1h:.1f} | ADX 4H {q.adx4h:.1f}",
+        ]
+        if str(q.bias) == "NEUTRAL":
+            lines += [
+                "",
+                "⚠️ <b>Bloqueo principal: sesgo diario NEUTRAL.</b>",
+                "En la estrategia LIVE actual, 15m/5m NO pueden convertir por sí solos un día NEUTRAL en ENTER NOW.",
+                f"Breakout LONG vigilado: <b>{p(q.primary_breakout)}</b>",
+                f"Breakdown SHORT vigilado: <b>{p(q.alt_trigger)}</b>",
+            ]
+        else:
+            try:
+                f = self.analyzer.frames
+                x1, x15, p15, x5, p5 = f["1h"].iloc[-1], f["15m"].iloc[-1], f["15m"].iloc[-2], f["5m"].iloc[-1], f["5m"].iloc[-2]
+                inv = fnum(getattr(q, "primary_invalidation", 0))
+                br = fnum(getattr(q, "primary_breakout", 0))
+                price = fnum(q.price)
+                if str(q.bias).startswith("LONG"):
+                    lines += [
+                        "", "<b>BREAKOUT LONG</b>",
+                        f"{yes(x15.close > br)} cierre 15m {p(x15.close)} &gt; breakout {p(br)}",
+                        f"{yes(x15.vol_z >= 0.25)} vol_z {x15.vol_z:.2f} ≥ 0.25",
+                        f"{yes(51 <= x15.rsi <= 76)} RSI15 {x15.rsi:.1f} dentro 51–76",
+                        f"{yes(x15.macd_hist >= p15.macd_hist)} MACD hist 15m mejora",
+                        f"{yes(x5.close > x5.ema20)} 5m sobre EMA20",
+                        f"{yes(x5.rsi >= 50)} RSI5 {x5.rsi:.1f} ≥ 50",
+                        f"{yes(price > inv and x15.close > inv)} tesis sobre invalidación {p(inv)}",
+                        "", "<b>CONTINUATION LONG</b>",
+                        f"{yes(q.trends.get('1h') in ('BULL','BULL_SOFT'))} tendencia 1H bullish",
+                        f"{yes(x1.adx >= 22)} ADX1H {x1.adx:.1f} ≥ 22",
+                        f"{yes(x1.pdi >= x1.mdi)} +DI1H ≥ -DI1H",
+                    ]
+                elif str(q.bias).startswith("SHORT"):
+                    lines += [
+                        "", "<b>BREAKDOWN SHORT</b>",
+                        f"{yes(x15.close < br)} cierre 15m {p(x15.close)} &lt; breakdown {p(br)}",
+                        f"{yes(x15.vol_z >= 0.35)} vol_z {x15.vol_z:.2f} ≥ 0.35",
+                        f"{yes(26 <= x15.rsi <= 49)} RSI15 {x15.rsi:.1f} dentro 26–49",
+                        f"{yes(x15.macd_hist <= p15.macd_hist)} MACD hist 15m empeora",
+                        f"{yes(x5.close < x5.ema20)} 5m bajo EMA20",
+                        f"{yes(x5.rsi <= 50)} RSI5 {x5.rsi:.1f} ≤ 50",
+                        f"{yes(price < inv and x15.close < inv)} tesis bajo invalidación {p(inv)}",
+                    ]
+            except Exception as e:
+                lines.append("Diagnóstico detallado no disponible: " + C.html.escape(str(e)))
+
+        if getattr(q, "wait", None):
+            lines += ["", "<b>Qué está esperando</b>"] + ["• " + C.html.escape(str(x)) for x in q.wait[:6]]
+        if getattr(q, "warnings", None):
+            lines += ["", "<b>Avisos</b>"] + ["• " + C.html.escape(str(x)) for x in q.warnings[:6]]
+        return "\n".join(lines)
+
     def commands(self):
         for cmd in self.tg.poll_commands():
             if cmd in ("/status", "/live"):
@@ -3517,12 +3743,15 @@ class RealAuto:
                     C.plan_message(self.plan, "📍 PLAN LIVE ACTUAL")
                 )
 
+            elif cmd == "/why":
+                self.tg.send(self.why_message())
+
             elif cmd == "/data":
                 self.tg.send(self.observer.status_text())
 
             elif cmd == "/help":
                 self.tg.send(
-                    "<b>I-GOD V7.3.8.4 comandos</b>\n"
+                    "<b>I-GOD V7.3.8.5 comandos</b>\n"
                     "/status — cuenta + bot + mercado\n"
                     "/account — cuenta Futures real\n"
                     "/position — posición/SL/TP reales\n"
@@ -3531,7 +3760,7 @@ class RealAuto:
                     "/live_on — permitir nuevas entradas\n"
                     "/live_off — bloquear nuevas entradas\n"
                     "/unlock — quitar lock solo si no hay posición/órdenes\n"
-                    "/data — estado del journal + shadow (solo observación)\n"
+                    "/data — estado del journal + shadow (solo observación)\n/why — explica por qué entra o espera AHORA\n"
                     "/help — ayuda"
                 )
 
@@ -3543,7 +3772,7 @@ class RealAuto:
         self.live.start()
 
         self.tg.send(
-            "🔴🤖 <b>I-GOD V7.3.8.4 REAL AUTO conectado</b>\n\n"
+            "🔴🤖 <b>I-GOD V7.3.8.5 REAL AUTO conectado</b>\n\n"
             f"{SYMBOL} | sizing {LIVE_SIZING_MODE} "
             f"{LIVE_EQUITY_ALLOC_PCT*100:.0f}% equity "
             f"| risk {LIVE_RISK_PCT*100:.1f}% "
@@ -3558,6 +3787,7 @@ class RealAuto:
             f"SL tesis autoritativo: <b>invalidación ± {C.THESIS_STOP_BUFFER_ATR:.2f}×ATR15</b>\n"
             f"DATA observer: <b>{DATA_OBSERVER_ENABLED}</b> | SHADOW: <b>{SHADOW_ENABLED}</b> "
             f"(NO envía órdenes)\n"
+            f"Visibility alerts: <b>{LIVE_VISIBILITY_ALERTS}</b> | snapshots: <b>{LIVE_PLAN_SNAPSHOT_MIN} min</b>\n"
             f"Daily loss hard: <b>{abs(LIVE_MAX_DAILY_LOSS_USDT):.2f} USDT</b> | "
             f"risk slots: <b>{LIVE_DAILY_RISK_SLOTS}</b>\n"
             f"Daily target soft: <b>{LIVE_DAILY_PROFIT_TARGET_PCT*100:.1f}%</b>\n"
@@ -3582,6 +3812,12 @@ class RealAuto:
                         f"{self.plan.bias} | {self.plan.action} | "
                         f"{self.plan.setup} | {self.plan.price:.1f}"
                     )
+
+                    # V7.3.8.5: visibility only. Record WAIT/NO TRADE states and
+                    # send quiet pre-entry watch alerts. This NEVER changes action,
+                    # sizing, risk, orders, cooldown, SL/TP or execution state.
+                    self.record_plan_visibility(self.plan)
+                    self.maybe_visibility_alert(self.plan)
 
                     mark = fnum(self.plan.price)
 
