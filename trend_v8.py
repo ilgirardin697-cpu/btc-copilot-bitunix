@@ -24,6 +24,12 @@ READ_PATHS = frozenset({
 })
 
 
+def fingerprint(decision):
+    """Canonical identity shared by SHADOW and REAL; contains no account data."""
+    return hashlib.sha256(json.dumps(decision, sort_keys=True, separators=(",", ":"),
+                                     allow_nan=False).encode()).hexdigest()
+
+
 class BitunixReadOnly:
     """Exact endpoint allowlist and GET-only transport, including with live keys."""
 
@@ -220,6 +226,7 @@ class ShadowCore:
         state["last_candle"] = decision["candle_time"]
         event = {"version": "V8", "mode": "SHADOW", "symbol": SYMBOL,
                  "event_id": f"v8-{decision['candle_time']}", "action": action,
+                 "fingerprint": fingerprint(decision),
                  "decision": decision, "shadow_equity": state["equity_net"],
                  "equity_net": state["equity_net"], "pnl_net": state["pnl_net"],
                  "pnl_gross": state["pnl_gross"], "realized_net": state["realized_net"],

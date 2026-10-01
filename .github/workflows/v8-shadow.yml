@@ -1,4 +1,4 @@
-name: V8 SHADOW checks
+name: V8 SHADOW and REAL safety checks
 
 on: [push, pull_request]
 
@@ -14,6 +14,6 @@ jobs:
         with:
           python-version: '3.12'
       - name: Check V8 syntax
-        run: python -m py_compile trend_v8.py test_trend_v8.py
+        run: python -m py_compile trend_v8.py v8_executor.py v8_bitunix.py execution_guard.py test_trend_v8.py test_v8_executor.py live_auto.py
       - name: Test V8 without network or credentials
         run: python -m unittest discover -v
