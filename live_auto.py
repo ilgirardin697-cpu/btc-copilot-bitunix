@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-I-GOD BTC Copilot V7.3.8.5 — REAL AUTO EXECUTOR for Bitunix
+I-GOD BTC Copilot V7.3.8.6 — REAL AUTO EXECUTOR for Bitunix
 ======================================================
 
 REAL MONEY CODE.
@@ -117,6 +117,14 @@ LIVE_STOP_SLIPPAGE_RATE = float(
 
 LIVE_MIN_NET_RR = float(os.getenv("LIVE_MIN_NET_RR", "1.50"))
 
+# V7.3.8.6 — evidence-based live quarantine.
+# Forward DATA/SHADOW currently shows poor results for LONG PULLBACK / RECLAIM.
+# Keep detecting, journaling and shadow-simulating the setup, but default to
+# NO REAL ORDER until evidence justifies promoting it back to LIVE.
+LIVE_LONG_PULLBACK_REAL_ENABLED = (
+    os.getenv("LIVE_LONG_PULLBACK_REAL_ENABLED", "false").lower() == "true"
+)
+
 # PROFIT LOCK: el +10% diario NO apaga el bot.
 LIVE_DAILY_PROFIT_TARGET_PCT = float(
     os.getenv("LIVE_DAILY_PROFIT_TARGET_PCT", "10")
@@ -159,7 +167,7 @@ STATE_FILE = (
     else Path("igod_live_state.json")
 )
 
-# V7.3.8.5 passive DATA + SHADOW observer + visibility telemetry. These files are deliberately
+# V7.3.8.6 passive DATA + SHADOW observer + visibility telemetry. These files are deliberately
 # separate from the live trading state: observer failures must never alter
 # entry, exit, risk, TP/SL or lock decisions.
 DATA_OBSERVER_ENABLED = os.getenv("DATA_OBSERVER_ENABLED", "true").lower() == "true"
@@ -182,7 +190,7 @@ OBSERVER_STATE_FILE = (
     if volume else Path("igod_observer_state.json")
 )
 
-# V7.3.8.5 visibility-only telemetry. These settings NEVER alter entry logic.
+# V7.3.8.6 visibility-only telemetry. These settings NEVER alter entry logic.
 LIVE_VISIBILITY_ALERTS = os.getenv("LIVE_VISIBILITY_ALERTS", "true").lower() == "true"
 LIVE_VISIBILITY_COOLDOWN_MIN = int(os.getenv("LIVE_VISIBILITY_COOLDOWN_MIN", "20"))
 LIVE_PLAN_SNAPSHOT_MIN = max(1, int(os.getenv("LIVE_PLAN_SNAPSHOT_MIN", "5")))
@@ -1134,7 +1142,7 @@ class PassiveObserver:
         try:
             open_shadow = sum(1 for x in self.shadow.values() if x.get("status") == "OPEN")
             return (
-                "📚 <b>DATA + SHADOW V7.3.8.5</b>\n\n"
+                "📚 <b>DATA + SHADOW V7.3.8.6</b>\n\n"
                 f"Observer: <b>{'ON' if self.enabled else 'OFF'}</b>\n"
                 f"Shadow: <b>{'ON' if self.shadow_enabled else 'OFF'}</b>\n"
                 f"Señales ENTER registradas: <b>{len(self.seen_signals)}</b>\n"
@@ -1175,7 +1183,7 @@ class RealAuto:
         self.last_analysis = 0.0
         self.plan = None
         self.last_block_notice = {}
-        # V7.3.8.5 visibility-only state. Never used by entry/risk decisions.
+        # V7.3.8.6 visibility-only state. Never used by entry/risk decisions.
         self.last_visibility_action = None
         self.last_visibility_bias = None
         self.last_visibility_stage = None
@@ -2304,6 +2312,22 @@ class RealAuto:
             self.notify_entry_blocked(plan, client_id, lock_reason)
             return False
 
+        # V7.3.8.6 — LONG PULLBACK / RECLAIM audit quarantine.
+        # IMPORTANT: observer.observe_signal() already ran before open_real(), so
+        # DATA + SHADOW keep learning. All ordinary read-only execution gates
+        # above are also evaluated. We stop here, before leverage/order mutation.
+        if (
+            str(getattr(plan, "setup", "")) == "PULLBACK / RECLAIM"
+            and not LIVE_LONG_PULLBACK_REAL_ENABLED
+        ):
+            reason = (
+                "audit quarantine: PULLBACK / RECLAIM is SHADOW/DATA ONLY "
+                f"in V7.3.8.6; net R:R {costs['net_rr']:.2f}R passed normal gates"
+            )
+            log(f"Entry blocked: {reason}")
+            self.notify_entry_blocked(plan, client_id, reason)
+            return False
+
         try:
             lev_state = self.api.change_leverage_verified(selected_leverage)
             log(
@@ -3247,12 +3271,13 @@ class RealAuto:
         )
 
         return (
-            "📊 <b>I-GOD V7.3.8.4 — STATUS REAL</b>\n\n"
+            "📊 <b>I-GOD V7.3.8.6 — STATUS REAL</b>\n\n"
             "<b>💰 BITUNIX</b>\n"
             + acct_lines
             + f"Posición exchange: <b>{C.html.escape(ex_text)}</b>\n\n"
             "<b>🤖 BOT</b>\n"
             f"LIVE_EXECUTION: <b>{LIVE_EXECUTION}</b>\n"
+            f"LONG Pullback/Reclaim LIVE: <b>{'ENABLED' if LIVE_LONG_PULLBACK_REAL_ENABLED else 'SHADOW/DATA ONLY'}</b>\n"
             f"Auto entradas: <b>{self.state.auto_enabled}</b>\n"
             f"Entry armed: <b>{self.state.entry_armed}</b>\n"
             f"Bloqueado: <b>{self.state.locked}</b>"
@@ -3334,6 +3359,11 @@ class RealAuto:
             problems.append("LIVE_EXECUTION=false")
         else:
             details.append("✅ LIVE_EXECUTION=true")
+
+        if LIVE_LONG_PULLBACK_REAL_ENABLED:
+            details.append("✅ LONG Pullback/Reclaim LIVE habilitado")
+        else:
+            details.append("🧪 LONG Pullback/Reclaim = SHADOW/DATA ONLY por auditoría")
 
         if not self.state.auto_enabled:
             problems.append("AUTO desactivado")
@@ -3480,7 +3510,7 @@ class RealAuto:
         )
 
     # -----------------------------
-    # V7.3.8.5 visibility-only diagnostics
+    # V7.3.8.6 visibility-only diagnostics
     # -----------------------------
 
     def visibility_alert_allowed(self, key: str, cooldown_min: int = None) -> bool:
@@ -3495,11 +3525,22 @@ class RealAuto:
         """Expose neutral-break proximity without changing planner decisions."""
         stage = str(getattr(plan, "stage", "") or "")
         try:
-            if str(getattr(plan, "bias", "")) != "NEUTRAL":
+            bias = str(getattr(plan, "bias", ""))
+            price = fnum(getattr(plan, "price", 0))
+            invalidation = fnum(getattr(plan, "primary_invalidation", 0))
+
+            # Visibility only: once thesis is broken, do not label that price as
+            # an actionable pullback zone. Execution logic is unchanged.
+            if bias.startswith("LONG") and invalidation > 0 and price <= invalidation:
+                return "LONG THESIS BROKEN — WAIT RECLAIM"
+            if bias.startswith("SHORT") and invalidation > 0 and price >= invalidation:
+                return "SHORT THESIS BROKEN — WAIT REJECTION"
+
+            if bias != "NEUTRAL":
                 return stage
+
             x15 = self.analyzer.frames["15m"].iloc[-1]
             atr15 = max(fnum(x15.get("atr")), 1e-9)
-            price = fnum(getattr(plan, "price", 0))
             long_break = fnum(getattr(plan, "primary_breakout", 0))
             short_break = fnum(getattr(plan, "alt_trigger", 0))
             if long_break > 0:
@@ -3627,7 +3668,19 @@ class RealAuto:
                 br = fnum(getattr(q, "primary_breakout", 0))
                 price = fnum(q.price)
                 if str(q.bias).startswith("LONG"):
+                    atr15 = max(fnum(x15.get("atr")), 1e-9)
+                    pull_anchor = max(fnum(x15.get("ema20")), fnum(x15.get("vwap")))
                     lines += [
+                        "", "<b>PULLBACK / RECLAIM LONG</b>",
+                        f"{yes(x15.low <= pull_anchor + 0.20*atr15)} 15m toca EMA20/VWAP + 0.20×ATR15",
+                        f"{yes(x15.close > pull_anchor)} cierre 15m recupera EMA20/VWAP ({p(pull_anchor)})",
+                        f"{yes(x15.close > x15.open)} vela 15m cierra verde",
+                        f"{yes(43 <= x15.rsi <= 69)} RSI15 {x15.rsi:.1f} dentro 43–69",
+                        f"{yes(x5.close > x5.ema20)} 5m sobre EMA20",
+                        f"{yes(x5.rsi >= 48)} RSI5 {x5.rsi:.1f} ≥ 48",
+                        f"{yes(x5.macd_hist >= p5.macd_hist)} MACD hist 5m mejora",
+                        f"{yes(price > inv and x15.close > inv)} tesis recuperada sobre {p(inv)}",
+                        f"🧪 LIVE real: <b>{'ENABLED' if LIVE_LONG_PULLBACK_REAL_ENABLED else 'SHADOW/DATA ONLY'}</b>",
                         "", "<b>BREAKOUT LONG</b>",
                         f"{yes(x15.close > br)} cierre 15m {p(x15.close)} &gt; breakout {p(br)}",
                         f"{yes(x15.vol_z >= 0.25)} vol_z {x15.vol_z:.2f} ≥ 0.25",
@@ -3751,7 +3804,7 @@ class RealAuto:
 
             elif cmd == "/help":
                 self.tg.send(
-                    "<b>I-GOD V7.3.8.5 comandos</b>\n"
+                    "<b>I-GOD V7.3.8.6 comandos</b>\n"
                     "/status — cuenta + bot + mercado\n"
                     "/account — cuenta Futures real\n"
                     "/position — posición/SL/TP reales\n"
@@ -3761,6 +3814,7 @@ class RealAuto:
                     "/live_off — bloquear nuevas entradas\n"
                     "/unlock — quitar lock solo si no hay posición/órdenes\n"
                     "/data — estado del journal + shadow (solo observación)\n/why — explica por qué entra o espera AHORA\n"
+                    "LONG PULLBACK/RECLAIM: SHADOW/DATA ONLY por defecto en esta versión\n"
                     "/help — ayuda"
                 )
 
@@ -3772,7 +3826,7 @@ class RealAuto:
         self.live.start()
 
         self.tg.send(
-            "🔴🤖 <b>I-GOD V7.3.8.5 REAL AUTO conectado</b>\n\n"
+            "🔴🤖 <b>I-GOD V7.3.8.6 REAL AUTO conectado</b>\n\n"
             f"{SYMBOL} | sizing {LIVE_SIZING_MODE} "
             f"{LIVE_EQUITY_ALLOC_PCT*100:.0f}% equity "
             f"| risk {LIVE_RISK_PCT*100:.1f}% "
@@ -3781,6 +3835,7 @@ class RealAuto:
             f"AUTO: <b>{self.state.auto_enabled}</b>\n"
             f"State persistente: <b>{bool(volume)}</b>\n"
             f"Fee guard mínimo: <b>{LIVE_MIN_NET_RR:.2f}R neto</b>\n"
+            f"LONG Pullback/Reclaim LIVE: <b>{'ENABLED' if LIVE_LONG_PULLBACK_REAL_ENABLED else 'SHADOW/DATA ONLY'}</b>\n"
             f"Planner R:R: <b>{C.MIN_RR_ENTER:.2f}R mínimo técnico / {C.PREFERRED_RR_ENTER:.2f}R preferido</b>\n"
             f"Reserva cash ejecución: <b>{LIVE_EXECUTION_CASH_RESERVE_PCT*100:.1f}% + costes estimados</b>\n"
             f"Reserva slippage STOP: <b>{LIVE_STOP_SLIPPAGE_RATE*100:.2f}%</b>\n"
@@ -3813,7 +3868,7 @@ class RealAuto:
                         f"{self.plan.setup} | {self.plan.price:.1f}"
                     )
 
-                    # V7.3.8.5: visibility only. Record WAIT/NO TRADE states and
+                    # V7.3.8.6: visibility only. Record WAIT/NO TRADE states and
                     # send quiet pre-entry watch alerts. This NEVER changes action,
                     # sizing, risk, orders, cooldown, SL/TP or execution state.
                     self.record_plan_visibility(self.plan)
