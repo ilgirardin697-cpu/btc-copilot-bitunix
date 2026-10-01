@@ -41,6 +41,7 @@ from typing import Any, Dict, List, Optional
 
 import requests
 import main as C
+from execution_guard import v7_mutation_guard
 
 
 # ---------------------------------------------------------------------
@@ -292,6 +293,7 @@ class BitunixPrivate:
             "language": "en-US",
         }
 
+    @v7_mutation_guard
     def request(self, method: str, path: str, params=None, body=None):
         params = {
             k: sf(v) if isinstance(v, bool) else v
