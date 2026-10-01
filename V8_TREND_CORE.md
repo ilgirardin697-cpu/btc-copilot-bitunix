@@ -16,9 +16,29 @@ Se requieren 200 velas; comparativas sin suficiente histórico quedan en null.
 La simulación entra con nocional de 1x su equity y mantiene la cantidad hasta
 FLAT. No configura leverage en Bitunix ni lee los parámetros de leverage V7.
 `V8_SHADOW_INITIAL_EQUITY` fija el equity virtual inicial (1000 USDT por defecto).
-No representa órdenes, fills ni rentabilidad neta real: el PnL virtual es bruto,
-sin comisiones, slippage ni funding. Si hay interrupciones, procesa el último
-cierre disponible; no reconstruye operaciones durante el tiempo desconectado.
+`V8_SHADOW_TURNOVER_COST=0.001` descuenta 10 bps del nocional efectivo
+en cada entrada y salida; HOLD no paga costes. Para financiar posición y coste
+sin deuda: nocional de entrada = equity / (1 + coste), cantidad = nocional / precio.
+Así la exposición vale exactamente 1x del equity NETO tras pagar la entrada.
+Salida: efectivo recibido = cantidad * precio * (1 - coste).
+Equity NETO y PnL NETO son las métricas principales. State/journal conservan
+realized_net (trades cerrados, incluidos ambos costes), costes acumulados,
+PnL bruto y realized_gross para diagnóstico. PnL bruto describe la misma
+cantidad negociada, sumando los costes al PnL neto; no es otra cartera sin costes.
+No añade otro modelo separado de comisiones, slippage o funding.
+
+Tras downtime se procesan todas las velas cerradas posteriores a last_candle,
+en orden y con SMA calculada solo hasta cada cierre. Todo el replay se valida
+antes de modificar estado. El worker conserva todo el histórico descargado
+(hasta aproximadamente 400 velas); se necesitan 199 cierres anteriores a la
+primera vela pendiente. Huecos, datos obsoletos o historial insuficiente bloquean
+el ciclo sin saltar velas. Primer arranque: solo el cierre vigente; si es LONG,
+la operación se etiqueta BOOTSTRAP_LONG, sin afirmar un crossover histórico.
+Las observaciones privadas durante replay son actuales, llevan observed_at_ms
+y no participan en las decisiones ni representan el estado histórico de cuenta.
+Estados/journals antiguos de PnL bruto se rechazan: utilizar otro directorio,
+conservando esos artefactos. Tampoco se puede cambiar el coste de una simulación
+ya persistida. No se inventan retroactivamente costes de operaciones antiguas.
 
 `V8_MODE` solo admite SHADOW. `LIVE_EXECUTION` y `LIVE_AUTO_START` no tienen
 efecto. No importa el ejecutor V7. El transporte Bitunix únicamente permite GET
@@ -47,6 +67,9 @@ de fills alcanzado quedan INCOMPLETE. No se atribuye ese PnL a V8.
 Validación sin red ni credenciales:
 
 ```sh
-python -m py_compile main.py live_auto.py trend_v8.py test_trend_v8.py
+python -m py_compile trend_v8.py test_trend_v8.py
 python -m unittest discover -v
 ```
+
+GitHub Actions ejecuta esas comprobaciones en push y pull_request, sin secretos,
+órdenes ni despliegues.

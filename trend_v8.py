@@ -105,7 +105,7 @@ class BitunixReadOnly:
                 "ownership": "EXTERNAL_TO_V8", "history_limit": 100}
 
 
-def signal(rows, now_ms):
+def closed_candles(rows, now_ms):
     closed = {}
     for row in rows:
         timestamp, close = int(row["time"]), float(row["close"])
@@ -115,60 +115,121 @@ def signal(rows, now_ms):
             if timestamp in closed and closed[timestamp] != close:
                 raise ValueError("Conflicting duplicate candle")
             closed[timestamp] = close
-    times = sorted(closed)[-300:]
+    times = sorted(closed)
     if len(times) < 200:
         raise ValueError("Need at least 200 completely closed 4H candles")
     expected = ((now_ms - 1500) // FOUR_HOURS - 1) * FOUR_HOURS
     if times[-1] != expected or any(b - a != FOUR_HOURS for a, b in zip(times, times[1:])):
         raise ValueError("Stale or discontinuous 4H candles")
-    closes = [closed[t] for t in times]
+    return [{"time": t, "close": closed[t]} for t in times]
+
+
+def decision_at(rows):
+    """Rows end at the decision candle; no future information is visible."""
+    closes = [row["close"] for row in rows[-300:]]
     telemetry = {}
     for period in PERIODS:
         average = sum(closes[-period:]) / period if len(closes) >= period else None
         telemetry[str(period)] = {"sma": average, "direction": (
             "LONG" if closes[-1] > average else "FLAT") if average is not None else None}
-    return {"candle_time": times[-1], "close": closes[-1],
+    return {"candle_time": rows[-1]["time"], "close": closes[-1],
             "direction": telemetry["200"]["direction"], "comparison": telemetry}
 
 
+def signal(rows, now_ms):
+    return decision_at(closed_candles(rows, now_ms))
+
+
+def pending_decisions(rows, now_ms, last_candle):
+    """Validate the entire replay before allowing any state mutation."""
+    closed = closed_candles(rows, now_ms)
+    if last_candle == -1:
+        return [decision_at(closed)]  # bootstrap, not a historical crossover
+    if last_candle > closed[-1]["time"]:
+        raise ValueError("Persisted candle is ahead of available data")
+    pending = [i for i, row in enumerate(closed) if row["time"] > last_candle]
+    if not pending:
+        return []
+    first = pending[0]
+    if closed[first]["time"] != last_candle + FOUR_HOURS or first < 199:
+        raise ValueError("Insufficient history for complete SMA200 replay")
+    return [decision_at(closed[:i + 1]) for i in pending]
+
+
 class ShadowCore:
-    def __init__(self, directory, initial_equity=1000.0):
+    def __init__(self, directory, initial_equity=1000.0, turnover_cost=None):
         if not math.isfinite(initial_equity) or initial_equity <= 0:
             raise ValueError("Initial shadow equity must be positive and finite")
+        if turnover_cost is None:
+            turnover_cost = float(os.getenv("V8_SHADOW_TURNOVER_COST", "0.001"))
+        if not math.isfinite(turnover_cost) or not 0 <= turnover_cost < 1:
+            raise ValueError("Turnover cost must be finite and in [0, 1)")
+        self.turnover_cost = turnover_cost
         self.directory = Path(directory)
         self.directory.mkdir(parents=True, exist_ok=True)
         self.path = self.directory / "igod_v8_shadow_state.json"
         self.journal = self.directory / "igod_v8_shadow_journal.jsonl"
         self.state = {"version": "V8", "mode": "SHADOW", "last_candle": -1,
                       "cash": initial_equity, "qty": 0.0, "entry": 0.0,
-                      "realized_gross": 0.0}
+                      "schema": 2, "initial_equity": initial_equity,
+                      "turnover_cost": turnover_cost, "costs_accumulated": 0.0,
+                      "entry_cost": 0.0, "realized_gross": 0.0, "realized_net": 0.0,
+                      "equity_net": initial_equity, "pnl_net": 0.0, "pnl_gross": 0.0}
         if self.path.exists():
             self.state = json.loads(self.path.read_text(encoding="utf-8"))
             if self.state["mode"] != "SHADOW" or self.state["version"] != "V8":
                 raise ValueError("Invalid V8 SHADOW state")
+            self.validate_state(self.state)
+
+    def validate_state(self, state):
+        if state.get("schema") != 2:
+            raise ValueError("Legacy gross state requires a separate directory; cannot invent past costs")
+        if state.get("turnover_cost") != self.turnover_cost:
+            raise ValueError("Cannot change turnover cost for an existing simulation")
 
     def step(self, decision, observation):
+        self.recover()
         if decision["candle_time"] <= self.state["last_candle"]:
             return None
+        if decision["direction"] not in ("LONG", "FLAT"):
+            raise ValueError("V8 never permits SHORT")
+        if self.state["last_candle"] != -1 and decision["candle_time"] != self.state["last_candle"] + FOUR_HOURS:
+            raise ValueError("Shadow decisions must be sequential")
         state = dict(self.state)
         price = decision["close"]
         equity = state["cash"] + state["qty"] * price
         action = "HOLD"
+        cost = notional = 0.0
         if decision["direction"] == "LONG" and state["qty"] == 0 and equity > 0:
-            state.update(qty=equity / price, cash=0.0, entry=price)
-            action = "SIMULATED_LONG"
+            # Fund the actual 1x position AND its fee without borrowing cash.
+            notional = equity / (1 + self.turnover_cost)
+            cost = notional * self.turnover_cost
+            state.update(qty=notional / price, cash=0.0, entry=price, entry_cost=cost)
+            action = "BOOTSTRAP_LONG" if state["last_candle"] == -1 else "SIMULATED_LONG"
         elif decision["direction"] == "FLAT" and state["qty"] > 0:
+            notional = state["qty"] * price
+            cost = notional * self.turnover_cost
             state["realized_gross"] += state["qty"] * (price - state["entry"])
-            state.update(cash=equity, qty=0.0, entry=0.0)
+            state["realized_net"] += state["qty"] * (price - state["entry"]) - state["entry_cost"] - cost
+            state.update(cash=equity - cost, qty=0.0, entry=0.0, entry_cost=0.0)
             action = "SIMULATED_FLAT"
+        state["costs_accumulated"] += cost
+        state["equity_net"] = state["cash"] + state["qty"] * price
+        state["pnl_net"] = state["equity_net"] - state["initial_equity"]
+        state["pnl_gross"] = state["pnl_net"] + state["costs_accumulated"]
         state["last_candle"] = decision["candle_time"]
         event = {"version": "V8", "mode": "SHADOW", "symbol": SYMBOL,
                  "event_id": f"v8-{decision['candle_time']}", "action": action,
-                 "decision": decision, "shadow_equity": equity,
-                 "target_notional": equity if decision["direction"] == "LONG" else 0,
+                 "decision": decision, "shadow_equity": state["equity_net"],
+                 "equity_net": state["equity_net"], "pnl_net": state["pnl_net"],
+                 "pnl_gross": state["pnl_gross"], "realized_net": state["realized_net"],
+                 "realized_gross": state["realized_gross"],
+                 "costs_accumulated": state["costs_accumulated"],
+                 "turnover_notional": notional, "turnover_cost": cost,
+                 "target_notional": state["equity_net"] if decision["direction"] == "LONG" else 0,
                  "exposure_multiple": 1.0, "state_after": state,
                  "account_observation": observation,
-                 "pnl_model": "gross simulation; no fees/slippage/funding deducted"}
+                 "pnl_model": "NET: turnover notional * configured cost on entry and exit; HOLD zero"}
         # Journal is the recovery source if the process stops before state replacement.
         with self.journal.open("a", encoding="utf-8") as stream:
             stream.write(json.dumps(event, allow_nan=False) + "\n")
@@ -191,8 +252,17 @@ class ShadowCore:
             with self.journal.open(encoding="utf-8") as stream:
                 for line in stream:
                     event = json.loads(line)
+                    self.validate_state(event["state_after"])
                     if event["state_after"]["last_candle"] > self.state["last_candle"]:
                         self.save(event["state_after"])
+
+    def replay(self, rows, now_ms, observation):
+        self.recover()
+        decisions = pending_decisions(rows, now_ms, self.state["last_candle"])
+        events = []
+        for decision in decisions:
+            events.append(self.step(decision, observation))
+        return events
 
 
 def notify(event):
@@ -203,7 +273,8 @@ def notify(event):
     for chat in recipients - {""}:
         body = urlencode({"chat_id": chat, "text": (
             f"I-GOD V8 SHADOW BTCUSDT 4H: {event['decision']['direction']}\n"
-            f"{event['action']} | exposición objetivo 1x | simulación sin órdenes reales")}).encode()
+            f"{event['action']} | exposición objetivo 1x | simulación sin órdenes reales\n"
+            f"Equity NETO: {event['equity_net']:.4f} USDT | PnL NETO: {event['pnl_net']:.4f} USDT")}).encode()
         with urlopen(Request(f"https://api.telegram.org/bot{token}/sendMessage",
                              data=body, method="POST"), timeout=12) as response:
             if not json.load(response).get("ok"):
@@ -221,14 +292,17 @@ def run():
         try:
             core.recover()
             now = int(time.time() * 1000)
-            decision = signal(api.candles(now), now)
-            if decision["candle_time"] > core.state["last_candle"]:
+            rows = api.candles(now)
+            decisions = pending_decisions(rows, now, core.state["last_candle"])
+            if decisions:
                 try:
                     observation = api.observe()
                 except Exception:
                     observation = {"status": "READ_ERROR"}
-                event = core.step(decision, observation)
-                if event:
+                # Current account observation is explicitly separate from historical decisions.
+                observation["observed_at_ms"] = int(time.time() * 1000)
+                events = core.replay(rows, now, observation)
+                for event in events:
                     notify(event)
         except Exception as exc:
             # Never print credentials or Telegram URLs from transport exceptions.
