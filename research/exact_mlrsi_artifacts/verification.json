@@ -1,0 +1,21 @@
+{
+  "test_count": 49,
+  "tests_exit_code": 0,
+  "backtest_exit_code": 0,
+  "metric_reproduction_identical": true,
+  "metrics_sha256": "f029b54f9daee8d7c7c88ff91cf9d60987b860742b544428e96378cd63f7bd39",
+  "selected_id": "RSI27_STATE_M_0.60_opposite_1",
+  "TEST_excluded_from_selection": true,
+  "sha256": {
+    "frozen_spec.json": "7f7df5f6b7d8232b4992eaabe95c12dd0be9bc5696d8051d3222530b44819d2e",
+    "hourly_centroids.csv.gz": "01db1dd5278ca89de58f9382976fc600126943464d8adac2875ffdf6232f98b6",
+    "results.json": "75f341486923a79f9583222f7d8a961f7c4e035846a1f7f261990233046fbe55",
+    "selected_trades.csv.gz": "d842f15f729da24bd7bfde82895e75bb15665c02284df3d8d67061ad62a75c37",
+    "selection_lock.json": "f4b47ec75d83382ed95f5f485cc030d8a9e89faf7e92abc66df3657ea8867212"
+  },
+  "commands": [
+    "python -m research.confluence_exact_mlrsi",
+    "python -m unittest discover -v",
+    "git diff --check"
+  ]
+}

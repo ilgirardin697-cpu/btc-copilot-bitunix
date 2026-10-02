@@ -1,0 +1,82 @@
+{
+  "name": "I-GOD CONFLUENCE ENGINE — causal BackQuant ML RSI",
+  "rsi_lengths": [
+    14,
+    27
+  ],
+  "source": "close",
+  "smooth": true,
+  "smoothing": "EMA",
+  "smoothing_length": 4,
+  "maxData": 3000,
+  "maxIter": 1000,
+  "clusters": 3,
+  "initialization_percentiles": [
+    25,
+    50,
+    75
+  ],
+  "distance": "absolute",
+  "update": "arithmetic mean",
+  "ties": "lowest centroid index",
+  "empty_cluster": "retain prior centroid",
+  "minimum_valid_observations": 4,
+  "rolling": "last maxData finite smoothed RSI samples through current close",
+  "convergence": "unchanged assignment boundaries or exact centroid equality",
+  "trigger_minutes": 60,
+  "regime_minutes": 60,
+  "sma_length": 200,
+  "modes": [
+    "STATE",
+    "EVENT"
+  ],
+  "systems": [
+    "M",
+    "RM",
+    "LM",
+    "RLM"
+  ],
+  "taker_thresholds": [
+    0.55,
+    0.6,
+    0.65
+  ],
+  "exits": [
+    "opposite",
+    "atr"
+  ],
+  "atr_length": 14,
+  "atr_multiplier": 2,
+  "cost_per_side": 0.001,
+  "cost_sensitivity": [
+    0.0005,
+    0.001,
+    0.002
+  ],
+  "sizing": "fixed quantity sized 1x equity at entry; effective exposure can drift",
+  "selection": "LONG at fixed 60% taker only, TRAIN >=20 trades and positive expectancy; VALIDATION >=20 trades, highest Sharpe then expectancy then TRAIN Sharpe; thresholds 55/65 diagnostics only; TEST absent",
+  "short": "diagnostic RLM mirror only, never promoted",
+  "test_start": 1704067200000,
+  "as_of": 1790899200000,
+  "promotion": {
+    "test_positive": true,
+    "test_expectancy_positive": true,
+    "remove_best_and_top3_positive": true,
+    "all_taker_neighbors_test_positive": true,
+    "both_rsi_presets_same_selected_mode_system_exit_test_positive": true,
+    "opposite_mode_not_destructive": "TEST return >= -10%",
+    "probability_1_before_1": "24h TEST >=55%, 7-day block-bootstrap lower 95% bound >50%, and exceeds all-hour control by >=2 percentage points",
+    "max_drawdown": "TEST and ALL >= -35%",
+    "20bps": "TEST and ALL net return positive"
+  },
+  "bootstrap": {
+    "replicates": 500,
+    "seed": 773,
+    "block_days": 7
+  },
+  "source_urls": [
+    "https://www.tradingview.com/script/DKa7Dmc5-Machine-Learning-RSI-BackQuant/",
+    "https://tradingmike.blogspot.com/2025/06/2025-06-13rsi.html",
+    "https://www.tradingview.com/pine-script-docs/language/arrays/"
+  ]
+}
