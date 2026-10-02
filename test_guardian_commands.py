@@ -43,7 +43,7 @@ class CommandTests(unittest.TestCase):
         self.assertEqual(os.getenv('GUARDIAN_ENABLE_COMMANDS', 'false'), 'false')
 
     def test_owner_enabled_and_exact_command_set(self):
-        self.assertEqual(COMMANDS, ('/status', '/why', '/position', '/risk', '/levels', '/help'))
+        self.assertEqual(COMMANDS, ('/status', '/why', '/position', '/risk', '/levels', '/stats', '/help'))
         self.assertTrue(self.commands.process(self.update()))
         self.assertIn('Actualizado hace:', self.reply.call_args.args[0])
 
@@ -93,13 +93,13 @@ class CommandTests(unittest.TestCase):
 
     def test_snapshot_stale_boundary_and_future(self):
         view = self.cache.read()
-        for command in COMMANDS[:-1]:
+        for command in ('/status', '/why', '/position', '/risk', '/levels'):
             self.assertNotIn(STALE, render_command(command, view, view['timestamp'] + 30))
             self.assertIn(STALE, render_command(command, view, view['timestamp'] + 31))
             self.assertEqual(render_command(command, view, view['timestamp'] - 1), NO_DATA)
 
     def test_missing_snapshot_no_operar(self):
-        for command in COMMANDS[:-1]:
+        for command in ('/status', '/why', '/position', '/risk', '/levels'):
             self.assertEqual(render_command(command, None, 100), NO_DATA)
 
     def test_status_and_risk_cannot_imply_shadow_protection(self):
