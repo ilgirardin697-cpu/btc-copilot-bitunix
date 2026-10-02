@@ -80,8 +80,8 @@ class HierarchicalTests(unittest.TestCase):
         data['market_levels']['atr_1h'] = 100
         original = copy.deepcopy(data)
         with patch('requests.sessions.Session.request', side_effect=AssertionError('NO HTTP')) as http:
-            text = _levels(data)
-            why = _why(data)
+            text = _levels(data, mark=105)
+            why = _why(data, mark=105)
         self.assertIn('Muy cercano — nivel local/timing', text)
         self.assertIn('R1 no confirma LONG', why)
         self.assertEqual(data, original)
@@ -111,6 +111,6 @@ class HierarchicalTests(unittest.TestCase):
     def test_exact_micro_boundary(self):
         data = dict(bias='WAIT', market_levels=dict(status='AVAILABLE', reference_price=100,
                                                   resistance=115, support=None, atr_1h=100))
-        self.assertIn('Muy cercano', _levels(data))
+        self.assertIn('Muy cercano', _levels(data, mark=100))
         data['market_levels']['resistance'] = 115.001
-        self.assertNotIn('Muy cercano', _levels(data))
+        self.assertNotIn('Muy cercano', _levels(data, mark=100))

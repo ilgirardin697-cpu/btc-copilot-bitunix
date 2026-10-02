@@ -11,6 +11,7 @@ import statistics
 import subprocess
 import threading
 import time
+import uuid
 from datetime import datetime, timezone
 import requests
 
@@ -22,6 +23,12 @@ PAIRS = ((.005, .005), (.01, .005), (.01, .01), (.02, .01), (.03, .01))
 QUALITIES = ('GOOD', 'CAUTION', 'POOR')
 REASONS = ('CONFIRMED_RECLAIM', 'NEAR_RESISTANCE', 'NEAR_SUPPORT', 'EXTENDED',
            'WAIT_RECLAIM', 'INSUFFICIENT_EVIDENCE')
+_PROCESS_BOOT_ID = str(uuid.uuid4())
+PERSISTENCE_MESSAGES = {
+    'INITIALIZED_NOT_RESTART_VERIFIED': '🟡 Persistencia: volumen inicializado; falta verificar supervivencia a reinicio.',
+    'REOPENED_FROM_PERSISTENT_STORAGE': '✅ Persistencia: archivos de auditoría recuperados tras reinicio.',
+}
+PERSISTENCE_UNVERIFIED = '🔴 Persistencia de auditoría NO verificada.'
 
 
 def runtime_git_sha():
@@ -111,10 +118,10 @@ def evaluate(signal, rows, hours, now_ms):
 class AuditStore:
     """Local fsync/atomic replace, process lock and append-before-state recovery.
 
-    This does not establish that a hosting volume survives container replacement.
+    The canary proves reopening across process boots, not future disaster recovery.
     A torn final JSONL fragment is truncated; complete records remain immutable.
     """
-    def __init__(self, directory):
+    def __init__(self, directory, *, boot_id=None, clock=time.time):
         self.root = Path(directory)
         self.root.mkdir(parents=True, exist_ok=True)
         self.lock = (self.root / 'audit.lock').open('a+b')
@@ -142,9 +149,68 @@ class AuditStore:
                     self.state.update(row['state_after'])
             if len({row['event_id'] for row in self.signals}) != len(self.signals):
                 raise ValueError('AUDIT_DUPLICATE_EVENT')
+            self._initialize_canary(boot_id or _PROCESS_BOOT_ID, clock)
         except Exception:
             self.close()
             raise RuntimeError('AUDIT_STORAGE_UNAVAILABLE') from None
+
+    def _initialize_canary(self, boot_id, clock):
+        """Nonfatal, secret-free metadata check; same-process reopen is not a boot."""
+        self.durability = 'NOT_VERIFIED'
+        path = self.root / 'durability_canary.json'
+        try:
+            if str(uuid.UUID(boot_id)) != boot_id:
+                return
+            expected = self.state.get('durability_canary_uuid')
+            now = clock()
+            if type(now) not in (int, float) or not math.isfinite(now) or now <= 0:
+                return
+            if path.exists():
+                row = json.loads(path.read_text('utf-8'))
+                if not isinstance(row, dict) or set(row) - {
+                        'uuid', 'created_at', 'boot_count', 'last_boot_id', 'last_reopened_at'}:
+                    return
+                for field in ('uuid', 'last_boot_id'):
+                    if str(uuid.UUID(row[field])) != row[field]:
+                        return
+                count = row['boot_count']
+                created = row['created_at']
+                if type(count) is not int or count < 1 or type(created) not in (int, float):
+                    return
+                if not math.isfinite(created) or not 0 < created <= now:
+                    return
+                reopened = row.get('last_reopened_at')
+                if count > 1 or reopened is not None:
+                    if type(reopened) not in (int, float) or not math.isfinite(reopened) or not created <= reopened <= now:
+                        return
+                if expected is not None and expected != row['uuid']:
+                    return
+                if row['last_boot_id'] != boot_id:
+                    row.update(boot_count=count + 1, last_boot_id=boot_id, last_reopened_at=now)
+                    self._write_canary(row)
+            else:
+                # Missing after initialization is lost evidence, not a new volume.
+                if expected is not None:
+                    return
+                row = dict(uuid=str(uuid.uuid4()), created_at=now, boot_count=1, last_boot_id=boot_id)
+                self._write_canary(row)
+            if expected is None:
+                self.state['durability_canary_uuid'] = row['uuid']
+                self.save()
+            self.durability = ('REOPENED_FROM_PERSISTENT_STORAGE' if row['boot_count'] > 1
+                               else 'INITIALIZED_NOT_RESTART_VERIFIED')
+        except Exception:
+            # No paths, IDs, payloads or exception text are logged or reported.
+            self.durability = 'NOT_VERIFIED'
+
+    def _write_canary(self, row):
+        path = self.root / 'durability_canary.json.tmp'
+        with path.open('w', encoding='utf-8') as stream:
+            json.dump(row, stream, sort_keys=True, allow_nan=False)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(path, self.root / 'durability_canary.json')
+        self.sync_directory()
 
     def close(self):
         if not self.lock.closed:
@@ -261,7 +327,7 @@ def statistics_snapshot(store, now_ms):
                 period_start=min((s['signal_time'] for s in store.signals if s['source'] == SOURCE), default=None),
                 completed_horizons={str(h): sum(row['hours'] == h and row['status'] == 'COMPLETE'
                                                for row in store.outcomes.values() if row['source'] == SOURCE) for h in HORIZONS},
-                durability='LOCAL_FSYNC_ONLY_HOST_VOLUME_UNVERIFIED')
+                durability=getattr(store, 'durability', 'NOT_VERIFIED'))
 
 
 class ForwardAudit:
@@ -395,7 +461,8 @@ class ForwardAudit:
 def render_stats(snapshot, window='all', now_ms=None):
     if not snapshot or window not in ('all', '30d', '90d'):
         return ('📊 COPILOT — RESULTADOS FORWARD\nSin registro forward verificado disponible.\n'
-                'Esto mide señales, NO tu rentabilidad real.\nNo permite abrir ni cerrar operaciones.')
+                'Esto mide señales, NO tu rentabilidad real.\nNo permite abrir ni cerrar operaciones.\n'
+                + PERSISTENCE_UNVERIFIED)
     lines = ['📊 COPILOT — RESULTADOS FORWARD', '⚠️ Esto mide señales del sistema. NO es tu rentabilidad real.',
              'Fuente: FORWARD_LIVE | Ventana: ' + window]
     if snapshot.get('lost_observations', 0):
@@ -428,5 +495,5 @@ def render_stats(snapshot, window='all', now_ms=None):
     lines += ['\nToques simultáneos en una vela: ambiguos, excluidos del denominador.',
               'No alcanzar ninguna barrera dentro de 24h no cuenta como éxito.',
               'Estadísticas descriptivas; no incluyen entradas/salidas, costes ni rentabilidad de cuenta.',
-              'Persistencia del volumen de alojamiento NO verificada.']
+              PERSISTENCE_MESSAGES.get(snapshot.get('durability'), PERSISTENCE_UNVERIFIED)]
     return '\n'.join(lines)

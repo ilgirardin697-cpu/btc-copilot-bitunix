@@ -17,7 +17,7 @@ El lenguaje de dirección es:
 
 Dirección y entrada son dos cosas distintas. GOOD permite mostrar «PUEDES BUSCAR ENTRADA» según las reglas actuales. CAUTION/POOR pide esperar mejor entrada o no perseguir precio, aunque la dirección siga confirmada. No significa certeza ni probabilidad medida. Las reglas de dirección y entrada no se han optimizado en esta fase.
 
-Los niveles también tienen dos escalas: **R1/S1 locales 15m** para contexto cercano y **R2/S2 estructurales 1H**. Se calculan de forma independiente con pivotes confirmados. Un nivel a ≤0.15 ATR1H recibe la etiqueta «Muy cercano — nivel local/timing»; esta etiqueta no cambia dirección o entrada. Cruzar R1/S1/R2/S2 no concede permiso por sí solo. Si no hay pivotes suficientes, no se inventan niveles.
+Los niveles también tienen dos escalas: **R1/S1 locales 15m** para contexto cercano y **R2/S2 estructurales 1H**. Se calculan de forma independiente con pivotes confirmados. Un nivel local a ≤0.15 ATR1H del mark recibe la etiqueta «Muy cercano — nivel local/timing»; esta etiqueta no cambia dirección o entrada. Si el mark cruza un nivel, se avisa de que falta cierre 15m/1H y no se reclasifica por ello. Cruzar R1/S1/R2/S2 no concede permiso por sí solo. Si no hay pivotes suficientes, no se inventan niveles.
 
 ## 2. Trade Guardian: posición real y capital
 
@@ -41,7 +41,7 @@ Congela calidad y evidencia al inicio. Evalúa velas públicas 5m posteriores, a
 
 `/stats` separa ALL/GOOD/CAUTION/POOR/LONG/SHORT, siempre con n, maduros, pendientes e incompletos. Los pendientes no son fracasos. Huecos de datos se censuran; un toque simultáneo de ambas barreras en una vela no permite conocer el orden. Muestras pequeñas se advierten y no se presentan como edge probado. Estos resultados no incluyen un sistema de entradas/salidas, fees o slippage.
 
-El registro empieza al ejecutar la nueva versión, sin backfill histórico presentado como live. Se guarda en `/data/copilot_audit`: state atómico y journals fsynced de señales, resultados e instantáneas diarias. **Necesita un volumen persistente de Railway que cubra `/data`**; este trabajo no lo configura ni afirma que esté verificado. Un directorio escribible no prueba supervivencia al reemplazo del contenedor. Fallos de auditoría no detienen el bucle de protección.
+El registro empieza al ejecutar la nueva versión, sin backfill histórico presentado como live. Se guarda en `/data/copilot_audit`: state atómico y journals fsynced de señales, resultados e instantáneas diarias. **Necesita un volumen persistente de Railway que cubra `/data`**; este trabajo no lo configura. El canary empieza en amarillo; `/stats` solo muestra recuperación tras reinicio en verde cuando otro proceso reabre y guarda su UUID. Un canary corrupto o perdido no da esa garantía. Esta prueba no certifica recuperación ante desastres ni la infraestructura. Fallos de auditoría no detienen el bucle de protección.
 
 `Forward statistics are signal statistics, not Igor's account returns.`
 

@@ -60,6 +60,31 @@ def _position(snapshot, compact=False):
             + '\n\n' + render_risk(risk).split('\n')[0])
 
 
+def _level_view(reference, mark, level, label, timeframe, atr=None):
+    """Display relationships only: never discover, reclassify or confirm a level."""
+    reference, mark, level, atr = map(_number, (reference, mark, level, atr))
+    valid_mark = mark is not None and mark > 0
+    resistance = label.startswith('R')
+    crossed = (reference is not None and level is not None and valid_mark
+               and (reference < level < mark if resistance else mark < level < reference))
+    return dict(label=label, timeframe=timeframe, crossed=bool(crossed),
+                reference_relation=('BELOW' if reference < level else 'ABOVE' if reference > level else 'AT')
+                if reference is not None and level is not None else 'UNKNOWN',
+                mark_relation=('BELOW' if mark < level else 'ABOVE' if mark > level else 'AT')
+                if valid_mark and level is not None else 'UNKNOWN',
+                distance_pct=(level - mark) / mark if valid_mark and level is not None else None,
+                distance_atr=abs(mark - level) / atr
+                if valid_mark and level is not None and atr is not None and atr > 0 else None)
+
+
+def _crossed_text(view, compact=False):
+    above = view['mark_relation'] == 'ABOVE'
+    if compact:
+        return '⏳ Mark ' + ('encima' if above else 'debajo') + ' — falta cierre ' + view['timeframe']
+    return ('⏳ Mark por ' + ('encima' if above else 'debajo') + ' de ' + view['label'] + ', '
+            + ('ruptura' if above else 'pérdida') + ' ' + view['timeframe'] + ' todavía NO confirmada')
+
+
 def _levels(data, compact=False, mark=None):
     """Only the independent closed/pivot-verified level field; no guessed levels."""
     levels = data.get('market_levels') or {}
@@ -81,14 +106,22 @@ def _levels(data, compact=False, mark=None):
         r2 = r2 if r2 is not None and r2 > reference else None
     scales = [(levels, support, resistance, '⚡ NIVELES LOCALES 15m', '1'),
               (structural, s2, r2, '🏛 NIVELES ESTRUCTURALES 1H', '2')]
+    atr = _number(levels.get('atr_1h'))
+    views = {label + number: _level_view(reference, mark, value, label + number,
+                                        '15m' if number == '1' else '1H', atr)
+             for _, s, r, _, number in scales for label, value in (('R', r), ('S', s))}
     if compact:
         lines = []
         for _, s, r, _, number in scales:
             if s is None and r is None:
                 continue
             lines.append('⚡ 15m' if number == '1' else '🏛 1H')
-            lines += (['🔴 R' + number + ': ' + _price(r)] if r else [])
-            lines += (['🟢 S' + number + ': ' + _price(s)] if s else [])
+            for label, value, icon in (('R', r, '🔴'), ('S', s, '🟢')):
+                if value is not None:
+                    lines.append(icon + ' ' + label + number + ': ' + _price(value))
+                    view = views[label + number]
+                    if view['crossed']:
+                        lines.append(_crossed_text(view, compact=True))
         return '🏗 NIVELES\n' + '\n'.join(lines) if lines else ''
     lines = ['🏗 NIVELES DEL MERCADO', 'BTC: ' + _price(mark),
              'Referencia 15m cerrada: ' + _price(reference)]
@@ -100,11 +133,19 @@ def _levels(data, compact=False, mark=None):
                 lines.append(label + ': Sin pivote confirmado disponible')
                 continue
             lines.append('\n' + label + ': ' + _price(value))
-            lines.append(f'Distancia: {sign}{abs(value - reference) / reference:.2%}')
-            atr = _number(levels.get('atr_1h'))
-            if atr is not None and atr > 0:
-                multiple = abs(value - reference) / atr
-                lines.append(f'{multiple:.2f} ATR1H (Binance cerrado)')
+            view = views[('R' if key == 'resistance' else 'S') + number]
+            if view['distance_pct'] is not None:
+                relation = {'ABOVE': 'nivel por debajo del mark', 'BELOW': 'nivel por encima del mark',
+                            'AT': 'mark en el nivel'}[view['mark_relation']]
+                lines.append(f"Distancia desde mark: {view['distance_pct']:+.2%} ({relation})")
+            else:
+                lines.append('Distancia desde mark: Sin mark verificable')
+            if view['crossed']:
+                lines.append(_crossed_text(view))
+            lines.append(f'Desde cierre de referencia: {sign}{abs(value - reference) / reference:.2%}')
+            if view['distance_atr'] is not None:
+                multiple = view['distance_atr']
+                lines.append(f'{multiple:.2f} ATR1H desde mark (Binance cerrado)')
                 if number == '1' and multiple <= .15:
                     lines.append('⚪ Muy cercano — nivel local/timing')
             for suffix, caption in (('_pivot_time', 'Pivote'), ('_confirmed_time', 'Confirmado')):
@@ -117,16 +158,23 @@ def _levels(data, compact=False, mark=None):
     if all(value is None for value in (support, resistance, s2, r2)):
         lines.append('Sin niveles confirmados suficientes')
     lines += ['\n🧭 DIRECCIÓN', direction_label(data.get('bias')), '\n👀 QUÉ VIGILAR']
-    if resistance is not None:
-        lines.append('⬆️ Cierre 15m por encima de ' + _price(resistance)
-                     + '\n→ cambia estructura local; NO confirma LONG por sí solo')
-    if support is not None:
-        lines.append('⬇️ Cierre 15m por debajo de ' + _price(support)
-                     + '\n→ cambia estructura local; NO confirma SHORT por sí solo')
-    if r2 is not None:
-        lines.append('Cierre 1H sobre R2 ' + _price(r2) + ': cambio de estructura 1H a vigilar')
-    if s2 is not None:
-        lines.append('Cierre 1H bajo S2 ' + _price(s2) + ': cambio de estructura 1H a vigilar')
+    for label, value in (('R1', resistance), ('S1', support), ('R2', r2), ('S2', s2)):
+        if value is None:
+            continue
+        view = views[label]
+        above = label.startswith('R')
+        if view['crossed']:
+            lines.append('BTC está actualmente ' + ('sobre' if above else 'bajo') + ' ' + label
+                         + ', pero falta un cierre ' + view['timeframe'] + ' para confirmar la '
+                         + ('ruptura.' if above else 'pérdida.'))
+        elif label.endswith('1'):
+            lines.append(('⬆️ Cierre 15m por encima de ' if above else '⬇️ Cierre 15m por debajo de ')
+                         + _price(value))
+        else:
+            lines.append('Cierre 1H ' + ('sobre' if above else 'bajo') + ' ' + label + ' ' + _price(value)
+                         + ': cambio de estructura 1H a vigilar')
+        if label.endswith('1'):
+            lines.append('→ cambia estructura local; NO confirma ' + ('LONG' if above else 'SHORT') + ' por sí solo')
     lines.append('→ sigue necesitando las reglas normales de momentum/flow/estructura del Copilot')
     if support is None and resistance is None:
         lines.append('Esperar nuevos pivotes 15m confirmados; no hay niveles verificables')
@@ -140,7 +188,7 @@ def _levels(data, compact=False, mark=None):
     return '\n'.join(lines)
 
 
-def _why(data):
+def _why(data, mark=None):
     trends = {'BULL': '🟢 BULL', 'BEAR': '🔴 BEAR'}
     momenta = {'GREEN': '🟢 GREEN', 'RED': '🔴 RED', 'NEUTRAL': '⚪ NEUTRAL'}
     structures = {'BULLISH': '🟢 ALCISTA', 'BEARISH': '🔴 BAJISTA', 'MIXED': '⚪ MIXTA'}
@@ -196,11 +244,19 @@ def _why(data):
             lines.append('Esperar una entrada confirmada; no perseguir precio')
     levels = data.get('market_levels') or {}
     reference, atr = _number(levels.get('reference_price')), _number(levels.get('atr_1h'))
-    if reference is not None and atr is not None and atr > 0:
-        for key, label, side in (('resistance', 'R1', 'LONG'), ('support', 'S1', 'SHORT')):
-            level = _number(levels.get(key))
-            if level is not None and abs(level - reference) <= .15 * atr:
-                lines.append('Precio muy cerca de ' + label + ' local, pero ' + label + ' no confirma ' + side + '.')
+    for scale, number, timeframe in ((levels, '1', '15m'), (levels.get('structural') or {}, '2', '1H')):
+        if scale.get('status') != 'AVAILABLE' or reference is None or reference <= 0:
+            continue
+        for key, prefix, side in (('resistance', 'R', 'LONG'), ('support', 'S', 'SHORT')):
+            level = _number(scale.get(key))
+            if level is None or not (level > reference if prefix == 'R' else 0 < level < reference):
+                continue
+            label = prefix + number
+            view = _level_view(reference, mark, level, label, timeframe, atr)
+            if view['crossed']:
+                lines.append(_crossed_text(view))
+            elif view['distance_atr'] is not None and view['distance_atr'] <= .15:
+                lines.append('Mark muy cerca de ' + label + ', pero ' + label + ' no confirma ' + side + '.')
     return '\n'.join(lines)
 
 
@@ -222,7 +278,7 @@ def render_command(command, snapshot, now):
         wanted = ('🧭 DIRECCIÓN', '🧭 TENDENCIA', '🧠 ML RSI', '💧 FLUJO', '🏗 ESTRUCTURA', '🌪 VOLATILIDAD', '🎯 ENTRADA')
         text = blocks[0] + '\n\nBTC: ' + _price(snapshot['mark'])
         text += '\n\n' + '\n\n'.join(block for block in blocks if block.startswith(wanted))
-        levels = _levels(data, compact=True)
+        levels = _levels(data, compact=True, mark=snapshot['mark'])
         if levels:
             text += '\n\n' + levels
         text += '\n\n' + _position(snapshot, compact=True)
@@ -237,7 +293,7 @@ def render_command(command, snapshot, now):
     elif command == '/levels':
         text = _levels(data, mark=snapshot['mark'])
     else:
-        text = _why(data)
+        text = _why(data, mark=snapshot['mark'])
     return warning + text + footer
 
 
