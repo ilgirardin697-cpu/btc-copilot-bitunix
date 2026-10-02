@@ -1,0 +1,118 @@
+{
+  "parameters": {
+    "percentile": 0.2,
+    "duration": 2,
+    "volume_z": 1.5,
+    "hold": 1,
+    "acceleration": true
+  },
+  "selected_id": "p0.2_n2_v1.5_h1_a1",
+  "selection_rule": "MAX_MIN_TRAIN_VALIDATION_24H_FIRST_PASSAGE_THEN_VALIDATION_RETURN",
+  "selection_periods": [
+    "TRAIN",
+    "VALIDATION"
+  ],
+  "test_selection": false,
+  "initial_candidates": 9,
+  "frozen_candidates": [
+    {
+      "percentile": 0.2,
+      "duration": 3,
+      "volume_z": 1.5,
+      "hold": 1,
+      "acceleration": true
+    },
+    {
+      "percentile": 0.15,
+      "duration": 3,
+      "volume_z": 1.5,
+      "hold": 1,
+      "acceleration": true
+    },
+    {
+      "percentile": 0.25,
+      "duration": 3,
+      "volume_z": 1.5,
+      "hold": 1,
+      "acceleration": true
+    },
+    {
+      "percentile": 0.2,
+      "duration": 2,
+      "volume_z": 1.5,
+      "hold": 1,
+      "acceleration": true
+    },
+    {
+      "percentile": 0.2,
+      "duration": 4,
+      "volume_z": 1.5,
+      "hold": 1,
+      "acceleration": true
+    },
+    {
+      "percentile": 0.2,
+      "duration": 3,
+      "volume_z": 1.0,
+      "hold": 1,
+      "acceleration": true
+    },
+    {
+      "percentile": 0.2,
+      "duration": 3,
+      "volume_z": 2.0,
+      "hold": 1,
+      "acceleration": true
+    },
+    {
+      "percentile": 0.2,
+      "duration": 3,
+      "volume_z": 1.5,
+      "hold": 0,
+      "acceleration": true
+    },
+    {
+      "percentile": 0.2,
+      "duration": 3,
+      "volume_z": 1.5,
+      "hold": 1,
+      "acceleration": false
+    },
+    {
+      "percentile": 0.15,
+      "duration": 2,
+      "volume_z": 1.5,
+      "hold": 1,
+      "acceleration": true
+    },
+    {
+      "percentile": 0.25,
+      "duration": 2,
+      "volume_z": 1.5,
+      "hold": 1,
+      "acceleration": true
+    },
+    {
+      "percentile": 0.2,
+      "duration": 2,
+      "volume_z": 1.0,
+      "hold": 1,
+      "acceleration": true
+    },
+    {
+      "percentile": 0.2,
+      "duration": 2,
+      "volume_z": 2.0,
+      "hold": 1,
+      "acceleration": true
+    },
+    {
+      "percentile": 0.2,
+      "duration": 2,
+      "volume_z": 1.5,
+      "hold": 1,
+      "acceleration": false
+    }
+  ],
+  "sha256": "4ebb6a0dbcd59382261fe11f4c8545549a4330bc93bba8cf2759234677464525"
+}
