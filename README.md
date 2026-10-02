@@ -43,4 +43,6 @@ No public domain is required because Telegram messages are sent outbound and Bit
 
 ## I-GOD Trade Guardian
 
+Consulta el [mapa operativo de I-GOD](docs/I_GOD_OPERATING_MAP.md) para distinguir Manual Copilot, Guardian, auditoría forward, V8 y Early Breakout, y entender las consultas Telegram.
+
 The independent manual position risk monitor is started explicitly with `python trade_guardian.py`. It is disarmed by default; see [TRADE_GUARDIAN.md](TRADE_GUARDIAN.md) and [.env.example](.env.example) for its endpoint allowlist, risk behavior and arming requirements. Railway continues to run `main.py`.
