@@ -162,6 +162,27 @@ def entry_quality(bias, hourly, quarter_hourly, momentum, structure):
     return result
 
 
+def current_entry_quality(data, mark):
+    """Restrict entry permission using the already-read mark; never grant GOOD."""
+    result = dict(data)
+    if data.get('bias') not in ('LONG_ALLOWED', 'SHORT_ALLOWED'):
+        result['entry_quality'] = 'CAUTION'
+        return result
+    long = data['bias'] == 'LONG_ALLOWED'
+    atr, level = data.get('entry_atr_1h'), data.get('entry_level')
+    opposing = data.get('resistance') if long else data.get('support')
+    if any(value is None or not np.isfinite(value) or value <= 0 for value in (mark, atr, level, opposing)):
+        result.update(entry_quality='CAUTION', entry_reason='INSUFFICIENT_EVIDENCE')
+        return result
+    if 0 <= (opposing - mark if long else mark - opposing) <= .5 * atr:
+        result.update(entry_quality='POOR', entry_reason='NEAR_RESISTANCE' if long else 'NEAR_SUPPORT')
+    elif (mark - level if long else level - mark) > 2 * atr:
+        result.update(entry_quality='POOR', entry_reason='EXTENDED')
+    elif (long and (mark <= level or mark >= opposing)) or (not long and (mark >= level or mark <= opposing)):
+        result.update(entry_quality='CAUTION', entry_reason='WAIT_RECLAIM')
+    return result
+
+
 def snapshot(hourly, four_hourly, quarter_hourly, now_ms):
     h = closed_bars(hourly, now_ms, 3600000)
     f = closed_bars(four_hourly, now_ms, 14400000)

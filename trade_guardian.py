@@ -9,7 +9,7 @@ from guardian_risk import Config, SafetyError, risk, catastrophic_stop, assess_o
 from guardian_store import Store
 from guardian_telegram import Telegram, render_copilot, render_risk, protection_status, DECISION_PREFIXES
 from koncorde_shadow import diagnostic
-from guardian_signals import volatility_state
+from guardian_signals import volatility_state, current_entry_quality
 
 
 def _safe_order_number(value):
@@ -101,7 +101,8 @@ class Guardian:
                 time.sleep(.2)
 
     def _position_text(self, position, details, orders, target):
-        data = dict(self.bias, volatility=volatility_state(details['atr'], details['mark']))
+        data = dict(current_entry_quality(self.bias, details['mark']),
+                    volatility=volatility_state(details['atr'], details['mark']))
         return render_copilot(data, self.config, position, details, orders.get('status'), target,
                               private_ready=self.client.credentials_present)
 
@@ -179,10 +180,11 @@ class Guardian:
         if now >= self._bias_due:
             self.bias = self.market.bias()
             self._bias_due = now + 60
-        data = dict(self.bias, volatility=volatility_state(atr, mark) if mark is not None else 'UNKNOWN')
+        data = dict(current_entry_quality(self.bias, mark),
+                    volatility=volatility_state(atr, mark) if mark is not None else 'UNKNOWN')
         copilot = render_copilot(data, self.config, position if details else None, details,
                                  sl_status, target, private_ready=self.client.credentials_present)
-        decision_key = self.bias['bias'] + ':' + self.bias.get('entry_quality', 'CAUTION')
+        decision_key = self.bias['bias'] + ':' + data.get('entry_quality', 'CAUTION')
         if not self._started:
             self._started = True
             status = 'PRIVATE POSITION GUARD DISABLED — credentials absent' if not self.client.credentials_present else (
@@ -195,11 +197,11 @@ class Guardian:
             self.store.state['copilot_decision'] = decision_key
         self.store.save()
         if now >= self._snapshot_due:
-            self.store.append('bias', {'timestamp': now, **self.bias, 'koncorde': diagnostic(),
+            self.store.append('bias', {'timestamp': now, **data, 'koncorde': diagnostic(),
                                        'risk': details, 'human_snapshot': copilot})
             self._snapshot_due = now + 300
         heartbeat = {'timestamp': now, 'mark': mark, 'bias': self.bias['bias'], 'position': position is not None,
-                     'entry_quality': self.bias.get('entry_quality', 'CAUTION'),
+                     'entry_quality': data.get('entry_quality', 'CAUTION'),
                      'risk': details['state'] if details else 'UNKNOWN',
                      'armed': {'sl': self.config.armed('SL'), 'close': self.config.armed('CLOSE')},
                      'last_successful_private_read': self.client.last_private,

@@ -20,7 +20,7 @@ from guardian_bitunix import (Bitunix, signature, POSITIONS, TPSL, TICKERS, PAIR
 from guardian_risk import Config, SafetyError, parse_positions, risk, catastrophic_stop, assess_orders, SIDE_ALIASES
 from guardian_signals import (closed_bars, rolling_mlrsi, cluster_three, states_and_events,
                               confirmed_structure, direction, flow_state, atr14, latest_mlrsi,
-                              volatility_state, snapshot, ML_RSI27_REAL, entry_quality)
+                              volatility_state, snapshot, ML_RSI27_REAL, entry_quality, current_entry_quality)
 from guardian_store import Store
 from guardian_market import BINANCE_MARKET_DATA_BASE, Market
 from guardian_telegram import Telegram, render_copilot, render_risk, protection_status
@@ -864,7 +864,9 @@ class GuardianTests(unittest.TestCase):
                     entry_reason='CONFIRMED_RECLAIM' if quality == 'GOOD' else 'EXTENDED' if quality == 'POOR' else 'WAIT_RECLAIM',
                     trend4='BEAR' if bearish else 'BULL', trend1='BEAR' if bearish else 'BULL',
                     momentum='RED' if bearish else 'GREEN', taker_buy=.386 if bearish else .614,
-                    structure='BEARISH' if bearish else 'BULLISH', volatility='ELEVATED')
+                    structure='BEARISH' if bearish else 'BULLISH', volatility='ELEVATED',
+                    entry_atr_1h=100, entry_level=10100 if bearish else 9900,
+                    support=9500, resistance=10500)
 
     def test_long_good_has_green_entry_banner(self):
         text = render_copilot(self.human_bias(), Config())
@@ -1049,9 +1051,28 @@ class GuardianTests(unittest.TestCase):
         data.update(entry_reason='NEAR_RESISTANCE', resistance=120, entry_level=112)
         text = render_copilot(data, Config())
         self.assertIn('Breakout + reclaim de 120.00', text)
-        text = render_copilot(self.human_bias(quality='CAUTION'), Config())
+        missing_levels = self.human_bias(quality='CAUTION')
+        missing_levels.update(entry_level=None, resistance=None, support=None)
+        text = render_copilot(missing_levels, Config())
         self.assertNotIn('Pullback y reclaim del nivel confirmado', text)
         self.assertNotIn('Breakout + reclaim de ', text)
+
+    def test_live_mark_prevents_chasing_between_closed_candles(self):
+        data = self.human_bias()
+        observed = current_entry_quality(data, 10300)
+        self.assertEqual((observed['bias'], observed['entry_quality'], observed['entry_reason']),
+                         ('LONG_ALLOWED', 'POOR', 'EXTENDED'))
+        self.assertEqual(data['entry_quality'], 'GOOD')
+        bearish = self.human_bias('SHORT_ALLOWED')
+        observed = current_entry_quality(bearish, 9700)
+        self.assertEqual((observed['bias'], observed['entry_quality']), ('SHORT_ALLOWED', 'POOR'))
+        self.assertEqual(current_entry_quality(data, None)['entry_quality'], 'CAUTION')
+        self.assertEqual(current_entry_quality(data, 9800)['entry_quality'], 'CAUTION')
+        self.assertEqual(current_entry_quality(data, 10000)['entry_quality'], 'GOOD')
+
+    def test_live_mark_does_not_promote_unconfirmed_entry(self):
+        for quality in ('CAUTION', 'POOR'):
+            self.assertEqual(current_entry_quality(self.human_bias(quality=quality), 10000)['entry_quality'], quality)
 
     def test_missing_fields_blocked(self):
         row = position()
