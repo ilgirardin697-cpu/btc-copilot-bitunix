@@ -14,6 +14,7 @@ from urllib.request import Request, urlopen
 from execution_guard import ExecutionLease
 import trend_v8 as trend
 from v8_bitunix import BitunixV8
+from v8_notifications import notification_text
 
 
 class Blocked(RuntimeError):
@@ -35,6 +36,7 @@ def finite(value):
 
 
 def telegram(message):
+    message = notification_text(message)
     token = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
     chats = {os.getenv(k, "").strip() for k in ("TELEGRAM_CHAT_ID", "TELEGRAM_ALERT_CHAT_ID")}
     if not token:
