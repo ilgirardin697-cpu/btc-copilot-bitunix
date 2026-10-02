@@ -5,7 +5,11 @@ import json
 import os
 import unittest
 from unittest.mock import Mock, patch
-import requests
+try:
+    import numpy as np
+    import requests
+except ImportError:
+    raise unittest.SkipTest('Command dependencies are installed by the Guardian workflow') from None
 from guardian_commands import COMMANDS, HELP, NO_DATA, STALE, SnapshotCache, TelegramCommands, render_command
 from guardian_bitunix import POST_ALLOWLIST, PLACE_SL, FLASH_CLOSE
 from guardian_risk import Config
