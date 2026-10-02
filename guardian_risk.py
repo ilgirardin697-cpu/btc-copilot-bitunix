@@ -86,17 +86,32 @@ class Position:
 
 
 def parse_positions(rows):
+    """Parse the fixed Guardian GET scoped with includeSubAccounts=false."""
     if not isinstance(rows, list) or len(rows) > 1:
         raise SafetyError('AMBIGUOUS_POSITIONS')
     if not rows:
         return None
     p = rows[0]
     try:
-        if (p['symbol'] != 'BTCUSDT' or p['side'] not in ('LONG', 'SHORT')
-                or p['marginMode'] not in ('ISOLATION', 'CROSS')
-                or p['positionMode'] not in ('ONE_WAY', 'HEDGE')
-                or p.get('subAccountId') not in (None, '', 0, '0')):
-            raise SafetyError('POSITION_SCOPE_INVALID')
+        if not isinstance(p, dict):
+            raise SafetyError('POSITION_INCOMPLETE')
+        if p.get('symbol') != 'BTCUSDT':
+            raise SafetyError('POSITION_SYMBOL_INVALID')
+        if p.get('side') not in ('LONG', 'SHORT'):
+            raise SafetyError('POSITION_SIDE_INVALID')
+        if p.get('marginMode') not in ('ISOLATION', 'CROSS'):
+            raise SafetyError('POSITION_MARGIN_MODE_INVALID')
+        if p.get('positionMode') not in ('ONE_WAY', 'HEDGE'):
+            raise SafetyError('POSITION_MODE_INVALID')
+        if 'subAccountId' in p:
+            account_id = p['subAccountId']
+            # The scoped request controls account inclusion; a nonzero ID is not
+            # evidence of an unexpected subaccount. Never coerce floats or bools.
+            valid_account = ((type(account_id) is int and account_id >= 0)
+                             or (isinstance(account_id, str) and account_id.isascii()
+                                 and account_id.isdecimal()))
+            if not valid_account:
+                raise SafetyError('POSITION_ACCOUNT_ID_INVALID')
         pid = p['positionId']
         if not isinstance(pid, str) or not pid.isdecimal() or len(pid) > 64:
             raise SafetyError('POSITION_ID_INVALID')

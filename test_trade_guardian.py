@@ -229,11 +229,15 @@ class GuardianTests(unittest.TestCase):
 
     def test_wrapped_position_scope_validation_unchanged(self):
         self.fake.positions_wrapped = True
-        for changes in ({'symbol': 'ETHUSDT'}, {'subAccountId': 12345},
-                        {'side': 'UNSUPPORTED'}, {'positionMode': 'UNSUPPORTED'}):
+        cases = (({'symbol': 'ETHUSDT'}, 'POSITION_SYMBOL_INVALID'),
+                 ({'subAccountId': 'malformed'}, 'POSITION_ACCOUNT_ID_INVALID'),
+                 ({'side': 'UNSUPPORTED'}, 'POSITION_SIDE_INVALID'),
+                 ({'marginMode': 'UNSUPPORTED'}, 'POSITION_MARGIN_MODE_INVALID'),
+                 ({'positionMode': 'UNSUPPORTED'}, 'POSITION_MODE_INVALID'))
+        for changes, code in cases:
             with self.subTest(changes=changes):
                 self.fake.positions = [position(**changes)]
-                with self.assertRaisesRegex(SafetyError, '^POSITION_SCOPE_INVALID$'):
+                with self.assertRaisesRegex(SafetyError, '^' + code + '$'):
                     self.client.position()
         self.assertFalse(self.fake.posts)
 
@@ -705,9 +709,108 @@ class GuardianTests(unittest.TestCase):
         self.fake.before_post = check
         self.guardian._act('CLOSE', self.p(), 100)
 
-    def test_subaccount_blocked(self):
-        with self.assertRaises(SafetyError):
-            self.p(subAccountId=12345)
+    def test_nonzero_account_id_from_scoped_get_accepted(self):
+        for wrapped in (False, True):
+            self.fake.positions_wrapped = wrapped
+            for account_id in (12345, '12345', 0, '0'):
+                with self.subTest(wrapped=wrapped, account_id=account_id):
+                    self.fake.positions = [position(subAccountId=account_id)]
+                    self.assertEqual(self.client.position(), self.p())
+                    self.assertEqual(self.fake.calls[-1][2]['params'],
+                                     {'symbol': 'BTCUSDT', 'includeSubAccounts': 'false'})
+                    self.assertIsNotNone(self.client.last_private)
+        self.assertFalse(self.fake.posts)
+
+    def test_malformed_account_ids_fail_closed(self):
+        values = (None, '', True, False, -1, 1.0, 1.5, float('nan'), float('inf'),
+                  float('-inf'), 'NaN', 'Infinity', '12.5', ' 123', '123abc',
+                  '\u0661\u0662\u0663', [], {})
+        for wrapped in (False, True):
+            self.fake.positions_wrapped = wrapped
+            for value in values:
+                with self.subTest(wrapped=wrapped, value=value):
+                    self.fake.positions = [position(subAccountId=value)]
+                    with self.assertRaisesRegex(SafetyError, '^POSITION_ACCOUNT_ID_INVALID$'):
+                        self.client.position()
+                    self.assertIsNone(self.client.last_private)
+                    with patch('builtins.print') as output:
+                        self.guardian.cycle()
+                    output.assert_any_call('GUARDIAN_BLIND_CODE=POSITION_ACCOUNT_ID_INVALID', flush=True)
+        self.assertFalse(self.fake.posts)
+
+    def test_position_field_specific_codes(self):
+        fields = (('symbol', 'POSITION_SYMBOL_INVALID'),
+                  ('side', 'POSITION_SIDE_INVALID'),
+                  ('marginMode', 'POSITION_MARGIN_MODE_INVALID'),
+                  ('positionMode', 'POSITION_MODE_INVALID'))
+        for field, code in fields:
+            for invalid in (None, 'UNSUPPORTED', [], {}):
+                with self.subTest(field=field, invalid=invalid):
+                    with self.assertRaisesRegex(SafetyError, '^' + code + '$'):
+                        self.p(**{field: invalid})
+            row = position()
+            del row[field]
+            with self.subTest(field=field, missing=True), self.assertRaisesRegex(SafetyError, '^' + code + '$'):
+                parse_positions([row])
+
+    def test_field_diagnostics_never_log_actual_ids_or_payloads(self):
+        cases = (({'symbol': 'PRIVATE_PAYLOAD'}, 'POSITION_SYMBOL_INVALID'),
+                 ({'side': 'PRIVATE_PAYLOAD'}, 'POSITION_SIDE_INVALID'),
+                 ({'marginMode': 'PRIVATE_PAYLOAD'}, 'POSITION_MARGIN_MODE_INVALID'),
+                 ({'positionMode': 'PRIVATE_PAYLOAD'}, 'POSITION_MODE_INVALID'),
+                 ({'subAccountId': 'PRIVATE_PAYLOAD'}, 'POSITION_ACCOUNT_ID_INVALID'))
+        for changes, code in cases:
+            with self.subTest(code=code):
+                self.fake.positions = [position(positionId='987654321987654321', **changes)]
+                with patch('builtins.print') as output:
+                    self.guardian.cycle()
+                output.assert_any_call('GUARDIAN_BLIND_CODE=' + code, flush=True)
+                self.assertNotIn('PRIVATE_PAYLOAD', str(output.call_args_list))
+                self.assertNotIn('987654321987654321', str(output.call_args_list))
+                self.assertNotIn('fake-key', str(output.call_args_list))
+                self.assertNotIn('fake-secret', str(output.call_args_list))
+        self.assertFalse(self.fake.posts)
+
+    def test_include_subaccounts_false_mandatory(self):
+        invalid = ({'symbol': 'BTCUSDT'},
+                   {'symbol': 'BTCUSDT', 'includeSubAccounts': 'true'},
+                   {'symbol': 'BTCUSDT', 'includeSubAccounts': True},
+                   {'symbol': 'BTCUSDT', 'includeSubAccounts': False},
+                   {'symbol': 'BTCUSDT', 'includeSubAccounts': None},
+                   {'symbol': 'BTCUSDT', 'includeSubAccounts': 'false', 'subAccountId': 12345})
+        for params in invalid:
+            with self.subTest(params=params), self.assertRaisesRegex(SafetyError, '^GET_SCOPE_BLOCKED$'):
+                self.client._request('GET', POSITIONS, params)
+        self.assertEqual(self.fake.calls, [])
+        self.client.position()
+        self.assertEqual(self.fake.calls[-1][2]['params'],
+                         {'symbol': 'BTCUSDT', 'includeSubAccounts': 'false'})
+
+    def test_duplicate_positions_with_valid_account_ids_fail_closed(self):
+        self.fake.positions = [position(subAccountId=12345),
+                               position(positionId='456', subAccountId=67890)]
+        for wrapped in (False, True):
+            with self.subTest(wrapped=wrapped):
+                self.fake.positions_wrapped = wrapped
+                with self.assertRaisesRegex(SafetyError, '^AMBIGUOUS_POSITIONS$'):
+                    self.client.position()
+                with patch('builtins.print'):
+                    self.guardian.cycle()
+        self.assertFalse(self.fake.posts)
+
+    def test_shadow_nonzero_account_id_zero_posts(self):
+        self.client.config = self.guardian.config = Config()
+        self.fake.positions = [position(subAccountId=12345)]
+        for wrapped in (False, True):
+            with self.subTest(wrapped=wrapped):
+                self.fake.positions_wrapped = wrapped
+                with patch('builtins.print'):
+                    heartbeat = self.guardian.cycle()
+                self.assertTrue(heartbeat['position'])
+                self.assertEqual(heartbeat['risk'], 'EMERGENCY')
+                self.assertIsNotNone(heartbeat['last_successful_private_read'])
+                self.assertEqual(heartbeat['armed'], {'sl': False, 'close': False})
+        self.assertFalse(self.fake.posts)
 
     def test_missing_fields_blocked(self):
         row = position()
