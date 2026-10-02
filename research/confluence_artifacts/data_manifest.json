@@ -1,0 +1,1736 @@
+[
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2020-01.zip",
+    "sha256": "101e303a2f2c8be7b2fdba8af5a794ab17f19f6ba7a68e5af8efbcbc0ebd983a",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1577836800000,
+    "last_timestamp": 1580514900000,
+    "kind": "bars",
+    "month": "2020-01"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2020-02.zip",
+    "sha256": "43b9fe53e4354bdcb900c49d07f31cfcc5c758fbf63b2aa544f455a1cd0b944c",
+    "official_checksum": true,
+    "rows": 8352,
+    "first_timestamp": 1580515200000,
+    "last_timestamp": 1583020500000,
+    "kind": "bars",
+    "month": "2020-02"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2020-03.zip",
+    "sha256": "99dc47a65cd2eb29e7006ef9004a6359a3f8791299c2ba23318b78e76c286c5a",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1583020800000,
+    "last_timestamp": 1585698900000,
+    "kind": "bars",
+    "month": "2020-03"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2020-04.zip",
+    "sha256": "382fd1a511f54b86d4638ba2541ceff76f9e96d7e6f25b1b8badbd23ed66458c",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1585699200000,
+    "last_timestamp": 1588290900000,
+    "kind": "bars",
+    "month": "2020-04"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2020-05.zip",
+    "sha256": "ff949185457826051fb06b2a865a40c8dbfe604d935b404f8482824223e9441e",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1588291200000,
+    "last_timestamp": 1590969300000,
+    "kind": "bars",
+    "month": "2020-05"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2020-06.zip",
+    "sha256": "67e2dea8a50b47b559a5295581c7039c7813cf09e155308037ca5c16efaa9350",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1590969600000,
+    "last_timestamp": 1593561300000,
+    "kind": "bars",
+    "month": "2020-06"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2020-07.zip",
+    "sha256": "c7e72576d5e3ad0ee5c2d837dd63bcaa6aa0461799bae4d2f6ca6b0e78d6f08f",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1593561600000,
+    "last_timestamp": 1596239700000,
+    "kind": "bars",
+    "month": "2020-07"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2020-08.zip",
+    "sha256": "028476815685deabd0ff6d659ab604ac4e116a572d7c9acfbe74508da2441470",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1596240000000,
+    "last_timestamp": 1598918100000,
+    "kind": "bars",
+    "month": "2020-08"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2020-09.zip",
+    "sha256": "f7a9c4e7f24e91d9dd7cbaf8f1e58f45d5fe4d1c623895e746ceb7c4c78d9918",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1598918400000,
+    "last_timestamp": 1601510100000,
+    "kind": "bars",
+    "month": "2020-09"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2020-10.zip",
+    "sha256": "547b5a7e9703dbd7ff6f1eb7c97a86b852fa8e42287557cb2c0e3fd675875d34",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1601510400000,
+    "last_timestamp": 1604188500000,
+    "kind": "bars",
+    "month": "2020-10"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2020-11.zip",
+    "sha256": "e39d8fe1138aeb7053aa83e442b38c78d5ef87f929597ab5aa5d7009b12a4216",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1604188800000,
+    "last_timestamp": 1606780500000,
+    "kind": "bars",
+    "month": "2020-11"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2020-12.zip",
+    "sha256": "d53eeacb3597e303b6fdef51e14ad5a86fb776d2bb823f6c1bb2c02ee168445b",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1606780800000,
+    "last_timestamp": 1609458900000,
+    "kind": "bars",
+    "month": "2020-12"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2021-01.zip",
+    "sha256": "121bc9248a2be75f5a3e0bb53ec00ae3a0fbd23cede41d6998073818438d5eb4",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1609459200000,
+    "last_timestamp": 1612137300000,
+    "kind": "bars",
+    "month": "2021-01"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2021-02.zip",
+    "sha256": "ddbde3144a64213c84aa79e67ae034f9811e78b36e59c1090780e37529097c14",
+    "official_checksum": true,
+    "rows": 8064,
+    "first_timestamp": 1612137600000,
+    "last_timestamp": 1614556500000,
+    "kind": "bars",
+    "month": "2021-02"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2021-03.zip",
+    "sha256": "1e0fd641ec408939e73f4c534de2c2319087071fd9d2cc90c1b97a9d0ebd9b33",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1614556800000,
+    "last_timestamp": 1617234900000,
+    "kind": "bars",
+    "month": "2021-03"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2021-04.zip",
+    "sha256": "da129801ed2f00ba8221b12671705bef80beba69db396c3151f645a0732c6e5e",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1617235200000,
+    "last_timestamp": 1619826900000,
+    "kind": "bars",
+    "month": "2021-04"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2021-05.zip",
+    "sha256": "428263c2f50edb06a169cba58b6d9a39ab739ca23d97bbad00fd1080e04a0a09",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1619827200000,
+    "last_timestamp": 1622505300000,
+    "kind": "bars",
+    "month": "2021-05"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2021-06.zip",
+    "sha256": "7efaefaa65732c36e21f346cb7e15a75cea427c99f927fed9556ea637829f231",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1622505600000,
+    "last_timestamp": 1625097300000,
+    "kind": "bars",
+    "month": "2021-06"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2021-07.zip",
+    "sha256": "327d4f4df85f6f04e0ca2b46ccaf1d2481f47a91d34f79e98c978d21abe9c4ac",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1625097600000,
+    "last_timestamp": 1627775700000,
+    "kind": "bars",
+    "month": "2021-07"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2021-08.zip",
+    "sha256": "fc1a03e5be460ddb7af70cc7dd48a5d5ede5ddbe51ccac5f7959ffd67eb8a68a",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1627776000000,
+    "last_timestamp": 1630454100000,
+    "kind": "bars",
+    "month": "2021-08"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2021-09.zip",
+    "sha256": "fa29041cdda0decb7ab16ff3c98709459bbcb999761897ef4417d96dfcd23295",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1630454400000,
+    "last_timestamp": 1633046100000,
+    "kind": "bars",
+    "month": "2021-09"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2021-10.zip",
+    "sha256": "f21933019b6d1a328843ec09f6b4f2e646e006965300851d1b94f451e2d3cd18",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1633046400000,
+    "last_timestamp": 1635724500000,
+    "kind": "bars",
+    "month": "2021-10"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2021-11.zip",
+    "sha256": "d41d8bafe40585dc42fe0c05232b0cfc32edbc2b670daa8bef6410453991b1dd",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1635724800000,
+    "last_timestamp": 1638316500000,
+    "kind": "bars",
+    "month": "2021-11"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2021-12.zip",
+    "sha256": "fdde03f0cd8b608b82319e08b3e4d1e21810aebbf84a2cc10a913ed811ec105b",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1638316800000,
+    "last_timestamp": 1640994900000,
+    "kind": "bars",
+    "month": "2021-12"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2022-01.zip",
+    "sha256": "b2ff8cd047d5ca6177a26cb1c2942e35550f0ebbfcb872921feb49dd570d02ee",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1640995200000,
+    "last_timestamp": 1643673300000,
+    "kind": "bars",
+    "month": "2022-01"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2022-02.zip",
+    "sha256": "ec30e9e7f6591ec291223aaaf3b477f09524ac0bdd6b299da513fb489463bdb7",
+    "official_checksum": true,
+    "rows": 8064,
+    "first_timestamp": 1643673600000,
+    "last_timestamp": 1646092500000,
+    "kind": "bars",
+    "month": "2022-02"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2022-03.zip",
+    "sha256": "63a72d0c0fcbeeb4e790cc9ef0e78eecfc44246ceb1f23fd19ed16860e5e6830",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1646092800000,
+    "last_timestamp": 1648770900000,
+    "kind": "bars",
+    "month": "2022-03"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2022-04.zip",
+    "sha256": "346ca3f3996b08b4e92e206cce36abbcb0b168f9654150664c61a6d957d6c086",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1648771200000,
+    "last_timestamp": 1651362900000,
+    "kind": "bars",
+    "month": "2022-04"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2022-05.zip",
+    "sha256": "ec60078c916ea98658765941bd2ab795fd27f594f1dae6e121d5e6ae59b6b1ee",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1651363200000,
+    "last_timestamp": 1654041300000,
+    "kind": "bars",
+    "month": "2022-05"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2022-06.zip",
+    "sha256": "9481735add90721ba8ab745ef95807cf16d2a9dad736998a4f5cfc41d82da657",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1654041600000,
+    "last_timestamp": 1656633300000,
+    "kind": "bars",
+    "month": "2022-06"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2022-07.zip",
+    "sha256": "8b4ab117b3abb19f9a23decf76fd090c7e25c7875ab3a951b03fa761847fe416",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1656633600000,
+    "last_timestamp": 1659311700000,
+    "kind": "bars",
+    "month": "2022-07"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2022-08.zip",
+    "sha256": "9ef0dc1f953cb61abfd1584245e9a99afa44d1b9fbabba73de647239870e51cb",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1659312000000,
+    "last_timestamp": 1661990100000,
+    "kind": "bars",
+    "month": "2022-08"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2022-09.zip",
+    "sha256": "a9c069838ca77434a529dcb4bc6653e92e27b8dc85232a1c89fb647e03a22ec9",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1661990400000,
+    "last_timestamp": 1664582100000,
+    "kind": "bars",
+    "month": "2022-09"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2022-10.zip",
+    "sha256": "7fa18fa46d73ae9d5ebab357fffe96a507176322166cd2476fd889be495e99bf",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1664582400000,
+    "last_timestamp": 1667260500000,
+    "kind": "bars",
+    "month": "2022-10"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2022-11.zip",
+    "sha256": "a5c3ad428d15aec6f91580f061c66928a6af5925f7bd0e80d404787da936c43a",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1667260800000,
+    "last_timestamp": 1669852500000,
+    "kind": "bars",
+    "month": "2022-11"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2022-12.zip",
+    "sha256": "a633f5abbfdeb0ac0a3d183d81c06401d1a6541a3da666a73ca54ecdfcfd7294",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1669852800000,
+    "last_timestamp": 1672530900000,
+    "kind": "bars",
+    "month": "2022-12"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2023-01.zip",
+    "sha256": "583e2d1f1779434d0876ac5c84a55dd5c9e8700f21420762fe50483fab839dd0",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1672531200000,
+    "last_timestamp": 1675209300000,
+    "kind": "bars",
+    "month": "2023-01"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2023-02.zip",
+    "sha256": "23afe68a8d8fb826b86a174fdefdb42aa750504221092c9456ad770935feeed2",
+    "official_checksum": true,
+    "rows": 8064,
+    "first_timestamp": 1675209600000,
+    "last_timestamp": 1677628500000,
+    "kind": "bars",
+    "month": "2023-02"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2023-03.zip",
+    "sha256": "2ea92cf315951301af005c4cd14ade06d7bd2dba546eb088f43773c52c85eaee",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1677628800000,
+    "last_timestamp": 1680306900000,
+    "kind": "bars",
+    "month": "2023-03"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2023-04.zip",
+    "sha256": "9fc287898ccd0c82506dd82e57faf1d0d9ae6102555af21364a36dea1b42d817",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1680307200000,
+    "last_timestamp": 1682898900000,
+    "kind": "bars",
+    "month": "2023-04"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2023-05.zip",
+    "sha256": "def79dfc73dc7031f961a7cdd83eb9f815a0775502829201e793876b61065eeb",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1682899200000,
+    "last_timestamp": 1685577300000,
+    "kind": "bars",
+    "month": "2023-05"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2023-06.zip",
+    "sha256": "daa3032bf548140b54baeb8515c1801e46af1cf3d8a9546d66e0e9c4e3adcbe7",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1685577600000,
+    "last_timestamp": 1688169300000,
+    "kind": "bars",
+    "month": "2023-06"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2023-07.zip",
+    "sha256": "0054f032805e0e903cb2c73212a5d271dc2c1cd6fba4a74729587b8ad08c27fb",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1688169600000,
+    "last_timestamp": 1690847700000,
+    "kind": "bars",
+    "month": "2023-07"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2023-08.zip",
+    "sha256": "92635591e3c813ff17a3d3c55dbef62e7379f6f17a54b0bcbe64f909f0fc052b",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1690848000000,
+    "last_timestamp": 1693526100000,
+    "kind": "bars",
+    "month": "2023-08"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2023-09.zip",
+    "sha256": "7f44a35a1dc7f23c82a35c9afcaa8c64bf533734c913ab7c5f85eb0e5fbc76e1",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1693526400000,
+    "last_timestamp": 1696118100000,
+    "kind": "bars",
+    "month": "2023-09"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2023-10.zip",
+    "sha256": "41fd943f5349a7417b17684c3d0fd1c13df779fea921a00742f3f4af3986f8ba",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1696118400000,
+    "last_timestamp": 1698796500000,
+    "kind": "bars",
+    "month": "2023-10"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2023-11.zip",
+    "sha256": "c386879e037bdac37634b2cfd43d0e00033bcf9eef5d8a42284927314d727cfb",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1698796800000,
+    "last_timestamp": 1701388500000,
+    "kind": "bars",
+    "month": "2023-11"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2023-12.zip",
+    "sha256": "2c6f4d22a095de8df65e7661231eaeb8344345674e65c478ba1efa2f1e0fb5c5",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1701388800000,
+    "last_timestamp": 1704066900000,
+    "kind": "bars",
+    "month": "2023-12"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2024-01.zip",
+    "sha256": "b04981f250c65b97b7fc1b4b699401c0f54b46e98c2f2e30bb14a387a45e9a82",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1704067200000,
+    "last_timestamp": 1706745300000,
+    "kind": "bars",
+    "month": "2024-01"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2024-02.zip",
+    "sha256": "1f55bd1995df1173ca96d430b485b721554aca5eaa4d7c644ab4afd695990c2f",
+    "official_checksum": true,
+    "rows": 8352,
+    "first_timestamp": 1706745600000,
+    "last_timestamp": 1709250900000,
+    "kind": "bars",
+    "month": "2024-02"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2024-03.zip",
+    "sha256": "e58017be4762e3b93511dc5ca255c1ddf7c1c4ccbbbb1c313b174e033e2b891e",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1709251200000,
+    "last_timestamp": 1711929300000,
+    "kind": "bars",
+    "month": "2024-03"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2024-04.zip",
+    "sha256": "ea177b76e07782ae13e2a26f4a262296e89b3ffd549947c3d6d8bd0c07e3fc2b",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1711929600000,
+    "last_timestamp": 1714521300000,
+    "kind": "bars",
+    "month": "2024-04"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2024-05.zip",
+    "sha256": "219ce6bc8e85a9fa9088eda56a92f5c56361751dd8301dff5ed9fc1232b5c1a2",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1714521600000,
+    "last_timestamp": 1717199700000,
+    "kind": "bars",
+    "month": "2024-05"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2024-06.zip",
+    "sha256": "f49fdf9f3add26ba70f301cac7d9d3b2e0211eeaaf99f32fa1c92730deae6e8d",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1717200000000,
+    "last_timestamp": 1719791700000,
+    "kind": "bars",
+    "month": "2024-06"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2024-07.zip",
+    "sha256": "657f79d55b809ca18f242e950c916bbbe93c3d09697f0e330ba26b5a6a75a4e6",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1719792000000,
+    "last_timestamp": 1722470100000,
+    "kind": "bars",
+    "month": "2024-07"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2024-08.zip",
+    "sha256": "5804758756c980445eb6bbba96f10bd98bb7da471b6041bc31337cb0c7236a16",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1722470400000,
+    "last_timestamp": 1725148500000,
+    "kind": "bars",
+    "month": "2024-08"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2024-09.zip",
+    "sha256": "15ffdcf3d23f9fb6743c54d9d783cdc20373aaf8f60fd949a85653e7bee29170",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1725148800000,
+    "last_timestamp": 1727740500000,
+    "kind": "bars",
+    "month": "2024-09"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2024-10.zip",
+    "sha256": "024d574aec22d830443dfe557c12137d24423c18b228e2c10045851cd056434d",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1727740800000,
+    "last_timestamp": 1730418900000,
+    "kind": "bars",
+    "month": "2024-10"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2024-11.zip",
+    "sha256": "bf2ff598c07f5f78a4265c376b3a8f3277e39b42d66bf79610b8b3199a34fa45",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1730419200000,
+    "last_timestamp": 1733010900000,
+    "kind": "bars",
+    "month": "2024-11"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2024-12.zip",
+    "sha256": "261ced4d4a389f680ae730c53ba82b42f97f656b630352713e2d7fd738f57b8c",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1733011200000,
+    "last_timestamp": 1735689300000,
+    "kind": "bars",
+    "month": "2024-12"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2025-01.zip",
+    "sha256": "0c99422d64fa3cc58564cf77969fc5a96d6f44783c79ecfcf94b103753bf7570",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1735689600000,
+    "last_timestamp": 1738367700000,
+    "kind": "bars",
+    "month": "2025-01"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2025-02.zip",
+    "sha256": "fdd6fb92b75bae5c02dd583b5be44ca6673d1807ce4b0c08160d3c5cf7677a46",
+    "official_checksum": true,
+    "rows": 8064,
+    "first_timestamp": 1738368000000,
+    "last_timestamp": 1740786900000,
+    "kind": "bars",
+    "month": "2025-02"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2025-03.zip",
+    "sha256": "46f83773b9cec38a09be429727a5a300ccca6d11c8e8ca5fa9545fad6eda131f",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1740787200000,
+    "last_timestamp": 1743465300000,
+    "kind": "bars",
+    "month": "2025-03"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2025-04.zip",
+    "sha256": "9eda69fd858e9ced7e72cfbb75bffe34458763c37c8ee73910e572b4baba21ed",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1743465600000,
+    "last_timestamp": 1746057300000,
+    "kind": "bars",
+    "month": "2025-04"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2025-05.zip",
+    "sha256": "073da284f178e72777abbfbcf79faa99fcf77bd69c4a678938abbf6cd7d14f5b",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1746057600000,
+    "last_timestamp": 1748735700000,
+    "kind": "bars",
+    "month": "2025-05"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2025-06.zip",
+    "sha256": "da39c04e24a90c87406b9030e1aaf376655ad59d4bc0496f38e4162a9babf514",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1748736000000,
+    "last_timestamp": 1751327700000,
+    "kind": "bars",
+    "month": "2025-06"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2025-07.zip",
+    "sha256": "2cea4750d51d9c064d674ec8d0d8d1f39448960284272fdc74698562c873bf0f",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1751328000000,
+    "last_timestamp": 1754006100000,
+    "kind": "bars",
+    "month": "2025-07"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2025-08.zip",
+    "sha256": "7f78f6f88ae1946f8bd8312a37d1d74b24e24d6b13bc37d2909ad7c8c0c7e9ae",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1754006400000,
+    "last_timestamp": 1756684500000,
+    "kind": "bars",
+    "month": "2025-08"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2025-09.zip",
+    "sha256": "dbfb8bc2f9343107c7a702acd6919d77060a8f7ea4b25359c71e5fc018a85209",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1756684800000,
+    "last_timestamp": 1759276500000,
+    "kind": "bars",
+    "month": "2025-09"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2025-10.zip",
+    "sha256": "fab262ca4318f8f65164ae33a020458439adc6f7bc2e59bbfce1886118d05a48",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1759276800000,
+    "last_timestamp": 1761954900000,
+    "kind": "bars",
+    "month": "2025-10"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2025-11.zip",
+    "sha256": "2759d4be0fe68cc2be3d4d91940fcd95abc69f0c31f25d0b6cb5e0629c625d2d",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1761955200000,
+    "last_timestamp": 1764546900000,
+    "kind": "bars",
+    "month": "2025-11"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2025-12.zip",
+    "sha256": "0e923a3d2ac4f6711d8c841220f4e5d2e479c1bdb40b41515eb250e16808304f",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1764547200000,
+    "last_timestamp": 1767225300000,
+    "kind": "bars",
+    "month": "2025-12"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-01.zip",
+    "sha256": "c092f3b26036f203bb5b11c28958574aa8501315ed26dd0f8c017051b9fb3abf",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1767225600000,
+    "last_timestamp": 1769903700000,
+    "kind": "bars",
+    "month": "2026-01"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-02.zip",
+    "sha256": "8be83befce2cd9bf0959c872d91108debd03e1b51a451bac3a56b8ddca196bb4",
+    "official_checksum": true,
+    "rows": 8064,
+    "first_timestamp": 1769904000000,
+    "last_timestamp": 1772322900000,
+    "kind": "bars",
+    "month": "2026-02"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-03.zip",
+    "sha256": "0302ccef9b3e5e38c35bc8667a1e890138c9136e89145688220eea99b748200e",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1772323200000,
+    "last_timestamp": 1775001300000,
+    "kind": "bars",
+    "month": "2026-03"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-04.zip",
+    "sha256": "e2934467bdb6a000124948f4c8fef176e2066520a6b2e5a0522450fed51396f7",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1775001600000,
+    "last_timestamp": 1777593300000,
+    "kind": "bars",
+    "month": "2026-04"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-05.zip",
+    "sha256": "b1a73378796bb62084c32ca5865903beeaf87d521d950d5e7776343f682dea93",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1777593600000,
+    "last_timestamp": 1780271700000,
+    "kind": "bars",
+    "month": "2026-05"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-06.zip",
+    "sha256": "782c555963c852ca768335de21d5743147e5d50bff449600f8fceb9ebe5273de",
+    "official_checksum": true,
+    "rows": 8640,
+    "first_timestamp": 1780272000000,
+    "last_timestamp": 1782863700000,
+    "kind": "bars",
+    "month": "2026-06"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-07.zip",
+    "sha256": "ec750f7aa69c8f842fa1464a90ad4aa92452cfa767df9e8d70dc484e466c8fc3",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1782864000000,
+    "last_timestamp": 1785542100000,
+    "kind": "bars",
+    "month": "2026-07"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-08.zip",
+    "sha256": "14fd408e5d2902665c66b701e861b173568b66399e3fa462b94c766d209567d1",
+    "official_checksum": true,
+    "rows": 8928,
+    "first_timestamp": 1785542400000,
+    "last_timestamp": 1788220500000,
+    "kind": "bars",
+    "month": "2026-08"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-09.zip",
+    "missing": true,
+    "kind": "bars",
+    "month": "2026-09"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-01.zip",
+    "sha256": "7f81b2f3694d13779e7e896b69d60cd61e9444d7b9f9e90df761935e1c1b76e2",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1577836800000,
+    "last_timestamp": 1580486400000,
+    "kind": "funding",
+    "month": "2020-01"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-02.zip",
+    "sha256": "6599466d108d120c64a078824326c063ed2d4335b3292e52c5e572f79166533a",
+    "official_checksum": true,
+    "rows": 87,
+    "first_timestamp": 1580515200000,
+    "last_timestamp": 1582992000000,
+    "kind": "funding",
+    "month": "2020-02"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-03.zip",
+    "sha256": "eee845fde6336e29d25889563cba3d2cff2d4d640e51fb1f82ae9b28cedaee77",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1583020800000,
+    "last_timestamp": 1585670400001,
+    "kind": "funding",
+    "month": "2020-03"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-04.zip",
+    "sha256": "d009ce034d08c3dcf3e7f874b0f8b0ec76ba507bc6bb4e007e541df537bafbce",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1585699200002,
+    "last_timestamp": 1588262400000,
+    "kind": "funding",
+    "month": "2020-04"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-05.zip",
+    "sha256": "3f2b56dd6b9a42457009bb367d0adadd3cf7e2216cd325172d0089e3883125a8",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1588291200000,
+    "last_timestamp": 1590940800000,
+    "kind": "funding",
+    "month": "2020-05"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-06.zip",
+    "sha256": "30b3470ff98576578973d75e3c157a5cbf1778b11e4c26b4b4ff70a3cbb348ec",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1590969600000,
+    "last_timestamp": 1593532800002,
+    "kind": "funding",
+    "month": "2020-06"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-07.zip",
+    "sha256": "18dae7b11075fc0fba79ad47df46683415cba5d027caa69c66bc2a5c9d9b459a",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1593561600002,
+    "last_timestamp": 1596211200000,
+    "kind": "funding",
+    "month": "2020-07"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-08.zip",
+    "sha256": "e6f6d1749f674c85d4766e0eb36af6ea40d91a0674234d30df80eb9876b094e3",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1596240000005,
+    "last_timestamp": 1598889600001,
+    "kind": "funding",
+    "month": "2020-08"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-09.zip",
+    "sha256": "7ae9a3b6afb2dc06e46080582908ec8c27063b707a14c7f1e679dc991ff48032",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1598918400000,
+    "last_timestamp": 1601481600000,
+    "kind": "funding",
+    "month": "2020-09"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-10.zip",
+    "sha256": "4c55b191c101f39c7fb193a6529665dd9e83302ca21876521e4c93b3902e9fb1",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1601510400000,
+    "last_timestamp": 1604160000000,
+    "kind": "funding",
+    "month": "2020-10"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-11.zip",
+    "sha256": "676356a2d075caa51b4f8ada026e9430dc320ffd23d2343b13b7aa25324ed6d1",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1604188800000,
+    "last_timestamp": 1606752000000,
+    "kind": "funding",
+    "month": "2020-11"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-12.zip",
+    "sha256": "d7390f90edf54cc4ad9bbe78e2f6b291ae06ad9539f591a2d0fce445873bbd63",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1606780800000,
+    "last_timestamp": 1609430400010,
+    "kind": "funding",
+    "month": "2020-12"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-01.zip",
+    "sha256": "cff916dc4b638ec3de97828e8911cd91cf7d7a3d0836ec0175869c374e66823d",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1609459200002,
+    "last_timestamp": 1612108800000,
+    "kind": "funding",
+    "month": "2021-01"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-02.zip",
+    "sha256": "819a7b107443686adb313fc5fc223302a29f3981e1d1bd9828ad0ade65a8a8af",
+    "official_checksum": true,
+    "rows": 84,
+    "first_timestamp": 1612137600001,
+    "last_timestamp": 1614528000000,
+    "kind": "funding",
+    "month": "2021-02"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-03.zip",
+    "sha256": "2125fd300848938c7b992b8f7b7b5007d5b277a4ff1ebda7da083b40242729da",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1614556800000,
+    "last_timestamp": 1617206400000,
+    "kind": "funding",
+    "month": "2021-03"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-04.zip",
+    "sha256": "9cd888e3b0a1954813d0062c2e60426fdc8e34a7f258f6838371ec67f535b028",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1617235200025,
+    "last_timestamp": 1619798400003,
+    "kind": "funding",
+    "month": "2021-04"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-05.zip",
+    "sha256": "ed934afb9cf84df6ecae742e755147333a84244836a66b51523abc66dd5f63af",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1619827200002,
+    "last_timestamp": 1622476800000,
+    "kind": "funding",
+    "month": "2021-05"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-06.zip",
+    "sha256": "7b8d9bfb8816636b800764dafb2aa2307d19166c695bfa245adbf7d01d61f766",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1622505600001,
+    "last_timestamp": 1625068800005,
+    "kind": "funding",
+    "month": "2021-06"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-07.zip",
+    "sha256": "8ab3df641d3bcf40527491f8e26d046ad2b662d1950ead9555ad32975571b7fe",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1625097600000,
+    "last_timestamp": 1627747200003,
+    "kind": "funding",
+    "month": "2021-07"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-08.zip",
+    "sha256": "7eb681cc45b94176f4b9192a62c3a1925d79031ba001cea2d8dec6ff6e5b9c35",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1627776000005,
+    "last_timestamp": 1630425600003,
+    "kind": "funding",
+    "month": "2021-08"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-09.zip",
+    "sha256": "03f25a7c25eef18d5f5b5b7bb0b664cab7a210b409f37e95a54e141808a0752d",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1630454400000,
+    "last_timestamp": 1633017600005,
+    "kind": "funding",
+    "month": "2021-09"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-10.zip",
+    "sha256": "f25820d6add687addbca3ef43bee58f70853a6da53832a0c1bc22d00dc8ec64a",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1633046400012,
+    "last_timestamp": 1635696000001,
+    "kind": "funding",
+    "month": "2021-10"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-11.zip",
+    "sha256": "e2e6b2d7218607e7e4a38137d50f553c2cfb901275c19edf567024c1cc6de85f",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1635724800009,
+    "last_timestamp": 1638288000000,
+    "kind": "funding",
+    "month": "2021-11"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2021-12.zip",
+    "sha256": "bf3ce484faf41d7dccfd38c5cc3d8de34d8297df30ab10784e874cc10fd1b310",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1638316800000,
+    "last_timestamp": 1640966400000,
+    "kind": "funding",
+    "month": "2021-12"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-01.zip",
+    "sha256": "22ee19079b620f5c6d820e7d7f8bafa7fde866d89bd664863b8bd527749c12cb",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1640995200006,
+    "last_timestamp": 1643644800000,
+    "kind": "funding",
+    "month": "2022-01"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-02.zip",
+    "sha256": "fa95088258a905c79ab79e8984d2f6f66933ec2e814dbab4ef9da89b01ab484a",
+    "official_checksum": true,
+    "rows": 84,
+    "first_timestamp": 1643673600010,
+    "last_timestamp": 1646064000002,
+    "kind": "funding",
+    "month": "2022-02"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-03.zip",
+    "sha256": "4cf0883bc07f4ed4cdd3b0d8c0d166b4d15d21e666ab752f9f44401af4d6172f",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1646092800002,
+    "last_timestamp": 1648742400015,
+    "kind": "funding",
+    "month": "2022-03"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-04.zip",
+    "sha256": "57e2776cc68b3169fc9f8632dad67278f470cd453407a8ebe6c87963c8a31357",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1648771200000,
+    "last_timestamp": 1651334400015,
+    "kind": "funding",
+    "month": "2022-04"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-05.zip",
+    "sha256": "bced8a5013d09742b96682e6fd01ad4456213515a03d7586ec2b1f2689af5255",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1651363200000,
+    "last_timestamp": 1654012800000,
+    "kind": "funding",
+    "month": "2022-05"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-06.zip",
+    "sha256": "0cd0708f8903829eb46f98cf60f4b2516c986e1ccddf6620a5912b48e16baf93",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1654041600000,
+    "last_timestamp": 1656604800000,
+    "kind": "funding",
+    "month": "2022-06"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-07.zip",
+    "sha256": "29d58cce0cd45f74c6a112039835c6d9ee5a7e60e7c38c2503beb7930453a4fe",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1656633600001,
+    "last_timestamp": 1659283200019,
+    "kind": "funding",
+    "month": "2022-07"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-08.zip",
+    "sha256": "6f4f0c6c84c05694b4b4a5c085776730fd4059723eecd98ee6ffeb3fde4da811",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1659312000010,
+    "last_timestamp": 1661961600013,
+    "kind": "funding",
+    "month": "2022-08"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-09.zip",
+    "sha256": "d62cd4e13009de37add446dc4f63ead4c56dcc4955a1e60f6726bcadc5a68fa9",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1661990400012,
+    "last_timestamp": 1664553600007,
+    "kind": "funding",
+    "month": "2022-09"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-10.zip",
+    "sha256": "ad9efed10d4ca1567b865d7a158790977cec1b925395634217069df6696c8bc9",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1664582400008,
+    "last_timestamp": 1667232000010,
+    "kind": "funding",
+    "month": "2022-10"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-11.zip",
+    "sha256": "8febe5bec1a029e993bbf27490761f8c47c32849bf7dd13441b2b2f6ec1ffb51",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1667260800000,
+    "last_timestamp": 1669824000015,
+    "kind": "funding",
+    "month": "2022-11"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2022-12.zip",
+    "sha256": "4218c78331bcc4dbeb5768fa112242a880971c1f2cfd1d3f32aaa26ca34069af",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1669852800001,
+    "last_timestamp": 1672502400000,
+    "kind": "funding",
+    "month": "2022-12"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-01.zip",
+    "sha256": "05e3df32f28d0d50f4c5a280adee9368b4a66fc68c6ddca1b3277087ac0d19f5",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1672531200000,
+    "last_timestamp": 1675180800007,
+    "kind": "funding",
+    "month": "2023-01"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-02.zip",
+    "sha256": "5227accd9aaa59f71f5e682abffb58be5f99573ed208ab968b1704c81ac11345",
+    "official_checksum": true,
+    "rows": 84,
+    "first_timestamp": 1675209600013,
+    "last_timestamp": 1677600000005,
+    "kind": "funding",
+    "month": "2023-02"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-03.zip",
+    "sha256": "ab022adff9b853d2f33cf80154e77c770f57c3392f0bbc36564b2e2cdbd0e872",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1677628800016,
+    "last_timestamp": 1680278400011,
+    "kind": "funding",
+    "month": "2023-03"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-04.zip",
+    "sha256": "2931039d26818edc65d4faefba84945fd1ba52989dd58fb127dc3cd7a12c7fbf",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1680307200000,
+    "last_timestamp": 1682870400010,
+    "kind": "funding",
+    "month": "2023-04"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-05.zip",
+    "sha256": "5d026fece46df86293054c8c56c2c8de575d30161b82979b11831831217a246e",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1682899200004,
+    "last_timestamp": 1685548800000,
+    "kind": "funding",
+    "month": "2023-05"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-06.zip",
+    "sha256": "3ffdde6f1dc9c3c065d77ae43f3ba64d19d4cb76512d4bc1d541933d4fb2e6f7",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1685577600008,
+    "last_timestamp": 1688140800001,
+    "kind": "funding",
+    "month": "2023-06"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-07.zip",
+    "sha256": "0304baed9fd407293a8a8040b30a1b68bd344803b630d33530375b421733a930",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1688169600000,
+    "last_timestamp": 1690819200001,
+    "kind": "funding",
+    "month": "2023-07"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-08.zip",
+    "sha256": "516a8f50631c6ede6a9642f6d1590b6a22c33ba09935501d2ace8dc1396501fd",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1690848000000,
+    "last_timestamp": 1693497600000,
+    "kind": "funding",
+    "month": "2023-08"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-09.zip",
+    "sha256": "3fd9df6fd1eef33cf5fe625c27012359bc6d64a68c109305d7b44a0354f533c2",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1693526400000,
+    "last_timestamp": 1696089600000,
+    "kind": "funding",
+    "month": "2023-09"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-10.zip",
+    "sha256": "03105cc140150bffca834bcccbddc6cfee245e079d2df1759653243bd6e92448",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1696118400000,
+    "last_timestamp": 1698768000000,
+    "kind": "funding",
+    "month": "2023-10"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-11.zip",
+    "sha256": "8015d2997f8d5e757ff3707ee87800ca30a74da0129daa747b64117f07bcc186",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1698796800000,
+    "last_timestamp": 1701360000000,
+    "kind": "funding",
+    "month": "2023-11"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2023-12.zip",
+    "sha256": "8f02fdd2a2da261bbf13ab301c74bdb57fae005f19d5088e9ece5f8824c1a2a7",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1701388800000,
+    "last_timestamp": 1704038400000,
+    "kind": "funding",
+    "month": "2023-12"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-01.zip",
+    "sha256": "3e0d30870672aa8f0f937881056e3cfd55913ae5c780cd50b33f2763aa0ba58e",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1704067200000,
+    "last_timestamp": 1706716800000,
+    "kind": "funding",
+    "month": "2024-01"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-02.zip",
+    "sha256": "daf1e4901e3d6436d82ad60f90d007eb5300be8047cfef121007203a7212cde6",
+    "official_checksum": true,
+    "rows": 87,
+    "first_timestamp": 1706745600000,
+    "last_timestamp": 1709222400000,
+    "kind": "funding",
+    "month": "2024-02"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-03.zip",
+    "sha256": "711dcaf2a341aedfd06447b4117b540f60adb0784c5e64a313c718e4cf092bc3",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1709251200000,
+    "last_timestamp": 1711900800001,
+    "kind": "funding",
+    "month": "2024-03"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-04.zip",
+    "sha256": "6d220b8e2815362a11d294d35dbca28568370d8295351937eceec10f2b359b85",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1711929600000,
+    "last_timestamp": 1714492800000,
+    "kind": "funding",
+    "month": "2024-04"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-05.zip",
+    "sha256": "aef8c5fdce1493fd570b5829a72f2f17c7e459483390f25544d16c2a30be592e",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1714521600000,
+    "last_timestamp": 1717171200000,
+    "kind": "funding",
+    "month": "2024-05"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-06.zip",
+    "sha256": "43fc4473820d1fb4fe340d1b1951a87555f6841aa352e684fa95d6adffce04c6",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1717200000000,
+    "last_timestamp": 1719763200000,
+    "kind": "funding",
+    "month": "2024-06"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-07.zip",
+    "sha256": "acab0593c1452660ce74a6c239fb215c1192b0a9c6e8c1689e6495de40a0174b",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1719792000000,
+    "last_timestamp": 1722441600000,
+    "kind": "funding",
+    "month": "2024-07"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-08.zip",
+    "sha256": "7003d29a43dd5f9357f838da8766834954939e22c1d80af682d9f33984f67b71",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1722470400000,
+    "last_timestamp": 1725120000000,
+    "kind": "funding",
+    "month": "2024-08"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-09.zip",
+    "sha256": "6ef23b02392b481ef9c3855434bf3644289fb6e228b4f7d9a0dfc6d3cdff1116",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1725148800000,
+    "last_timestamp": 1727712000000,
+    "kind": "funding",
+    "month": "2024-09"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-10.zip",
+    "sha256": "26db65ac8020d80ece35df79c254c5f7e24427529bcceeb2972748c4fe2d2707",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1727740800000,
+    "last_timestamp": 1730390400000,
+    "kind": "funding",
+    "month": "2024-10"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-11.zip",
+    "sha256": "e1b19cccfe2cdcba48b022790789b7b01edd86c075f39bc152e44c267d43bd51",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1730419200000,
+    "last_timestamp": 1732982400000,
+    "kind": "funding",
+    "month": "2024-11"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-12.zip",
+    "sha256": "069409f525ebf6370ee1c7defe475167de4b97284c5ac8e68768652968cd3dc9",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1733011200000,
+    "last_timestamp": 1735660800000,
+    "kind": "funding",
+    "month": "2024-12"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-01.zip",
+    "sha256": "df725010d55458866eb5a47e9ee708c6796c9d7e77b14c38342cea11f381815e",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1735689600015,
+    "last_timestamp": 1738339200000,
+    "kind": "funding",
+    "month": "2025-01"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-02.zip",
+    "sha256": "e918b90fb33df3a3317feea13807a892047f1ec86eeac100bdb7b3dd83285d46",
+    "official_checksum": true,
+    "rows": 84,
+    "first_timestamp": 1738368000000,
+    "last_timestamp": 1740758400000,
+    "kind": "funding",
+    "month": "2025-02"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-03.zip",
+    "sha256": "a3b95cfb315641fbfddc61eb32adf2a2588afb7a3973a61f464aca007ad43e3f",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1740787200000,
+    "last_timestamp": 1743436800000,
+    "kind": "funding",
+    "month": "2025-03"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-04.zip",
+    "sha256": "01dbb7bd0135f98bd63bdde6b943cde1accc1770cabf92f68a1ec0653ced3888",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1743465600000,
+    "last_timestamp": 1746028800003,
+    "kind": "funding",
+    "month": "2025-04"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-05.zip",
+    "sha256": "e7355e2775b88009c984db1783bb8ed6b5f24ede2b52bb764151b5722d6a5e42",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1746057600000,
+    "last_timestamp": 1748707200000,
+    "kind": "funding",
+    "month": "2025-05"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-06.zip",
+    "sha256": "a1f4a40953740fa83ee9ad97776ff8325d1958654a67f1325614071a983819d4",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1748736000001,
+    "last_timestamp": 1751299200002,
+    "kind": "funding",
+    "month": "2025-06"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-07.zip",
+    "sha256": "b097dff828f6e43fece23db0d3cb98042a9d7bc19693b8cbfd051d88eb973b7b",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1751328000007,
+    "last_timestamp": 1753977600000,
+    "kind": "funding",
+    "month": "2025-07"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-08.zip",
+    "sha256": "1180129860b6e196e8d70bb9719e81573aa6b4acb423ba5ee7f82f10c836f7ab",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1754006400001,
+    "last_timestamp": 1756656000001,
+    "kind": "funding",
+    "month": "2025-08"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-09.zip",
+    "sha256": "21dc6570fc6bffad0e7b5f9e99211b82ad07c95ab4f18c3a2daa3b95ec98344c",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1756684800000,
+    "last_timestamp": 1759248000000,
+    "kind": "funding",
+    "month": "2025-09"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-10.zip",
+    "sha256": "9ecdedab6344fc4cdb154763266b8e09627a71c3cc5574cf868158b541c259c2",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1759276800000,
+    "last_timestamp": 1761926400007,
+    "kind": "funding",
+    "month": "2025-10"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-11.zip",
+    "sha256": "23735400405627d610123e3a43db3e98ae7addb93459cd670e65a7659a5f081b",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1761955200001,
+    "last_timestamp": 1764518400004,
+    "kind": "funding",
+    "month": "2025-11"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-12.zip",
+    "sha256": "35318b789f020b0e04c9043112480743855554e52e1d188437cbdaa67246d51d",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1764547200000,
+    "last_timestamp": 1767196800001,
+    "kind": "funding",
+    "month": "2025-12"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-01.zip",
+    "sha256": "fcdc796484f395830d418588a34a26baed8849dbef0ff2b56173247e493ff51f",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1767225600008,
+    "last_timestamp": 1769875200009,
+    "kind": "funding",
+    "month": "2026-01"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-02.zip",
+    "sha256": "80df1dd669dc1e3afc360c9da8b9a949a127fce088eedbf5bf708bd37b0a1f58",
+    "official_checksum": true,
+    "rows": 84,
+    "first_timestamp": 1769904000001,
+    "last_timestamp": 1772294400004,
+    "kind": "funding",
+    "month": "2026-02"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-03.zip",
+    "sha256": "5c069d5e9597a44fd0e213395082e59ff223fb99c9eab3a2a5a2a5622ba7867c",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1772323200005,
+    "last_timestamp": 1774972800000,
+    "kind": "funding",
+    "month": "2026-03"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-04.zip",
+    "sha256": "51cdeb4de7d5ef1d4eece80b6115e391bdf7a2d0803bf9ad8371ab23340b22d3",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1775001600000,
+    "last_timestamp": 1777564800000,
+    "kind": "funding",
+    "month": "2026-04"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-05.zip",
+    "sha256": "445b65fd6b17bfcfb5e4d035db29fad34f729fa078f0449024db42621be84e6e",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1777593600000,
+    "last_timestamp": 1780243200004,
+    "kind": "funding",
+    "month": "2026-05"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-06.zip",
+    "sha256": "cff97ce688329592bccbbf5873b5c7021649e093f5f5806e332c5b4fb7fd6a00",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1780272000001,
+    "last_timestamp": 1782835200005,
+    "kind": "funding",
+    "month": "2026-06"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-07.zip",
+    "sha256": "e36fcc66f493d7d9ec348c852fc22e9f318c79cf7adae17398a3994ae0adc41e",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1782864000000,
+    "last_timestamp": 1785513600000,
+    "kind": "funding",
+    "month": "2026-07"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-08.zip",
+    "sha256": "7c108b3a02bd6dc7345ca7323e3a49664edcea0afdcf780ffb3b44762c45a964",
+    "official_checksum": true,
+    "rows": 93,
+    "first_timestamp": 1785542400001,
+    "last_timestamp": 1788192000001,
+    "kind": "funding",
+    "month": "2026-08"
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-09.zip",
+    "sha256": "913cd31b8f924a06717a2fac17f3df6132c24ccded209eb3e4ae7d83e1b247f2",
+    "official_checksum": true,
+    "rows": 90,
+    "first_timestamp": 1788220800005,
+    "last_timestamp": 1790784000002,
+    "kind": "funding",
+    "month": "2026-09"
+  },
+  {
+    "url": "https://fapi.binance.com/fapi/v1/klines",
+    "params": {
+      "symbol": "BTCUSDT",
+      "interval": "5m",
+      "startTime": 1788220800000,
+      "endTime": 1790899199999,
+      "limit": 1500
+    },
+    "rows": 1500,
+    "first_timestamp": 1788220800000,
+    "last_timestamp": 1788670500000,
+    "sha256": "5acedcfdcd4be6ce8968486388d97f418bc2c514e78dff60fa8523f7bbbb3bb6"
+  },
+  {
+    "url": "https://fapi.binance.com/fapi/v1/klines",
+    "params": {
+      "symbol": "BTCUSDT",
+      "interval": "5m",
+      "startTime": 1788670800000,
+      "endTime": 1790899199999,
+      "limit": 1500
+    },
+    "rows": 1500,
+    "first_timestamp": 1788670800000,
+    "last_timestamp": 1789120500000,
+    "sha256": "433e731d091ea655a0f62ebeb09ed8a3cdb9f600b86998d6126e4e46312ae8e8"
+  },
+  {
+    "url": "https://fapi.binance.com/fapi/v1/klines",
+    "params": {
+      "symbol": "BTCUSDT",
+      "interval": "5m",
+      "startTime": 1789120800000,
+      "endTime": 1790899199999,
+      "limit": 1500
+    },
+    "rows": 1500,
+    "first_timestamp": 1789120800000,
+    "last_timestamp": 1789570500000,
+    "sha256": "5ef1a4e7d77ed3db9fc0be9fda0aab5b59e1a70afb0ae00adb0d4d6712fbcd3b"
+  },
+  {
+    "url": "https://fapi.binance.com/fapi/v1/klines",
+    "params": {
+      "symbol": "BTCUSDT",
+      "interval": "5m",
+      "startTime": 1789570800000,
+      "endTime": 1790899199999,
+      "limit": 1500
+    },
+    "rows": 1500,
+    "first_timestamp": 1789570800000,
+    "last_timestamp": 1790020500000,
+    "sha256": "815727c1ae653d8f2500aa06be9f363292ac6503235ec29541a08a19fa2cda81"
+  },
+  {
+    "url": "https://fapi.binance.com/fapi/v1/klines",
+    "params": {
+      "symbol": "BTCUSDT",
+      "interval": "5m",
+      "startTime": 1790020800000,
+      "endTime": 1790899199999,
+      "limit": 1500
+    },
+    "rows": 1500,
+    "first_timestamp": 1790020800000,
+    "last_timestamp": 1790470500000,
+    "sha256": "fa45faa7c4b140b44f37fb8e9609246cf3b2c75607f0d2abee100211efa6c79e"
+  },
+  {
+    "url": "https://fapi.binance.com/fapi/v1/klines",
+    "params": {
+      "symbol": "BTCUSDT",
+      "interval": "5m",
+      "startTime": 1790470800000,
+      "endTime": 1790899199999,
+      "limit": 1500
+    },
+    "rows": 1428,
+    "first_timestamp": 1790470800000,
+    "last_timestamp": 1790898900000,
+    "sha256": "71f1e12fff83d4e0a15bf4bae8164f6f766d1ecf5688d761088bd24863adfad3"
+  },
+  {
+    "url": "https://fapi.binance.com/fapi/v1/fundingRate",
+    "params": {
+      "symbol": "BTCUSDT",
+      "startTime": 1790784000003,
+      "endTime": 1790899199999,
+      "limit": 1000
+    },
+    "rows": 3,
+    "sha256": "cdd24cf84b6d10600f68f0a3b0c3124570e8f1b9f9247b5cc152902e95185651",
+    "first_timestamp": 1790812800001,
+    "last_timestamp": 1790870400003
+  },
+  {
+    "url": "https://fapi.binance.com/fapi/v1/fundingRate",
+    "params": {
+      "symbol": "BTCUSDT",
+      "startTime": 1790870400004,
+      "endTime": 1790899199999,
+      "limit": 1000
+    },
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "first_timestamp": null,
+    "last_timestamp": null
+  },
+  {
+    "normalized_rows": 710208,
+    "first_timestamp": 1577836800000,
+    "last_timestamp": 1790898900000,
+    "funding_rows": 7398,
+    "normalized_sha256": "6a6f472fcd87a74c7d6aa4e7b67638b53997b17016b61b3fd260e814f8cfd76c",
+    "as_of": 1790899200000
+  }
+]
