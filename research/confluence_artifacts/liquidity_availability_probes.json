@@ -1,0 +1,157 @@
+[
+  {
+    "url": "https://data.binance.vision/data/futures/um/daily/metrics/BTCUSDT/BTCUSDT-metrics-2020-01-01.zip",
+    "date": "2020-01-01",
+    "kind": "metrics",
+    "status": 404,
+    "used_in_signals": false
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/daily/metrics/BTCUSDT/BTCUSDT-metrics-2021-12-01.zip",
+    "date": "2021-12-01",
+    "kind": "metrics",
+    "status": 200,
+    "used_in_signals": false,
+    "sha256": "12fbd76343893fe56a75ae8086ea3c4f0a1a5780e1b2003640d8847daf0cfdde",
+    "official_checksum_verified": true,
+    "rows": 288,
+    "header": [
+      "create_time",
+      "symbol",
+      "sum_open_interest",
+      "sum_open_interest_value",
+      "count_toptrader_long_short_ratio",
+      "sum_toptrader_long_short_ratio",
+      "count_long_short_ratio",
+      "sum_taker_long_short_vol_ratio"
+    ],
+    "first_row": [
+      "2021-12-01 00:00:00",
+      "BTCUSDT",
+      "59230.06000000",
+      "3372488777.57459763",
+      "4.151199024522422",
+      "1.1342944237",
+      "4.0217716594343855",
+      "0.6221603761"
+    ],
+    "last_row": [
+      "2021-12-01 23:55:00",
+      "BTCUSDT",
+      "60657.80200000",
+      "3466983413.96686000",
+      "4.137011939335269",
+      "1.1369246352",
+      "4.312449085388432",
+      "1.1158471398"
+    ]
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/daily/metrics/BTCUSDT/BTCUSDT-metrics-2022-01-01.zip",
+    "date": "2022-01-01",
+    "kind": "metrics",
+    "status": 200,
+    "used_in_signals": false,
+    "sha256": "1846df7dc4a6279afd20c010cb09ee271db8ffa9991c7acea7a73f0e00c0b2c5",
+    "official_checksum_verified": true,
+    "rows": 288,
+    "header": [
+      "create_time",
+      "symbol",
+      "sum_open_interest",
+      "sum_open_interest_value",
+      "count_toptrader_long_short_ratio",
+      "sum_toptrader_long_short_ratio",
+      "count_long_short_ratio",
+      "sum_taker_long_short_vol_ratio"
+    ],
+    "first_row": [
+      "2022-01-01 00:00:00",
+      "BTCUSDT",
+      "74803.41000000",
+      "3456683790.32415250",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "last_row": [
+      "2022-01-01 23:55:00",
+      "BTCUSDT",
+      "72913.72500000",
+      "3477211304.35737600",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/daily/metrics/BTCUSDT/BTCUSDT-metrics-2026-09-01.zip",
+    "date": "2026-09-01",
+    "kind": "metrics",
+    "status": 200,
+    "used_in_signals": false,
+    "sha256": "2c2c077c1ad18a3a752e16a0161a9b768a3c4a6f18d75f06cae2d8afad8fe2a4",
+    "official_checksum_verified": true,
+    "rows": 288,
+    "header": [
+      "create_time",
+      "symbol",
+      "sum_open_interest",
+      "sum_open_interest_value",
+      "count_toptrader_long_short_ratio",
+      "sum_toptrader_long_short_ratio",
+      "count_long_short_ratio",
+      "sum_taker_long_short_vol_ratio"
+    ],
+    "first_row": [
+      "2026-09-01 00:00:00",
+      "BTCUSDT",
+      "107896.9810000000000000",
+      "8481814045.5043000000000000",
+      "1.05807805",
+      "2.09706500",
+      "0.99843647",
+      "2.31696400"
+    ],
+    "last_row": [
+      "2026-09-01 23:50:00",
+      "BTCUSDT",
+      "108330.4960000000000000",
+      "8389050261.2622850000000000",
+      "1.38899650",
+      "2.07096200",
+      "1.28781292",
+      "0.26108200"
+    ]
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/daily/liquidationSnapshot/BTCUSDT/BTCUSDT-liquidationSnapshot-2020-01-01.zip",
+    "date": "2020-01-01",
+    "kind": "liquidationSnapshot",
+    "status": 404,
+    "used_in_signals": false
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/daily/liquidationSnapshot/BTCUSDT/BTCUSDT-liquidationSnapshot-2021-12-01.zip",
+    "date": "2021-12-01",
+    "kind": "liquidationSnapshot",
+    "status": 404,
+    "used_in_signals": false
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/daily/liquidationSnapshot/BTCUSDT/BTCUSDT-liquidationSnapshot-2022-01-01.zip",
+    "date": "2022-01-01",
+    "kind": "liquidationSnapshot",
+    "status": 404,
+    "used_in_signals": false
+  },
+  {
+    "url": "https://data.binance.vision/data/futures/um/daily/liquidationSnapshot/BTCUSDT/BTCUSDT-liquidationSnapshot-2026-09-01.zip",
+    "date": "2026-09-01",
+    "kind": "liquidationSnapshot",
+    "status": 404,
+    "used_in_signals": false
+  }
+]

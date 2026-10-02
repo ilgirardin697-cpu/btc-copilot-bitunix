@@ -1,0 +1,51 @@
+{
+  "name": "I-GOD CONFLUENCE ENGINE",
+  "timeframes": [
+    5,
+    15,
+    30,
+    60
+  ],
+  "regime": [
+    60,
+    240
+  ],
+  "families": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F"
+  ],
+  "exits": [
+    "opposite",
+    "atr",
+    "structure",
+    "rr"
+  ],
+  "primary_cost_per_side": 0.001,
+  "cost_split": "50% fee, 50% slippage; market taker assumption",
+  "windows": [
+    12,
+    24,
+    48
+  ],
+  "imbalance": [
+    0.55,
+    0.6,
+    0.65
+  ],
+  "ml_rsi": "RSI14 Wilder recursive initialization, EMA5 smoothing, green>55/red<45; equivalent approximation, no learned model",
+  "pivot_width": 2,
+  "selection": "validation Sharpe then train Sharpe; minimum 20 trades each; no TEST access",
+  "risk": "1x nominal primary, fixed entry quantity; not continuously rebalanced",
+  "split": [
+    1577836800000,
+    1640995200000,
+    1704067200000,
+    1790899200000
+  ],
+  "bootstrap": "500 stationary contiguous 7-day block resamples, seed 773",
+  "promotion": "all ten user gates; positive TEST, net expectancy, Sharpe>=0.5, DD>=-0.35, 20bps positive, robust neighbors, ablation improvement; no best-trade dependence"
+}

@@ -1,0 +1,21 @@
+{
+  "backtest_exit_code": 0,
+  "test_count": 34,
+  "tests_exit_code": 0,
+  "commands": [
+    "python -m research.confluence_engine_backtest",
+    "python -m research.confluence_engine_backtest --diagnostics-only",
+    "python -m unittest discover -v"
+  ],
+  "sha256": {
+    "frozen_spec.json": "800121571d24a767c3ac7f1fd17bdf00678d6b76a62cf993ecdcecd31749aff1",
+    "selection_lock.json": "2129d2efda053761d968ea9f28e8a43530918073cb5542d297ea619d2d65fd8f",
+    "benchmark.json": "92710d5e019ffddf0cd0661fa423cd80466e59d47a3f33ffadf52baa4ce5a922",
+    "data_manifest.json": "c17e1df827771b32bdffa65b5e11b1e8355a45ade1d4a739f879a6af6e138532",
+    "liquidity_availability_probes.json": "399510aec76b5da1bbacc623abd51005075ec6040e2c11666e5a9c277ad41493",
+    "results.json": "38b77e5778c37c81115dc5a985c8f3837c2e3ee9a62bf648e7d1f576a0cda420",
+    "all_signal_outcomes.json.gz": "785cb07db3a8f40292ee54c1ea106cea6a0afd2e48f68ade0050c339e0734b73",
+    "selected_signal_excursions.csv.gz": "8083f2436c29ccd40588be47995863d4545d246404ad730bc9168c0d30933b8d",
+    "selected_trades.csv.gz": "b72d305d6f5ce77047af2b92d5dd600d5016c8ae5cd33f7014de8b26ba465e32"
+  }
+}
