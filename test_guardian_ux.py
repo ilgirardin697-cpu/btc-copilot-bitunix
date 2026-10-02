@@ -171,7 +171,7 @@ class GuardianUXTests(unittest.TestCase):
 
     def test_levels_work_while_wait(self):
         text = self.command('/levels')
-        for value in ('Resistencia 15m: 110.00', 'Soporte 15m: 96.00',
+        for value in ('R1: 110.00', 'S1: 96.00',
                       'SIN DIRECCIÓN CONFIRMADA', 'Cierre 15m por encima de 110.00',
                       'Cierre 15m por debajo de 96.00', 'NO son una señal de entrada'):
             self.assertIn(value, text)
@@ -187,10 +187,10 @@ class GuardianUXTests(unittest.TestCase):
         view['data']['market_levels'] = {}
         text = self.command('/levels', view)
         self.assertIn('Sin niveles confirmados suficientes', text)
-        self.assertNotIn('Resistencia 15m: 110.00', text)
+        self.assertNotIn('R1: 110.00', text)
 
     def test_status_has_compact_levels(self):
-        self.assertIn('🏗 NIVELES\n🔴 R: 110.00\n🟢 S: 96.00', self.command('/status'))
+        self.assertIn('🏗 NIVELES\n⚡ 15m\n🔴 R1: 110.00\n🟢 S1: 96.00', self.command('/status'))
 
     def test_status_omits_unavailable_levels(self):
         view = self.view()
