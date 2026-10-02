@@ -1,6 +1,6 @@
 # BTCUSDT COPILOT — BITUNIX + TELEGRAM
 
-This project is an analysis/alert bot. It **does not place orders** and does not use Bitunix private API keys.
+The existing V8/V7 copilot is an analysis/alert bot. The separate I-GOD Trade Guardian described in [TRADE_GUARDIAN.md](TRADE_GUARDIAN.md) is a new optional service with a restricted Bitunix private read and capital protection client; it starts in SHADOW and is not deployed by this repository's Railway entrypoint.
 
 ## What it does
 
@@ -40,3 +40,7 @@ Optional variables are documented in `.env.example`.
 `python main.py`
 
 No public domain is required because Telegram messages are sent outbound and Bitunix data is read outbound.
+
+## I-GOD Trade Guardian
+
+The independent manual position risk monitor is started explicitly with `python trade_guardian.py`. It is disarmed by default; see [TRADE_GUARDIAN.md](TRADE_GUARDIAN.md) and [.env.example](.env.example) for its endpoint allowlist, risk behavior and arming requirements. Railway continues to run `main.py`.
