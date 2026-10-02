@@ -8,6 +8,10 @@ from datetime import datetime, timezone
 
 
 DECISION_PREFIXES = ('🟢📈', '🔴📉', '🟠📈', '🟠📉', '🟡⏳', '⚫❓', '🛡️')
+TPSL_WARNING_TEXT = {
+    'EXISTING_SL_CLOSER_TO_LIQUIDATION_OR_UNVERIFIED': '⚠️ SL más cercano a liquidación o protección no verificable; no se reemplaza',
+    'EXISTING_TP_OR_UNKNOWN_UNTOUCHED': '⚠️ TP/SL sin stop protector verificado; no se reemplaza',
+}
 
 
 def _number(value):
@@ -37,6 +41,22 @@ def protection_status(config, private_ready=False):
     return '\n'.join(lines)
 
 
+def direction_label(bias):
+    return {'LONG_ALLOWED': '🟢 LONG CONFIRMADO', 'SHORT_ALLOWED': '🔴 SHORT CONFIRMADO',
+            'WAIT': '🟡 SIN DIRECCIÓN CONFIRMADA'}.get(bias, '⚫ DATOS INSUFICIENTES')
+
+
+def position_relationship(side, bias):
+    aligned = bias == ('LONG_ALLOWED' if side == 'LONG' else 'SHORT_ALLOWED')
+    counter = bias == ('SHORT_ALLOWED' if side == 'LONG' else 'LONG_ALLOWED')
+    if aligned:
+        return '✅ Posición alineada con la dirección confirmada'
+    if counter:
+        return ('⚠️ Posición contraria a la dirección confirmada\n🚫 NO AÑADIR POSICIÓN\n'
+                'Cierre automático por dirección: NO')
+    return '⚪ Dirección del mercado todavía sin confirmar'
+
+
 def render_risk(details, statuses=None, target=None):
     details = details or {}
     labels = {
@@ -58,14 +78,16 @@ def render_risk(details, statuses=None, target=None):
         lines.append(f'ATR1H: {atr_pct:.2%}')
     stop_labels = {
         'EXISTING_SAFER_SL_UNTOUCHED': '✅ SL existente más protector; se respeta',
-        'EXISTING_SL_CLOSER_TO_LIQUIDATION_OR_UNVERIFIED': '⚠️ SL más cercano a liquidación o protección no verificable; no se reemplaza',
-        'EXISTING_TP_OR_UNKNOWN_UNTOUCHED': '⚠️ TP/SL sin stop protector verificado; no se reemplaza',
+        **TPSL_WARNING_TEXT,
         'MISSING_SL': '⚠️ Sin SL catastrófico verificado',
         'STOP_TARGET_UNAVAILABLE_OR_INVALID': '⚠️ SL catastrófico no verificable',
     }
-    lines.extend(stop_labels.get(code, '⚠️ SL no verificable') for code in (statuses or ['STOP_TARGET_UNAVAILABLE_OR_INVALID']))
+    verified_stop = bool(statuses) and all(code == 'EXISTING_SAFER_SL_UNTOUCHED' for code in statuses)
+    lines += ['\n🛑 STOP PROTECTOR', 'Estado: ✅ Verificado' if verified_stop else 'Estado: ⚠️ No verificado']
+    lines.extend(dict.fromkeys(stop_labels.get(code, '⚠️ SL no verificable')
+                              for code in (statuses or ['STOP_TARGET_UNAVAILABLE_OR_INVALID'])))
     if _number(target) is not None:
-        lines.append('SL catastrófico objetivo: ' + _price(target))
+        lines.append('Objetivo catastrófico teórico: ' + _price(target))
     return '\n'.join(lines)
 
 
@@ -81,8 +103,8 @@ def render_copilot(data, config, position=None, details=None, statuses=None, tar
         banner = '🟢📈 LONG — PUEDES BUSCAR ENTRADA' if long else '🔴📉 SHORT — PUEDES BUSCAR ENTRADA'
         decision = f'✅ Dirección: {side}\n✅ Puedes buscar entrada {side}\n🚫 {"SHORT" if long else "LONG"}: NO recomendado ahora'
     elif long or short:
-        banner = '🟠📈 BIAS LONG — ESPERA MEJOR ENTRADA' if long else '🟠📉 BIAS SHORT — ESPERA MEJOR ENTRADA'
-        decision = f'✅ Bias: {side}\n🚫 NO ENTRAR AHORA\n⏳ Esperar pullback o breakout + reclaim'
+        banner = '🟠📈 LONG — ESPERA MEJOR ENTRADA' if long else '🟠📉 SHORT — ESPERA MEJOR ENTRADA'
+        decision = f'✅ Dirección: {side}\n🚫 NO ENTRAR AHORA\n⏳ Esperar pullback o breakout + reclaim'
     elif bias == 'WAIT':
         banner = '🟡⏳ NO OPERAR — ESPERAR'
         decision = '🚫 No LONG\n🚫 No SHORT\n⏳ Esperar nueva confirmación'
@@ -106,12 +128,12 @@ def render_copilot(data, config, position=None, details=None, statuses=None, tar
     reason = data.get('entry_reason')
     if long or short:
         conclusions = {
-            'EXTENDED': f'Bias {side}, pero el precio está demasiado extendido. No perseguir.',
-            'NEAR_RESISTANCE': 'Bias LONG, pero el precio está junto a resistencia confirmada. No perseguir.',
-            'NEAR_SUPPORT': 'Bias SHORT, pero el precio está junto a soporte confirmado. No perseguir.',
+            'EXTENDED': f'Dirección {side}, pero el precio está demasiado extendido. No perseguir.',
+            'NEAR_RESISTANCE': 'Dirección LONG, pero el precio está junto a resistencia confirmada. No perseguir.',
+            'NEAR_SUPPORT': 'Dirección SHORT, pero el precio está junto a soporte confirmado. No perseguir.',
         }
         conclusion = (f'Tendencia, confirmaciones y reclaim apoyan buscar {side}.' if quality == 'GOOD'
-                      else conclusions.get(reason, f'Bias {side}; esperar una entrada confirmada.'))
+                      else conclusions.get(reason, f'Dirección {side}; esperar una entrada confirmada.'))
     elif bias == 'WAIT':
         conclusion = ('4H y 1H no están alineados. No operar.' if data.get('trend4') != data.get('trend1')
                       else 'Faltan confirmaciones de momentum, flujo o estructura. No operar.')
@@ -148,6 +170,7 @@ def render_copilot(data, config, position=None, details=None, statuses=None, tar
     if data.get('red_event') is True:
         momentum_text += '\n🔴 Nuevo evento RED'
     lines = [banner, 'I-GOD TRADE GUARDIAN + MANUAL COPILOT', decision,
+             '🧭 DIRECCIÓN\n' + direction_label(bias),
              '🧭 TENDENCIA\n4H: ' + trends.get(data.get('trend4'), '⚪ Sin datos')
              + '\n1H: ' + trends.get(data.get('trend1'), '⚪ Sin datos'),
              '🧠 ML RSI 27 LOW EMA4\nEstado: ' + momentum_text,
@@ -157,11 +180,7 @@ def render_copilot(data, config, position=None, details=None, statuses=None, tar
              '🎯 ENTRADA\n' + entry_text,
              '🎯 CONCLUSIÓN\n' + conclusion, '👀 QUÉ ESPERAMOS\n' + '\n'.join(expected)]
     if position is not None and details:
-        aligned = bias == ('LONG_ALLOWED' if position.side == 'LONG' else 'SHORT_ALLOWED')
-        counter = bias == ('SHORT_ALLOWED' if position.side == 'LONG' else 'LONG_ALLOWED')
-        status = ('✅ POSICIÓN ALINEADA CON EL BIAS' if aligned else
-                  '⚠️⚠️ POSICIÓN CONTRA TENDENCIA ⚠️⚠️\n🚫 NO AÑADIR POSICIÓN\n🟠 Considerar reducir/cerrar manualmente si la tesis ya no es válida\nCierre automático por dirección: NO' if counter else
-                  '⚪ No hay bias confirmado para comparar la posición')
+        status = position_relationship(position.side, bias)
         icon = '📈' if position.side == 'LONG' else '📉'
         lines.append(f'💼 TU POSICIÓN\n{icon} {position.side} BTCUSDT\nEntrada: {_price(position.entry)}\n'
                      f'Mark: {_price(details.get("mark"))}\nLeverage: {_price(position.leverage)}x\n'

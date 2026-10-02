@@ -114,7 +114,7 @@ class CommandTests(unittest.TestCase):
         view = self.cache.read()
         text = render_command('/position', view, view['timestamp'])
         for value in ('LONG BTCUSDT', 'Entrada: 10,100.00', 'Mark: 10,000.00', 'Qty BTC: 0.1',
-                       'Leverage: 10x', 'PnL: -2.00', 'Liquidación: 9,500.00', 'Distancia: 5.00%', 'Alineada'):
+                       'Leverage: 10x', 'PnL: -2.00', 'Liquidación: 9,500.00', 'Distancia: 5.00%', 'alineada'):
             self.assertIn(value, text)
         view['position'] = None
         self.assertIn('Sin posición BTCUSDT abierta', render_command('/position', view, view['timestamp']))
@@ -128,6 +128,7 @@ class CommandTests(unittest.TestCase):
             self.assertIn(value, text)
         for key in ('support', 'resistance', 'entry_level'):
             view['data'].pop(key, None)
+        view['data'].pop('market_levels', None)
         text = render_command('/levels', view, view['timestamp'])
         self.assertIn('Sin niveles confirmados', text)
         self.assertNotIn('9,900.00', text)

@@ -102,6 +102,53 @@ def flow_state(ratio):
     return 'NEUTRAL'
 
 
+def confirmed_market_levels(hourly, quarter_hourly, mark, *, now_ms):
+    """Read-only levels, independent of direction and entry permission.
+
+    The explicit observation cutoff excludes open/future bars. Levels and
+    distances use the latest CLOSED 15m close, not the live mark. Two-right
+    pivots become available only at their confirmation candle's close.
+    Previous levels are the most recently confirmed distinct eligible pivots
+    other than the nearest one. Missing evidence stays unavailable.
+    """
+    result = dict(status='INSUFFICIENT_CONFIRMED_PIVOTS', reference_price=None,
+                  reference_time=None, support=None, resistance=None,
+                  previous_support=None, previous_resistance=None, atr_1h=None,
+                  support_distance_pct=None, resistance_distance_pct=None,
+                  support_distance_atr=None, resistance_distance_atr=None,
+                  support_pivot_time=None, resistance_pivot_time=None,
+                  support_confirmed_time=None, resistance_confirmed_time=None)
+    try:
+        h = closed_bars(hourly, now_ms, 3600000)
+        q = closed_bars(quarter_hourly, now_ms, 900000)
+    except (TypeError, ValueError, IndexError):
+        result['status'] = 'INVALID_CLOSED_DATA'
+        return result
+    if not len(q):
+        return result
+    reference = float(q[-1, 4])
+    atr = atr14(h)
+    result.update(reference_price=reference, reference_time=int(q[-1, 0] + 900000), atr_1h=atr)
+    _, highs, lows = confirmed_structure(q)
+    for name, pivots in (('support', lows), ('resistance', highs)):
+        eligible = [(i, float(value)) for i, value in pivots
+                    if (value < reference if name == 'support' else value > reference)]
+        if not eligible:
+            continue
+        level = (max if name == 'support' else min)(value for _, value in eligible)
+        confirmation = next(i for i, value in reversed(eligible) if value == level)
+        previous = next((value for _, value in reversed(eligible) if value != level), None)
+        distance = abs(level - reference)
+        result.update({name: level, 'previous_' + name: previous,
+                       name + '_distance_pct': distance / reference,
+                       name + '_distance_atr': distance / atr if atr is not None else None,
+                       name + '_pivot_time': int(q[confirmation - 2, 0]),
+                       name + '_confirmed_time': int(q[confirmation, 0] + 900000)})
+    if result['support'] is not None or result['resistance'] is not None:
+        result['status'] = 'AVAILABLE'
+    return result
+
+
 def direction(trend4, trend1, momentum, ratio, structure):
     if 'UNKNOWN' in (trend4, trend1, momentum, structure) or ratio is None:
         return 'UNKNOWN', 'Insufficient closed market data'
@@ -212,6 +259,7 @@ def snapshot(hourly, four_hourly, quarter_hourly, now_ms):
                 short_threshold=float(ml['short_threshold']), window_count=int(ml['window_count']),
                 flow=flow_state(ratio), taker_buy=ratio, structure=structure,
                 last_closed_1h=int(h[-1, 0] + 3600000),
+                market_levels=confirmed_market_levels(h, q, float(q[-1, 4]), now_ms=now_ms),
                 **entry_quality(bias, h, q, momentum, structure))
 
 def pine_rsi(close, length):

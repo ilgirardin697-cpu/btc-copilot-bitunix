@@ -8,7 +8,7 @@ from guardian_bitunix import Bitunix
 from guardian_market import Market
 from guardian_risk import Config, SafetyError, risk, catastrophic_stop, assess_orders
 from guardian_store import Store
-from guardian_telegram import Telegram, render_copilot, render_risk, protection_status, DECISION_PREFIXES
+from guardian_telegram import Telegram, render_copilot, render_risk, protection_status, DECISION_PREFIXES, TPSL_WARNING_TEXT
 from koncorde_shadow import diagnostic
 from guardian_signals import volatility_state, current_entry_quality
 from guardian_commands import SnapshotCache, TelegramCommands
@@ -40,6 +40,19 @@ class Guardian:
         last = self.store.state.setdefault('alerts', {}).get(key, 0)
         if last and self.clock() - last < cooldown:
             return
+        # Existing-order warnings belong to the dedicated transition/hourly
+        # notice. Risk/context alerts retain stop status without repeating the
+        # same warning every generic cooldown. Queries keep the full warning.
+        warning_lines = set(TPSL_WARNING_TEXT.values())
+        seen = set()
+        lines = []
+        for line in text.split('\n'):
+            if line in warning_lines:
+                if not key.startswith('tpsl:') or line in seen:
+                    continue
+                seen.add(line)
+            lines.append(line)
+        text = '\n'.join(lines)
         if 'GUARDIAN:' not in text:
             text += '\n\n' + protection_status(self.config, self.client.credentials_present)
         self.store.append('alerts', {'timestamp': self.clock(), 'key': key, 'text': text})
@@ -116,6 +129,37 @@ class Guardian:
         return render_copilot(data, self.config, position, details, orders.get('status'), target,
                               private_ready=self.client.credentials_present)
 
+    def _tpsl_notice(self, position, details, orders, statuses, target):
+        """Notification memory only; never changes order assessment or actions.
+
+        A target move is material at max(0.25 ATR, 0.1% mark) relative to
+        the last notification. Price noise does not reset the hourly reminder.
+        """
+        warning_codes = sorted(set(statuses) & {
+            'EXISTING_SL_CLOSER_TO_LIQUIDATION_OR_UNVERIFIED', 'EXISTING_TP_OR_UNKNOWN_UNTOUCHED'})
+        previous = self.store.state.get('tpsl_notice') or {}
+        ranks = {'NORMAL': 0, 'WARNING': 1, 'DANGER': 2, 'EMERGENCY': 3}
+        signature = json.dumps({'statuses': sorted(set(statuses)),
+                                'orders': sorted(orders, key=lambda row: json.dumps(row, sort_keys=True))},
+                               sort_keys=True, separators=(',', ':'))
+        target = _safe_order_number(target)
+        prior_target = _safe_order_number(previous.get('sent_target'))
+        material = (target is None) != (prior_target is None)
+        if target is not None and prior_target is not None:
+            material = abs(target - prior_target) >= max(.25 * (details.get('atr') or 0), .001 * details['mark'])
+        changed = (previous.get('position_id') != position.position_id or not previous.get('active')
+                   or previous.get('signature') != signature
+                   or ranks[details['state']] > ranks.get(previous.get('risk'), -1) or material)
+        due = self.clock() - previous.get('sent_at', 0) >= 3600
+        row = dict(previous, position_id=position.position_id, active=bool(warning_codes),
+                   signature=signature, risk=details['state'])
+        if warning_codes and (changed or due):
+            self.alert('tpsl:' + position.position_id,
+                       '⚠️ STOP PROTECTOR NO VERIFICADO\n' + render_risk(details, warning_codes, target)
+                       + '\nLa orden manual se respeta; no se cancela ni reemplaza.', cooldown=0)
+            row.update(sent_at=self.clock(), sent_target=target)
+        self.store.state['tpsl_notice'] = row
+
     def cycle(self):
         now = self.clock()
         # CAPITAL first. Direction downloads never delay an emergency action.
@@ -134,6 +178,7 @@ class Guardian:
                         self.store.append('positions', {'timestamp': now, 'event': 'MANUAL_CLOSE_DETECTED', 'positionId': previous})
                         self.alert('manual:' + previous, 'MANUAL_CLOSE_DETECTED\n' + previous)
                     self.store.state['position_id'] = None
+                    self.store.state.pop('tpsl_notice', None)
                 else:
                     details = risk(position, mark, atr, self.config)
                     orders = self.client.orders(position.position_id)
@@ -173,21 +218,32 @@ class Guardian:
                     if details['state'] != 'NORMAL':
                         self.alert('risk:' + position.position_id + details['state'],
                                    render_risk(details, sl_status, target) + '\n\n' + text)
-                    if 'EXISTING_SL_CLOSER_TO_LIQUIDATION_OR_UNVERIFIED' in sl_status:
-                        self.alert('weaker:' + position.position_id, '⚠️ EXISTING SL IS CLOSER TO LIQUIDATION THAN GUARDIAN SAFE LIMIT OR PROTECTION UNVERIFIED\nManual order untouched')
-                    if 'EXISTING_TP_OR_UNKNOWN_UNTOUCHED' in sl_status:
-                        self.alert('tp-only:' + position.position_id, 'EXISTING TP/SL HAS NO VERIFIED CATASTROPHIC STOP\nGuardian will not replace or cancel the existing order')
+                    self._tpsl_notice(position, details, order_summary, sl_status, target)
                     if clean and position.leverage >= 2:
                         if details['state'] == 'EMERGENCY' and not emergency_processed:
                             self._act('CLOSE', position, atr)
                         elif not orders and target is not None:
                             self._act('SL', position, atr)
                 self.store.save()
+            if self._failures:
+                self.alert('blind:recovered', '✅ CONEXIÓN RECUPERADA\n\n'
+                           'Datos de Bitunix vuelven a estar verificados.\n'
+                           'Guardian continúa en su modo configurado.', cooldown=0)
             self._failures = 0
         except SafetyError as error:
             print('GUARDIAN_BLIND_CODE=' + str(error), flush=True)
             self._failures += 1
-            self.alert('blind', '🚨 GUARDIAN BLIND\nFresh venue state cannot be verified; NO MUTATION\n' + str(error))
+            stages = {
+                1: ('🟡 DATOS TEMPORALMENTE NO VERIFICABLES\n\n'
+                    'No puedo verificar datos frescos de Bitunix en este ciclo.\n'
+                    '🔒 No realizaré acciones automáticas hasta recuperar datos.'),
+                2: ('🟠 DATOS DEGRADADOS\n\nSigo sin poder verificar datos frescos.\n'
+                    '🔒 Guardian permanece bloqueado para mutaciones.'),
+                3: ('🚨 GUARDIAN SIN DATOS FIABLES\n\nNo puedo verificar el estado actual de Bitunix.\n'
+                    '🚫 NO MUTATION\n⚠️ Revisa Bitunix manualmente si tienes una posición abierta.'),
+            }
+            stage = min(self._failures, 3)
+            self.alert('blind:' + str(stage), stages[stage], cooldown=0 if self._failures <= 3 else 300)
             mark, details = None, None
         if now >= self._bias_due:
             self.bias = self.market.bias()
@@ -234,6 +290,7 @@ class Guardian:
                                            position_verified=verified_position, position=position_view,
                                            risk=details, sl_status=sl_status, stop_target=target,
                                            human_snapshot=copilot,
+                                           mode=self.config.mode,
                                            protection=protection_status(self.config, self.client.credentials_present))
                                       if mark is not None and (details is not None or self.bias['bias'] != 'UNKNOWN') else None)
         print(json.dumps(heartbeat), flush=True)
