@@ -170,7 +170,9 @@ class GuardianUXTests(unittest.TestCase):
         return self.cycle()
 
     def test_levels_work_while_wait(self):
-        text = self.command('/levels')
+        view = self.view()
+        view['mark'] = 105
+        text = self.command('/levels', view)
         for value in ('R1: 110.00', 'S1: 96.00',
                       'SIN DIRECCIÓN CONFIRMADA', 'Cierre 15m por encima de 110.00',
                       'Cierre 15m por debajo de 96.00', 'NO son una señal de entrada'):
@@ -178,7 +180,9 @@ class GuardianUXTests(unittest.TestCase):
         self.assertNotIn('Reclaim relevante', text)
 
     def test_levels_display_signed_distances_and_closed_reference(self):
-        text = self.command('/levels')
+        view = self.view()
+        view['mark'] = 105
+        text = self.command('/levels', view)
         for value in ('Referencia 15m cerrada: 105.00', '+4.76%', '-8.57%', '1.25 ATR1H', '2.25 ATR1H'):
             self.assertIn(value, text)
 
@@ -190,7 +194,9 @@ class GuardianUXTests(unittest.TestCase):
         self.assertNotIn('R1: 110.00', text)
 
     def test_status_has_compact_levels(self):
-        self.assertIn('🏗 NIVELES\n⚡ 15m\n🔴 R1: 110.00\n🟢 S1: 96.00', self.command('/status'))
+        view = self.view()
+        view['mark'] = 105
+        self.assertIn('🏗 NIVELES\n⚡ 15m\n🔴 R1: 110.00\n🟢 S1: 96.00', self.command('/status', view))
 
     def test_status_omits_unavailable_levels(self):
         view = self.view()
