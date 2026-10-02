@@ -3,6 +3,7 @@ from dataclasses import asdict
 import json
 import os
 import time
+from uuid import uuid4
 from guardian_bitunix import Bitunix
 from guardian_market import Market
 from guardian_risk import Config, SafetyError, risk, catastrophic_stop, assess_orders
@@ -29,6 +30,8 @@ class Guardian:
         self._bias_due = 0
         self._snapshot_due = 0
         self._started = False
+        self._startup_key = 'startup:' + uuid4().hex
+        self._startup_position_checked = False
         self._failures = 0
 
     def alert(self, key, text, cooldown=300):
@@ -43,7 +46,7 @@ class Guardian:
         try:
             self.telegram.send(text if text.startswith(DECISION_PREFIXES) else 'I-GOD TRADE GUARDIAN\n' + text)
         except Exception:
-            pass
+            Telegram._diagnostic('TELEGRAM_SEND_NOT_OK')
 
     def _confirmed(self, row, result):
         confirmed = dict(row, status='CONFIRMED', timestamp=self.clock(), result=result)
@@ -53,6 +56,8 @@ class Guardian:
             self.store.state['lockout_until'] = until
             self.store.save()
             self.alert('closed:' + row['positionId'], 'EMERGENCY CLOSE CONFIRMED\nPosition: ' + row['positionId'])
+        else:
+            self.alert('confirmed:' + row['key'], 'GUARDIAN PROTECTION RECONCILED\nAction: SL')
 
     def reconcile(self):
         """No repeat POST for unresolved intent, even after a lost response/restart."""
@@ -83,12 +88,15 @@ class Guardian:
                'positionId': position.position_id, 'risk_epoch': 1, 'status': 'INTENT',
                'timestamp': self.clock(), 'body': permit['body']}
         self.store.append('actions', row)  # fsync must finish before the ONLY POST call
+        self.alert('intent:' + row['key'], 'GUARDIAN PROTECTION INTENT\nAction: ' + action)
         try:
             response = self.client.execute(permit)
             row = dict(row, status='RESPONSE', timestamp=self.clock(), response=response)
             self.store.append('actions', row)
+            self.alert('response:' + row['key'], 'GUARDIAN PROTECTION RESPONSE RECEIVED\nAction: ' + action + '\nExchange reconciliation pending')
         except SafetyError:
             self.store.append('actions', dict(row, status='RESPONSE', timestamp=self.clock(), result='AMBIGUOUS'))
+            self.alert('response:' + row['key'], 'GUARDIAN PROTECTION RESPONSE AMBIGUOUS\nAction: ' + action + '\nReconciling; no duplicate action')
         if action == 'SL' and row.get('response', {}).get('orderId'):
             self.store.state.setdefault('owned_sl', {})[position.position_id] = row['response']['orderId']
             self.store.save()
@@ -110,12 +118,14 @@ class Guardian:
         now = self.clock()
         # CAPITAL first. Direction downloads never delay an emergency action.
         position, details, mark, atr, sl_status, target = None, None, None, None, None, None
+        private_verified = False  # notification readiness, never authorizes a mutation
         try:
             mark = self.client.mark()
             atr = self.market.venue_atr()
             if self.client.credentials_present:
                 clean = self.reconcile()
                 position = self.client.position()
+                private_verified = True
                 previous = self.store.state.get('position_id')
                 if position is None:
                     if previous:
@@ -189,9 +199,14 @@ class Guardian:
             self._started = True
             status = 'PRIVATE POSITION GUARD DISABLED — credentials absent' if not self.client.credentials_present else (
                 'CAPITAL PROTECTION ARMED' if self.config.armed('SL') and self.config.armed('CLOSE') else 'POSITION GUARD READ-ONLY')
-            self.alert('startup:' + str(int(now)), copilot + '\n\nI-GOD TRADE GUARDIAN ONLINE\n' + status + '\nRisk engine active')
+            self.alert(self._startup_key, copilot + '\n\nI-GOD TRADE GUARDIAN ONLINE\n' + status + '\nRisk engine active')
             self.store.state['copilot_decision'] = decision_key
             print(status, flush=True)
+        if not self._startup_position_checked and private_verified:
+            if position is None or details is not None:
+                self._startup_position_checked = True
+                if position is not None:
+                    self.alert(self._startup_key + ':position', '💼 POSICIÓN ABIERTA DETECTADA\n\n' + copilot)
         if self.store.state.get('copilot_decision') != decision_key:
             self.alert('copilot:' + decision_key, copilot)
             self.store.state['copilot_decision'] = decision_key
@@ -216,7 +231,8 @@ def main():
         config = Config.from_env()
         store = Store(config.state_dir)
         client = Bitunix(config, os.getenv('BITUNIX_API_KEY', ''), os.getenv('BITUNIX_API_SECRET', ''))
-        guardian = Guardian(client, store, Market(client), Telegram(os.getenv('TELEGRAM_BOT_TOKEN', ''), os.getenv('TELEGRAM_CHAT_ID', '')))
+        guardian = Guardian(client, store, Market(client), Telegram(os.getenv('TELEGRAM_BOT_TOKEN', ''),
+                            os.getenv('TELEGRAM_CHAT_ID', ''), alert_chat_id=os.getenv('TELEGRAM_ALERT_CHAT_ID', '')))
         while True:
             started = time.monotonic()
             guardian.cycle()

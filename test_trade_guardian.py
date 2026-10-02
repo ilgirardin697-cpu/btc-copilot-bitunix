@@ -2,10 +2,13 @@
 from dataclasses import replace
 from email.utils import formatdate
 from pathlib import Path
+import ast
 import hashlib
 import inspect
 import json
+import queue
 import tempfile
+import threading
 import time
 import unittest
 from unittest.mock import Mock, patch
@@ -1148,6 +1151,383 @@ class GuardianTests(unittest.TestCase):
     def test_emergency_closed_not_manual_close(self):
         self.guardian._act('CLOSE', self.p(), 100)
         self.assertFalse(any('MANUAL_CLOSE' in x for x in self.telegram.messages))
+
+
+class TelegramDeliveryTests(unittest.TestCase):
+    """Only injected transports; outbound workers cannot use the real network."""
+    def setUp(self):
+        self.http = Mock()
+        self.http.post.return_value = Mock(status_code=200, json=Mock(return_value={'ok': True}))
+        self._network = patch.object(requests.sessions.Session, 'request',
+                                     side_effect=AssertionError('LIVE HTTP FORBIDDEN'))
+        self._network.start()
+        self.addCleanup(self._network.stop)
+
+    def telegram(self, owner='', alerts='', token='private-bot-token'):
+        return Telegram(token, owner, self.http, alert_chat_id=alerts)
+
+    def drain(self, telegram):
+        # A bounded wait, including task_done, ensures captured worker logs are complete.
+        with telegram._queue.all_tasks_done:
+            self.assertTrue(telegram._queue.all_tasks_done.wait_for(
+                lambda: telegram._queue.unfinished_tasks == 0, timeout=3))
+
+    def send(self, telegram, text='offline alert'):
+        with patch('builtins.print') as output, patch('guardian_telegram.time.sleep') as backoff:
+            self.assertTrue(telegram.send(text))
+            self.drain(telegram)
+        return [call.args[0] for call in output.call_args_list], backoff
+
+    def recipients(self):
+        return [call.kwargs['json']['chat_id'] for call in self.http.post.call_args_list]
+
+    def test_owner_chat_only(self):
+        logs, _ = self.send(self.telegram(owner='owner-private-id'))
+        self.assertEqual(self.recipients(), ['owner-private-id'])
+        self.assertEqual(logs, ['TELEGRAM_SEND_OK'])
+
+    def test_alert_chat_only(self):
+        self.send(self.telegram(alerts='alert-private-id'))
+        self.assertEqual(self.recipients(), ['alert-private-id'])
+
+    def test_owner_and_all_alerts(self):
+        logs, _ = self.send(self.telegram(owner='owner-private-id', alerts='alert-one,alert-two'))
+        self.assertEqual(self.recipients(), ['owner-private-id', 'alert-one', 'alert-two'])
+        self.assertEqual(logs, ['TELEGRAM_SEND_OK'] * 3)
+
+    def test_duplicates_deliver_once(self):
+        self.send(self.telegram(owner='same-id', alerts='same-id,second-id,same-id,second-id'))
+        self.assertEqual(self.recipients(), ['same-id', 'second-id'])
+
+    def test_csv_whitespace_and_empty_entries_match_main_routing(self):
+        self.send(self.telegram(owner='  owner-id  ', alerts=' , alert-one, ,alert-two, alert-one ,'))
+        self.assertEqual(self.recipients(), ['owner-id', 'alert-one', 'alert-two'])
+        main_source = Path('main.py').read_text(encoding='utf-8')
+        main_tree = ast.parse(main_source)
+        telegram_class = next(node for node in main_tree.body
+                              if isinstance(node, ast.ClassDef) and node.name == 'Telegram')
+        init = next(node for node in telegram_class.body if getattr(node, 'name', None) == '__init__')
+        namespace = {'TELEGRAM_ALERT_CHAT_ID': ' , alert-one, ,alert-two, alert-one ,'}
+        # Execute only the existing bot's constructor AST; never import/run its bot.
+        module = ast.Module(body=[init], type_ignores=[])
+        exec(compile(module, 'main.py:Telegram.__init__', 'exec'), namespace)
+        owner = Mock()
+        namespace['__init__'](owner, 'private-bot-token', '  owner-id  ')
+        self.assertEqual(self.recipients(), owner.recipient_ids)
+
+    def test_missing_token_static_disabled(self):
+        for token in ('', '   '):
+            with self.subTest(token=token), patch('builtins.print') as output:
+                self.assertFalse(self.telegram(owner='private-id', token=token).send('alert'))
+                output.assert_called_once_with('TELEGRAM_DISABLED_NO_TOKEN', flush=True)
+        self.http.post.assert_not_called()
+
+    def test_missing_recipients_static_disabled(self):
+        with patch('builtins.print') as output:
+            self.assertFalse(self.telegram(owner=' ', alerts=' , , ').send('alert'))
+            output.assert_called_once_with('TELEGRAM_DISABLED_NO_RECIPIENT', flush=True)
+        self.http.post.assert_not_called()
+
+    def test_success_outbound_message_only(self):
+        logs, backoff = self.send(self.telegram(owner='private-id'), 'message' * 1000)
+        self.assertEqual(logs, ['TELEGRAM_SEND_OK'])
+        backoff.assert_not_called()
+        self.http.post.assert_called_once_with(
+            'https://api.telegram.org/botprivate-bot-token/sendMessage',
+            json={'chat_id': 'private-id', 'text': ('message' * 1000)[:4000]},
+            timeout=(1, 2), allow_redirects=False)
+        self.http.get.assert_not_called()
+
+    def test_timeout_secret_safe_three_attempts(self):
+        self.http.post.side_effect = requests.Timeout(
+            'private-bot-token private-id https://api.telegram.org/botprivate-bot-token/sendMessage')
+        logs, backoff = self.send(self.telegram(owner='private-id'))
+        self.assertEqual(logs, ['TELEGRAM_SEND_TIMEOUT'] * 3)
+        self.assertEqual(self.http.post.call_count, 3)
+        self.assertEqual([call.args[0] for call in backoff.call_args_list], [.2, .4])
+
+    def test_http_failure_static_only(self):
+        self.http.post.return_value = Mock(status_code=503,
+                                          text='private-bot-token private-id raw API body')
+        logs, _ = self.send(self.telegram(owner='private-id'))
+        self.assertEqual(logs, ['TELEGRAM_SEND_HTTP_ERROR'] * 3)
+        self.http.post.return_value.json.assert_not_called()
+
+    def test_network_exception_static_only(self):
+        self.http.post.side_effect = requests.ConnectionError('private-bot-token private-id')
+        logs, _ = self.send(self.telegram(owner='private-id'))
+        self.assertEqual(logs, ['TELEGRAM_SEND_HTTP_ERROR'] * 3)
+
+    def test_response_not_ok_static_only(self):
+        self.http.post.return_value.json.return_value = {
+            'ok': False, 'description': 'private-bot-token private-id raw API body'}
+        logs, _ = self.send(self.telegram(owner='private-id'))
+        self.assertEqual(logs, ['TELEGRAM_SEND_NOT_OK'] * 3)
+
+    def test_invalid_response_does_not_expose_payload_or_exception(self):
+        for value in (None, [], {'ok': 'true'}, {'ok': 1}):
+            with self.subTest(value=value):
+                self.http.post.return_value.json.return_value = value
+                logs, _ = self.send(self.telegram(owner='private-id'))
+                self.assertEqual(logs, ['TELEGRAM_SEND_NOT_OK'] * 3)
+        self.http.post.return_value.json.side_effect = ValueError('private-bot-token private-id')
+        logs, _ = self.send(self.telegram(owner='private-id'))
+        self.assertEqual(logs, ['TELEGRAM_SEND_NOT_OK'] * 3)
+
+    def test_retry_recovers_and_stops_after_success(self):
+        self.http.post.side_effect = [requests.Timeout('private-bot-token'),
+                                     Mock(status_code=200, json=Mock(return_value={'ok': True}))]
+        logs, backoff = self.send(self.telegram(owner='private-id'))
+        self.assertEqual(logs, ['TELEGRAM_SEND_TIMEOUT', 'TELEGRAM_SEND_OK'])
+        self.assertEqual(self.http.post.call_count, 2)
+        backoff.assert_called_once_with(.2)
+
+    def test_failed_recipient_does_not_block_other_recipient(self):
+        self.http.post.side_effect = [requests.Timeout('private-id')] * 3 + [
+            Mock(status_code=200, json=Mock(return_value={'ok': True}))]
+        logs, _ = self.send(self.telegram(owner='private-id', alerts='other-private-id'))
+        self.assertEqual(self.recipients(), ['private-id'] * 3 + ['other-private-id'])
+        self.assertEqual(logs, ['TELEGRAM_SEND_TIMEOUT'] * 3 + ['TELEGRAM_SEND_OK'])
+
+    def test_queue_full_is_nonfatal_static_only(self):
+        telegram = self.telegram(owner='private-id')
+        telegram._queue = queue.Queue(maxsize=1)
+        telegram._queue.put_nowait('queued')
+        with patch('builtins.print') as output:
+            self.assertFalse(telegram.send('alert'))
+            output.assert_called_once_with('TELEGRAM_QUEUE_FULL', flush=True)
+        self.http.post.assert_not_called()
+
+    def test_worker_start_failure_is_nonfatal_static_only(self):
+        telegram = self.telegram(owner='private-id')
+        with patch('guardian_telegram.threading.Thread.start', side_effect=RuntimeError('private-bot-token')):
+            with patch('builtins.print') as output:
+                self.assertFalse(telegram.send('alert'))
+                output.assert_called_once_with('TELEGRAM_SEND_NOT_OK', flush=True)
+        self.assertIsNone(telegram._queue)
+        self.http.post.assert_not_called()
+
+    def test_broken_log_stream_is_nonfatal(self):
+        with patch('builtins.print', side_effect=OSError('private-bot-token')):
+            self.assertFalse(self.telegram(token='').send('alert'))
+
+
+class GuardianNotificationTests(unittest.TestCase):
+    """Notification integration shares the same FakeBitunix safety harness."""
+    tearDown = GuardianTests.tearDown
+    p = GuardianTests.p
+
+    def setUp(self):
+        GuardianTests.setUp(self)
+        self.client.config = Config()  # runtime SHADOW; armed tests use fakes explicitly
+        self.guardian.config = self.client.config
+        self.fake.positions = [position(liqPrice=9500)]
+        self.fake.orders = [dict(id='777', symbol='BTCUSDT', positionId='123',
+                                 slPrice='9800', slStopType='MARK_PRICE')]
+        self.market.bias = lambda: GuardianTests.human_bias()
+        self.guardian.bias = self.market.bias()
+        self.store.state['position_id'] = '123'  # persisted from BEFORE this process
+        self.store.state['position_bias'] = 'LONG_ALLOWED'
+        self.store.save()
+
+    def cycle(self):
+        with patch('builtins.print'):
+            return self.guardian.cycle()
+
+    def startup_positions(self):
+        return [message for message in self.telegram.messages if '💼 POSICIÓN ABIERTA DETECTADA' in message]
+
+    def test_startup_persisted_position_sends_current_human_snapshot(self):
+        self.cycle()
+        self.assertEqual(len(self.startup_positions()), 1)
+        message = self.startup_positions()[0]
+        for evidence in ('LONG BTCUSDT', 'Entrada: 10,100.00', 'Mark: 10,000.00',
+                         'Leverage: 10.00x', 'PnL: -2.00', 'RIESGO: NORMAL',
+                         'LONG — PUEDES BUSCAR ENTRADA', 'ENTRADA: BUENA ZONA',
+                         'GUARDIAN: SHADOW', 'Protección automática DESARMADA'):
+            self.assertIn(evidence, message)
+        self.assertTrue(any('I-GOD TRADE GUARDIAN ONLINE' in message for message in self.telegram.messages))
+        self.assertFalse(self.fake.posts)
+
+    def test_startup_position_once_per_process_no_ten_second_spam(self):
+        now = [time.time()]
+        self.guardian.clock = lambda: now[0]
+        self.cycle()
+        count = len(self.telegram.messages)
+        for _ in range(5):
+            now[0] += 10
+            self.cycle()
+        self.assertEqual(len(self.telegram.messages), count)
+        self.assertEqual(len(self.startup_positions()), 1)
+
+    def test_restart_sends_even_with_persisted_startup_cooldown(self):
+        self.cycle()
+        startup_key = self.guardian._startup_key
+        self.guardian = Guardian(self.client, self.store, self.market, self.telegram)
+        self.cycle()
+        self.assertNotEqual(self.guardian._startup_key, startup_key)
+        self.assertEqual(len(self.startup_positions()), 2)
+        self.assertEqual(sum('I-GOD TRADE GUARDIAN ONLINE' in m for m in self.telegram.messages), 2)
+        self.assertFalse(self.fake.posts)
+
+    def test_startup_private_failure_defers_position_alert_until_verified(self):
+        self.client.last_private = time.time()  # historical success is insufficient
+        self.fake.fail = True
+        self.cycle()
+        self.assertEqual(self.startup_positions(), [])
+        self.assertFalse(self.guardian._startup_position_checked)
+        self.fake.fail = False
+        self.cycle()
+        self.cycle()
+        self.assertEqual(len(self.startup_positions()), 1)
+        self.assertFalse(self.fake.posts)
+
+    def test_startup_without_position_then_new_position_alerts_normally(self):
+        self.fake.positions = []
+        self.store.state['position_id'] = None
+        self.cycle()
+        self.assertEqual(self.startup_positions(), [])
+        self.fake.positions = [position(liqPrice=9500)]
+        self.cycle()
+        self.assertTrue(any('NEW POSITION DETECTED' in m for m in self.telegram.messages))
+        self.assertEqual(self.startup_positions(), [])
+        self.assertFalse(self.fake.posts)
+
+    def test_later_new_position_keeps_new_event(self):
+        self.cycle()
+        self.telegram.messages.clear()
+        self.fake.positions = [position(positionId='456', liqPrice=9500)]
+        self.fake.orders = []
+        self.cycle()
+        self.assertEqual(sum('NEW POSITION DETECTED' in m for m in self.telegram.messages), 1)
+        self.assertEqual(self.startup_positions(), [])
+        self.assertFalse(self.fake.posts)
+
+    def test_manual_close_sends_alert_without_action(self):
+        self.cycle()
+        self.telegram.messages.clear()
+        self.fake.positions = []
+        self.cycle()
+        self.cycle()
+        self.assertEqual(sum('MANUAL_CLOSE_DETECTED' in m for m in self.telegram.messages), 1)
+        self.assertFalse(self.fake.posts)
+
+    def test_decision_and_entry_quality_changes_are_outbound(self):
+        self.cycle()
+        self.telegram.messages.clear()
+        self.market.bias = lambda: GuardianTests.human_bias(quality='POOR')
+        self.guardian._bias_due = 0
+        self.cycle()
+        self.assertTrue(any('NO PERSEGUIR PRECIO' in m for m in self.telegram.messages))
+        self.telegram.messages.clear()
+        self.market.bias = lambda: GuardianTests.human_bias('SHORT_ALLOWED')
+        self.guardian._bias_due = 0
+        self.cycle()
+        self.cycle()
+        self.assertTrue(any('POSICIÓN CONTRA TENDENCIA' in m for m in self.telegram.messages))
+        self.assertFalse(self.fake.posts)
+
+    def test_warning_danger_emergency_and_blind_are_outbound_shadow(self):
+        self.cycle()
+        for liquidation, label in ((9700, 'RIESGO: WARNING'), (9800, 'RIESGO: DANGER'),
+                                    (9900, 'EMERGENCIA DE LIQUIDACIÓN')):
+            with self.subTest(label=label):
+                self.telegram.messages.clear()
+                self.fake.positions = [position(liqPrice=liquidation)]
+                heartbeat = self.cycle()
+                self.assertTrue(any(label in m for m in self.telegram.messages))
+                self.assertTrue(heartbeat['position'])
+                self.assertFalse(self.fake.posts)
+        self.telegram.messages.clear()
+        self.fake.fail = True
+        self.cycle()
+        self.assertTrue(any('GUARDIAN BLIND' in m for m in self.telegram.messages))
+        self.assertFalse(self.fake.posts)
+
+    def test_notifier_exception_is_nonfatal_and_never_triggers_bitunix_post(self):
+        self.telegram.fail = True
+        self.fake.positions = [position(liqPrice=9900)]
+        with patch('builtins.print') as output:
+            for _ in range(2):
+                heartbeat = self.guardian.cycle()
+                self.assertEqual(heartbeat['risk'], 'EMERGENCY')
+        self.assertTrue(any(call.args == ('TELEGRAM_SEND_NOT_OK',) for call in output.call_args_list))
+        self.assertFalse(self.fake.posts)
+
+    def test_real_worker_failures_do_not_stop_cycles_or_persist_secrets(self):
+        http = Mock()
+        http.post.side_effect = requests.Timeout('private-bot-token private-chat-id raw response')
+        telegram = Telegram('private-bot-token', '', http, alert_chat_id='private-chat-id')
+        self.guardian.telegram = telegram
+        with patch('builtins.print') as output, patch('guardian_telegram.time.sleep'):
+            self.guardian.cycle()
+            self.guardian.cycle()
+            TelegramDeliveryTests.drain(self, telegram)
+        logs = '\n'.join(str(call.args[0]) for call in output.call_args_list)
+        persisted = '\n'.join(path.read_text(encoding='utf-8') for path in Path(self.tmp.name).glob('*.json*'))
+        for secret in ('private-bot-token', 'private-chat-id', 'raw response', 'api.telegram.org'):
+            self.assertNotIn(secret, logs)
+            self.assertNotIn(secret, persisted)
+        self.assertIn('TELEGRAM_SEND_TIMEOUT', logs)
+        self.assertFalse(self.fake.posts)
+        self.assertIsNotNone(self.client.last_private)
+
+    def test_slow_telegram_does_not_block_the_risk_loop(self):
+        entered, release = threading.Event(), threading.Event()
+        def slow_post(*args, **kwargs):
+            entered.set()
+            if not release.wait(3):
+                raise requests.Timeout('offline wait')
+            return Mock(status_code=200, json=Mock(return_value={'ok': True}))
+        telegram = Telegram('private-bot-token', 'private-chat-id', Mock(post=slow_post))
+        self.guardian.telegram = telegram
+        with patch('builtins.print'):
+            try:
+                self.guardian.cycle()
+                self.assertTrue(entered.wait(1))
+                self.assertFalse(release.is_set())
+                self.guardian.cycle()  # completes while outbound HTTP is still waiting
+                self.assertFalse(release.is_set())
+            finally:
+                release.set()
+                TelegramDeliveryTests.drain(self, telegram)
+        self.assertFalse(self.fake.posts)
+
+    def test_protection_intent_and_result_are_alerted_only_for_fake_armed_action(self):
+        self.client.config = self.guardian.config = ARMED
+        self.fake.orders = []
+        self.guardian._act('SL', self.p(liqPrice=9500), 100)
+        self.assertEqual([call[1] for call in self.fake.posts], [PLACE_SL])
+        for status in ('GUARDIAN PROTECTION INTENT', 'GUARDIAN PROTECTION RESPONSE RECEIVED',
+                       'GUARDIAN PROTECTION RECONCILED'):
+            self.assertTrue(any(status in m for m in self.telegram.messages))
+
+    def test_ambiguous_protection_result_reconciles_without_telegram_retrying_bitunix(self):
+        self.client.config = self.guardian.config = ARMED
+        self.fake.positions = [position(liqPrice=9900)]
+        self.fake.ambiguous = True
+        self.telegram.fail = True
+        with patch('builtins.print'):
+            self.guardian._act('CLOSE', self.p(liqPrice=9900), 100)
+            self.guardian._act('CLOSE', self.p(liqPrice=9900), 100)
+        self.assertEqual([call[1] for call in self.fake.posts], [FLASH_CLOSE])
+        self.assertTrue(any('GUARDIAN PROTECTION RESPONSE AMBIGUOUS' in m for m in self.telegram.messages))
+        self.assertTrue(any('EMERGENCY CLOSE CONFIRMED' in m for m in self.telegram.messages))
+        self.assertEqual(POST_ALLOWLIST, {PLACE_SL, FLASH_CLOSE})
+
+    def test_transport_and_entrypoint_remain_outbound_only(self):
+        source = Path('guardian_telegram.py').read_text(encoding='utf-8')
+        self.assertNotIn('getUpdates', source)
+        self.assertEqual(source.count("'/sendMessage'"), 1)
+        tree = ast.parse(inspect.getsource(Telegram))
+        http_calls = [node.func.attr for node in ast.walk(tree)
+                      if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+                      and isinstance(node.func.value, ast.Attribute) and node.func.value.attr == '_http']
+        self.assertEqual(http_calls, ['post'])
+        entrypoint = Path('trade_guardian.py').read_text(encoding='utf-8')
+        for name in ('TELEGRAM_BOT_TOKEN', 'TELEGRAM_CHAT_ID', 'TELEGRAM_ALERT_CHAT_ID'):
+            self.assertIn("os.getenv('" + name + "', '')", entrypoint)
+        self.assertEqual(POST_ALLOWLIST, {PLACE_SL, FLASH_CLOSE})
 
 
 if __name__ == '__main__':

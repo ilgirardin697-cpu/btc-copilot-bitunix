@@ -84,7 +84,11 @@ On restart, the process loads state and journal before private reads and reconci
 
 State defaults to `/data/guardian`: `state.json`, `actions.jsonl`, `positions.jsonl`, `bias.jsonl`, `alerts.jsonl`. State replacement is atomic and action appends use fsync. Do not share the same state directory between multiple service instances.
 
-Telegram sends only outbound `sendMessage`; it never polls. Startup, new position, direction conflict, risk escalation, lockout, blind state and emergency confirmation are deduplicated. Telegram failure cannot stop the risk loop. Logs/heartbeat expose timestamp, mark, bias, position presence, risk, armed status and last successful reads, never API credentials.
+Telegram sends only outbound `sendMessage`; it never polls. Recipient routing matches the main bot: `TELEGRAM_BOT_TOKEN` enables delivery to the optional owner `TELEGRAM_CHAT_ID` and every non-empty comma-separated `TELEGRAM_ALERT_CHAT_ID`, stripping whitespace and deduplicating in order. Alert recipients alone are sufficient. Tokens and recipient IDs are never logged or persisted.
+
+Every process announces startup and sends `💼 POSICIÓN ABIERTA DETECTADA` with the current verified human snapshot if a position already exists, including one recorded before restart. This position announcement happens once per process after a successful private read and risk assessment; an initial read failure defers it until recovery. Later new positions, manual closes, direction conflicts, material decision/entry changes, WARNING/DANGER/EMERGENCY, GUARDIAN BLIND and protection action intent/results retain deduplicated outbound alerts. There is no ten-second Telegram heartbeat.
+
+Delivery uses a bounded background queue. Each recipient gets an initial attempt plus at most two retries, with 0.2/0.4-second backoff and bounded HTTP timeouts. Enqueueing does not claim delivery success. Logs report only `TELEGRAM_SEND_OK`, `TELEGRAM_DISABLED_NO_TOKEN`, `TELEGRAM_DISABLED_NO_RECIPIENT`, `TELEGRAM_SEND_TIMEOUT`, `TELEGRAM_SEND_HTTP_ERROR`, `TELEGRAM_SEND_NOT_OK` or `TELEGRAM_QUEUE_FULL`; no response body, URL, headers, token or recipient is exposed. Telegram failures remain nonfatal and never retry Bitunix actions or change risk/mutation rules. Heartbeat logs retain timestamp, mark, bias, position presence, risk, armed status and last successful reads, never API credentials.
 
 ## Failure limits
 
