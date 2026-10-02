@@ -439,7 +439,7 @@ class GuardianTests(unittest.TestCase):
         with patch('builtins.print'):
             self.guardian.cycle()
         self.assertFalse(self.fake.posts)
-        self.assertTrue(any('CLOSER TO LIQUIDATION' in x for x in self.telegram.messages))
+        self.assertTrue(any('SL más cercano a liquidación' in x for x in self.telegram.messages))
 
     def test_missing_sl_shadow_dry_run(self):
         self.client.config = Config()
@@ -666,7 +666,7 @@ class GuardianTests(unittest.TestCase):
         self.fake.orders = [dict(positionId='123', symbol='BTCUSDT', slPrice=10400, slStopType='MARK_PRICE')]
         with patch('builtins.print'):
             self.guardian.cycle()
-        self.assertTrue(any('⚠️⚠️ POSICIÓN CONTRA TENDENCIA ⚠️⚠️' in x for x in self.telegram.messages))
+        self.assertTrue(any('⚠️ Posición contraria a la dirección confirmada' in x for x in self.telegram.messages))
         self.assertFalse(self.fake.posts)
 
     def test_direction_conflict_never_flash_closes(self):
@@ -869,7 +869,9 @@ class GuardianTests(unittest.TestCase):
                     momentum='RED' if bearish else 'GREEN', taker_buy=.386 if bearish else .614,
                     structure='BEARISH' if bearish else 'BULLISH', volatility='ELEVATED',
                     entry_atr_1h=100, entry_level=10100 if bearish else 9900,
-                    support=9500, resistance=10500)
+                    support=9500, resistance=10500,
+                    market_levels=dict(status='AVAILABLE', reference_price=10000,
+                                       support=9500, resistance=10500, atr_1h=100))
 
     def test_long_good_has_green_entry_banner(self):
         text = render_copilot(self.human_bias(), Config())
@@ -907,7 +909,7 @@ class GuardianTests(unittest.TestCase):
         for bias, side, icon in (('LONG_ALLOWED', 'LONG', '📈'), ('SHORT_ALLOWED', 'SHORT', '📉')):
             with self.subTest(bias=bias):
                 text = render_copilot(self.human_bias(bias, 'POOR'), Config())
-                self.assertTrue(text.startswith('🟠' + icon + ' BIAS ' + side + ' — ESPERA MEJOR ENTRADA'))
+                self.assertTrue(text.startswith('🟠' + icon + ' ' + side + ' — ESPERA MEJOR ENTRADA'))
                 self.assertIn('🔴 ENTRADA: NO PERSEGUIR PRECIO', text)
                 self.assertIn('🚫 NO ENTRAR AHORA', text)
                 self.assertNotIn('Puedes buscar entrada', text)
@@ -970,8 +972,8 @@ class GuardianTests(unittest.TestCase):
         with patch('builtins.print'):
             self.guardian.cycle()
         startup = next(text for text in self.telegram.messages if 'I-GOD TRADE GUARDIAN ONLINE' in text)
-        self.assertTrue(startup.startswith('🟠📈 BIAS LONG'))
-        self.assertTrue(self.store.read('bias')[0]['human_snapshot'].startswith('🟠📈 BIAS LONG'))
+        self.assertTrue(startup.startswith('🟠📈 LONG'))
+        self.assertTrue(self.store.read('bias')[0]['human_snapshot'].startswith('🟠📈 LONG'))
         self.assertFalse(self.fake.posts)
 
     def test_copilot_entry_change_alert_deduplicates(self):
@@ -984,7 +986,7 @@ class GuardianTests(unittest.TestCase):
             self.guardian._bias_due = 0
             self.guardian.cycle()
             self.guardian.cycle()
-        poor = [text for text in self.telegram.messages if text.startswith('🟠📈 BIAS LONG') and 'NO PERSEGUIR' in text]
+        poor = [text for text in self.telegram.messages if text.startswith('🟠📈 LONG') and 'NO PERSEGUIR' in text]
         self.assertEqual(len(poor), 1)
         self.assertFalse(self.fake.posts)
 
@@ -1424,7 +1426,7 @@ class GuardianNotificationTests(unittest.TestCase):
         self.guardian._bias_due = 0
         self.cycle()
         self.cycle()
-        self.assertTrue(any('POSICIÓN CONTRA TENDENCIA' in m for m in self.telegram.messages))
+        self.assertTrue(any('Posición contraria a la dirección confirmada' in m for m in self.telegram.messages))
         self.assertFalse(self.fake.posts)
 
     def test_warning_danger_emergency_and_blind_are_outbound_shadow(self):
@@ -1441,7 +1443,7 @@ class GuardianNotificationTests(unittest.TestCase):
         self.telegram.messages.clear()
         self.fake.fail = True
         self.cycle()
-        self.assertTrue(any('GUARDIAN BLIND' in m for m in self.telegram.messages))
+        self.assertTrue(any('DATOS TEMPORALMENTE NO VERIFICABLES' in m for m in self.telegram.messages))
         self.assertFalse(self.fake.posts)
 
     def test_notifier_exception_is_nonfatal_and_never_triggers_bitunix_post(self):
