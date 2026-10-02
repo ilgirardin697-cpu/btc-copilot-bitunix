@@ -12,6 +12,7 @@ from guardian_telegram import Telegram, render_copilot, render_risk, protection_
 from koncorde_shadow import diagnostic
 from guardian_signals import volatility_state, current_entry_quality
 from guardian_commands import SnapshotCache, TelegramCommands
+from copilot_audit import ForwardAudit, runtime_git_sha
 
 
 def _safe_order_number(value):
@@ -23,7 +24,7 @@ def _safe_order_number(value):
 
 
 class Guardian:
-    def __init__(self, client, store, market, telegram, clock=time.time):
+    def __init__(self, client, store, market, telegram, clock=time.time, audit=None):
         self.client, self.store, self.market, self.telegram = client, store, market, telegram
         self.config = client.config
         self.clock = clock
@@ -35,6 +36,7 @@ class Guardian:
         self._startup_position_checked = False
         self._failures = 0
         self.command_snapshot = SnapshotCache()
+        self.audit = audit
 
     def alert(self, key, text, cooldown=300):
         last = self.store.state.setdefault('alerts', {}).get(key, 0)
@@ -293,6 +295,11 @@ class Guardian:
                                            mode=self.config.mode,
                                            protection=protection_status(self.config, self.client.credentials_present))
                                       if mark is not None and (details is not None or self.bias['bias'] != 'UNKNOWN') else None)
+        if self.audit is not None:
+            try:
+                self.audit.submit(data, int(now * 1000), mark)
+            except Exception:
+                print('COPILOT_AUDIT_UNAVAILABLE', flush=True)
         print(json.dumps(heartbeat), flush=True)
         return heartbeat
 
@@ -300,15 +307,26 @@ class Guardian:
 def main():
     store = None
     commands = None
+    audit = None
     try:
         config = Config.from_env()
         store = Store(config.state_dir)
         client = Bitunix(config, os.getenv('BITUNIX_API_KEY', ''), os.getenv('BITUNIX_API_SECRET', ''))
+        try:
+            audit = ForwardAudit(os.getenv('COPILOT_AUDIT_STATE_DIR', '/data/copilot_audit'),
+                                 git_sha=runtime_git_sha())
+            audit.start()
+        except Exception:
+            if audit is not None:
+                audit.close()
+            audit = None
+            print('COPILOT_AUDIT_UNAVAILABLE', flush=True)
         guardian = Guardian(client, store, Market(client), Telegram(os.getenv('TELEGRAM_BOT_TOKEN', ''),
-                            os.getenv('TELEGRAM_CHAT_ID', ''), alert_chat_id=os.getenv('TELEGRAM_ALERT_CHAT_ID', '')))
+                            os.getenv('TELEGRAM_CHAT_ID', ''), alert_chat_id=os.getenv('TELEGRAM_ALERT_CHAT_ID', '')), audit=audit)
         commands = TelegramCommands(os.getenv('TELEGRAM_BOT_TOKEN', ''), os.getenv('TELEGRAM_CHAT_ID', ''),
                                     guardian.command_snapshot, guardian.telegram.send_owner,
-                                    enabled=os.getenv('GUARDIAN_ENABLE_COMMANDS', 'false').lower() == 'true')
+                                    enabled=os.getenv('GUARDIAN_ENABLE_COMMANDS', 'false').lower() == 'true',
+                                    stats_cache=audit.stats_cache if audit is not None else None)
         commands.start()
         while True:
             started = time.monotonic()
@@ -324,6 +342,8 @@ def main():
             commands.stop()
         if store is not None:
             store.close()
+        if audit is not None:
+            audit.close()
 
 
 if __name__ == '__main__':

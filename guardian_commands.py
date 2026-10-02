@@ -7,14 +7,16 @@ import time
 from datetime import datetime, timezone
 import requests
 from guardian_telegram import _price, _number, render_risk, direction_label, position_relationship
+from copilot_audit import render_stats
 
-COMMANDS = ('/status', '/why', '/position', '/risk', '/levels', '/help')
+COMMANDS = ('/status', '/why', '/position', '/risk', '/levels', '/stats', '/help')
 NO_DATA = '⚫❓ SIN DATOS SUFICIENTES — NO OPERAR'
 STALE = '⚠️ DATOS DESACTUALIZADOS — NO TOMAR DECISIÓN'
 HELP = ('🤖 I-GOD MANUAL COPILOT\n\n/status\n→ resumen de qué ve ahora\n\n'
         '/why\n→ por qué espera o favorece LONG/SHORT\n\n'
         '/position\n→ tu posición real de Bitunix\n\n/risk\n→ riesgo y liquidación\n\n'
-        '/levels\n→ soportes, resistencias y niveles a vigilar\n\n/help\n→ ayuda\n\n'
+        '/levels\n→ soportes, resistencias y niveles a vigilar\n\n'
+        '/stats [30d|90d|all]\n→ resultados posteriores de señales, no de tu cuenta\n\n/help\n→ ayuda\n\n'
         '🔒 Estos comandos son solo consulta.\nNunca abren ni cierran operaciones.')
 
 
@@ -205,6 +207,8 @@ def _why(data):
 def render_command(command, snapshot, now):
     if command not in COMMANDS or command == '/help':
         return HELP
+    if command == '/stats':
+        return render_stats((snapshot or {}).get('audit_stats'), now_ms=int(now * 1000))
     if not snapshot:
         return NO_DATA
     age = now - snapshot['timestamp']
@@ -239,7 +243,7 @@ def render_command(command, snapshot, now):
 
 class TelegramCommands:
     """No Bitunix, Guardian, environment writer, disk store or mutation callback."""
-    def __init__(self, token, owner, cache, reply, enabled=False, transport=None, clock=time.time):
+    def __init__(self, token, owner, cache, reply, enabled=False, transport=None, clock=time.time, stats_cache=None):
         self._token, self._owner = token.strip(), str(owner).strip()
         self._cache, self._reply = cache, reply
         self.enabled = enabled is True
@@ -248,6 +252,7 @@ class TelegramCommands:
         self._offset = 0
         self._stop = threading.Event()
         self._worker = None
+        self._stats_cache = stats_cache
 
     def process(self, update):
         if not self.enabled or not self._token or not self._owner or not isinstance(update, dict):
@@ -262,6 +267,13 @@ class TelegramCommands:
             return False
         command = text.split(maxsplit=1)[0].split('@')[0]
         try:
+            if command == '/stats':
+                parts = text.split()
+                window = parts[1] if len(parts) == 2 else 'all'
+                if len(parts) > 2 or window not in ('all', '30d', '90d'):
+                    return bool(self._reply(HELP))
+                return bool(self._reply(render_stats(self._stats_cache.read() if self._stats_cache else None,
+                                                    window, int(self._clock() * 1000))))
             return bool(self._reply(render_command(command, self._cache.read(), self._clock())))
         except Exception:
             return False  # never log incoming content, response payload or credentials
