@@ -26,6 +26,18 @@ def signature(key, secret, nonce, timestamp, params, body):
     return hashlib.sha256((digest + secret).encode()).hexdigest()
 
 
+def _response_list(data, list_key, code):
+    """Normalize documented lists and production wrappers without hiding omissions."""
+    if isinstance(data, list):
+        return data, None
+    if not isinstance(data, dict) or not isinstance(data.get(list_key), list):
+        raise SafetyError(code + '_RESPONSE_INVALID')
+    rows, total = data[list_key], data.get('total')
+    if type(total) is not int or total < len(rows):
+        raise SafetyError(code + '_TOTAL_INVALID')
+    return rows, total
+
+
 class Bitunix:
     def __init__(self, config, key='', secret='', transport=None, clock=time.time):
         self.config = config
@@ -91,7 +103,7 @@ class Bitunix:
             raise SafetyError('CLOCK_JUMP')
         self._last_wall, self._last_mono = wall, mono
         payload = json.dumps(body, separators=(',', ':'), ensure_ascii=True) if body is not None else ''
-        headers = {'Content-Type': 'application/json'}
+        headers = {'Content-Type': 'application/json', 'language': 'en-US'}
         if private:
             nonce, stamp = secrets.token_hex(16), str(int(wall * 1000))
             headers.update({'api-key': self._key, 'nonce': nonce, 'timestamp': stamp,
@@ -125,8 +137,12 @@ class Bitunix:
 
     def position(self):
         try:
-            value = parse_positions(self._request('GET', POSITIONS,
-                                     {'symbol': 'BTCUSDT', 'includeSubAccounts': 'false'}))
+            rows, total = _response_list(self._request('GET', POSITIONS,
+                                        {'symbol': 'BTCUSDT', 'includeSubAccounts': 'false'}),
+                                        'positionList', 'POSITIONS')
+            if total is not None and total != len(rows):
+                raise SafetyError('POSITIONS_PAGINATION_INCOMPLETE')
+            value = parse_positions(rows)
             self.last_private = self.clock()
             return value
         except SafetyError:
@@ -151,19 +167,30 @@ class Bitunix:
         return value
 
     def orders(self, position_id):
-        rows = []
-        for skip in range(0, 1000, 100):
-            page = self._request('GET', TPSL, {'symbol': 'BTCUSDT', 'positionId': position_id,
-                                             'limit': 100, 'skip': skip})
-            if not isinstance(page, list):
-                raise SafetyError('ORDERS_INVALID')
-            if any(not isinstance(p, dict) or p.get('positionId') != position_id or p.get('symbol') != 'BTCUSDT' for p in page):
-                raise SafetyError('ORDERS_SCOPE_INVALID')
-            rows.extend(page)
-            if len(page) < 100:
-                self.last_private = self.clock()
-                return rows
-        raise SafetyError('ORDERS_PAGINATION_INCOMPLETE')
+        try:
+            rows, total = [], None
+            for skip in range(0, 1000, 100):
+                page, page_total = _response_list(self._request('GET', TPSL,
+                    {'symbol': 'BTCUSDT', 'positionId': position_id, 'limit': 100, 'skip': skip}),
+                    'orderList', 'ORDERS')
+                if page_total is not None:
+                    if (total is not None and page_total != total) or page_total < skip + len(page):
+                        raise SafetyError('ORDERS_TOTAL_INVALID')
+                    total = page_total
+                if len(page) > 100:
+                    raise SafetyError('ORDERS_PAGINATION_INCOMPLETE')
+                if any(not isinstance(p, dict) or p.get('positionId') != position_id or p.get('symbol') != 'BTCUSDT' for p in page):
+                    raise SafetyError('ORDERS_SCOPE_INVALID')
+                rows.extend(page)
+                if len(page) < 100 or (total is not None and len(rows) == total):
+                    if total is not None and len(rows) != total:
+                        raise SafetyError('ORDERS_PAGINATION_INCOMPLETE')
+                    self.last_private = self.clock()
+                    return rows
+            raise SafetyError('ORDERS_PAGINATION_INCOMPLETE')
+        except SafetyError:
+            self.last_private = None
+            raise
 
     def precision(self):
         rows = self._request('GET', PAIRS, {'symbols': 'BTCUSDT'})
