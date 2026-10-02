@@ -5,6 +5,9 @@ import math
 import os
 
 
+SIDE_ALIASES = {'LONG': 'LONG', 'BUY': 'LONG', 'SHORT': 'SHORT', 'SELL': 'SHORT'}
+
+
 class SafetyError(Exception):
     """Messages are static codes: never include exchange bodies or credentials."""
 
@@ -97,7 +100,9 @@ def parse_positions(rows):
             raise SafetyError('POSITION_INCOMPLETE')
         if p.get('symbol') != 'BTCUSDT':
             raise SafetyError('POSITION_SYMBOL_INVALID')
-        if p.get('side') not in ('LONG', 'SHORT'):
+        raw_side = str(p.get('side')).upper()
+        side = SIDE_ALIASES.get(raw_side)
+        if side is None:
             raise SafetyError('POSITION_SIDE_INVALID')
         if p.get('marginMode') not in ('ISOLATION', 'CROSS'):
             raise SafetyError('POSITION_MARGIN_MODE_INVALID')
@@ -115,7 +120,7 @@ def parse_positions(rows):
         pid = p['positionId']
         if not isinstance(pid, str) or not pid.isdecimal() or len(pid) > 64:
             raise SafetyError('POSITION_ID_INVALID')
-        pos = Position(pid, p['side'], number(p['qty']), number(p['leverage']),
+        pos = Position(pid, side, number(p['qty']), number(p['leverage']),
                        number(p['liqPrice']), number(p['avgOpenPrice']), number(p['unrealizedPNL']),
                        number(p['margin']), number(p['marginRate']), p['marginMode'], p['positionMode'],
                        int(p['ctime']), int(p['mtime']))

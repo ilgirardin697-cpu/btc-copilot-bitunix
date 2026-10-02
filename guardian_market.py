@@ -59,7 +59,8 @@ class Market:
         return [[r[0], r[1], r[2], r[3], r[4], r[5], r[9]] for r in rows]
 
     def bias(self):
-        hour = int(self.clock() // 3600)
+        # Entry evidence includes 15m closed pivots; refresh on that boundary.
+        hour = int(self.clock() // 900)
         if self._hour == hour and self._bias is not None:
             return self._bias
         try:
