@@ -17,13 +17,13 @@ except ImportError:
 import requests
 from guardian_bitunix import (Bitunix, signature, POSITIONS, TPSL, TICKERS, PAIRS, KLINES,
                               PLACE_SL, FLASH_CLOSE, GET_ALLOWLIST, POST_ALLOWLIST)
-from guardian_risk import Config, SafetyError, parse_positions, risk, catastrophic_stop, assess_orders
+from guardian_risk import Config, SafetyError, parse_positions, risk, catastrophic_stop, assess_orders, SIDE_ALIASES
 from guardian_signals import (closed_bars, rolling_mlrsi, cluster_three, states_and_events,
                               confirmed_structure, direction, flow_state, atr14, latest_mlrsi,
-                              volatility_state, snapshot, ML_RSI27_REAL)
+                              volatility_state, snapshot, ML_RSI27_REAL, entry_quality)
 from guardian_store import Store
 from guardian_market import BINANCE_MARKET_DATA_BASE, Market
-from guardian_telegram import Telegram
+from guardian_telegram import Telegram, render_copilot, render_risk, protection_status
 from trade_guardian import Guardian
 
 
@@ -663,7 +663,7 @@ class GuardianTests(unittest.TestCase):
         self.fake.orders = [dict(positionId='123', symbol='BTCUSDT', slPrice=10400, slStopType='MARK_PRICE')]
         with patch('builtins.print'):
             self.guardian.cycle()
-        self.assertTrue(any('TRADE AGAINST BIAS' in x for x in self.telegram.messages))
+        self.assertTrue(any('⚠️⚠️ POSICIÓN CONTRA TENDENCIA ⚠️⚠️' in x for x in self.telegram.messages))
         self.assertFalse(self.fake.posts)
 
     def test_direction_conflict_never_flash_closes(self):
@@ -811,6 +811,247 @@ class GuardianTests(unittest.TestCase):
                 self.assertIsNotNone(heartbeat['last_successful_private_read'])
                 self.assertEqual(heartbeat['armed'], {'sl': False, 'close': False})
         self.assertFalse(self.fake.posts)
+
+    def test_side_aliases_normalize_only_to_long_short(self):
+        self.assertEqual(SIDE_ALIASES, {'LONG': 'LONG', 'BUY': 'LONG', 'SHORT': 'SHORT', 'SELL': 'SHORT'})
+        for raw, normalized in SIDE_ALIASES.items():
+            for value in (raw, raw.lower(), raw.title()):
+                with self.subTest(value=value):
+                    self.fake.positions = [position(side=value)]
+                    self.assertEqual(self.client.position().side, normalized)
+        self.assertFalse(self.fake.posts)
+
+    def test_unknown_side_aliases_fail_closed(self):
+        for value in ('BULL', 'BEAR', 'OPEN', 'CLOSE', 1, 2, '', None, ' BUY', 'SELL ', True, [], {}):
+            with self.subTest(value=value), self.assertRaisesRegex(SafetyError, '^POSITION_SIDE_INVALID$'):
+                self.p(side=value)
+
+    def test_buy_uses_long_liquidation_and_catastrophic_stop(self):
+        p = self.p(side='BUY', liqPrice=9500)
+        self.assertEqual(p.side, 'LONG')
+        self.assertEqual(risk(p, 10000, 100, ARMED)['state'], 'NORMAL')
+        self.assertEqual(catastrophic_stop(p, 10000, 100, 1, ARMED), '9575.0')
+        with self.assertRaisesRegex(SafetyError, '^LIQUIDATION_SIDE_INVALID$'):
+            risk(self.p(side='BUY', liqPrice=10500), 10000, 100, ARMED)
+
+    def test_sell_uses_short_liquidation_and_catastrophic_stop(self):
+        p = self.p(side='SELL', liqPrice=10500)
+        self.assertEqual(p.side, 'SHORT')
+        self.assertEqual(risk(p, 10000, 100, ARMED)['state'], 'NORMAL')
+        self.assertEqual(catastrophic_stop(p, 10000, 100, 1, ARMED), '10425.0')
+        with self.assertRaisesRegex(SafetyError, '^LIQUIDATION_SIDE_INVALID$'):
+            risk(self.p(side='SELL', liqPrice=9500), 10000, 100, ARMED)
+
+    def test_aliases_duplicate_positions_still_blocked(self):
+        self.fake.positions = [position(side='BUY'), position(side='SELL', positionId='456')]
+        with patch('builtins.print'):
+            self.guardian.cycle()
+        self.assertFalse(self.fake.posts)
+        self.assertIsNone(self.client.last_private)
+
+    def test_side_aliases_shadow_zero_posts(self):
+        self.client.config = self.guardian.config = Config()
+        for side, liq in (('BUY', 9900), ('SELL', 10100)):
+            self.fake.positions = [position(side=side, liqPrice=liq)]
+            with patch('builtins.print'):
+                self.guardian.cycle()
+        self.assertFalse(self.fake.posts)
+
+    @staticmethod
+    def human_bias(bias='LONG_ALLOWED', quality='GOOD'):
+        bearish = bias == 'SHORT_ALLOWED'
+        return dict(bias=bias, entry_quality=quality,
+                    entry_reason='CONFIRMED_RECLAIM' if quality == 'GOOD' else 'EXTENDED' if quality == 'POOR' else 'WAIT_RECLAIM',
+                    trend4='BEAR' if bearish else 'BULL', trend1='BEAR' if bearish else 'BULL',
+                    momentum='RED' if bearish else 'GREEN', taker_buy=.386 if bearish else .614,
+                    structure='BEARISH' if bearish else 'BULLISH', volatility='ELEVATED')
+
+    def test_long_good_has_green_entry_banner(self):
+        text = render_copilot(self.human_bias(), Config())
+        self.assertTrue(text.startswith('🟢📈 LONG — PUEDES BUSCAR ENTRADA'))
+        self.assertIn('✅ Puedes buscar entrada LONG', text)
+        self.assertIn('🚫 SHORT: NO recomendado ahora', text)
+        self.assertIn('🟢 ENTRADA: BUENA ZONA', text)
+        self.assertIn('🟢 Compras taker: 61.4%', text)
+
+    def test_short_good_has_red_entry_banner(self):
+        text = render_copilot(self.human_bias('SHORT_ALLOWED'), Config())
+        self.assertTrue(text.startswith('🔴📉 SHORT — PUEDES BUSCAR ENTRADA'))
+        self.assertIn('✅ Puedes buscar entrada SHORT', text)
+        self.assertIn('🚫 LONG: NO recomendado ahora', text)
+        self.assertIn('🔴 Compras taker: 38.6%', text)
+
+    def test_wait_banner_says_no_trade(self):
+        data = self.human_bias('WAIT')
+        data['trend1'] = 'BEAR'
+        text = render_copilot(data, Config())
+        self.assertTrue(text.startswith('🟡⏳ NO OPERAR — ESPERAR'))
+        self.assertIn('🚫 No LONG\n🚫 No SHORT', text)
+        self.assertIn('4H y 1H no están alineados', text)
+        self.assertIn('1H recupere SMA200', text)
+        self.assertNotIn('BUENA ZONA', text)
+
+    def test_unknown_banner_never_allows_an_entry(self):
+        text = render_copilot({'bias': 'UNKNOWN', 'entry_quality': 'GOOD'}, Config())
+        self.assertTrue(text.startswith('⚫❓ SIN DATOS SUFICIENTES — NO OPERAR'))
+        self.assertIn('🚫 No abrir LONG\n🚫 No abrir SHORT', text)
+        self.assertNotIn('BUENA ZONA', text)
+        self.assertNotIn('Puedes buscar entrada', text)
+
+    def test_poor_long_and_short_do_not_allow_entry(self):
+        for bias, side, icon in (('LONG_ALLOWED', 'LONG', '📈'), ('SHORT_ALLOWED', 'SHORT', '📉')):
+            with self.subTest(bias=bias):
+                text = render_copilot(self.human_bias(bias, 'POOR'), Config())
+                self.assertTrue(text.startswith('🟠' + icon + ' BIAS ' + side + ' — ESPERA MEJOR ENTRADA'))
+                self.assertIn('🔴 ENTRADA: NO PERSEGUIR PRECIO', text)
+                self.assertIn('🚫 NO ENTRAR AHORA', text)
+                self.assertNotIn('Puedes buscar entrada', text)
+                self.assertNotIn('ENTRADA PERMITIDA', text)
+                self.assertNotIn('Se permite buscar entrada', text)
+
+    def test_missing_entry_evidence_renders_caution(self):
+        text = render_copilot({'bias': 'LONG_ALLOWED'}, Config())
+        self.assertIn('🟠 ENTRADA: PRECAUCIÓN', text)
+        self.assertNotIn('BUENA ZONA', text)
+        self.assertNotIn('PUEDES BUSCAR ENTRADA', text)
+
+    def test_shadow_banner_clearly_disarmed(self):
+        text = render_copilot(self.human_bias(), replace(ARMED, mode='SHADOW'), private_ready=True)
+        self.assertIn('👁️ GUARDIAN: SHADOW\n🔒 Protección automática DESARMADA', text)
+        self.assertNotIn('✅ Cierre emergencia ARMADO', text)
+        self.assertNotIn('✅ SL catastrófico ARMADO', text)
+
+    def test_protection_display_requires_real_triple_arm_and_credentials(self):
+        full = protection_status(ARMED, private_ready=True)
+        self.assertIn('🛡️🚨 GUARDIAN: PROTECT CAPITAL', full)
+        sl_only = protection_status(replace(ARMED, allow_close=False), private_ready=True)
+        self.assertIn('✅ SL catastrófico ARMADO', sl_only)
+        self.assertIn('❌ Auto-cierre desarmado', sl_only)
+        for config, ready in ((replace(ARMED, arm_phrase=''), True), (ARMED, False)):
+            text = protection_status(config, private_ready=ready)
+            self.assertIn('Protección automática DESARMADA', text)
+            self.assertNotIn('✅ Cierre emergencia ARMADO', text)
+
+    def test_telegram_rendering_ignores_raw_payloads_and_credentials(self):
+        data = self.human_bias()
+        data.update(why='fake-secret raw exchange body', api_key='fake-key', payload={'token': 'TELEGRAM-SECRET'})
+        text = render_copilot(data, ARMED, self.p(), risk(self.p(), 10000, 100, ARMED),
+                              statuses=['fake-secret'], target='fake-secret', private_ready=True)
+        for secret in ('fake-secret', 'fake-key', 'TELEGRAM-SECRET', 'raw exchange body', 'PROTECT_CAPITAL_ONLY'):
+            self.assertNotIn(secret, text)
+
+    def test_danger_banner_does_not_flash_close(self):
+        self.fake.positions = [position(liqPrice=9800)]
+        self.fake.orders = [dict(positionId='123', symbol='BTCUSDT', slPrice=9950, slStopType='MARK_PRICE')]
+        with patch('builtins.print'):
+            heartbeat = self.guardian.cycle()
+        self.assertEqual(heartbeat['risk'], 'DANGER')
+        self.assertTrue(any(x.startswith('🛡️🟠 RIESGO: DANGER') for x in self.telegram.messages))
+        self.assertFalse(self.fake.posts)
+
+    def test_emergency_closes_independently_of_entry_quality_and_bias(self):
+        self.guardian.bias = {'bias': 'WAIT', 'entry_quality': 'POOR'}
+        self.market.value = 'WAIT'
+        self.fake.positions = [position(side='BUY')]
+        with patch('builtins.print'):
+            self.guardian.cycle()
+        self.assertEqual([call[1] for call in self.fake.posts], [FLASH_CLOSE])
+        self.assertTrue(any(x.startswith('🛡️🔴🚨 EMERGENCIA DE LIQUIDACIÓN') for x in self.telegram.messages))
+
+    def test_startup_and_stored_copilot_snapshots_start_with_decision_banner(self):
+        self.client.config = self.guardian.config = Config()
+        data = self.human_bias('LONG_ALLOWED', 'POOR')
+        self.market.bias = lambda: dict(data)
+        with patch('builtins.print'):
+            self.guardian.cycle()
+        startup = next(text for text in self.telegram.messages if 'I-GOD TRADE GUARDIAN ONLINE' in text)
+        self.assertTrue(startup.startswith('🟠📈 BIAS LONG'))
+        self.assertTrue(self.store.read('bias')[0]['human_snapshot'].startswith('🟠📈 BIAS LONG'))
+        self.assertFalse(self.fake.posts)
+
+    def test_copilot_entry_change_alert_deduplicates(self):
+        self.client.config = self.guardian.config = Config()
+        data = self.human_bias(quality='CAUTION')
+        self.market.bias = lambda: dict(data)
+        with patch('builtins.print'):
+            self.guardian.cycle()
+            data.update(entry_quality='POOR', entry_reason='EXTENDED')
+            self.guardian._bias_due = 0
+            self.guardian.cycle()
+            self.guardian.cycle()
+        poor = [text for text in self.telegram.messages if text.startswith('🟠📈 BIAS LONG') and 'NO PERSEGUIR' in text]
+        self.assertEqual(len(poor), 1)
+        self.assertFalse(self.fake.posts)
+
+    @staticmethod
+    def entry_candles():
+        hourly = np.array([[i * 3600000, 100, 102, 98, 100, 10, 6] for i in range(20)], float)
+        highs = [100, 102, 110, 103, 102, 101, 104, 112, 105, 104, 103, 108, 120, 111, 110, 109, 106, 105, 104, 103, 114]
+        lows = [95, 94, 93, 94, 95, 96, 95, 94, 95, 96, 97, 98, 97, 96, 97, 98, 99, 100, 99, 98, 112]
+        quarter = np.array([[i * 900000, (h + l) / 2, h, l, (h + l) / 2, 10, 6]
+                            for i, (h, l) in enumerate(zip(highs, lows))], float)
+        return hourly, quarter
+
+    def test_entry_quality_good_requires_confirmed_reclaim(self):
+        h, q = self.entry_candles()
+        self.assertEqual(confirmed_structure(q)[0], 'BULLISH')
+        quality = entry_quality('LONG_ALLOWED', h, q, 'GREEN', 'BULLISH')
+        self.assertEqual((quality['entry_quality'], quality['entry_level']), ('GOOD', 112))
+        self.assertEqual(quality['resistance'], 120)
+        q = q.copy()
+        q[:, 1:5] = 200 - q[:, 1:5]
+        q[:, [2, 3]] = q[:, [3, 2]]
+        quality = entry_quality('SHORT_ALLOWED', h, q, 'RED', 'BEARISH')
+        self.assertEqual((quality['entry_quality'], quality['entry_level']), ('GOOD', 88))
+
+    def test_entry_quality_near_confirmed_resistance_or_support_is_poor(self):
+        h, q = self.entry_candles()
+        q[-1, 1:5] = [119, 119.5, 118.5, 119]
+        quality = entry_quality('LONG_ALLOWED', h, q, 'GREEN', 'BULLISH')
+        self.assertEqual((quality['entry_quality'], quality['entry_reason']), ('POOR', 'NEAR_RESISTANCE'))
+        q[:, 1:5] = 200 - q[:, 1:5]
+        q[:, [2, 3]] = q[:, [3, 2]]
+        quality = entry_quality('SHORT_ALLOWED', h, q, 'RED', 'BEARISH')
+        self.assertEqual((quality['entry_quality'], quality['entry_reason']), ('POOR', 'NEAR_SUPPORT'))
+
+    def test_entry_quality_extension_is_poor_without_changing_bias(self):
+        h, q = self.entry_candles()
+        q[-1, 1:5] = [129, 130, 128, 129]
+        result = entry_quality('LONG_ALLOWED', h, q, 'GREEN', 'BULLISH')
+        self.assertEqual((result['entry_quality'], result['entry_reason']), ('POOR', 'EXTENDED'))
+        self.assertNotIn('bias', result)
+        self.assertEqual(direction('BULL', 'BULL', 'GREEN', .614, 'BULLISH')[0], 'LONG_ALLOWED')
+
+    def test_entry_quality_missing_atr_pivots_or_alignment_never_good(self):
+        h, q = self.entry_candles()
+        for hours, quarters, momentum, structure in ((h[:2], q, 'GREEN', 'BULLISH'),
+                (h, q[:4], 'GREEN', 'BULLISH'), (h, q, 'NEUTRAL', 'BULLISH'), (h, q, 'GREEN', 'MIXED')):
+            with self.subTest(momentum=momentum, structure=structure):
+                self.assertEqual(entry_quality('LONG_ALLOWED', hours, quarters, momentum, structure)['entry_quality'], 'CAUTION')
+
+    def test_entry_snapshot_excludes_future_quarter_candles(self):
+        h, f, q, now = self._copilot_candles()
+        before = snapshot(h, f, q, now)
+        q = np.vstack((q, [now, 110, 100000, 1, 111, 10, 6],
+                      [now + 900000, 110, 100000, 1, 111, 10, 6]))
+        self.assertEqual(before, snapshot(h, f, q, now))
+
+    def test_entry_levels_are_only_confirmed_pivots(self):
+        h, q = self.entry_candles()
+        result = entry_quality('LONG_ALLOWED', h, q, 'GREEN', 'BULLISH')
+        _, highs, lows = confirmed_structure(q)
+        self.assertIn(result['entry_level'], [level for confirmation, level in highs if confirmation < len(q) - 1])
+        self.assertIn(result['resistance'], [level for _, level in highs])
+        self.assertIn(result['support'], [level for _, level in lows])
+
+    def test_expectations_never_invent_levels(self):
+        data = self.human_bias(quality='POOR')
+        data.update(entry_reason='NEAR_RESISTANCE', resistance=120, entry_level=112)
+        text = render_copilot(data, Config())
+        self.assertIn('Breakout + reclaim de 120.00', text)
+        text = render_copilot(self.human_bias(quality='CAUTION'), Config())
+        self.assertNotIn('Pullback y reclaim del nivel confirmado', text)
+        self.assertNotIn('Breakout + reclaim de ', text)
 
     def test_missing_fields_blocked(self):
         row = position()

@@ -116,6 +116,52 @@ def direction(trend4, trend1, momentum, ratio, structure):
     return 'WAIT', 'Fewer than two matching momentum/flow/structure confirmations'
 
 
+def entry_quality(bias, hourly, quarter_hourly, momentum, structure):
+    """Display only: closed-price timing, never a direction or capital-risk gate.
+
+    Frozen V1: within 0.5 hourly ATR of an opposing pivot or more than 2 ATR
+    beyond the nearest reclaimed pivot is POOR. GOOD requires an actual closed
+    15m reclaim of a previously confirmed pivot, matching momentum/structure,
+    and complete pivot/ATR evidence. Otherwise CAUTION. No parameter search.
+    """
+    result = dict(entry_quality='CAUTION', entry_reason='INSUFFICIENT_EVIDENCE',
+                  entry_level=None, resistance=None, support=None, entry_atr_1h=None,
+                  entry_reference_price=None)
+    if bias not in ('LONG_ALLOWED', 'SHORT_ALLOWED'):
+        return result
+    atr = atr14(hourly)
+    _, highs, lows = confirmed_structure(quarter_hourly)
+    if atr is None or len(highs) < 2 or len(lows) < 2:
+        return result
+    price = float(quarter_hourly[-1, 4])
+    resistance = min((float(level) for _, level in highs if level >= price), default=None)
+    support = max((float(level) for _, level in lows if level <= price), default=None)
+    result.update(entry_reference_price=price, entry_atr_1h=atr,
+                  resistance=resistance, support=support)
+    long = bias == 'LONG_ALLOWED'
+    opposing = resistance if long else support
+    pivots = highs if long else lows
+    # Reclaim must use a pivot already confirmed before the latest closed bar.
+    broken = [float(level) for confirmation, level in pivots
+              if confirmation < len(quarter_hourly) - 1
+              and (level < price if long else level > price)]
+    level = (max(broken) if long else min(broken)) if broken else None
+    result['entry_level'] = level
+    if opposing is not None and abs(opposing - price) <= .5 * atr:
+        result.update(entry_quality='POOR', entry_reason='NEAR_RESISTANCE' if long else 'NEAR_SUPPORT')
+    elif level is not None and abs(price - level) > 2 * atr:
+        result.update(entry_quality='POOR', entry_reason='EXTENDED')
+    else:
+        reclaim = level is not None and (quarter_hourly[-1, 3] <= level < price if long
+                                        else quarter_hourly[-1, 2] >= level > price)
+        aligned = momentum == ('GREEN' if long else 'RED') and structure == ('BULLISH' if long else 'BEARISH')
+        if reclaim and aligned and opposing is not None:
+            result.update(entry_quality='GOOD', entry_reason='CONFIRMED_RECLAIM')
+        else:
+            result['entry_reason'] = 'WAIT_RECLAIM'
+    return result
+
+
 def snapshot(hourly, four_hourly, quarter_hourly, now_ms):
     h = closed_bars(hourly, now_ms, 3600000)
     f = closed_bars(four_hourly, now_ms, 14400000)
@@ -144,7 +190,8 @@ def snapshot(hourly, four_hourly, quarter_hourly, now_ms):
                 rsi27=float(ml['rsi']), long_threshold=float(ml['long_threshold']),
                 short_threshold=float(ml['short_threshold']), window_count=int(ml['window_count']),
                 flow=flow_state(ratio), taker_buy=ratio, structure=structure,
-                last_closed_1h=int(h[-1, 0] + 3600000))
+                last_closed_1h=int(h[-1, 0] + 3600000),
+                **entry_quality(bias, h, q, momentum, structure))
 
 def pine_rsi(close, length):
     """Wilder RMA seeded by the first length price changes, not the first bar."""

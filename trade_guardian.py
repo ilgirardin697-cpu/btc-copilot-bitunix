@@ -7,7 +7,7 @@ from guardian_bitunix import Bitunix
 from guardian_market import Market
 from guardian_risk import Config, SafetyError, risk, catastrophic_stop, assess_orders
 from guardian_store import Store
-from guardian_telegram import Telegram
+from guardian_telegram import Telegram, render_copilot, render_risk, protection_status, DECISION_PREFIXES
 from koncorde_shadow import diagnostic
 from guardian_signals import volatility_state
 
@@ -35,11 +35,13 @@ class Guardian:
         last = self.store.state.setdefault('alerts', {}).get(key, 0)
         if last and self.clock() - last < cooldown:
             return
+        if 'GUARDIAN:' not in text:
+            text += '\n\n' + protection_status(self.config, self.client.credentials_present)
         self.store.append('alerts', {'timestamp': self.clock(), 'key': key, 'text': text})
         self.store.state['alerts'][key] = self.clock()
         self.store.save()
         try:
-            self.telegram.send('I-GOD TRADE GUARDIAN\n' + text)
+            self.telegram.send(text if text.startswith(DECISION_PREFIXES) else 'I-GOD TRADE GUARDIAN\n' + text)
         except Exception:
             pass
 
@@ -99,27 +101,14 @@ class Guardian:
                 time.sleep(.2)
 
     def _position_text(self, position, details, orders, target):
-        flow = self.bias.get('flow', 'UNKNOWN')
-        ratio = self.bias.get('taker_buy')
-        flow_line = f'{flow} ({ratio:.1%} taker buy)' if isinstance(ratio, (float, int)) else flow
-        return (f'{position.side} BTCUSDT\nEntry: {position.entry:g}\nSize: {position.qty:g}\n'
-                f'Leverage: {position.leverage:g}x\nPnL: {position.pnl:g}\nMark: {details["mark"]:g}\n'
-                f'Liquidation: {position.liq:g}\nMarket bias: {self.bias["bias"]}\n'
-                f'TREND: 4H {self.bias.get("trend4", "UNKNOWN")}; 1H {self.bias.get("trend1", "UNKNOWN")}\n'
-                f'MOMENTUM: ML_RSI27_REAL LOW/RSI27/EMA4 {self.bias.get("momentum", "UNKNOWN")} '
-                f'(GREEN EVENT={self.bias.get("green_event", False)}; RED EVENT={self.bias.get("red_event", False)})\n'
-                f'FLOW: {flow_line}\nSTRUCTURE: 15m {self.bias.get("structure", "UNKNOWN")}\n'
-                f'WHY: {self.bias.get("why", "Insufficient evidence")}\n'
-                f'Risk: {details["state"]}\nLiq distance: {details["distance_pct"]:.2%}\n'
-                f'ATR1H: {details["atr"]}\nATR%: {details["atr_pct"]}\n'
-                f'Volatility: {volatility_state(details["atr"], details["mark"])}\n'
-                f'Liq distance ATR: {details["distance_atr"]}\n'
-                f'Existing SL: {orders}\nCatastrophic SL target: {target}')
+        data = dict(self.bias, volatility=volatility_state(details['atr'], details['mark']))
+        return render_copilot(data, self.config, position, details, orders.get('status'), target,
+                              private_ready=self.client.credentials_present)
 
     def cycle(self):
         now = self.clock()
         # CAPITAL first. Direction downloads never delay an emergency action.
-        position, details = None, None
+        position, details, mark, atr, sl_status, target = None, None, None, None, None, None
         try:
             mark = self.client.mark()
             atr = self.market.venue_atr()
@@ -152,25 +141,25 @@ class Guardian:
                                                {'status': sl_status, 'orders': order_summary}, target)
                     if clean and position.leverage >= 2 and details['state'] == 'EMERGENCY':
                         self.alert('risk:' + position.position_id + details['state'],
-                                   'GUARDIAN EMERGENCY\n' + text)
+                                   render_risk(details, sl_status, target) + '\n\n' + text)
                         self._act('CLOSE', position, atr)
                         emergency_processed = True
                     if previous != position.position_id:
                         self.store.append('positions', {'timestamp': now, 'event': 'NEW_POSITION_DETECTED', **asdict(position)})
-                        self.alert('new:' + position.position_id, 'NEW POSITION DETECTED\n' + text)
+                        self.alert('new:' + position.position_id, text + '\n\nNEW POSITION DETECTED')
                         if now < self.store.state.get('lockout_until', 0):
                             self.alert('lockout:' + position.position_id, '🚨 GUARDIAN LOCKOUT VIOLATION\nApp trading is not physically blocked\n' + text)
                     self.store.state['position_id'] = position.position_id
                     opposite = ('LONG_ALLOWED' if position.side == 'SHORT' else 'SHORT_ALLOWED')
                     if self.bias['bias'] == opposite:
                         self.alert('conflict:' + position.position_id + opposite,
-                                   '⚠️ TRADE AGAINST BIAS\nCONSIDER EXIT / REDUCE\nDO NOT ADD\nGuardian automatic close for direction: NO\n' + text)
+                                   text)
                     elif previous == position.position_id and self.store.state.get('position_bias') != self.bias['bias']:
-                        self.alert('aligned:' + position.position_id + self.bias['bias'], 'POSITION CONTEXT UPDATED\n' + text)
+                        self.alert('aligned:' + position.position_id + self.bias['bias'], text + '\n\nPOSITION CONTEXT UPDATED')
                     self.store.state['position_bias'] = self.bias['bias']
                     if details['state'] != 'NORMAL':
                         self.alert('risk:' + position.position_id + details['state'],
-                                   ('🚨 GUARDIAN EMERGENCY' if details['state'] == 'EMERGENCY' else '🚨 LIQUIDATION DANGER' if details['state'] == 'DANGER' else 'LIQUIDATION WARNING') + '\n' + text)
+                                   render_risk(details, sl_status, target) + '\n\n' + text)
                     if 'EXISTING_SL_CLOSER_TO_LIQUIDATION_OR_UNVERIFIED' in sl_status:
                         self.alert('weaker:' + position.position_id, '⚠️ EXISTING SL IS CLOSER TO LIQUIDATION THAN GUARDIAN SAFE LIMIT OR PROTECTION UNVERIFIED\nManual order untouched')
                     if 'EXISTING_TP_OR_UNKNOWN_UNTOUCHED' in sl_status:
@@ -190,24 +179,27 @@ class Guardian:
         if now >= self._bias_due:
             self.bias = self.market.bias()
             self._bias_due = now + 60
+        data = dict(self.bias, volatility=volatility_state(atr, mark) if mark is not None else 'UNKNOWN')
+        copilot = render_copilot(data, self.config, position if details else None, details,
+                                 sl_status, target, private_ready=self.client.credentials_present)
+        decision_key = self.bias['bias'] + ':' + self.bias.get('entry_quality', 'CAUTION')
         if not self._started:
             self._started = True
             status = 'PRIVATE POSITION GUARD DISABLED — credentials absent' if not self.client.credentials_present else (
                 'CAPITAL PROTECTION ARMED' if self.config.armed('SL') and self.config.armed('CLOSE') else 'POSITION GUARD READ-ONLY')
-            self.alert('startup:' + str(int(now)), f'I-GOD TRADE GUARDIAN ONLINE\n{status}\nMode: {self.config.mode}\n'
-                       f'Place SL armed: {self.config.armed("SL")}\nFlash close armed: {self.config.armed("CLOSE")}\n'
-                       f'Symbol: BTCUSDT\nMarket bias: {self.bias["bias"]}\n'
-                       f'TREND 4H/1H: {self.bias.get("trend4", "UNKNOWN")}/{self.bias.get("trend1", "UNKNOWN")}\n'
-                       f'MOMENTUM ML_RSI27_REAL LOW/RSI27/EMA4: {self.bias.get("momentum", "UNKNOWN")}\n'
-                       f'FLOW: {self.bias.get("flow", "UNKNOWN")}\n'
-                       f'STRUCTURE 15m: {self.bias.get("structure", "UNKNOWN")}\n'
-                       f'WHY: {self.bias.get("why", "Insufficient evidence")}\n'
-                       f'Last closed 1H: {self.bias.get("last_closed_1h")}\nRisk engine active')
+            self.alert('startup:' + str(int(now)), copilot + '\n\nI-GOD TRADE GUARDIAN ONLINE\n' + status + '\nRisk engine active')
+            self.store.state['copilot_decision'] = decision_key
             print(status, flush=True)
+        if self.store.state.get('copilot_decision') != decision_key:
+            self.alert('copilot:' + decision_key, copilot)
+            self.store.state['copilot_decision'] = decision_key
+        self.store.save()
         if now >= self._snapshot_due:
-            self.store.append('bias', {'timestamp': now, **self.bias, 'koncorde': diagnostic(), 'risk': details})
+            self.store.append('bias', {'timestamp': now, **self.bias, 'koncorde': diagnostic(),
+                                       'risk': details, 'human_snapshot': copilot})
             self._snapshot_due = now + 300
         heartbeat = {'timestamp': now, 'mark': mark, 'bias': self.bias['bias'], 'position': position is not None,
+                     'entry_quality': self.bias.get('entry_quality', 'CAUTION'),
                      'risk': details['state'] if details else 'UNKNOWN',
                      'armed': {'sl': self.config.armed('SL'), 'close': self.config.armed('CLOSE')},
                      'last_successful_private_read': self.client.last_private,
