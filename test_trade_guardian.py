@@ -9,7 +9,11 @@ import tempfile
 import time
 import unittest
 from unittest.mock import patch
-import numpy as np
+try:
+    import numpy as np
+    import requests
+except ImportError:
+    raise unittest.SkipTest('Guardian dependencies are installed and tested by its dedicated workflow') from None
 import requests
 from guardian_bitunix import (Bitunix, signature, POSITIONS, TPSL, TICKERS, PAIRS, KLINES,
                               PLACE_SL, FLASH_CLOSE, GET_ALLOWLIST, POST_ALLOWLIST)
