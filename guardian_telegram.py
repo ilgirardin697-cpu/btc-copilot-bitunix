@@ -3,6 +3,7 @@ import requests
 import queue
 import threading
 import math
+import time
 from datetime import datetime, timezone
 
 
@@ -178,34 +179,86 @@ def render_copilot(data, config, position=None, details=None, statuses=None, tar
 
 
 class Telegram:
-    def __init__(self, token='', chat_id='', transport=None):
-        self._token, self._chat_id = token, chat_id
+    def __init__(self, token='', chat_id='', transport=None, alert_chat_id=''):
+        self._token = token.strip()
+        owner = str(chat_id).strip()
+        extras = [value.strip() for value in alert_chat_id.split(',') if value.strip()]
+        self._recipients = []
+        for recipient in [owner] + extras:
+            if recipient and recipient not in self._recipients:
+                self._recipients.append(recipient)
         self._http = transport or requests.Session()
         self._queue = None
         self._worker = None
+        self._start_lock = threading.Lock()
+
+    @staticmethod
+    def _diagnostic(code):
+        try:
+            print(code, flush=True)
+        except Exception:
+            pass  # a broken log stream must not affect the risk loop
 
     def send(self, text):
-        if not self._token or not self._chat_id:
+        if not self._token:
+            self._diagnostic('TELEGRAM_DISABLED_NO_TOKEN')
             return False
-        if self._queue is None:
-            self._queue = queue.Queue(maxsize=100)
-            self._worker = threading.Thread(target=self._run, daemon=True, name='guardian-telegram')
-            self._worker.start()
+        if not self._recipients:
+            self._diagnostic('TELEGRAM_DISABLED_NO_RECIPIENT')
+            return False
         try:
+            with self._start_lock:
+                if self._queue is None:
+                    self._queue = queue.Queue(maxsize=100)
+                    self._worker = threading.Thread(target=self._run, daemon=True, name='guardian-telegram')
+                    try:
+                        self._worker.start()
+                    except Exception:
+                        self._queue, self._worker = None, None
+                        self._diagnostic('TELEGRAM_SEND_NOT_OK')
+                        return False
             self._queue.put_nowait(text[:4000])
             return True
         except queue.Full:
+            self._diagnostic('TELEGRAM_QUEUE_FULL')
             return False
+        except Exception:
+            self._diagnostic('TELEGRAM_SEND_NOT_OK')
+            return False
+
+    def _deliver(self, recipient, text):
+        """At most three attempts per recipient, all on the outbound worker."""
+        for attempt in range(3):
+            try:
+                response = self._http.post('https://api.telegram.org/bot' + self._token + '/sendMessage',
+                                          json={'chat_id': recipient, 'text': text},
+                                          timeout=(1, 2), allow_redirects=False)
+                if response.status_code != 200:
+                    code = 'TELEGRAM_SEND_HTTP_ERROR'
+                else:
+                    payload = response.json()
+                    if isinstance(payload, dict) and payload.get('ok') is True:
+                        self._diagnostic('TELEGRAM_SEND_OK')
+                        return True
+                    code = 'TELEGRAM_SEND_NOT_OK'
+            except requests.Timeout:
+                code = 'TELEGRAM_SEND_TIMEOUT'
+            except requests.RequestException:
+                code = 'TELEGRAM_SEND_HTTP_ERROR'
+            except Exception:
+                code = 'TELEGRAM_SEND_NOT_OK'
+            self._diagnostic(code)
+            if attempt < 2:
+                time.sleep(.2 * (attempt + 1))
+        return False
 
     def _run(self):
         while True:
             text = self._queue.get()
             try:
-                response = self._http.post('https://api.telegram.org/bot' + self._token + '/sendMessage',
-                                           json={'chat_id': self._chat_id, 'text': text},
-                                           timeout=(1, 2), allow_redirects=False)
-                response.status_code == 200 and response.json().get('ok') is True
+                for recipient in self._recipients:
+                    self._deliver(recipient, text)
             except Exception:
-                pass
+                self._diagnostic('TELEGRAM_SEND_NOT_OK')
             finally:
                 self._queue.task_done()
