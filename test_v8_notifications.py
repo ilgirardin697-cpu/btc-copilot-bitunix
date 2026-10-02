@@ -9,7 +9,7 @@ import unittest
 from unittest.mock import Mock, patch
 from urllib.parse import parse_qs
 import v8_executor
-from v8_notifications import render_v8_notification
+from v8_notifications import render_v8_notification, notification_text
 
 
 class NotificationTests(unittest.TestCase):
@@ -65,7 +65,7 @@ class NotificationTests(unittest.TestCase):
         telegram = next(n for n in root.body if isinstance(n, ast.FunctionDef) and n.name == 'telegram')
         call = telegram.body[0]
         self.assertIsInstance(call, ast.Assign)
-        self.assertEqual(call.value.func.id, 'render_v8_notification')
+        self.assertEqual(call.value.func.id, 'notification_text')
         telegram.body.pop(0)
         digest = hashlib.sha256(ast.dump(root).encode()).hexdigest()
         self.assertEqual(digest, 'c3437fd0e6b49f3efe48ec97a0d7decf859247d2ac1fed665df81c4bba8b2bc7')
@@ -87,6 +87,17 @@ class NotificationTests(unittest.TestCase):
             text = parse_qs(request.data.decode())['text'][0]
             self.assertIn('V8 STRATEGY SIGNAL', text)
             self.assertIn('EJECUCIÓN REAL DESARMADA', text)
+
+    def test_display_metadata_failure_is_nonfatal_and_unverified(self):
+        with patch.dict(os.environ, {'V8_LIVE_EXECUTION': 'true'}), patch('v8_notifications.Path.exists', side_effect=OSError('PRIVATE_SECRET')):
+            text = notification_text('V8 SIGNAL LONG')
+        self.assertIn('no verificable', text)
+        self.assertNotIn('PRIVATE_SECRET', text)
+        self.assertNotIn('EJECUCIÓN REAL DESARMADA', text)
+
+    def test_disarmed_does_not_need_file_read(self):
+        with patch.dict(os.environ, {'V8_LIVE_EXECUTION': 'false'}), patch('v8_notifications.Path.exists', side_effect=AssertionError('NO FILE READ')):
+            self.assertIn('EJECUCIÓN REAL DESARMADA', notification_text('V8 SIGNAL LONG'))
 
 
 if __name__ == '__main__':
