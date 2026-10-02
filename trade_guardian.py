@@ -11,6 +11,7 @@ from guardian_store import Store
 from guardian_telegram import Telegram, render_copilot, render_risk, protection_status, DECISION_PREFIXES
 from koncorde_shadow import diagnostic
 from guardian_signals import volatility_state, current_entry_quality
+from guardian_commands import SnapshotCache, TelegramCommands
 
 
 def _safe_order_number(value):
@@ -33,6 +34,7 @@ class Guardian:
         self._startup_key = 'startup:' + uuid4().hex
         self._startup_position_checked = False
         self._failures = 0
+        self.command_snapshot = SnapshotCache()
 
     def alert(self, key, text, cooldown=300):
         last = self.store.state.setdefault('alerts', {}).get(key, 0)
@@ -221,18 +223,36 @@ class Guardian:
                      'armed': {'sl': self.config.armed('SL'), 'close': self.config.armed('CLOSE')},
                      'last_successful_private_read': self.client.last_private,
                      'last_successful_public_read': self.client.last_public}
+        verified_position = private_verified and (position is None or details is not None)
+        if position is not None and self.store.attempted('CLOSE', position.position_id):
+            verified_position = False  # never report a pre-action position as current
+        position_view = None
+        if verified_position and position is not None:
+            position_view = dict(side=position.side, entry=position.entry, qty=position.qty,
+                                 leverage=position.leverage, pnl=position.pnl, liq=position.liq)
+        self.command_snapshot.publish(dict(timestamp=now, data=data, mark=mark,
+                                           position_verified=verified_position, position=position_view,
+                                           risk=details, sl_status=sl_status, stop_target=target,
+                                           human_snapshot=copilot,
+                                           protection=protection_status(self.config, self.client.credentials_present))
+                                      if mark is not None and (details is not None or self.bias['bias'] != 'UNKNOWN') else None)
         print(json.dumps(heartbeat), flush=True)
         return heartbeat
 
 
 def main():
     store = None
+    commands = None
     try:
         config = Config.from_env()
         store = Store(config.state_dir)
         client = Bitunix(config, os.getenv('BITUNIX_API_KEY', ''), os.getenv('BITUNIX_API_SECRET', ''))
         guardian = Guardian(client, store, Market(client), Telegram(os.getenv('TELEGRAM_BOT_TOKEN', ''),
                             os.getenv('TELEGRAM_CHAT_ID', ''), alert_chat_id=os.getenv('TELEGRAM_ALERT_CHAT_ID', '')))
+        commands = TelegramCommands(os.getenv('TELEGRAM_BOT_TOKEN', ''), os.getenv('TELEGRAM_CHAT_ID', ''),
+                                    guardian.command_snapshot, guardian.telegram.send_owner,
+                                    enabled=os.getenv('GUARDIAN_ENABLE_COMMANDS', 'false').lower() == 'true')
+        commands.start()
         while True:
             started = time.monotonic()
             guardian.cycle()
@@ -243,6 +263,8 @@ def main():
         print('GUARDIAN STOPPED — SAFE FAILURE; NO NEW MUTATION', flush=True)
         raise SystemExit(1) from None
     finally:
+        if commands is not None:
+            commands.stop()
         if store is not None:
             store.close()
 

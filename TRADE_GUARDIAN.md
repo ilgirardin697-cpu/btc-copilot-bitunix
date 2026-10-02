@@ -92,6 +92,12 @@ Delivery uses a bounded background queue. Each recipient gets an initial attempt
 
 ## Failure limits
 
+### Optional owner queries
+
+`GUARDIAN_ENABLE_COMMANDS=false` is the default. Only the exact value `true` (case-insensitive) opts into a separate Telegram `getUpdates` worker. Only `TELEGRAM_CHAT_ID` can issue `/status`, `/why`, `/position`, `/risk`, `/levels` and `/help`; alert recipients cannot issue commands. Replies go only to the owner. Unknown commands return help; incoming content, chat IDs and Telegram responses are never logged or persisted. The worker reads a copied in-memory snapshot published by normal Guardian cycles, not the Bitunix client or control files. Commands cannot trade, arm, change leverage/margin, or trigger any private request. An unverified position is not reported as absent. Snapshot age is shown; over 30 seconds displays `DATOS DESACTUALIZADOS — NO TOMAR DECISIÓN`, and missing data says `SIN DATOS SUFICIENTES — NO OPERAR`. Command failures cannot stop risk cycles. Outbound-only operation remains the default.
+
+Telegram's [official getUpdates contract](https://core.telegram.org/bots/api#getupdates) uses update offsets and allowed update types. This opt-in reader requests only ordinary messages, advances its in-memory offset and ignores unauthorized chats. Use a dedicated Guardian bot token if another process consumes updates for the main bot; Telegram polling consumers sharing one token compete for the same update stream. No Railway variables or deployment are changed by this PR.
+
 This version has no private subaccount enumeration, market-time endpoint, direct order cancellation, or recovery for a permanently ambiguous exchange response. Bitunix ticker responses document mark and last prices but no quote timestamp; freshness is therefore bounded by a successful current HTTP response, its server Date header and request latency, rather than an exchange quote timestamp. Check the Bitunix account and exchange orders manually after an unresolved emergency alert. A stale or invalid datum blocks mutations. The emergency endpoint gets at most one automatic call per position ID in v1; if a successful response leaves the position open, the Guardian escalates and waits for human/exchange resolution rather than sending blind duplicates.
 
 `Guardian does not guarantee prevention of liquidation during gaps, outages, exchange failures or extreme slippage.`

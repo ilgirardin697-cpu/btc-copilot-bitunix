@@ -182,6 +182,7 @@ class Telegram:
     def __init__(self, token='', chat_id='', transport=None, alert_chat_id=''):
         self._token = token.strip()
         owner = str(chat_id).strip()
+        self._owner = owner
         extras = [value.strip() for value in alert_chat_id.split(',') if value.strip()]
         self._recipients = []
         for recipient in [owner] + extras:
@@ -200,10 +201,17 @@ class Telegram:
             pass  # a broken log stream must not affect the risk loop
 
     def send(self, text):
+        return self._enqueue(text, tuple(self._recipients))
+
+    def send_owner(self, text):
+        """Command replies go only to the configured owner, never alert recipients."""
+        return self._enqueue(text, (self._owner,) if self._owner else ())
+
+    def _enqueue(self, text, recipients):
         if not self._token:
             self._diagnostic('TELEGRAM_DISABLED_NO_TOKEN')
             return False
-        if not self._recipients:
+        if not recipients:
             self._diagnostic('TELEGRAM_DISABLED_NO_RECIPIENT')
             return False
         try:
@@ -217,7 +225,7 @@ class Telegram:
                         self._queue, self._worker = None, None
                         self._diagnostic('TELEGRAM_SEND_NOT_OK')
                         return False
-            self._queue.put_nowait(text[:4000])
+            self._queue.put_nowait((text[:4000], recipients))
             return True
         except queue.Full:
             self._diagnostic('TELEGRAM_QUEUE_FULL')
@@ -254,9 +262,9 @@ class Telegram:
 
     def _run(self):
         while True:
-            text = self._queue.get()
+            text, recipients = self._queue.get()
             try:
-                for recipient in self._recipients:
+                for recipient in recipients:
                     self._deliver(recipient, text)
             except Exception:
                 self._diagnostic('TELEGRAM_SEND_NOT_OK')
