@@ -20,7 +20,7 @@ from guardian_bitunix import (Bitunix, signature, POSITIONS, TPSL, TICKERS, PAIR
 from guardian_risk import Config, SafetyError, parse_positions, risk, catastrophic_stop, assess_orders
 from guardian_signals import (closed_bars, rolling_mlrsi, cluster_three, states_and_events,
                               confirmed_structure, direction, flow_state, atr14, latest_mlrsi,
-                              volatility_state, snapshot)
+                              volatility_state, snapshot, ML_RSI27_REAL)
 from guardian_store import Store
 from guardian_market import Market
 from guardian_telegram import Telegram
@@ -372,6 +372,56 @@ class GuardianTests(unittest.TestCase):
         self.assertEqual(current['state'], prior['state'])
         self.assertEqual(current['green_event'], prior['green_event'])
         self.assertEqual(current, latest_mlrsi(np.r_[c, 100000][:-1], 27, 300))
+
+    @staticmethod
+    def _copilot_candles():
+        now_ms = 200 * 14400000
+        def rows(count, interval):
+            index = np.arange(count)
+            close = 100 + .02 * index
+            low = 80 + 5 * np.sin(index / 7)
+            return np.column_stack((now_ms - (count - index) * interval,
+                                    close - .1, close + 1, low, close,
+                                    np.full(count, 10), np.full(count, 6)))
+        return rows(400, 3600000), rows(200, 14400000), rows(200, 900000), now_ms
+
+    def test_primary_guardian_mlrsi_uses_low_not_close(self):
+        hourly, four, quarter, now_ms = self._copilot_candles()
+        observed = snapshot(hourly, four, quarter, now_ms)
+        expected_low = latest_mlrsi(hourly[:, 3], length=27, max_data=3000, max_iter=1000)
+        close_comparison = latest_mlrsi(hourly[:, 4], length=27, max_data=3000, max_iter=1000)
+        self.assertAlmostEqual(observed['rsi27'], expected_low['rsi'])
+        self.assertNotAlmostEqual(observed['rsi27'], close_comparison['rsi'])
+        self.assertAlmostEqual(observed['long_threshold'], expected_low['long_threshold'])
+        self.assertAlmostEqual(observed['short_threshold'], expected_low['short_threshold'])
+        self.assertEqual(observed['momentum'], {-1: 'RED', 0: 'NEUTRAL', 1: 'GREEN'}[expected_low['state']])
+        self.assertEqual(observed['green_event'], expected_low['green_event'])
+        self.assertEqual(observed['red_event'], expected_low['red_event'])
+        self.assertEqual(observed['momentum_preset'], 'ML_RSI27_REAL')
+        self.assertEqual(observed['momentum_source'], 'LOW')
+        self.assertEqual(observed['momentum_parameters'], {
+            'name': 'ML_RSI27_REAL', 'source': 'LOW', 'rsi_length': 27,
+            'smoothing': 'EMA', 'smoothing_length': 4, 'smooth': True,
+            'max_iter': 1000, 'max_data': 3000, 'clusters': 3})
+
+    def test_close_only_changes_do_not_change_primary_mlrsi(self):
+        hourly, four, quarter, now_ms = self._copilot_candles()
+        before = snapshot(hourly, four, quarter, now_ms)
+        changed = hourly.copy()
+        changed[:, 4] = 110 + 3 * np.sin(np.arange(len(changed)) / 3)
+        changed[:, 1] = changed[:, 4] - .1
+        changed[:, 2] = changed[:, 4] + 1
+        after = snapshot(changed, four, quarter, now_ms)
+        self.assertNotAlmostEqual(latest_mlrsi(hourly[:, 4])['rsi'], latest_mlrsi(changed[:, 4])['rsi'])
+        for key in ('rsi27', 'long_threshold', 'short_threshold', 'momentum', 'green_event', 'red_event'):
+            self.assertEqual(before[key], after[key])
+
+    def test_primary_low_mlrsi_excludes_open_candle(self):
+        hourly, four, quarter, now_ms = self._copilot_candles()
+        before = snapshot(hourly, four, quarter, now_ms)
+        with_open = np.vstack((hourly, [now_ms, 105, 200, 1, 150, 10, 6]))
+        after = snapshot(with_open, four, quarter, now_ms)
+        self.assertEqual(before, after)
 
     def test_volatility_bands(self):
         self.assertEqual(volatility_state(100, 10000), 'NORMAL')

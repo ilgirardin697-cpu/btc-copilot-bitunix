@@ -3,6 +3,11 @@ from collections import deque
 import numpy as np
 
 RULE_VERSION = 'MANUAL_COPILOT_V1'
+ML_RSI27_REAL = {
+    'name': 'ML_RSI27_REAL', 'source': 'LOW', 'rsi_length': 27,
+    'smoothing': 'EMA', 'smoothing_length': 4, 'smooth': True,
+    'max_iter': 1000, 'max_data': 3000, 'clusters': 3,
+}
 
 
 def closed_bars(rows, now_ms, interval_ms):
@@ -39,8 +44,8 @@ def volatility_state(atr, mark):
 
 def latest_mlrsi(values, length=27, max_data=3000, max_iter=1000):
     """Calculate only current and prior causal states; live-cycle cost stays bounded."""
-    close = np.asarray(values, float)
-    smoothed = pine_ema(pine_rsi(close, length), 4)
+    source = np.asarray(values, float)
+    smoothed = pine_ema(pine_rsi(source, length), 4)
     indexes = np.flatnonzero(np.isfinite(smoothed))[-2:]
     if len(indexes) < 2:
         raise ValueError('MOMENTUM_WARMUP')
@@ -122,7 +127,10 @@ def snapshot(hourly, four_hourly, quarter_hourly, now_ms):
             raise ValueError('DIRECTION_DATA_GAP')
     trend1 = 'BULL' if h[-1, 4] > np.mean(h[-200:, 4]) else 'BEAR'
     trend4 = 'BULL' if f[-1, 4] > np.mean(f[-200:, 4]) else 'BEAR'
-    ml = latest_mlrsi(h[:, 4], length=27)
+    # User-confirmed TradingView calculation source is LOW (column 3).
+    # SMA trend continues to use CLOSE; historical CLOSE research is unchanged.
+    ml = latest_mlrsi(h[:, 3], length=ML_RSI27_REAL['rsi_length'],
+                      max_data=ML_RSI27_REAL['max_data'], max_iter=ML_RSI27_REAL['max_iter'])
     if h[-1, 5] <= 0:
         raise ValueError('MOMENTUM_OR_FLOW_UNAVAILABLE')
     momentum = {-1: 'RED', 0: 'NEUTRAL', 1: 'GREEN'}[int(ml['state'])]
@@ -130,6 +138,8 @@ def snapshot(hourly, four_hourly, quarter_hourly, now_ms):
     structure = confirmed_structure(q)[0]
     bias, why = direction(trend4, trend1, momentum, ratio, structure)
     return dict(version=RULE_VERSION, bias=bias, why=why, trend4=trend4, trend1=trend1,
+                momentum_preset=ML_RSI27_REAL['name'], momentum_source=ML_RSI27_REAL['source'],
+                momentum_parameters=dict(ML_RSI27_REAL),
                 momentum=momentum, green_event=bool(ml['green_event']), red_event=bool(ml['red_event']),
                 rsi27=float(ml['rsi']), long_threshold=float(ml['long_threshold']),
                 short_threshold=float(ml['short_threshold']), window_count=int(ml['window_count']),

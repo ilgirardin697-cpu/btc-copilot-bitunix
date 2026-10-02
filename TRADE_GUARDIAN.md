@@ -24,7 +24,26 @@ The position API may return subaccounts. V1 explicitly disables subaccounts and 
 
 ## Manual Copilot V1
 
-Only closed candles are used. Four-hour and one-hour trend are close versus SMA200. Momentum ports the causal rolling BackQuant-style ML RSI calculation from the prior research into a pure module: RSI27 (Wilder RMA seed), EMA4, up to 3000 available smoothed RSI samples, three clusters initialized at p25/p50/p75, absolute distance assignments and arithmetic-mean centers. Green/red state compares RSI with high/low center; events are transitions from a valid neutral candle. RSI14 is not a directional gate. This is a causal algorithm implementation, not an assertion of byte-for-byte TradingView parity; empty clusters retain their prior center.
+Only closed candles are used. Four-hour and one-hour trend are close versus SMA200. Primary momentum is `ML_RSI27_REAL`: LOW source, RSI27 (Wilder RMA seed), EMA4, a causal rolling window of up to 3000 available smoothed RSI samples, and a maximum of 1000 clustering iterations. Three clusters initialize at p25/p50/p75, with absolute-distance assignments and arithmetic-mean centers. Green/red state compares RSI with high/low center; events are transitions from a valid neutral candle. The source is the LOW of each closed Binance 1H candle, independently of the CLOSE-based trend. Snapshots persist preset name, source and parameters; Telegram identifies LOW/RSI27/EMA4 explicitly. Empty clusters retain their prior center.
+
+### TradingView source correction (2026-10-02)
+
+The user's actual TradingView input display is `Low 27 Ema 4 ... 1.000 3.000 3`. The earlier Guardian used CLOSE; it is now explicitly corrected to LOW. This is the user's selected preset, not the public default. No CLOSE diagnostic participates in the primary momentum gate. Historical CLOSE-based research code, artifacts and reported metrics are unchanged; they must not be described as results for this LOW configuration.
+
+The [author's TradingView description](https://www.tradingview.com/script/DKa7Dmc5-Machine-Learning-RSI-BackQuant/) confirms configurable RSI source/smoothing and three clusters. Its fetched page does not expose the complete Pine inputs. The [public Pine copy attributed to BackQuant](https://tradingmike.blogspot.com/2025/06/2025-06-13rsi.html) provides the following additional mapping; it is not proof of the user's installed version:
+
+| Display/input | Verification and Guardian behavior |
+| --- | --- |
+| LOW / 27 / Ema / 4 | User-confirmed selection; copy defaults are CLOSE / 14 / Ema / 4. |
+| Smooth RSI? | Enabled as explicitly requested; the abbreviated display alone does not verify its checkbox. |
+| 1.000 / 3.000 | Consistent with Max Clustering Steps 1000 and Max Data Points 3000; both explicitly requested. |
+| Final 3 | Matches Signal Line Width default 3 in the copy. Cluster count is hardcoded to three, not a count input there. |
+| Sigma 6 | ALMA-only; does not affect EMA. |
+| Threshold range 10 / 90 / step 5 | Copy defaults; its factors array is unused in the shown clustering. Actual user values unconfirmed. |
+| Performance Memory 10 | Copy default; unused in the shown calculation. Actual user value unconfirmed. |
+| Threshold lines, bar colors, plot colors/width | Display settings; actual user values unconfirmed. |
+
+Exact TradingView parity is not claimed. The copy uses `last_bar_index - bar_index <= maxData`, whereas Guardian uses only the trailing available samples at each closed candle. Its array initialization/push patterns contain leading unavailable elements; Guardian uses a deterministic finite-sample/empty-cluster policy. Pine's inclusive `0 to maxIter` loop can permit 1001 passes; Guardian caps at the requested 1000. Chart symbol/venue, timeframe, warm-up/history and the installed script version also require confirmation before any numerical parity claim.
 
 Flow classifies closed 1h Binance taker-buy base-volume ratio: at least 60% strong buy, 55–60% buy, 45–55% neutral, 40–45% sell and at most 40% strong sell. A 15m structure uses unique two-left/two-right pivots only after both right candles have closed. It requires two higher highs and higher lows for bullish, or lower highs and lower lows for bearish; otherwise mixed.
 
