@@ -17,7 +17,7 @@ jobs:
       - name: Compile Guardian modules
         run: python -m py_compile guardian_risk.py guardian_signals.py guardian_bitunix.py guardian_market.py guardian_store.py guardian_telegram.py guardian_commands.py koncorde_shadow.py trade_guardian.py test_trade_guardian.py test_guardian_commands.py test_guardian_ux.py
       - name: Run offline Guardian safety suite
-        run: python -m unittest test_trade_guardian test_guardian_commands test_guardian_ux -v
+        run: python -m unittest test_trade_guardian test_guardian_commands test_guardian_ux test_hierarchical_levels -v
       - name: Run repository suite
         run: python -m unittest discover -v
       - name: Check patch whitespace

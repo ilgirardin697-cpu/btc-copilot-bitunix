@@ -100,6 +100,8 @@ Telegram's [official getUpdates contract](https://core.telegram.org/bots/api#get
 
 ### Consultas claras y niveles durante WAIT
 
+Los niveles tienen dos escalas independientes: **R1/S1 locales 15m** y **R2/S2 estructurales 1H**, con la misma referencia 15m cerrada. Ambas usan pivotes estrictos de dos velas a cada lado; la segunda vela derecha debe haber cerrado. `/levels` muestra precios, distancias, timestamps de pivote/confirmación y ausencia de evidencia por escala; `/status` resume solo las escalas disponibles. La etiqueta «Muy cercano — nivel local/timing» aparece si un nivel local está a ≤0.15 ATR1H. Es presentación: nunca cambia dirección, entrada o protección. Cruzar un nivel por sí solo no confirma LONG/SHORT. `/why` puede mencionar esta proximidad como contexto.
+
 Telegram muestra **DIRECCIÓN**: LONG CONFIRMADO, SHORT CONFIRMADO, SIN DIRECCIÓN CONFIRMADA o DATOS INSUFICIENTES. Una dirección confirmada sigue necesitando una entrada GOOD para mostrar permiso de buscar entrada. Las reglas de dirección, entrada, ML RSI27 LOW EMA4, flujo y estructura no cambian. La relación con una posición es informativa; una dirección opuesta no recomienda automáticamente cerrar ni activa el cierre.
 
 `/status` añade un bloque compacto R/S cuando hay pivotes verificados. `/why` explica por separado las tendencias 4H/1H, momentum, flujo y estructura, qué confirmaciones faltan y qué evidencia cambiaría la decisión. `/position` muestra posición, PnL, liquidación y relación con la dirección. `/risk` distingue el stop verificado de un objetivo catastrófico **teórico** y en SHADOW dice expresamente que Guardian no lo colocará automáticamente. `/help` explica los seis comandos en español: solo consulta; nunca abren ni cierran operaciones.

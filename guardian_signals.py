@@ -117,7 +117,8 @@ def confirmed_market_levels(hourly, quarter_hourly, mark, *, now_ms):
                   support_distance_pct=None, resistance_distance_pct=None,
                   support_distance_atr=None, resistance_distance_atr=None,
                   support_pivot_time=None, resistance_pivot_time=None,
-                  support_confirmed_time=None, resistance_confirmed_time=None)
+                  support_confirmed_time=None, resistance_confirmed_time=None,
+                  structural=None)
     try:
         h = closed_bars(hourly, now_ms, 3600000)
         q = closed_bars(quarter_hourly, now_ms, 900000)
@@ -144,6 +145,31 @@ def confirmed_market_levels(hourly, quarter_hourly, mark, *, now_ms):
                        name + '_distance_atr': distance / atr if atr is not None else None,
                        name + '_pivot_time': int(q[confirmation - 2, 0]),
                        name + '_confirmed_time': int(q[confirmation, 0] + 900000)})
+    if result['support'] is not None or result['resistance'] is not None:
+        result['status'] = 'AVAILABLE'
+    result['structural'] = confirmed_level_scale(h, reference, atr, 3600000)
+    return result
+
+
+def confirmed_level_scale(rows, reference, atr, interval_ms):
+    """Independent 2-left/2-right pivots on already CLOSED candles."""
+    result = dict(status='INSUFFICIENT_CONFIRMED_PIVOTS', reference_price=reference,
+                  support=None, resistance=None, previous_support=None, previous_resistance=None,
+                  atr_1h=atr)
+    _, highs, lows = confirmed_structure(rows, left=2, right=2)
+    for name, pivots in (('support', lows), ('resistance', highs)):
+        eligible = [(i, float(value)) for i, value in pivots
+                    if (value < reference if name == 'support' else value > reference)]
+        if not eligible:
+            continue
+        value = (max if name == 'support' else min)(value for _, value in eligible)
+        confirmation = next(i for i, price in reversed(eligible) if price == value)
+        result.update({name: value,
+                       'previous_' + name: next((price for _, price in reversed(eligible) if price != value), None),
+                       name + '_pivot_time': int(rows[confirmation - 2, 0]),
+                       name + '_confirmed_time': int(rows[confirmation, 0] + interval_ms),
+                       name + '_distance_pct': abs(value - reference) / reference,
+                       name + '_distance_atr': abs(value - reference) / atr if atr else None})
     if result['support'] is not None or result['resistance'] is not None:
         result['status'] = 'AVAILABLE'
     return result

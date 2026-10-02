@@ -4,6 +4,7 @@ import json
 import math
 import threading
 import time
+from datetime import datetime, timezone
 import requests
 from guardian_telegram import _price, _number, render_risk, direction_label, position_relationship
 
@@ -69,32 +70,62 @@ def _levels(data, compact=False, mark=None):
             support = None
         if resistance is None or not resistance > reference:
             resistance = None
+    structural = levels.get('structural') or {}
+    s2, r2 = _number(structural.get('support')), _number(structural.get('resistance'))
+    if reference is None or structural.get('status') != 'AVAILABLE':
+        s2 = r2 = None
+    else:
+        s2 = s2 if s2 is not None and 0 < s2 < reference else None
+        r2 = r2 if r2 is not None and r2 > reference else None
+    scales = [(levels, support, resistance, '⚡ NIVELES LOCALES 15m', '1'),
+              (structural, s2, r2, '🏛 NIVELES ESTRUCTURALES 1H', '2')]
     if compact:
-        if support is None and resistance is None:
-            return ''
-        return '\n'.join(['🏗 NIVELES'] + (['🔴 R: ' + _price(resistance)] if resistance else [])
-                         + (['🟢 S: ' + _price(support)] if support else []))
+        lines = []
+        for _, s, r, _, number in scales:
+            if s is None and r is None:
+                continue
+            lines.append('⚡ 15m' if number == '1' else '🏛 1H')
+            lines += (['🔴 R' + number + ': ' + _price(r)] if r else [])
+            lines += (['🟢 S' + number + ': ' + _price(s)] if s else [])
+        return '🏗 NIVELES\n' + '\n'.join(lines) if lines else ''
     lines = ['🏗 NIVELES DEL MERCADO', 'BTC: ' + _price(mark),
              'Referencia 15m cerrada: ' + _price(reference)]
-    for value, label, sign in ((resistance, '🔴 Resistencia 15m', '+'),
-                                (support, '🟢 Soporte 15m', '-')):
-        if value is None:
-            lines.append('\n' + label + ': Sin pivote confirmado disponible')
-            continue
-        lines.append('\n' + label + ': ' + _price(value))
-        lines.append(f'Distancia: {sign}{abs(value - reference) / reference:.2%}')
-        atr = _number(levels.get('atr_1h'))
-        if atr is not None and atr > 0:
-            lines.append(f'{abs(value - reference) / atr:.2f} ATR1H (Binance cerrado)')
-    if support is None and resistance is None:
+    for scale, s, r, title, number in scales:
+        lines.append('\n' + title)
+        for key, value, label, sign in (('resistance', r, '🔴 R' + number, '+'),
+                                       ('support', s, '🟢 S' + number, '-')):
+            if value is None:
+                lines.append(label + ': Sin pivote confirmado disponible')
+                continue
+            lines.append('\n' + label + ': ' + _price(value))
+            lines.append(f'Distancia: {sign}{abs(value - reference) / reference:.2%}')
+            atr = _number(levels.get('atr_1h'))
+            if atr is not None and atr > 0:
+                multiple = abs(value - reference) / atr
+                lines.append(f'{multiple:.2f} ATR1H (Binance cerrado)')
+                if number == '1' and multiple <= .15:
+                    lines.append('⚪ Muy cercano — nivel local/timing')
+            for suffix, caption in (('_pivot_time', 'Pivote'), ('_confirmed_time', 'Confirmado')):
+                stamp = _number(scale.get(key + suffix))
+                if stamp is not None:
+                    try:
+                        lines.append(caption + ': ' + datetime.fromtimestamp(stamp / 1000, timezone.utc).strftime('%d/%m %H:%M UTC'))
+                    except (ValueError, OverflowError, OSError):
+                        pass
+    if all(value is None for value in (support, resistance, s2, r2)):
         lines.append('Sin niveles confirmados suficientes')
     lines += ['\n🧭 DIRECCIÓN', direction_label(data.get('bias')), '\n👀 QUÉ VIGILAR']
     if resistance is not None:
         lines.append('⬆️ Cierre 15m por encima de ' + _price(resistance)
-                     + '\n→ podría mejorar escenario LONG\n→ todavía necesita momentum/flow/estructura')
+                     + '\n→ cambia estructura local; NO confirma LONG por sí solo')
     if support is not None:
         lines.append('⬇️ Cierre 15m por debajo de ' + _price(support)
-                     + '\n→ podría mejorar escenario SHORT\n→ todavía necesita momentum/flow/estructura')
+                     + '\n→ cambia estructura local; NO confirma SHORT por sí solo')
+    if r2 is not None:
+        lines.append('Cierre 1H sobre R2 ' + _price(r2) + ': cambio de estructura 1H a vigilar')
+    if s2 is not None:
+        lines.append('Cierre 1H bajo S2 ' + _price(s2) + ': cambio de estructura 1H a vigilar')
+    lines.append('→ sigue necesitando las reglas normales de momentum/flow/estructura del Copilot')
     if support is None and resistance is None:
         lines.append('Esperar nuevos pivotes 15m confirmados; no hay niveles verificables')
     level = _number(data.get('entry_level'))
@@ -103,7 +134,7 @@ def _levels(data, compact=False, mark=None):
         lines += ['\n🎯 Reclaim relevante: ' + _price(level),
                   '🛑 Invalidación técnica: cierre 15m ' + ('bajo' if bias == 'LONG_ALLOWED' else 'sobre')
                   + ' ' + _price(level) + '; reevaluar el setup']
-    lines.append('\n🚫 Estos niveles NO son una señal de entrada.')
+    lines.append('\n🚫 Ningún nivel es una orden de entrada. Estos niveles NO son una señal de entrada.')
     return '\n'.join(lines)
 
 
@@ -161,6 +192,13 @@ def _why(data):
             lines.append('Esperar pullback + reclaim confirmado de ' + _price(level))
         elif data.get('entry_quality') != 'GOOD':
             lines.append('Esperar una entrada confirmada; no perseguir precio')
+    levels = data.get('market_levels') or {}
+    reference, atr = _number(levels.get('reference_price')), _number(levels.get('atr_1h'))
+    if reference is not None and atr is not None and atr > 0:
+        for key, label, side in (('resistance', 'R1', 'LONG'), ('support', 'S1', 'SHORT')):
+            level = _number(levels.get(key))
+            if level is not None and abs(level - reference) <= .15 * atr:
+                lines.append('Precio muy cerca de ' + label + ' local, pero ' + label + ' no confirma ' + side + '.')
     return '\n'.join(lines)
 
 
