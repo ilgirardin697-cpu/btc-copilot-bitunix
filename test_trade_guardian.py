@@ -8,7 +8,7 @@ import json
 import tempfile
 import time
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 try:
     import numpy as np
     import requests
@@ -22,7 +22,7 @@ from guardian_signals import (closed_bars, rolling_mlrsi, cluster_three, states_
                               confirmed_structure, direction, flow_state, atr14, latest_mlrsi,
                               volatility_state, snapshot, ML_RSI27_REAL)
 from guardian_store import Store
-from guardian_market import Market
+from guardian_market import BINANCE_MARKET_DATA_BASE, Market
 from guardian_telegram import Telegram
 from trade_guardian import Guardian
 
@@ -53,6 +53,8 @@ class FakeBitunix:
     def __init__(self):
         self.positions = [position()]
         self.orders = []
+        self.positions_wrapped = False
+        self.orders_wrapped = False
         self.mark = 10000
         self.calls = []
         self.fail = False
@@ -70,9 +72,15 @@ class FakeBitunix:
             if path == POSITIONS:
                 if self.before_position:
                     self.before_position(self)
-                return Response(self.positions)
+                data = {'positionList': self.positions, 'total': len(self.positions)} if self.positions_wrapped else self.positions
+                return Response(data)
             if path == TPSL:
-                return Response(self.orders)
+                if not isinstance(self.orders, list):
+                    return Response(self.orders)
+                start = kwargs['params']['skip']
+                page = self.orders[start:start + kwargs['params']['limit']]
+                data = {'orderList': page, 'total': len(self.orders)} if self.orders_wrapped else page
+                return Response(data)
             if path == TICKERS:
                 return Response([dict(symbol='BTCUSDT', markPrice=str(self.mark), lastPrice=str(self.mark))])
             if path == PAIRS:
@@ -149,6 +157,7 @@ class GuardianTests(unittest.TestCase):
         text = h['nonce'] + h['timestamp'] + 'fake-key' + 'includeSubAccountsfalsesymbolBTCUSDT'
         digest = hashlib.sha256(text.encode()).hexdigest()
         self.assertEqual(h['sign'], hashlib.sha256((digest + 'fake-secret').encode()).hexdigest())
+        self.assertEqual(h['language'], 'en-US')
         self.assertFalse(options['allow_redirects'])
 
     def test_secret_never_logged(self):
@@ -173,6 +182,193 @@ class GuardianTests(unittest.TestCase):
     def test_pending_position_parser(self):
         p = self.client.position()
         self.assertEqual((p.position_id, p.side, p.qty, p.margin_mode), ('123', 'LONG', .1, 'ISOLATION'))
+
+    def test_direct_positions_list(self):
+        self.assertEqual(self.client.position(), self.p())
+        self.fake.positions = []
+        self.assertIsNone(self.client.position())
+        self.assertIsNotNone(self.client.last_private)
+
+    def test_position_list_wrapper(self):
+        self.fake.positions_wrapped = True
+        self.assertEqual(self.client.position(), self.p())
+        self.fake.positions = []
+        self.assertIsNone(self.client.position())
+        self.assertIsNotNone(self.client.last_private)
+
+    def test_position_wrapper_truncated_fails_closed(self):
+        self.fake.positions = {'positionList': [position()], 'total': 2}
+        with self.assertRaisesRegex(SafetyError, '^POSITIONS_PAGINATION_INCOMPLETE$'):
+            self.client.position()
+        self.assertIsNone(self.client.last_private)
+        with patch('builtins.print'):
+            self.guardian.cycle()
+        self.assertFalse(self.fake.posts)
+
+    def test_position_wrapper_invalid_list_or_total(self):
+        invalid = [{'total': 0}, {'positionList': None, 'total': 0},
+                   {'positionList': [position()]}]
+        invalid += [{'positionList': [position()], 'total': value}
+                    for value in (None, True, False, -1, 0, 1.0, '1', 'NaN')]
+        for data in invalid:
+            with self.subTest(data=data):
+                self.fake.positions = data
+                with self.assertRaises(SafetyError):
+                    self.client.position()
+                self.assertIsNone(self.client.last_private)
+        self.assertFalse(self.fake.posts)
+
+    def test_duplicate_wrapped_positions_fail_closed(self):
+        self.fake.positions_wrapped = True
+        self.fake.positions = [position(), position(positionId='456')]
+        with self.assertRaisesRegex(SafetyError, '^AMBIGUOUS_POSITIONS$'):
+            self.client.position()
+        with patch('builtins.print'):
+            self.guardian.cycle()
+        self.assertFalse(self.fake.posts)
+
+    def test_wrapped_position_scope_validation_unchanged(self):
+        self.fake.positions_wrapped = True
+        for changes in ({'symbol': 'ETHUSDT'}, {'subAccountId': 12345},
+                        {'side': 'UNSUPPORTED'}, {'positionMode': 'UNSUPPORTED'}):
+            with self.subTest(changes=changes):
+                self.fake.positions = [position(**changes)]
+                with self.assertRaisesRegex(SafetyError, '^POSITION_SCOPE_INVALID$'):
+                    self.client.position()
+        self.assertFalse(self.fake.posts)
+
+    def test_direct_tpsl_list(self):
+        self.assertEqual(self.client.orders('123'), [])
+        self.fake.orders = [dict(positionId='123', symbol='BTCUSDT', slPrice='9950')]
+        self.assertEqual(self.client.orders('123'), self.fake.orders)
+
+    def test_order_list_wrapper(self):
+        self.fake.orders_wrapped = True
+        self.assertEqual(self.client.orders('123'), [])
+        self.fake.orders = [dict(positionId='123', symbol='BTCUSDT', slPrice='9950')]
+        self.assertEqual(self.client.orders('123'), self.fake.orders)
+        self.assertIsNotNone(self.client.last_private)
+
+    def test_order_wrapper_truncation_fails_closed(self):
+        self.fake.orders = {'orderList': [dict(positionId='123', symbol='BTCUSDT')], 'total': 2}
+        with self.assertRaisesRegex(SafetyError, '^ORDERS_PAGINATION_INCOMPLETE$'):
+            self.client.orders('123')
+        self.assertIsNone(self.client.last_private)
+        with patch('builtins.print'):
+            self.guardian.cycle()
+        self.assertFalse(self.fake.posts)
+
+    def test_order_wrapper_invalid_list_or_total(self):
+        order = dict(positionId='123', symbol='BTCUSDT')
+        invalid = [{'total': 0}, {'orderList': None, 'total': 0}, {'orderList': [order]}]
+        invalid += [{'orderList': [order], 'total': value}
+                    for value in (None, True, False, -1, 0, 1.0, '1', 'NaN')]
+        for data in invalid:
+            with self.subTest(data=data):
+                self.fake.orders = data
+                with self.assertRaises(SafetyError):
+                    self.client.orders('123')
+                self.assertIsNone(self.client.last_private)
+        self.assertFalse(self.fake.posts)
+
+    def test_tpsl_pagination_direct_and_wrapped(self):
+        self.fake.orders = [dict(id=str(i), positionId='123', symbol='BTCUSDT') for i in range(101)]
+        for wrapped in (False, True):
+            with self.subTest(wrapped=wrapped):
+                self.fake.orders_wrapped = wrapped
+                self.fake.calls.clear()
+                self.assertEqual(self.client.orders('123'), self.fake.orders)
+                self.assertEqual([call[2]['params']['skip'] for call in self.fake.calls], [0, 100])
+        self.assertFalse(self.fake.posts)
+
+    def test_tpsl_pagination_limit_preserved(self):
+        self.fake.orders = [dict(id=str(i), positionId='123', symbol='BTCUSDT') for i in range(1001)]
+        for wrapped in (False, True):
+            with self.subTest(wrapped=wrapped):
+                self.fake.orders_wrapped = wrapped
+                self.fake.calls.clear()
+                with self.assertRaisesRegex(SafetyError, '^ORDERS_PAGINATION_INCOMPLETE$'):
+                    self.client.orders('123')
+                self.assertEqual(len(self.fake.calls), 10)
+                self.assertIsNone(self.client.last_private)
+
+    def test_order_wrapper_inconsistent_total_fails_closed(self):
+        orders = [dict(id=str(i), positionId='123', symbol='BTCUSDT') for i in range(101)]
+        responses = [Response({'orderList': orders[:100], 'total': 101}),
+                     Response({'orderList': orders[100:], 'total': 102})]
+        with patch.object(self.fake, 'request', side_effect=responses):
+            with self.assertRaisesRegex(SafetyError, '^ORDERS_TOTAL_INVALID$'):
+                self.client.orders('123')
+        self.assertIsNone(self.client.last_private)
+
+    def test_wrapped_tpsl_scope_validation_unchanged(self):
+        self.fake.orders_wrapped = True
+        for order in (dict(positionId='456', symbol='BTCUSDT'),
+                      dict(positionId='123', symbol='ETHUSDT')):
+            with self.subTest(order=order):
+                self.fake.orders = [order]
+                with self.assertRaisesRegex(SafetyError, '^ORDERS_SCOPE_INVALID$'):
+                    self.client.orders('123')
+        self.assertFalse(self.fake.posts)
+
+    def test_market_data_url_and_public_kline_fields(self):
+        raw = [[0, '100', '102', '98', '101', '10', 3599999, '1000', 20, '6', '600', '0']]
+        http = Mock()
+        http.get.return_value.status_code = 200
+        http.get.return_value.json.return_value = raw
+        market = Market(self.client, transport=http, clock=lambda: 3600)
+        self.assertEqual(market._binance('1h', 1), [[0, '100', '102', '98', '101', '10', '6']])
+        self.assertEqual(BINANCE_MARKET_DATA_BASE, 'https://data-api.binance.vision')
+        http.get.assert_called_once_with('https://data-api.binance.vision/api/v3/klines',
+            params={'symbol': 'BTCUSDT', 'interval': '1h', 'limit': 1, 'endTime': 3600000},
+            timeout=(2, 3), allow_redirects=False)
+        # The injected public transport has no authenticated request or POST route.
+        self.assertEqual([call[0] for call in http.method_calls], ['get'])
+        source = Path('guardian_market.py').read_text(encoding='utf-8')
+        self.assertNotIn('api.binance.com', source)
+        for private_marker in ('BINANCE_API_KEY', 'BINANCE_API_SECRET', 'X-MBX-APIKEY', '/api/v3/account', '/api/v3/order'):
+            self.assertNotIn(private_marker, source)
+
+    def test_blind_diagnostic_contains_only_static_code(self):
+        self.fake.fail = True
+        with patch('builtins.print') as output:
+            self.guardian.cycle()
+        diagnostic = [call.args[0] for call in output.call_args_list
+                      if call.args and str(call.args[0]).startswith('GUARDIAN_BLIND_CODE=')]
+        self.assertEqual(diagnostic, ['GUARDIAN_BLIND_CODE=TRANSPORT_OR_RESPONSE_FAILURE'])
+        for call in output.call_args_list:
+            self.assertNotIn('fake-secret', str(call))
+            self.assertNotIn('fake-key', str(call))
+            self.assertNotIn('https://fapi.bitunix.com', str(call))
+
+    def test_exchange_payload_never_in_blind_diagnostic(self):
+        response = Response(None)
+        response.json = lambda: {'code': 10001, 'msg': 'fake-key fake-secret PRIVATE EXCHANGE BODY'}
+        with patch.object(self.fake, 'request', return_value=response), patch('builtins.print') as output:
+            self.guardian.cycle()
+        output.assert_any_call('GUARDIAN_BLIND_CODE=API_REJECTED_AUTH_OR_REQUEST', flush=True)
+        self.assertNotIn('fake-secret', str(output.call_args_list))
+        self.assertNotIn('PRIVATE EXCHANGE BODY', str(output.call_args_list))
+        self.assertFalse(self.fake.posts)
+
+    def test_wrapped_reads_shadow_remains_non_mutating(self):
+        self.fake.positions_wrapped = self.fake.orders_wrapped = True
+        self.client.config = self.guardian.config = Config()
+        with patch('builtins.print'):
+            heartbeat = self.guardian.cycle()
+        self.assertEqual(self.guardian.config.mode, 'SHADOW')
+        self.assertEqual(heartbeat['armed'], {'sl': False, 'close': False})
+        self.assertIsNotNone(heartbeat['last_successful_private_read'])
+        self.assertFalse(self.fake.posts)
+
+    def test_wrapped_reads_keep_mutation_capabilities_unchanged(self):
+        self.fake.positions_wrapped = self.fake.orders_wrapped = True
+        for action, liq in (('SL', 9500), ('CLOSE', 9900)):
+            self.fake.positions = [position(liqPrice=liq)]
+            self.fake.orders = []
+            permit = self.client.preflight(action, self.client.position(), 100)
+            self.client.execute(permit)
+        self.assertEqual([call[1] for call in self.fake.posts], [PLACE_SL, FLASH_CLOSE])
 
     def test_long_liquidation_sanity(self):
         with self.assertRaises(SafetyError):

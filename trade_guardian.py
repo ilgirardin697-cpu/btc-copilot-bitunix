@@ -183,6 +183,7 @@ class Guardian:
                 self.store.save()
             self._failures = 0
         except SafetyError as error:
+            print('GUARDIAN_BLIND_CODE=' + str(error), flush=True)
             self._failures += 1
             self.alert('blind', '🚨 GUARDIAN BLIND\nFresh venue state cannot be verified; NO MUTATION\n' + str(error))
             mark, details = None, None

@@ -6,6 +6,9 @@ from guardian_signals import closed_bars, atr14, snapshot
 from guardian_risk import SafetyError
 
 
+BINANCE_MARKET_DATA_BASE = "https://data-api.binance.vision"
+
+
 class Market:
     def __init__(self, bitunix, transport=None, clock=time.time):
         self.bitunix = bitunix
@@ -42,7 +45,7 @@ class Market:
         rows = []
         end = int(self.clock() * 1000)
         while len(rows) < count:
-            response = self.http.get('https://api.binance.com/api/v3/klines',
+            response = self.http.get(BINANCE_MARKET_DATA_BASE + '/api/v3/klines',
                                      params={'symbol': 'BTCUSDT', 'interval': interval,
                                              'limit': min(1000, count - len(rows)), 'endTime': end},
                                      timeout=(2, 3), allow_redirects=False)
