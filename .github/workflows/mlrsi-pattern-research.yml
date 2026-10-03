@@ -1,0 +1,17 @@
+name: ML RSI pattern offline research
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  mlrsi_pattern:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy requests
+      - run: python -m py_compile research/mlrsi_pattern_backtest.py research/mlrsi_pattern_data.py research/mlrsi_pattern_report.py research/test_mlrsi_pattern.py
+      - run: python -m unittest research.test_mlrsi_pattern -v
+      - run: python -m unittest discover -v
+      - run: git diff --check HEAD^ HEAD
