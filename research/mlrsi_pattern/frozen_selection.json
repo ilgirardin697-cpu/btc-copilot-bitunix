@@ -1,0 +1,16 @@
+{
+  "code_sha256": "36f53674b445cfd22bed1e603c70d0d03961531f23c3f260c44e5555b388e748",
+  "prereg_sha256": "87f597544f0913e876179da34c1b6e8d159bc18382bbddb32ddca6783cbef9e6",
+  "selections": {
+    "GREEN_CROSS:1": "fixed500_0.003",
+    "GREEN_RESUME:1": "fixed500_0.003",
+    "RED_CROSS:1": "fixed500_0.003",
+    "RED_RESUME:1": "fixed500_0.003",
+    "GREEN_CROSS:2": "fixed500_0.003",
+    "GREEN_RESUME:2": "fixed500_0.003",
+    "RED_CROSS:2": "atr_0.003_1",
+    "RED_RESUME:2": "fixed500_0.003"
+  },
+  "development_data_end_exclusive": 1704067200000,
+  "base_fee_bps": 5.0
+}

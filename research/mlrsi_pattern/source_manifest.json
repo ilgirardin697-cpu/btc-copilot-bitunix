@@ -1,0 +1,35 @@
+{
+  "retrieved_at": "2026-10-03T20:17:49.815740+00:00",
+  "exact_parity": false,
+  "sources": [
+    {
+      "name": "official_source",
+      "url": "https://pine-facade.tradingview.com/pine-facade/get/USER;d581ed0024f6459aa8c889950373508c/25.0",
+      "status": 401,
+      "sha256": "5026a76bf211fd8d8f475a2c18a690cddae7fb51654d99653ef6cfd25b7e3d79",
+      "bytes": 71
+    },
+    {
+      "name": "attributed_copy",
+      "url": "https://tradingmike.blogspot.com/2025/06/2025-06-13rsi.html",
+      "status": 200,
+      "sha256": "e010ebc16ffa34f405a1dd48a3da3c4c1c00d596ba609505c5fd96c2be2f19a1",
+      "bytes": 131278
+    },
+    {
+      "name": "author_page",
+      "url": "https://www.tradingview.com/script/DKa7Dmc5-Machine-Learning-RSI-BackQuant/",
+      "status": 200,
+      "sha256": "b179c479c9d810d93198c40aecd914caa620119e04bfb90a41411c762134bc53",
+      "public_script_id": "USER;d581ed0024f6459aa8c889950373508c",
+      "public_metadata_version": "25.0"
+    },
+    {
+      "name": "fees",
+      "url": "https://www.bitunix.com/service/handling-fee",
+      "retrieved_for_study": "2026-10-03",
+      "futures_vip1_taker_bps": 5,
+      "account_tier_verified": false
+    }
+  ]
+}
