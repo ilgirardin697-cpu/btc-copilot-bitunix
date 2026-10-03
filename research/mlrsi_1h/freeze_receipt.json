@@ -1,0 +1,15 @@
+{
+  "frozen_before_test_utc": "2026-10-03T21:21:21.646968+00:00",
+  "selection_sha256": "77b125b7ae0296afd5d0fcdb1c676a9b7f2223f9d4fba511f447a82c2ad90e14",
+  "development_results_sha256": "1a579f5a58ae62149f88e10320131c6b8240bd7daaf91091df66f0753ad53622",
+  "test_file_absent_at_freeze": true,
+  "development_data_end_exclusive": 1704067200000,
+  "serialization_correction": "Explicit Python bool; mathematical outputs and all original selections unchanged; initial TEST could not write JSON",
+  "initial_receipt": {
+    "frozen_before_test_utc": "2026-10-03T21:16:41.271172+00:00",
+    "selection_sha256": "2c3d99a154278b60d2184087500f14c36edc6e1c4ebde603de32300fe1080a90",
+    "development_results_sha256": "1e9b4873058bd316c6c1a2cbe9924802d08372537f989e460d16844858e38ab4",
+    "test_file_absent_at_freeze": true,
+    "development_data_end_exclusive": 1704067200000
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "code_sha256": "b661579e4a48dcffe3f50dba41ec29b7bc6c52353358114a0b05ccb48564ecec",
+  "spec_sha256": "387f9419759f6367fc5dc60dbb5cadc7333b437dd77bc03a8480e6d6ae78331a",
+  "dataset_sha256": "ba6f661004b45d76863aa1a9e8c92e1e2762962e212e662135be9536ea3a3192",
+  "cutoff": 1791061200000,
+  "fee_bps": 5.0,
+  "development_data_end_exclusive": 1704067200000,
+  "volatility_cutpoints": [
+    0.007544079151397457,
+    0.010046221509405885,
+    0.01341891427914823
+  ],
+  "selections": {
+    "GREEN_CROSS:1": {
+      "key": "color:sl0",
+      "eligible": 12,
+      "min_dev_mean": 0.008242638483219775,
+      "fallback": false
+    },
+    "GREEN_RESUME:1": {
+      "key": "color:sl0",
+      "eligible": 12,
+      "min_dev_mean": 0.005743635466683617,
+      "fallback": false
+    },
+    "RED_CROSS:1": {
+      "key": "color_runner:sl1:economic",
+      "eligible": 12,
+      "min_dev_mean": -0.0009302063701711475,
+      "fallback": false
+    },
+    "RED_RESUME:1": {
+      "key": "atr_runner:sl1:trail1:economic",
+      "eligible": 12,
+      "min_dev_mean": -0.001469929802815777,
+      "fallback": false
+    },
+    "GREEN_CROSS:2": {
+      "key": "atr_runner:sl1:trail1.5:economic",
+      "eligible": 0,
+      "min_dev_mean": null,
+      "fallback": true
+    },
+    "GREEN_RESUME:2": {
+      "key": "atr_runner:sl1:trail1.5:economic",
+      "eligible": 0,
+      "min_dev_mean": null,
+      "fallback": true
+    },
+    "RED_CROSS:2": {
+      "key": "fixed1r:sl1",
+      "eligible": 12,
+      "min_dev_mean": -0.0018162594257267145,
+      "fallback": false
+    },
+    "RED_RESUME:2": {
+      "key": "fixed2r:sl1",
+      "eligible": 12,
+      "min_dev_mean": 0.000157039350178858,
+      "fallback": false
+    }
+  },
+  "filters_selected": false
+}
