@@ -1,0 +1,113 @@
+{
+  "main_baseline": "9d0024a45d8e40193162a3864a876ca5ab61d1da",
+  "parent_research_commit": "c049302691e7857691adaf652cd283874c0734a2",
+  "parent_research_pr": 19,
+  "parent_branch": "mlrsi-pattern-research",
+  "parent_study_not_modified": true,
+  "parent_pr_files": [
+    ".github/workflows/mlrsi-pattern-research.yml",
+    "research/mlrsi_pattern/PARITY_AUDIT.md",
+    "research/mlrsi_pattern/RESULTS.md",
+    "research/mlrsi_pattern/data_manifest.json",
+    "research/mlrsi_pattern/development_results.json",
+    "research/mlrsi_pattern/diagnostics.json",
+    "research/mlrsi_pattern/frozen_selection.json",
+    "research/mlrsi_pattern/math_fixtures.json",
+    "research/mlrsi_pattern/preregistered.json",
+    "research/mlrsi_pattern/source_manifest.json",
+    "research/mlrsi_pattern/test_results.json",
+    "research/mlrsi_pattern_backtest.py",
+    "research/mlrsi_pattern_data.py",
+    "research/mlrsi_pattern_report.py",
+    "research/test_mlrsi_pattern.py"
+  ],
+  "exact_parity_proven": false,
+  "study_code_sha256": "b661579e4a48dcffe3f50dba41ec29b7bc6c52353358114a0b05ccb48564ecec",
+  "python": "3.12.12",
+  "numpy": "2.3.5",
+  "requests": "2.32.5",
+  "trading_requests": 0,
+  "deployment_performed": false,
+  "operational_source_audit": [
+    {
+      "path": "guardian_signals.py",
+      "sha256_canonical_text": "abee001f1b09fd43811731f16aa78589d0d5e86bd6dd7e01fa0ceb385b9d537a",
+      "unchanged": true
+    },
+    {
+      "path": "guardian_risk.py",
+      "sha256_canonical_text": "6a5e48b4ea56b4c1caa6f00ec3de5ca6fc89e775753c79014f89afc3ad4a0510",
+      "unchanged": true
+    },
+    {
+      "path": "guardian_bitunix.py",
+      "sha256_canonical_text": "17b6043196c81eb6b18c5abedbc399ddf34614aedfe6f4556c12863984743f87",
+      "unchanged": true
+    },
+    {
+      "path": "guardian_market.py",
+      "sha256_canonical_text": "1648fa09082db411fd7376954633862eb148dcb9163c165e65100dc64f89381c",
+      "unchanged": true
+    },
+    {
+      "path": "guardian_store.py",
+      "sha256_canonical_text": "4e1e657308f314edddcd9155ff03dd1f362879c77637ef3cea8997d2cb0ac03e",
+      "unchanged": true
+    },
+    {
+      "path": "guardian_telegram.py",
+      "sha256_canonical_text": "0df16e21b4a2de5c7721209d5a41a8d18b0dd958c7c3ab8e4fb13f973d3f520a",
+      "unchanged": true
+    },
+    {
+      "path": "guardian_commands.py",
+      "sha256_canonical_text": "0991d79d8ad9770f1b2f44d5487b716c8c05df3c4441fcb1e3cbba470c0a4c61",
+      "unchanged": true
+    },
+    {
+      "path": "trade_guardian.py",
+      "sha256_canonical_text": "e8e71cbd45bf190cb4812bc944bba8f7a0c4c5e9f16340952ea200bee903f1af",
+      "unchanged": true
+    },
+    {
+      "path": "copilot_audit.py",
+      "sha256_canonical_text": "74e903fa8f18a081417716ff5337ddc1fda5e9b6d62dc44c55dcece187167b1d",
+      "unchanged": true
+    },
+    {
+      "path": "trend_v8.py",
+      "sha256_canonical_text": "e5e26f93bca7c6c15cef2d98165c38e8806cc67762840b619ab0f5308af5bf31",
+      "unchanged": true
+    },
+    {
+      "path": "main.py",
+      "sha256_canonical_text": "f53d55f28384d5294821cbac44de4b7887f68fe510bf49693d3cfc711d52dd8b",
+      "unchanged": true
+    },
+    {
+      "path": "live_auto.py",
+      "sha256_canonical_text": "a167f318dc37bc853a443480d808e84a12e8efefc3c3c1a67ccc133a61469ede",
+      "unchanged": true
+    },
+    {
+      "path": "railway.json",
+      "sha256_canonical_text": "075e54976c4007c66795a52b28c74123d01cb48a8e9727d42883023ee5d7cbe0",
+      "unchanged": true
+    },
+    {
+      "path": "early_breakout_core.py",
+      "sha256_canonical_text": "089d910d735621331e17abe902d8de6490cccd60b0cb8ca365a7083ee35966ba",
+      "unchanged": true
+    },
+    {
+      "path": "early_breakout_shadow.py",
+      "sha256_canonical_text": "6f8e4cd0a3e529a3f20cd45b6933fbefe4016bcbb0d72deecf03a2bf42214b7c",
+      "unchanged": true
+    },
+    {
+      "path": "research/early_breakout_research.py",
+      "sha256_canonical_text": "a95adabd872004faa7ef000430822d0b51c98e3d9ea922db549615bced6c4764",
+      "unchanged": true
+    }
+  ]
+}

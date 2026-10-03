@@ -1,0 +1,19 @@
+name: ML RSI 1H offline research
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  mlrsi_1h:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy requests
+      - run: python -m py_compile research/mlrsi_1h_core.py research/mlrsi_1h_data.py research/mlrsi_1h_run.py research/mlrsi_1h_report.py research/test_mlrsi_1h.py
+      - run: python -m unittest research.test_mlrsi_1h -v
+      - run: python -m unittest discover -v
+      - run: git diff --check HEAD^ HEAD
