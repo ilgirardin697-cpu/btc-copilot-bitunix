@@ -1,0 +1,26 @@
+name: Passive ML RSI MTF observer
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  mlrsi_observer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install explicit runtime and test dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Compile observer and integration
+        run: python -m py_compile mlrsi_math.py mlrsi_public.py mlrsi_observer.py mlrsi_telegram.py mlrsi_safety_audit.py live_auto.py test_mlrsi_observer.py test_mlrsi_integration.py
+      - name: Dedicated offline math, state and executor isolation tests
+        run: python -m unittest test_mlrsi_observer test_mlrsi_integration -v
+      - name: Verify unchanged operational AST
+        run: python mlrsi_safety_audit.py
+      - name: Full repository regression
+        run: python -m unittest discover -v
+      - name: Patch whitespace
+        run: git diff --check HEAD^ HEAD
