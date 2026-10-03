@@ -2,6 +2,8 @@
 
 The existing V8/V7 copilot is an analysis/alert bot. The separate I-GOD Trade Guardian described in [TRADE_GUARDIAN.md](TRADE_GUARDIAN.md) is a new optional service with a restricted Bitunix private read and capital protection client; it starts in SHADOW and is not deployed by this repository's Railway entrypoint.
 
+V7 `live_auto.py` V7.3.8.7 adds a [passive ML RSI 15m/1H/4H observer](docs/MLRSI_MTF_OBSERVER.md), automatic observational Telegram alerts and `/mlrsi`. It always has `trade_authority=false`, uses separate public-market storage and cannot affect execution decisions. Exact BackQuant TradingView parity is NOT proven. Existing commands, Guardian/V8 rules and deployment entrypoints are unchanged.
+
 ## What it does
 
 - Source: Bitunix BTCUSDT Futures.

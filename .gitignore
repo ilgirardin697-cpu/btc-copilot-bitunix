@@ -2,3 +2,6 @@ __pycache__/
 *.pyc
 /v8/
 /research/cache/
+/igod_mlrsi_state.json*
+/igod_mlrsi_events.jsonl
+/igod_mlrsi_cache_*.json*
