@@ -7,6 +7,11 @@ import subprocess
 from types import SimpleNamespace
 import unittest
 from unittest.mock import Mock, patch
+try:
+    import numpy
+    import requests
+except ImportError:
+    raise unittest.SkipTest('Observer dependencies are installed and fully tested by mlrsi-observer CI') from None
 from mlrsi_safety_audit import BASELINE, verify_live_ast, verify_observer_boundary
 from mlrsi_observer import MLRSIObserver
 

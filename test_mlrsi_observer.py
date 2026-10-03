@@ -5,7 +5,11 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import Mock, patch
-import numpy as np
+try:
+    import numpy as np
+    import requests
+except ImportError:
+    raise unittest.SkipTest('Observer dependencies are installed and fully tested by mlrsi-observer CI') from None
 from guardian_signals import pine_rsi, pine_ema, rolling_mlrsi, cluster_three
 from mlrsi_math import CAPTURED_CONFIG, CausalSeries, ResearchEvents, TIMEFRAMES
 from mlrsi_observer import MLRSIObserver, ObserverConfig, empty_frame

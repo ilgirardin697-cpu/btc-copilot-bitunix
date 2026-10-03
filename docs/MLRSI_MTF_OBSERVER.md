@@ -253,7 +253,8 @@ git diff --check
 CI dedicada instala todo `requirements.txt`, incluyendo numpy, requests,
 pandas y websocket-client, y usa Python3.12 como la suite existente. Otras
 jobs mínimas sin pandas omiten únicamente los tests de import dinámico RealAuto;
-la dedicada ejecuta todos. Los tests previos y reglas de otros módulos no se
+el job mínimo V8 sin numpy/requests omite los módulos observer, como ya hace
+con los tests Guardian/research. La dedicada ejecuta todos. Los tests previos y reglas de otros módulos no se
 reescriben. No se inicia observer de producción como parte de los tests.
 
 **NO MERGE. NO RAILWAY DEPLOY. NO REAL ORDER. NO LIVE LOGIC CHANGE.**
