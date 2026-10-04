@@ -1,7 +1,9 @@
-"""LOW29/EMA4, persistent-array PINE_PARITY contract for the passive observer.
+# Derived from the user-supplied BackQuant Pine source; MPL-2.0, © BackQuant.
+"""LOW29/EMA4 PINE_PARITY, with literal source array/NA equality semantics.
 
 Exact BackQuant TradingView parity is NOT proven. Historical research is frozen;
-this mode implements the specified Pine contract, not the defective public copy.
+The source supplied directly by the user is authoritative. Paired TradingView
+table values are regression evidence, not proof for every dataset/runtime.
 """
 import copy
 import math
@@ -14,7 +16,7 @@ CAPTURED_CONFIG = {
     'max_clustering_steps': 1000, 'max_data_points': 3000, 'clusters': 3,
     'wait_for_timeframe_close': True,
 }
-CONFIG_VERSION = 'CAPTURE_LOW29_EMA4_PINE_PARITY_V3'
+CONFIG_VERSION = 'CAPTURE_LOW29_EMA4_PINE_PARITY_V4'
 MATH_MODE = 'PINE_PARITY'
 RSI_LENGTH = CAPTURED_CONFIG['rsi_length']
 PINE_ARRAY_LIMIT = 100000
@@ -25,8 +27,9 @@ COLORS = {-1: 'RED', 0: 'NEUTRAL', 1: 'GREEN'}
 def pine_percentile(values, percentage):
     """Explicit linear interpolation: sorted finite samples, rank=(n-1)*p/100.
 
-    No np.quantile dependency. Offline vectors and a Pine validation harness
-    document this contract; they are not TradingView-captured parity evidence.
+    No np.quantile dependency. All ten user-observed TV rows agree at two
+    displayed decimals; positional interpolation of unsorted data does not.
+    Whether the builtin mutates its array remains a separate diagnostic.
     Pine array statistics ignore missing elements unless all are missing.
     """
     if not 0 <= percentage <= 100:
@@ -40,35 +43,55 @@ def pine_percentile(values, percentage):
     return a[left] + (a[right] - a[left]) * (rank - left)
 
 
-def pine_cluster_three(values, max_iter=1000):
-    """Lloyd assignments in insertion order; first index wins absolute ties.
+def pine_arrays_equal(left, right):
+    """Literal f_arrays_equal: NA != value is bool NA, hence false in Pine v5 IF.
 
-    np.bincount sums in original sample order (no sorted-prefix reductions).
-    Means of empty clusters are NA, never the old centroid. Pathological NA
-    thresholds return invalid immediately: documented runtime fail-safe instead
-    of publishing a Pine ternary's potentially misleading NEUTRAL.
-    The Pine `for _ = 0 to maxIter` bound is inclusive.
+    This is deliberately not Python list equality nor an improved equality.
+    """
+    if len(left) != len(right):
+        return False
+    for a, b in zip(left, right):
+        if a is not None and b is not None and a != b:
+            return False
+    return True
+
+
+def pine_cluster_three(values, max_iter=1000, centroids=None):
+    """Execute the author's constructors, NA slots, IF equality and break order.
+
+    VAR carry starts with three NA slots, grows to six on the first bar (even
+    with an empty array), then persists. Percentiles overwrite indices0..2.
+    Three leading NA DISTANCES shift finite minima to indices>=3: all finite
+    samples therefore reach cluster3. New centroids have three leading NA too.
+    f_arrays_equal can return true BEFORE assigning these means. Do not turn
+    this into conventional k-means: the normal source retains p25/p50/p75.
     """
     if not isinstance(max_iter, int) or max_iter < 0:
         raise ValueError('MLRSI_MAX_ITER_INVALID')
     data = np.asarray([v for v in values if v is not None], dtype=float)
     if not np.all(np.isfinite(data)):
         raise ValueError('MLRSI_CLUSTER_INPUT_INVALID')
-    centroids = [pine_percentile(data, p) for p in (25, 50, 75)]
-    if len(data) == 0:
-        return centroids, 0, False
+    c = [None, None, None] if centroids is None else list(centroids)
+    if len(values) > 3:
+        c[:3] = [pine_percentile(values, p) for p in (25, 50, 75)]
     for iteration in range(max_iter + 1):
-        distances = np.abs(data[:, None] - np.asarray(centroids)[None, :])
-        assignment = np.argmin(distances, axis=1)  # array.indexof(min): FIRST
-        counts = np.bincount(assignment, minlength=3)
-        sums = np.bincount(assignment, weights=data, minlength=3)
-        updated = [float(sums[i] / counts[i]) if counts[i] else None for i in range(3)]
-        if any(c is None for c in updated):
-            return updated, iteration + 1, False
-        if updated == centroids:  # f_arrays_equal: exact, no epsilon
-            return updated, iteration + 1, True
-        centroids = updated
-    return centroids, max_iter + 1, False
+        # Ignore NA samples for array.avg; their membership cannot affect means.
+        if len(data):
+            centers = np.asarray([np.nan if x is None else x for x in c])
+            distances = np.concatenate((np.full((len(data), 3), np.nan),
+                                        np.abs(data[:, None] - centers[None, :])), axis=1)
+            assignment = np.argmin(np.where(np.isnan(distances), np.inf, distances), axis=1)
+            groups = np.where(assignment == 0, 0, np.where(assignment == 1, 1, 2))
+            counts = np.bincount(groups, minlength=3)
+            sums = np.bincount(groups, weights=data, minlength=3)
+            means = [float(sums[i] / counts[i]) if counts[i] else None for i in range(3)]
+        else:
+            means = [None, None, None]
+        updated = [None, None, None] + means  # array.new_float(3), THEN push
+        if pine_arrays_equal(updated, c):
+            return c, iteration + 1, True  # BREAK before centroids := new_centroids
+        c = updated
+    return c, max_iter + 1, False
 
 
 class CausalSeries:
@@ -85,6 +108,7 @@ class CausalSeries:
         self.seed = []
         self.up = self.down = self.smoothed = None
         self.history = []
+        self.pine_centroids = [None, None, None]
         self.bootstrap_last_bar_index = 0
         self.count = 0
         if state is not None:
@@ -94,10 +118,12 @@ class CausalSeries:
             self.history.extend(state['history'])
             self.count = state['count']
             self.bootstrap_last_bar_index = state['bootstrap_last_bar_index']
-            values = [self.previous_low, self.up, self.down, self.smoothed, *self.history]
+            self.pine_centroids = list(state['pine_centroids'])
+            values = [self.previous_low, self.up, self.down, self.smoothed, *self.history, *self.pine_centroids]
             if (state.get('rsi_length') != RSI_LENGTH or state.get('math_mode') != MATH_MODE
                     or len(state['history']) > PINE_ARRAY_LIMIT or len(self.seed) > RSI_LENGTH or self.count < 0
                     or type(self.bootstrap_last_bar_index) is not int or self.bootstrap_last_bar_index < 0
+                    or len(self.pine_centroids) != (3 if self.count == 0 else 6)
                     or any(v is not None and not math.isfinite(v) for v in values)
                     or not isinstance(self.count, int)
                     or any(len(pair) != 2 or any(not math.isfinite(v) or v < 0 for v in pair) for pair in self.seed)
@@ -107,6 +133,7 @@ class CausalSeries:
     def dump(self):
         return dict(rsi_length=RSI_LENGTH, math_mode=MATH_MODE,
                     bootstrap_last_bar_index=self.bootstrap_last_bar_index,
+                    pine_centroids=list(self.pine_centroids),
                     previous_low=self.previous_low, seed=self.seed, up=self.up, down=self.down,
                     smoothed=self.smoothed, history=list(self.history), count=self.count)
 
@@ -152,9 +179,13 @@ class CausalSeries:
                       valid=False, converged=False, window_count=len(self.history),
                       threshold_sample_count=len(self.history), iterations=0,
                       lower_threshold=None, middle_centroid=None, upper_threshold=None, color='UNKNOWN')
+        # Source clustering executes EVERY bar, including empty/NA warmup. That
+        # first execution is essential to the persistent three -> six carry.
+        c, iterations, converged = pine_cluster_three(self.history, CAPTURED_CONFIG['max_clustering_steps'], self.pine_centroids)
+        self.pine_centroids = c
+        result.update(converged=bool(converged), iterations=int(iterations))
         if raw is not None and len(self.history) >= 4:
-            c, iterations, converged = pine_cluster_three(self.history, CAPTURED_CONFIG['max_clustering_steps'])
-            valid = all(v is not None and math.isfinite(v) for v in c)
+            valid = all(v is not None and math.isfinite(v) for v in c[:3])
             color = ('GREEN' if self.smoothed > c[2] else 'RED' if self.smoothed < c[0] else 'NEUTRAL') if valid else 'UNKNOWN'
             result.update(lower_threshold=c[0], middle_centroid=c[1], upper_threshold=c[2], color=color,
                           valid=valid, converged=bool(converged), iterations=int(iterations))

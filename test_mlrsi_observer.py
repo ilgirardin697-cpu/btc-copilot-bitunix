@@ -48,7 +48,7 @@ class MathTests(unittest.TestCase):
 
     def test_current_live_preset_is_low29(self):
         self.assertEqual(RSI_LENGTH, 29)
-        self.assertEqual(CONFIG_VERSION, 'CAPTURE_LOW29_EMA4_PINE_PARITY_V3')
+        self.assertEqual(CONFIG_VERSION, 'CAPTURE_LOW29_EMA4_PINE_PARITY_V4')
         self.assertEqual(CAPTURED_CONFIG, dict(source='LOW', rsi_length=29, smooth=True, ma_type='EMA',
                                              smoothing_period=4, alma_sigma=1, threshold_range_min=10,
                                              threshold_range_max=90, step=5, performance_memory=10,

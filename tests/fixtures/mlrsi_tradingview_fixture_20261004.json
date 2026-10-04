@@ -1,0 +1,119 @@
+{
+  "authority": "USER_DIRECT_TRADINGVIEW_SOURCE_TAB_AND_DATA_TABLE",
+  "source_page": "https://www.tradingview.com/script/DKa7Dmc5-Machine-Learning-RSI-BackQuant/",
+  "source_file": "backquant_user_source.pine",
+  "source_sha256": "cbed377e7efb150cf4722be7b5a86c636ee326238565dda79708507bac6918ea",
+  "symbol": "BTCUSDT",
+  "venue": "BINANCE_SPOT",
+  "timeframe": "15m",
+  "timezone": "Europe/Madrid",
+  "date_column_semantics": "CANDLE_OPEN_TIME",
+  "displayed_decimal_places": 2,
+  "captured_configuration": "low 29 Ema 4 1 10 90 5 10 1.000 3.000 3",
+  "observations": [
+    {
+      "open_time_europe_madrid": "2026-10-04T09:00:00+02:00",
+      "open_time_utc": "2026-10-04T07:00:00+00:00",
+      "open_timestamp_ms": 1791097200000,
+      "displayed_rsi": "58.78",
+      "displayed_long_threshold": "56.11",
+      "displayed_short_threshold": "45.54",
+      "explicitly_observed_color": null
+    },
+    {
+      "open_time_europe_madrid": "2026-10-04T09:15:00+02:00",
+      "open_time_utc": "2026-10-04T07:15:00+00:00",
+      "open_timestamp_ms": 1791098100000,
+      "displayed_rsi": "58.05",
+      "displayed_long_threshold": "56.12",
+      "displayed_short_threshold": "45.54",
+      "explicitly_observed_color": null
+    },
+    {
+      "open_time_europe_madrid": "2026-10-04T09:30:00+02:00",
+      "open_time_utc": "2026-10-04T07:30:00+00:00",
+      "open_timestamp_ms": 1791099000000,
+      "displayed_rsi": "57.36",
+      "displayed_long_threshold": "56.12",
+      "displayed_short_threshold": "45.54",
+      "explicitly_observed_color": null
+    },
+    {
+      "open_time_europe_madrid": "2026-10-04T09:45:00+02:00",
+      "open_time_utc": "2026-10-04T07:45:00+00:00",
+      "open_timestamp_ms": 1791099900000,
+      "displayed_rsi": "57.89",
+      "displayed_long_threshold": "56.14",
+      "displayed_short_threshold": "45.54",
+      "explicitly_observed_color": null
+    },
+    {
+      "open_time_europe_madrid": "2026-10-04T10:00:00+02:00",
+      "open_time_utc": "2026-10-04T08:00:00+00:00",
+      "open_timestamp_ms": 1791100800000,
+      "displayed_rsi": "60.28",
+      "displayed_long_threshold": "56.14",
+      "displayed_short_threshold": "45.54",
+      "explicitly_observed_color": null
+    },
+    {
+      "open_time_europe_madrid": "2026-10-04T10:15:00+02:00",
+      "open_time_utc": "2026-10-04T08:15:00+00:00",
+      "open_timestamp_ms": 1791101700000,
+      "displayed_rsi": "62.13",
+      "displayed_long_threshold": "56.14",
+      "displayed_short_threshold": "45.55",
+      "explicitly_observed_color": null
+    },
+    {
+      "open_time_europe_madrid": "2026-10-04T10:30:00+02:00",
+      "open_time_utc": "2026-10-04T08:30:00+00:00",
+      "open_timestamp_ms": 1791102600000,
+      "displayed_rsi": "60.96",
+      "displayed_long_threshold": "56.15",
+      "displayed_short_threshold": "45.55",
+      "explicitly_observed_color": "GREEN"
+    },
+    {
+      "open_time_europe_madrid": "2026-10-04T10:45:00+02:00",
+      "open_time_utc": "2026-10-04T08:45:00+00:00",
+      "open_timestamp_ms": 1791103500000,
+      "displayed_rsi": "60.95",
+      "displayed_long_threshold": "56.15",
+      "displayed_short_threshold": "45.55",
+      "explicitly_observed_color": "GREEN"
+    },
+    {
+      "open_time_europe_madrid": "2026-10-04T11:00:00+02:00",
+      "open_time_utc": "2026-10-04T09:00:00+00:00",
+      "open_timestamp_ms": 1791104400000,
+      "displayed_rsi": "60.49",
+      "displayed_long_threshold": "56.17",
+      "displayed_short_threshold": "45.55",
+      "explicitly_observed_color": "GREEN"
+    },
+    {
+      "open_time_europe_madrid": "2026-10-04T11:15:00+02:00",
+      "open_time_utc": "2026-10-04T09:15:00+00:00",
+      "open_timestamp_ms": 1791105300000,
+      "displayed_rsi": "61.28",
+      "displayed_long_threshold": "56.17",
+      "displayed_short_threshold": "45.55",
+      "explicitly_observed_color": "GREEN"
+    }
+  ],
+  "public_input_fixture": "mlrsi_binance_low_20261004.json",
+  "computed_python_values": "Computed from frozen LOWs in test_mlrsi_source_parity; observations never feed thresholds.",
+  "prior_v3_python_1030": {
+    "commit": "7659f8dbb9616136e43cf24531076b42f7c9ef82",
+    "mlrsi_smoothed": 60.96012678691446,
+    "upper_threshold": 68.47052987446479,
+    "lower_threshold": 42.512609787024566,
+    "color": "NEUTRAL"
+  },
+  "limitations": [
+    "TV values have only 2 displayed decimals; full precision not supplied.",
+    "TV loaded history/last_bar_index and builtin array mutation not directly measured.",
+    "Exact BackQuant TradingView parity is NOT proven for all histories/timeframes."
+  ]
+}

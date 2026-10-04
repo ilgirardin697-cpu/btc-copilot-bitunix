@@ -45,7 +45,7 @@ transporte Guardian es texto plano. No se crea bot ni poller adicional.
 todo su contenido, añadiendo `/mlrsi`. `live_auto.py` vuelve íntegramente al
 baseline main V7.3.8.6, sin hooks ML RSI. No se modifica ningún start command,
 rama de servicio o archivo V8. La versión interna actual del observer es
-`V7.3.8.7_MLRSI_PINE_PARITY_3`; no cambia la versión de un executor.
+`V7.3.8.7_MLRSI_PINE_SOURCE_4`; no cambia la versión de un executor.
 
 Un fallo de init, arranque, cálculo, mercado, disco, comando o Telegram produce
 un diagnóstico estático y no interrumpe la gestión real. La falta de datos
@@ -57,7 +57,7 @@ La entrega usa el Telegram existente; no se redefine su comportamiento.
 
 La referencia actual confirmada es `ML RSI [BackQuant] low 29 Ema 4 1 10 90 5 10 1.000 3.000 3`.
 El observer usa **LOW29_EMA4**, no el preset RSI27 de los estudios congelados.
-`CONFIG_VERSION=CAPTURE_LOW29_EMA4_PINE_PARITY_V3`. RSI29 se aplica realmente a
+`CONFIG_VERSION=CAPTURE_LOW29_EMA4_PINE_PARITY_V4`. RSI29 se aplica realmente a
 bootstrap, cálculo incremental, confirmed y la copia provisional.
 
 | Campo | Valor | Uso en este port |
@@ -75,14 +75,12 @@ bootstrap, cálculo incremental, confirmed y la copia provisional.
 | Clusters | 3 | p25/p50/p75, percentiles lineales |
 | Wait for timeframe close | ON | Confirmaciones al cierre real UTC |
 
-**Math mode: PINE_PARITY**. Es el contrato Pine solicitado, no una prueba de
-identidad con el script original. La fuente principal es la
-[página oficial BackQuant](https://www.tradingview.com/script/DKa7Dmc5-Machine-Learning-RSI-BackQuant/).
-Aunque está marcada open-source, el endpoint de código devuelve HTTP401 desde
-este entorno. Su metadata pública identifica versión25.0. La copia de terceros
-contiene arrays con tres slots NA seguidos de append; contradice thresholds
-válidos y no se adopta ni se «repara» fingiendo que es la fuente oficial.
-Véase [evidencia, divergencias y comparación pendiente](MLRSI_PINE_PARITY.md).
+**Math mode: PINE_PARITY**. La autoridad primaria es el texto exacto de
+Source Code entregado por el usuario, conservado con MPL-2.0 en
+`tests/fixtures/backquant_user_source.pine`. No se considera un defecto de mirror.
+Diez filas reales de TradingView coinciden en RSI/upper/lower a dos decimales;
+no se afirma identidad universal con el motor ni precisión interna completa.
+Véase [source literal, causa del mismatch y evidencia](MLRSI_PINE_PARITY.md).
 
 El RSI se inicia tras 29 diferencias LOW: SMA de gains/losses, RMA con
 alpha1/29; RSI 100 - 100/(1+up/down), 100 con down0/up positivo,
@@ -103,37 +101,36 @@ históricos: **este modo no es un backtest prefix-invariant entre anclas distint
 No usa LOWs futuros; la selección histórica depende explícitamente del final
 conocido del dataset al cargar, como Pine.
 
-Cada cálculo reinicia p25/p50/p75. Interpolación explícita con rank
-(n-1)*p/100, sin depender de numpy.quantile; vectors offline y harness Pine
-permiten verificar la implementación. **Los vectors no son salidas capturadas
-de TradingView**: la equivalencia con su builtin aún necesita ejecución del
-harness. Assignment por distancia absoluta; primer índice en empate; medias
-sumadas en el orden de inserción, sin prefijos ordenados. Convergencia por
-igualdad exacta; loop0..1000 inclusivo. Al agotarlo con tres centroides finitos,
-Pine conserva el último resultado y el observer también: no exige convergencia
-para colorear. GREEN si RSI>centroide[2], RED si RSI<centroide[0]; igualdad
-es NEUTRAL. No hay histéresis.
+El source inicializa percentiles25/50/75 cuando hay más de3 samples.
+Se usa interpolación de orden `(n-1)*p/100`; las diez filas reales apoyan esa
+semántica. No se ha medido directamente si el builtin muta su array; el
+diagnóstico Pine compara un vector desordenado con una copia ordenada.
 
-**Divergencia patológica explícita:** cluster vacío produce NA (no retiene el
-centroide anterior); el observer marca UNKNOWN y detiene ese clustering, en
-vez de publicar un NEUTRAL posiblemente engañoso de comparaciones NA. Límite
-100000 elementos, coherente con arrays Pine: excederlo falla en el observer
-sin evicción ni modificación parcial de carry. El fallo nunca afecta Guardian.
-Las políticas NA intermedias del Pine exacto no se pueden certificar sin fuente.
+Se conservan los constructores de tres NA y los posteriores push: el
+carry VAR crece a6 slots en la primera barra, aun antes del gate. Los tres
+NA iniciales de distances desplazan índices finitos a>=3: llegan acluster3.
+f_arrays_equal usa comparación Pine v5 con NA dentro deIF. En el recorrido
+normal devuelve true y hace BREAK ANTES de asignar new_centroids. Así los
+percentiles0/1/2 siguen visibles; no se convierten en k-means convencional.
+Loop0..1000 inclusivo, primer índice en empate, medias vacíasNA. Color literal
+RSI>centroid[2] GREEN /RSI<centroid[0] RED /elseNEUTRAL, sin histéresis.
+converged significa salida de esa igualdad, no convergencia de Lloyd.
 
-La referencia independiente mlrsi_pine_reference.py usa listas y loops
-simples, sin importar el cálculo optimizado. Se compara cada barra de una
-fixture congelada de3436 LOWs: RSI bruto, EMA, tres centroides, color, contador
-e iteraciones. Se cubren inclusión/exclusión, índices2999/3000/3001, realtime,
-rollback y restart. Los ports/results RSI27 de PR19/20 permanecen intactos.
-**Research rolling math y PINE_PARITY live son modos distintos y explícitos**;
-la máquina CROSS/RESUME conserva el AST original.
+**Divergencia de warmup declarada:** si faltan RSI o thresholds finitos, el
+observer muestra UNKNOWN en lugar del gris que puede renderizar el ternario
+Pine. Límite100000 elementos: falla sin evicción ni cambios parciales. Fallos
+del observer nunca afectan Guardian. La referencia independiente mantiene el
+source literal y no importa las optimizaciones.
 
-**No se declara corregida la comparación visual.** El replay público15m a
-2026-10-04 08:49UTC sigue NEUTRAL: RSI suavizado60.9601268, upper68.4705299.
-La diferencia de deque por sí sola no explica el GREEN del usuario.
-Falta el Pine oficial legible y el par de valores/thresholds de la misma vela
-TradingView. No se ajustan parámetros ni thresholds para forzar GREEN.
+Se comparan cada barra de3436 LOWs sintéticos y4002 LOWs públicos, incluido
+bootstrap/realtime/restart/provisional. El fixture real tiene diez filas de
+TradingView: en10:30 Madrid se calcula RSI60.9601268/upper56.1485681/lower45.5457948,
+GREEN, exactamente60.96/56.15/45.55 a precisión de pantalla. El V3 anterior
+publicaba NEUTRAL porque reemplazaba esos percentiles por medias Lloyd.
+RSI/source/EMA/candles/timezone/ancla de ese replay permanecen sin cambios.
+Los resultados históricos RSI27 se preservan; no demuestran edge del nuevo
+source literal. **Research rolling math y PINE_PARITY live son distintos**;
+la máquina de eventos CROSS/RESUME mantiene el AST original.
 
 ## Datos públicos y cache
 
@@ -255,12 +252,13 @@ el host ML RSI; Guardian continúa. El cierre usa señales de parada, sin `join`
 - `igod_mlrsi_events.jsonl`: fsync append, campos forward descritos abajo.
 
 Cada serie persistida incluye rsi_length=29, math_mode=PINE_PARITY,
-bootstrap_last_bar_index, contador, seed/RMA/EMA y array íntegro. V1LOW27 y
-V2LOW29 rolling son incompatibles: una reconstrucción limpia y silenciosa usa
-OHLC públicos cacheados; no mezcla sus centroides. Un restart V3 conserva
-array, ancla y seed. Journals V1/V2 permanecen con sus versiones originales;
-los nuevos registros usan V3 y contador/mode. Las versiones desconocidas siguen
-rechazándose. No se reetiquetan ni se recalculan resultados antiguos.
+bootstrap_last_bar_index, contador, seed/RMA/EMA, array íntegro y carry
+pine_centroids de6 slots (3NA iniciales antes de la primera barra).
+V1LOW27/V2LOW29 rolling/V3Lloyd son incompatibles: reconstrucción limpia y
+silenciosa desdeOHLC públicos cacheados. Un restartV4 conserva carry/seed/ancla;
+journalsV1/V2/V3 mantienen sus versiones originales. Los nuevos registros
+usanV4; versiones desconocidas siguen rechazándose. No se reetiquetan ni
+recalculan resultados anteriores.
 
 La carga inicial/restart catch-up es silenciosa: no reenvía CROSS, RESUME,
 confluencias ni cambios antiguos. Puede emitir una fotografía explícita
@@ -340,8 +338,8 @@ cero POST. El comando arbitrario no hace ningún HTTP, escritura o mutación.
 Las pruebas no envían órdenes ni Telegram real.
 
 ```text
-python -m py_compile mlrsi_math.py mlrsi_public.py mlrsi_observer.py mlrsi_telegram.py mlrsi_guardian_host.py mlrsi_safety_audit.py trade_guardian.py guardian_commands.py test_mlrsi_observer.py test_mlrsi_integration.py mlrsi_pine_reference.py test_mlrsi_pine_parity.py
-python -m unittest test_mlrsi_observer test_mlrsi_integration test_mlrsi_pine_parity -v
+python -m py_compile mlrsi_math.py mlrsi_public.py mlrsi_observer.py mlrsi_telegram.py mlrsi_guardian_host.py mlrsi_safety_audit.py trade_guardian.py guardian_commands.py test_mlrsi_observer.py test_mlrsi_integration.py mlrsi_pine_reference.py test_mlrsi_pine_parity.py test_mlrsi_source_parity.py
+python -m unittest test_mlrsi_observer test_mlrsi_integration test_mlrsi_pine_parity test_mlrsi_source_parity -v
 python -m unittest test_trade_guardian test_guardian_commands -v
 python mlrsi_safety_audit.py
 python -m unittest discover -v

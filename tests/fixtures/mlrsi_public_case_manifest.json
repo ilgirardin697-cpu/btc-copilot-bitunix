@@ -1,7 +1,7 @@
 {
-  "description": "Public historical diagnostic, not a paired TradingView parity fixture.",
+  "description": "Preserved V3 public replay before the authoritative source/table correction; NOT current observer output.",
   "tradingview_source_page": "https://www.tradingview.com/script/DKa7Dmc5-Machine-Learning-RSI-BackQuant/",
-  "official_pine_source_available": false,
+  "official_pine_source_available": true,
   "source_access": [
     {
       "url": "https://pine-facade.tradingview.com/pine-facade/get/USER;d581ed0024f6459aa8c889950373508c/25.0",
@@ -20,7 +20,7 @@
   "observer_replay_color": "NEUTRAL",
   "visual_parity_passed": false,
   "as_of_utc": "2026-10-04T08:49:00+00:00",
-  "note": "Diagnostic only; no original TradingView threshold values available for pairing.",
+  "note": "TradingView threshold values NOW AVAILABLE in mlrsi_tradingview_fixture_20261004.json; prior calculated replay retained unchanged.",
   "rows": 4000,
   "closed_rows": 3999,
   "sample_count": 3000,
@@ -146,5 +146,8 @@
       "rows": 1000,
       "sha256": "3534369fe6b999179a81d820a774d2f2e6a459a4842cab9e4477b564ee1ee7ea"
     }
-  ]
+  ],
+  "config_version": "CAPTURE_LOW29_EMA4_PINE_PARITY_V3",
+  "source_provenance": "User supplied exact Source Code tab; prior automated HTTP access records retained.",
+  "paired_fixture": "mlrsi_tradingview_fixture_20261004.json"
 }

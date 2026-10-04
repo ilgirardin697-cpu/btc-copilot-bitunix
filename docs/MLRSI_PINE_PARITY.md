@@ -1,125 +1,167 @@
-# ML RSI PINE_PARITY: contrato y evidencia pendiente
+# ML RSI PINE_PARITY: source exacto y contraste con TradingView
 
-La observación del usuario a las 10:49 Europe/Madrid del 04/10/2026 es
-**TradingView GREEN frente a observer NEUTRAL**. LOW29 no resolvió el desacuerdo.
-Este cambio elimina diferencias conocidas de la implementación, pero **no declara
-resuelta esa validación real** ni autoriza trading.
+El usuario ha aportado el Pine **directamente de la pestaña Source Code** de
+[Machine Learning RSI, BackQuant, DKa7Dmc5](https://www.tradingview.com/script/DKa7Dmc5-Machine-Learning-RSI-BackQuant/)
+y diez filas de la Vista de tabla. Es la autoridad primaria de esta enmienda.
+Está conservado, con licencia MPL-2.0 y atribución, en
+`tests/fixtures/backquant_user_source.pine`. Los defaults del source se preservan;
+el preset del usuario LOW29/EMA4 se registra por separado. Los fallos HTTP del
+intento anterior no invalidan este material suministrado directamente.
 
-## Autoridad principal y acceso a fuente
+**Las diez filas coinciden en RSI y ambos thresholds a los dos decimales
+mostrados por TradingView.** No equivale a certificar todos los históricos,
+timeframes, ticks abiertos o decimales internos del motor. **Exact BackQuant
+TradingView parity is NOT proven.** No se ha ejecutado el diagnóstico Pine en
+TradingView durante esta tarea ni se ha desplegado el observer corregido.
 
-Indicador: [Machine Learning RSI, BackQuant, DKa7Dmc5](https://www.tradingview.com/script/DKa7Dmc5-Machine-Learning-RSI-BackQuant/).
-La página oficial lo marca open-source y describe tres clusters con el centroide
-alto como threshold LONG y el bajo como threshold SHORT. El HTML público
-identifica el Pine `USER;d581ed0024f6459aa8c889950373508c`, versión `25.0`.
-La descarga pública de su fuente devuelve **HTTP401**. El identificador alternativo
-PUB devuelve404. No se usa sesión TradingView ajena, no se extraen cookies y
-no se decompila el código compilado. La pestaña Source code legible sigue faltando.
-Se pidió al usuario su texto para poder contrastarlo literalmente.
+## Diferencia encontrada: constructores, NA, igualdad y orden del break
 
-La [copia atribuida](https://tradingmike.blogspot.com/2025/06/2025-06-13rsi.html)
-crea arrays de tres slots vacíos y luego añade distancias/medias. Según la
-semántica documentada, esos slots contienen NA y los índices de las distancias
-finitas dejan de ser0/1/2; los primeros thresholds también quedan NA. No se
-adopta esa copia como fuente válida ni se corrige para llamarla Pine original.
+El commit `7659f8dbb9616136e43cf24531076b42f7c9ef82` interpretaba el clustering
+como k-means convencional de tres elementos. El source exacto no hace eso:
 
-## Qué se implementa y qué se verifica
+1. `var centroids = array.new_float(3)` comienza con tres slots NA.
+2. El loop se ejecuta incluso en barras anteriores al gate del histórico.
+   `new_centroids = array.new_float(3)` seguido de tres push produce seis
+   slots. En la primera barra cambian los tamaños; el carry crece a seis NA.
+3. En barras maduras, array.set escribe p25/p50/p75 únicamente en posiciones
+   0/1/2. Los slots 3/4/5 siguen siendo NA.
+4. `distances = array.new_float(3)` también antepone tres NA. El primer mínimo
+   finito está en índice >=3. El source envía esos índices a cluster3.
+   Se mantiene la selección del primer índice en empate.
+5. El array nuevo contiene `[NA, NA, NA, NA, NA, media]`. En cada pareja
+   comparada con el carry hay al menos un NA. En Pine v5, NA != valor no
+   produce un true que entre en el if. Por tanto f_arrays_equal devuelve
+   true, aunque Python consideraría distintas esas listas.
+6. El break sucede ANTES de `centroids := new_centroids`. Los percentiles
+   originales permanecen en posiciones 0/1/2. Los thresholds visibles son
+   p25 y p75 en este recorrido normal, no las medias finales de Lloyd.
 
-`CONFIG_VERSION=CAPTURE_LOW29_EMA4_PINE_PARITY_V3`, `Math mode: PINE_PARITY`.
-El nombre identifica el **contrato solicitado**; no constituye certificación
-de paridad BackQuant. Source LOW, Wilder29, EMA4, tres centroides,
-maxData3000, maxIter1000. Range10–90, step5, memory10 y sigma1 conservan su
-metadata; no se inventa una función adicional.
+Esta explicación deriva del source y de la semántica documentada de
+[arrays Pine v5](https://www.tradingview.com/pine-script-docs/v5/language/arrays/),
+[operadores](https://www.tradingview.com/pine-script-docs/v5/language/operators/)
+y [bool NA en condicionales](https://www.tradingview.com/pine-script-docs/v5/language/type-system/).
+Los constructores no son un «defecto del mirror»; estaban en la fuente exacta.
+No se corrigen por intuición Python. El port ejecuta sus pasos literalmente;
+no sustituye thresholds por constantes ni por una regla simplificada p75/p25.
+`converged` refleja la salida de f_arrays_equal, no convergencia de k-means.
+La referencia independiente de listas/loops no importa el cálculo optimizado.
 
-Los [índices oficiales Pine](https://www.tradingview.com/pine-script-docs/concepts/chart-information/)
-distinguen bar_index de last_bar_index: el último índice disponible es conocido
-durante toda la carga histórica. Python fija ese índice por TF al cargar la lista,
-incluyendo su vela abierta. Calcula RSI desde el comienzo, pero añade únicamente
-las barras que cumplen `last_bar_index-bar_index<=3000`. La desigualdad incluye
-3001 índices, no3000. Con una barra abierta en el bootstrap hay normalmente
-3000 muestras cerradas, más una en la evaluación provisional. Sin barra abierta,
-3001 muestras cerradas. Cada barra realtime siguiente añade una; no existe shift.
-No se modifica el ancla al recuperar el mismo estado V3.
+## Percentiles: qué está medido y qué falta medir directamente
 
-Los [arrays y su persistencia](https://www.tradingview.com/pine-script-docs/language/arrays/)
-explican que `var` conserva el array, que la inicialización sin valor usa NA y
-que la media vacía devuelve NA. Se representa el array mediante lista persistida;
-no se conserva una deque acotada. Los slots NA de warmup se cuentan si cumplen
-el gate. El límite de100000 elementos falla sin descartar muestras. La copia
-provisional aplica [rollback a lo comprometido al cierre](https://www.tradingview.com/pine-script-docs/language/execution-model/):
-cada tick vuelve a clonar la misma serie cerrada, sin acumular ticks ni afectar
-confirmed. Un reload limpio puede cambiar la selección histórica; esta matemática
-no sustituye el research causal rolling ni garantiza prefix invariance entre
-anclas diferentes.
+Se implementa interpolación lineal sobre estadísticas de orden:
+`rank=(n-1)*p/100`. No depende de numpy.quantile. Pine no llama array.sort
+en el source del indicador. Las diez observaciones reales apoyan la alternativa
+A, cálculo de percentiles ordenados internamente: p25/p75 ordenados coinciden
+en todos los registros. Interpolar por posición del array cronológico no
+explica esos datos. Para la vela 10:30 daría p75≈50.06, no56.15.
 
-Wilder seed: SMA de29 cambios LOW válidos; recurrencia alpha1/29. EMA4 seed:
-primer RSI finito y alpha2/5. Fórmula RSI y seeds siguen el contrato de las
-[funciones built-in Pine](https://www.tradingview.com/pine-script-reference/v5/).
-Los tests validan fixtures deterministas, pero no son capturas de built-ins
-ejecutados en TradingView. El histórico inicial del gráfico aún puede diferir.
+El manual describe interpolación lineal, pero no documenta aquí todos los
+detalles internos ni efectos sobre el array original. No se afirma haber
+medido si el builtin reordena el array en sitio. El diagnóstico compara un
+array separado `[30,10,40,20]` con una copia ordenada y muestra su primer
+elemento antes/después. No ordena ni modifica rsi_values para medirlo.
+Tampoco se ha observado directamente array.indexof(allNA,NA) en este motor;
+su resultado no cambia las medias NA del warmup ni los thresholds maduros
+demostrados. El diagnóstico también expone ese caso.
 
-Percentiles25/50/75 usan interpolación explícita `(n-1)*p/100`. Se verifican
-vectores con resultado conocido y equivalencia numérica con NumPy linear;
-**no se asume que esto demuestre identidad con el builtin de TradingView**.
-El [manual de referencia](https://www.tradingview.com/pine-script-reference/v6/)
-describe interpolación lineal, sin permitirnos comprobar aquí cada caso del
-motor. El harness propio `tests/fixtures/mlrsi_pine_validation.pine` permite
-capturar percentiles/RSI/EMA/centroides reales. **No es fuente BackQuant y no se
-ha ejecutado en TradingView durante esta tarea.**
+## Fixture real y resultado reproducible
 
-Clustering: p25/p50/p75 nuevos por barra, distancias absolutas, primer índice
-en empate, media por cluster sumada en orden de inserción, igualdad exacta.
-El [loop Pine](https://www.tradingview.com/pine-script-docs/language/loops/)
-incluye el límite:0..1000 permite1001 intentos. Agotarlo deja los últimos
-centroides finitos; `converged=false` no fuerza UNKNOWN. RSI>upper es GREEN,
-RSI<lower es RED; igualdad es NEUTRAL. No se introduce histéresis.
+`mlrsi_tradingview_fixture_20261004.json` almacena observaciones del usuario,
+precisión de pantalla, hora local/UTC y source checksum. La fecha de TradingView
+es la apertura, no el cierre. `mlrsi_binance_low_20261004.json` conserva
+4002 LOWs públicos cerrados contiguos, URLs/checksums de descargas, rango y
+checksum de los LOWs. Ningún test usa red.
 
-**Divergencia patológica declarada:** un cluster vacío devuelve NA y no retiene
-su centroide previo. Python termina ese cálculo como UNKNOWN en vez de seguir
-repartiendo con centroides NA o publicar el NEUTRAL de una comparación inválida.
-El comportamiento exacto de ese caso en la versión del autor sigue sin verificar.
+Se conserva el comienzo y ancla3999 del replay anterior a08:49UTC; las
+barras posteriores modelan append realtime. No se selecciona otro histórico
+para mejorar el match. La última fila de09:30UTC todavía abierta se excluye de
+los LOWs de evaluación. Los valores finales de una vela posteriormente cerrada
+no se presentan como un tick histórico anterior de esa vela.
 
-## Replay del caso real: sigue sin cumplir GREEN
+| Apertura Madrid | RSI calculado | Upper calculado | Lower calculado | TV RSI / Long / Short |
+|---|---:|---:|---:|---|
+|09:00|58.776219|56.112908|45.538807|58.78 /56.11 /45.54|
+|09:15|58.048673|56.118000|45.540678|58.05 /56.12 /45.54|
+|09:30|57.364640|56.124125|45.542550|57.36 /56.12 /45.54|
+|09:45|57.885155|56.139170|45.544421|57.89 /56.14 /45.54|
+|10:00|60.280689|56.139612|45.544879|60.28 /56.14 /45.54|
+|10:15|62.131463|56.143336|45.545337|62.13 /56.14 /45.55|
+|10:30|60.960127|56.148568|45.545795|60.96 /56.15 /45.55|
+|10:45|60.945948|56.153534|45.546253|60.95 /56.15 /45.55|
+|11:00|60.493526|56.166808|45.547712|60.49 /56.17 /45.55|
+|11:15|61.277709|56.171850|45.549171|61.28 /56.17 /45.55|
 
-Se consultaron exclusivamente klines públicos de Binance spot15m con
-`endTime=2026-10-04T08:49:00Z`; se usaron3999 velas cerradas y el índice de la
-vela abierta para anclar. **El OHLC final histórico de esa vela abierta NO se
-usa para reconstruir un tick provisional de08:49**, porque eso introduciría
-información posterior. Solo se utiliza su existencia/timestamp en el ancla.
+Las diez filas calculadas son GREEN. Las cuatro últimas incluyen color GREEN
+explícitamente observado por el usuario; las primeras tienen RSI>Long según
+su propia tabla. En10:30 el resultado previo era upper68.4705299/lower42.5126098,
+NEUTRAL; RSI60.9601268 y sample count3000 permanecen idénticos. Se descartan
+RSI/EMA/source/timezone y la ventana por sí sola como causa de este mismatch.
+`mlrsi_public_case_manifest.json` conserva esos cálculos V3 como evidencia
+anterior, ahora enlazada al fixture observado. No se borra el desacuerdo previo.
 
-Última vela cerrada: open08:30UTC, close08:45UTC (10:45 Europe/Madrid).
+## Histórico, confirmed, provisional y límites
 
-| Valor | PINE_PARITY | Rolling anterior |
-|---|---:|---:|
-| RSI suavizado | 60.9601267869 | 60.9601267869 |
-| Lower | 42.5126097870 | 42.5126097870 |
-| Middle | 53.2857514782 | 53.2857514782 |
-| Upper | 68.4705298745 | 68.4705298745 |
-| Color | NEUTRAL | NEUTRAL |
-| Threshold samples | 3000 closed | 3000 rolling |
+`CONFIG_VERSION=CAPTURE_LOW29_EMA4_PINE_PARITY_V4`.
+LOW, Wilder29 y EMA4 permanecen sin cambios. El source construye factors
+10..90 step5 pero no lo usa después; tampoco usa perfAlpha. Sigma1 no afecta
+EMA. No se inventa una optimización dependiente de esa metadata.
 
-Las seis últimas velas cerradas del replay también son NEUTRAL. Esto demuestra
-que **el cambio de ventana por sí solo no explica el GREEN mostrado por el usuario**.
-Un observer arrancado antes tendría más muestras, pero no conocemos el momento
-de recarga del gráfico ni sus valores para emparejarlo. No se ajusta el historial
-o los thresholds para fabricar un match. La evidencia reproducible resumida y
-los checksums públicos están en `tests/fixtures/mlrsi_public_case_manifest.json`.
+En bootstrap el último índice disponible, incluida la vela abierta, es fijo.
+last_bar_index-bar_index<=3000 incluye3001 índices: con vela abierta suelen
+ser3000 samples confirmed +1 provisional; sin ella3001 confirmed. Las nuevas
+barras realtime incrementan el array sin evicción. En este fixture el contador
+va de2994 a3003 en las diez filas; en10:30 es3000.
 
-Para cerrar la validación faltan el Pine oficial legible y RSI/upper/lower de
-esa misma vela en TradingView. Después deben compararse venue, LOW, timestamps,
-histórico inicial, ancla, contador y resultados. No basta con el color aislado.
+La copia provisional clona el carry y hace rollback después de cada cálculo;
+no suma ticks al histórico ni confirma color. Confirmed exige timestamp UTC de
+cierre real. Los tres TF son independientes. Una recarga limpia cambia el ancla
+y puede cambiar thresholds; una historia/Pine session diferente sigue siendo
+un posible motivo de desacuerdo futuro. Prefix invariance solo se afirma con
+la misma ancla, no al reconstruir charts con distinto último índice.
 
-## Tests y límites de la afirmación
+Se conserva el loop inclusivo0..1000 (hasta1001 intentos), media de clusters
+vacíos NA y primer índice en empate. La primera barra normal tarda2 intentos
+por3→6 slots; las maduras salen en1 por la igualdad descrita. La autoridad del
+color sigue siendo RSI>centroid[2] / RSI<centroid[0], sin histéresis.
+Cuando no hay RSI/thresholds finitos, el observer muestra UNKNOWN; el ternario
+Pine puede mostrar gris. Esa divergencia de warmup se mantiene explícita para
+evitar presentar datos inválidos como confirmación. El límite100000 slots
+falla sin evicción ni cambio parcial de carry, siempre fuera de Guardian.
 
-La referencia independiente `pine_reference_mlrsi` no importa NumPy ni cálculo
-de producción. La fixture de3436 LOWs sintéticos permite comparar cada barra
-antes/durante/después del bootstrap, índices2999/3000/3001,36 cierres realtime,
-RSI, EMA, los tres centroides, color, iteraciones y contador. Es evidencia del
-contrato Python, **no fixtures oficiales ejecutadas por TradingView**.
+## Diagnóstico Pine para contrastar directamente el motor
 
-Estado V1/V2 incompatible: una reconstrucción silenciosa; journals anteriores
-conservados con sus versiones. Restart V3 mantiene ancla/array sin duplicar
-eventos. `/mlrsi` lee cache y muestra mode, muestras y centroides de las dos capas.
+Pegar `tests/fixtures/mlrsi_backquant_diagnostic.pine` como indicador Pine v5
+en BINANCE:BTCUSDT15m. Defaults LOW29/EMA4/sigma1 y configuración capturada.
+Contiene el core exacto del autor, con instrumentación de solo lectura:
 
-Guardian, V8, poller, host y research congelado conservan hashes/AST. El observer
-permanece SHADOW ONLY, `trade_authority=false`. Ningún resultado modifica
-protección, riesgo, dirección, sizing o entradas. Sin merge, deploy u órdenes.
+- sample count, last_bar_index, bar_index, diferencia;
+- RSI suavizado, percentiles25/50/75, centroides finales0/1/2;
+- tamaño del array de centroides, intentos, igualdad previa al break;
+- tamaños de clusters, constructor+push, mínimos/índices conNA, medias vacías;
+- percentiles del array desordenado y copia ordenada, primer elemento antes/después.
+
+Ver esos valores en Data Window/Vista de tabla para04/10/2026 10:30 Madrid
+(08:30UTC, apertura). Un script recién añadido puede usar otra ancla que el
+indicador que llevaba tiempo ejecutándose; comparar también sample count y
+last_bar_index. El archivo viejo mlrsi_pine_validation.pine queda identificado
+como harness del contrato V3 anterior; no es el diagnóstico literal actual.
+El nuevo script no ha sido compilado/ejecutado en TradingView aquí.
+No hace falta escoger otra aproximación para reproducir la tabla aportada;
+este diagnóstico permite validar detalles internos y una próxima comparación.
+
+## Estado, regresión y seguridad
+
+V4 persiste pine_centroids completo, incluidos los tres slots NA finales.
+EstadosV1/V2/V3 incompatibles hacen una reconstrucción limpia y silenciosa;
+journals originales conservan su config_version. RestartV4 conserva array,
+ancla, seed y carry sin duplicar CROSS/RESUME/confluencias antiguas.
+/mlrsi sigue leyendo exclusivamente cache y mostrando valores/contador.
+
+Los tests comparan todas las barras de3436 LOWs sintéticos y4002 LOWs públicos
+contra la traducción independiente, además de las diez filas de TradingView.
+Se comprueban gate2999/3000/3001, ticks provisionales, restart y migración.
+Research RSI27/CROSS/RESUME, Guardian, poller, host y V8 mantienen hashes/AST.
+Este cambio de semántica no modifica ni reinterpreta el resultado congelado
+15mNO EDGE /1HGREEN_RESUME inconclusive; no demuestra edge del nuevo observer.
+
+SHADOW ONLY — trade_authority=false — NO REAL ORDER — NO MERGE — NO DEPLOY.

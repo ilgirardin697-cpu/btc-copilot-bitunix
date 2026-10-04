@@ -1,4 +1,4 @@
-"""Offline equivalence of the specified Pine contract; NOT visual TV parity."""
+"""Literal Pine source equivalence, including persistent constructors and NA."""
 import copy
 import hashlib
 import json
@@ -12,7 +12,7 @@ try:
     import requests
 except ImportError:
     raise unittest.SkipTest('Dedicated ML RSI CI installs all required dependencies') from None
-from mlrsi_math import CausalSeries, MATH_MODE, CONFIG_VERSION, pine_percentile, pine_cluster_three, PINE_ARRAY_LIMIT
+from mlrsi_math import CausalSeries, MATH_MODE, CONFIG_VERSION, pine_percentile, pine_cluster_three, pine_arrays_equal, PINE_ARRAY_LIMIT
 from mlrsi_pine_reference import pine_reference_mlrsi, reference_clusters
 from mlrsi_observer import MLRSIObserver, TIMEFRAMES
 from test_mlrsi_observer import candle
@@ -123,35 +123,53 @@ class PinePrimitiveTests(unittest.TestCase):
 
     def test_ties_first_index_not_last(self):
         data = [0, 1, 2, 3, 4]
-        centroids, attempts, _ = pine_cluster_three(data, 0)
-        # Initial (1,2,3): 1.5/2.5 cases tested with duplicate fractional data.
-        self.assertEqual(centroids, [.5, 2, 3.5])
+        carry = pine_cluster_three([])[0]
+        centroids, attempts, _ = pine_cluster_three(data, 0, carry)
+        # Leading NA distance slots shift even the FIRST finite tie to >=3.
+        # All finite samples reach cluster3, not a conventional cluster index.
+        self.assertEqual(centroids, [1, 2, 3, None, None, None])
         self.assertEqual(attempts, 1)
-        self.assertEqual(pine_cluster_three(data, 0), reference_clusters(data, 0))
+        self.assertEqual(pine_cluster_three(data, 0, carry), reference_clusters(data, 0, carry))
         for data in ([0, 1, 1.5, 2, 2.5, 3, 4], [0, 0, 1, 1, 2, 2]):
-            self.assertEqual(pine_cluster_three(data, 0), reference_clusters(data, 0))
+            self.assertEqual(pine_cluster_three(data, 0, carry), reference_clusters(data, 0, carry))
 
     def test_loop_zero_executes_once(self):
         self.assertEqual(pine_cluster_three([0, 1, 2, 3, 4], 0)[1], 1)
 
     def test_loop_1000_includes_1001st_attempt(self):
-        calls = 0
-        def alternating(*args, **kwargs):
-            nonlocal calls
-            calls += 1
-            if 'weights' not in kwargs:
-                return np.ones(3, dtype=int)
-            return np.array([1., 2. + (calls // 2) % 2, 3.])
-        # Force exact inequality each iteration; finite nonempty clusters.
-        with patch('mlrsi_math.np.bincount', side_effect=alternating):
+        # Force no equality: normal source exits earlier because of NA IF.
+        with patch('mlrsi_math.pine_arrays_equal', return_value=False) as equal:
             result = pine_cluster_three([0, 1, 2, 3, 4], 1000)
         self.assertEqual(result[1], 1001)
+        self.assertEqual(equal.call_count, 1001)
 
-    def test_empty_clusters_are_na_not_retained(self):
-        c, attempts, converged = pine_cluster_three([50.] * 10)
-        self.assertEqual(c, [50., None, None])
+    def test_empty_cluster_na_does_not_replace_percentiles_before_break(self):
+        carry = pine_cluster_three([])[0]
+        c, attempts, converged = pine_cluster_three([50.] * 10, centroids=carry)
+        self.assertEqual(c, [50., 50., 50., None, None, None])
         self.assertEqual(attempts, 1)
-        self.assertFalse(converged)
+        self.assertTrue(converged)  # f_arrays_equal, not genuine Lloyd convergence
+
+    def test_na_comparison_is_not_python_list_equality(self):
+        self.assertTrue(pine_arrays_equal([None, 50.], [42., None]))
+        self.assertFalse(pine_arrays_equal([42., 50.], [43., 50.]))
+        self.assertFalse(pine_arrays_equal([None] * 3, [None] * 6))
+
+    def test_first_empty_historical_bar_grows_var_centroids(self):
+        carry, attempts, equal = pine_cluster_three([])
+        self.assertEqual(carry, [None] * 6)
+        self.assertEqual(attempts, 2)
+        self.assertTrue(equal)
+        self.assertEqual(pine_cluster_three([], centroids=carry), (carry, 1, True))
+
+    def test_percentiles_survive_break_before_assignment(self):
+        carry = pine_cluster_three([])[0]
+        data = [10., 20., 30., 40., 50., 100.]
+        actual, attempts, equal = pine_cluster_three(data, centroids=carry)
+        self.assertEqual(actual[:3], [pine_percentile(data, p) for p in (25, 50, 75)])
+        self.assertEqual(actual[3:], [None] * 3)
+        self.assertEqual(attempts, 1)
+        self.assertTrue(equal)
 
     def test_convergence_exact_not_epsilon(self):
         self.assertEqual(pine_cluster_three([0, 1, 2, 3, 4]), reference_clusters([0, 1, 2, 3, 4]))
@@ -228,6 +246,22 @@ class PineObserverTests(unittest.TestCase):
             self.assertEqual(same.series['15m'].count, len(self.low))
             same.observe({'15m': rows}, now)
             self.assertEqual(same.series['15m'].count, len(self.low))
+
+    def test_v3_state_rebuilds_and_preserves_old_journal(self):
+        with tempfile.TemporaryDirectory() as folder:
+            observer, rows, now = self.make_observer(folder)
+            state = json.loads(observer.state_path.read_text('utf-8'))
+            state['config_version'] = 'CAPTURE_LOW29_EMA4_PINE_PARITY_V3'
+            observer.state_path.write_text(json.dumps(state), encoding='utf-8')
+            row = observer._record('COLOR_CHANGE', '15m', True, now)
+            row['config_version'] = state['config_version']
+            journal = json.dumps(row) + '\n'
+            observer.journal_path.write_text(journal, encoding='utf-8')
+            rebuilt = MLRSIObserver(folder, logger=lambda code: None)
+            self.assertEqual(rebuilt.series['15m'].count, 0)
+            rebuilt.observe({'15m': rows}, now)
+            self.assertEqual(rebuilt.journal_path.read_text('utf-8'), journal)
+            self.assertEqual(rebuilt.series['15m'].pine_centroids[3:], [None] * 3)
 
 
 if __name__ == '__main__':

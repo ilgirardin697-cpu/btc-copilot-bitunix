@@ -2,6 +2,8 @@
 // Paste into a separate TradingView study to capture real builtin fixtures.
 // No orders. Compare its Data Window with the original author indicator.
 //@version=5
+// PRIOR V3 conventional-clustering harness, NOT the current author-source diagnostic.
+// Use mlrsi_backquant_diagnostic.pine for literal BackQuant array/NA behavior.
 indicator("I-GOD Pine contract validation - NOT original BackQuant", overlay=false)
 r = ta.rsi(low, 29)
 s = ta.ema(r, 4)

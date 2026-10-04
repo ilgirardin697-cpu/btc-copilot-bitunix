@@ -93,17 +93,17 @@
     }
   },
   "live_observer_preset": {
-    "config_version": "CAPTURE_LOW29_EMA4_PINE_PARITY_V3",
+    "config_version": "CAPTURE_LOW29_EMA4_PINE_PARITY_V4",
     "rsi_length": 29,
-    "description": "User-authorized Pine persistent-array contract; exact author source and visual parity remain unverified.",
+    "description": "Literal user-authoritative Pine v5 source constructors/NA equality; ten paired TV rows match at two decimals; universal parity not proven.",
     "files": {
       "mlrsi_math.py": {
-        "git_blob": "628a0fb651bca4cdb6c02b091fbbbc067fb4a42b",
-        "sha256": "4b0045d87ba4a873d8334716dae637fc8f912f9da9486992065f333f9a0406b1"
+        "git_blob": "f7f8c12f1d87705ccff1dac1fe50d95607c63d9a",
+        "sha256": "d1d67cd501f8ef5d7de0ad7fc2cfc26e71521b16e1a3c375cd04237df3cf7e17"
       },
       "mlrsi_observer.py": {
-        "git_blob": "caacfd527b794747dd52fc1cacf9ab87963bf3ac",
-        "sha256": "31c98eac7736e0ac401ff7afeed09d3aed8102dd544ac656168f7d04b2ac6cb1"
+        "git_blob": "3fe75e96f84d659b297bbbf2abc8c264871ef9c4",
+        "sha256": "4aafb9b1330eb1f2d27c66be4795a5a3953689c768af39184c161807c2065c4e"
       },
       "mlrsi_telegram.py": {
         "git_blob": "9cd367470f90a0e48cf10e8e7aa78cee5b5265eb",
@@ -146,6 +146,25 @@
       "mlrsi_telegram.py": {
         "git_blob": "03824686eca35964ac937c6f3f336a0e2328b3fc",
         "sha256": "0bf55f168a9259fa1308890e3f72f7daca272556d93baa33b6cea0e1aa720780"
+      }
+    }
+  },
+  "previous_pine_parity_preset": {
+    "config_version": "CAPTURE_LOW29_EMA4_PINE_PARITY_V3",
+    "rsi_length": 29,
+    "description": "User-authorized Pine persistent-array contract; exact author source and visual parity remain unverified.",
+    "files": {
+      "mlrsi_math.py": {
+        "git_blob": "628a0fb651bca4cdb6c02b091fbbbc067fb4a42b",
+        "sha256": "4b0045d87ba4a873d8334716dae637fc8f912f9da9486992065f333f9a0406b1"
+      },
+      "mlrsi_observer.py": {
+        "git_blob": "caacfd527b794747dd52fc1cacf9ab87963bf3ac",
+        "sha256": "31c98eac7736e0ac401ff7afeed09d3aed8102dd544ac656168f7d04b2ac6cb1"
+      },
+      "mlrsi_telegram.py": {
+        "git_blob": "9cd367470f90a0e48cf10e8e7aa78cee5b5265eb",
+        "sha256": "11829938c1b122610413984ae89f244a39b1479cac23d3a9563593bcd95405f5"
       }
     }
   }
