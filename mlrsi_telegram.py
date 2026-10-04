@@ -1,9 +1,10 @@
 """Read-only HTML presentation; no command polling or operational state."""
 from datetime import datetime, timezone
-from mlrsi_math import TIMEFRAMES
+from mlrsi_math import CAPTURED_CONFIG, TIMEFRAMES
 
 ICONS = {'GREEN': '🟢', 'RED': '🔴', 'NEUTRAL': '⚪', 'UNKNOWN': '⚫'}
 LABELS = {'15m': '15m', '1h': '1H', '4h': '4H'}
+PRESET_LABEL = f"Source: LOW | RSI: Wilder {CAPTURED_CONFIG['rsi_length']} | Smooth: EMA4"
 
 
 def utc(stamp):
@@ -48,7 +49,7 @@ def status(snapshot):
     green = sum(p['fresh'] and p['confirmed_color'] == 'GREEN' for p in snapshot['timeframes'].values())
     red = sum(p['fresh'] and p['confirmed_color'] == 'RED' for p in snapshot['timeframes'].values())
     lines += ['', '<b>CONFLUENCIA</b>', f'GREEN confirmed: {green}/3', f'RED confirmed: {red}/3', matrix(snapshot),
-              '', 'Source: LOW | RSI: Wilder 27 | Smooth: EMA4',
+              '', PRESET_LABEL,
               'Max data: 3000 | Max clustering steps: 1000',
               'TV metadata: range 10–90 | step 5 | memory 10 | ALMA sigma 1',
               '(Range/step/memory metadata; ALMA no afecta EMA.)',
@@ -68,7 +69,7 @@ def status(snapshot):
 
 def startup(snapshot):
     return ('🧠 <b>ML RSI MTF OBSERVER — CURRENT STATUS</b>\nBTCUSDT\n\n' + matrix(snapshot)
-            + '\n\nSource: LOW | RSI: Wilder 27 | Smooth: EMA4\nMax data: 3000 | Max clustering: 1000'
+            + '\n\n' + PRESET_LABEL + '\nMax data: 3000 | Max clustering: 1000'
             + '\nApproaching: ' + ('ON' if snapshot['approaching_enabled'] else 'OFF')
             + '\nProvisional alerts: ' + ('ON' if snapshot['provisional_alerts'] else 'OFF')
             + '\nClosed candle confirmation: ON\nConsulta: /mlrsi'

@@ -384,6 +384,11 @@ class CommandIntegrationTests(unittest.TestCase):
             self.assertIn(word, text)
         self.assertNotIn('<b>', text)
 
+    def test_owner_mlrsi_shows_current_rsi29_not_old_research27(self):
+        self.assertTrue(self.commands.process(self.update('/mlrsi')))
+        self.assertIn('RSI: Wilder 29', self.reply.call_args.args[0])
+        self.assertNotIn('RSI: Wilder 27', self.reply.call_args.args[0])
+
     def test_help_preserves_all_previous_text_and_commands(self):
         old_help = next(n for n in ast.parse(baseline('guardian_commands.py')).body
                         if isinstance(n, ast.Assign) and n.targets[0].id == 'HELP').value.value

@@ -91,5 +91,43 @@
       "git_blob": "5fb45c731c21874d05d69b3886ba42d5c571107e",
       "sha256": "0d2375fc4a6994877292018660f737be35491023e1cc27f9bb70cc49d8b10ae3"
     }
+  },
+  "live_observer_preset": {
+    "config_version": "CAPTURE_LOW29_EMA4_CAUSAL_V2",
+    "rsi_length": 29,
+    "description": "User-authorized current TradingView preset; old RSI27 validation records retained above.",
+    "files": {
+      "mlrsi_math.py": {
+        "git_blob": "63e6c85ae8e72cbbb65662d73e11d4d80d9eacdd",
+        "sha256": "d262254dcb3af9c1b7a5d9979e5a00157debd831facdd2e6187c2509f3876e34"
+      },
+      "mlrsi_observer.py": {
+        "git_blob": "7d83bc56448b20e82397d932a53fb1d0bb344f8e",
+        "sha256": "3c9d09244f47fc675440d74e913fbf22c427725c474366a5cfe60018246dad0a"
+      },
+      "mlrsi_telegram.py": {
+        "git_blob": "03824686eca35964ac937c6f3f336a0e2328b3fc",
+        "sha256": "0bf55f168a9259fa1308890e3f72f7daca272556d93baa33b6cea0e1aa720780"
+      }
+    }
+  },
+  "integration_commit": "e1a11039d2171c90e7fac5a149095ba3b42a820f",
+  "integration_files": {
+    "mlrsi_guardian_host.py": {
+      "git_blob": "4a24b251a7c62a5014bcd4b3bfafc35989649942",
+      "sha256": "714bd251e8d46acb7836ac764ef5a34151ae8ce9ed51fb2cfa2d1c67b97b058a"
+    },
+    "trade_guardian.py": {
+      "git_blob": "d6322f1f014a2ca7331453648279e3e8320ca7b4",
+      "sha256": "7b011e79fbe197ed0de09ec0b1cc29ad4546aea54a072d783b0384bf53dbe0e4"
+    },
+    "guardian_commands.py": {
+      "git_blob": "49a995691c63e03c1ce2c68ef6530ee299dbe287",
+      "sha256": "efba7338ecc525dc017c5ec96ded1534027b07d8caf1a627e4ad7c88ace9b117"
+    },
+    "tests/fixtures/mlrsi_research_events.json": {
+      "git_blob": "a67af3bb296ecf8ae37c6fd7efc863ca018fb665",
+      "sha256": "e0c1acefb76efbf154b407ddcdc9470b2d86a7b0870b75d9b605eb507d76d2b3"
+    }
   }
 }

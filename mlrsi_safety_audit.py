@@ -105,10 +105,20 @@ def verify_live_ast():
 
 def verify_protected_sources():
     manifest = json.loads(Path('tests/fixtures/mlrsi_safety_baselines.json').read_text('utf-8'))
-    for group in ('main_files', 'validated_core'):
+    preset = manifest['live_observer_preset']
+    assert preset['config_version'] == 'CAPTURE_LOW29_EMA4_CAUSAL_V2' and preset['rsi_length'] == 29
+    assert set(preset['files']) == {'mlrsi_math.py', 'mlrsi_observer.py', 'mlrsi_telegram.py'}
+    for group in ('main_files', 'validated_core', 'integration_files'):
         for path, record in manifest[group].items():
+            # Only the three explicitly authorized LOW27 -> LOW29 observer files change.
+            if group == 'validated_core' and path in preset['files']:
+                record = preset['files'][path]
             current = subprocess.check_output(['git', 'hash-object', '--path=' + path, path]).decode().strip()
             assert current == record['git_blob'], path + ' differs from immutable baseline'
+    historical = ast.parse(subprocess.check_output(['git', 'show', manifest['validated_core_commit'] + ':mlrsi_math.py']).decode('utf-8'))
+    current = ast.parse(Path('mlrsi_math.py').read_text('utf-8'))
+    event_class = lambda tree: next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == 'ResearchEvents')
+    assert fingerprint(event_class(current)) == fingerprint(event_class(historical)), 'Frozen CROSS/RESUME policies changed'
     v8ref = 'origin/v8-real-executor'
     assert subprocess.check_output(['git', 'rev-parse', v8ref]).decode().strip() == manifest['v8_commit'], 'V8 baseline ref changed'
     for path, record in manifest['v8_files'].items():

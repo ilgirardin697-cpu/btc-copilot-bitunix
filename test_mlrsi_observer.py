@@ -11,7 +11,7 @@ try:
 except ImportError:
     raise unittest.SkipTest('Observer dependencies are installed and fully tested by mlrsi-observer CI') from None
 from guardian_signals import pine_rsi, pine_ema, rolling_mlrsi, cluster_three
-from mlrsi_math import CAPTURED_CONFIG, CausalSeries, ResearchEvents, TIMEFRAMES
+from mlrsi_math import CAPTURED_CONFIG, CONFIG_VERSION, RSI_LENGTH, CausalSeries, ResearchEvents, TIMEFRAMES
 from mlrsi_observer import MLRSIObserver, ObserverConfig, empty_frame
 from mlrsi_public import PublicHistory, WARMUP_BARS, URL, atomic_json, validate_candles
 import mlrsi_telegram
@@ -28,16 +28,77 @@ def values(color='NEUTRAL', rsi=50, lower=40, upper=60):
                 window_count=3000, iterations=2)
 
 
+def rsi29_seed_fixture():
+    # 27 gains of one, then two losses of four: exactly 29 changes.
+    return [100. + i for i in range(28)] + [123., 119., 124., 118., 121., 116., 122., 120., 123.]
+
+
 class MathTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.low = 200 + np.cumsum(np.random.default_rng(517).normal(size=3100))
-        cls.reference = rolling_mlrsi(cls.low, length=27, max_data=3000, max_iter=1000)
+        cls.reference = rolling_mlrsi(cls.low, length=29, max_data=3000, max_iter=1000)
         cls.series = CausalSeries()
         cls.actual = [cls.series.push(x) for x in cls.low]
 
     def test_source_low(self):
         self.assertEqual(CAPTURED_CONFIG['source'], 'LOW')
+
+    def test_current_live_preset_is_low29(self):
+        self.assertEqual(RSI_LENGTH, 29)
+        self.assertEqual(CONFIG_VERSION, 'CAPTURE_LOW29_EMA4_CAUSAL_V2')
+        self.assertEqual(CAPTURED_CONFIG, dict(source='LOW', rsi_length=29, smooth=True, ma_type='EMA',
+                                             smoothing_period=4, alma_sigma=1, threshold_range_min=10,
+                                             threshold_range_max=90, step=5, performance_memory=10,
+                                             max_clustering_steps=1000, max_data_points=3000, clusters=3,
+                                             wait_for_timeframe_close=True))
+
+    def test_exactly_29_changes_seed_and_wilder_update(self):
+        s = CausalSeries()
+        lows = rsi29_seed_fixture()
+        for x in lows[:29]:  # 29 candles = only 28 changes
+            self.assertIsNone(s.push(x)['mlrsi_raw'])
+        self.assertEqual(len(s.seed), 28)
+        seeded = s.push(lows[29])
+        self.assertEqual(len(s.seed), 29)
+        self.assertAlmostEqual(s.up, 27 / 29)
+        self.assertAlmostEqual(s.down, 8 / 29)
+        self.assertAlmostEqual(seeded['mlrsi_raw'], 100 * 27 / 35)
+        self.assertEqual(seeded['mlrsi_smoothed'], seeded['mlrsi_raw'])
+        up, down = s.up, s.down
+        s.push(lows[30])  # next gain of five; Wilder weight is 28/29
+        self.assertAlmostEqual(s.up, (up * 28 + 5) / 29)
+        self.assertAlmostEqual(s.down, down * 28 / 29)
+
+    def test_rsi29_differs_from_historical_rsi27(self):
+        lows = rsi29_seed_fixture()
+        current = CausalSeries()  # separate live preset from unchanged research primitive
+        actual = [current.push(x)['mlrsi_raw'] for x in lows]
+        old = pine_rsi(lows, 27)
+        self.assertIsNone(actual[27])
+        self.assertTrue(np.isfinite(old[27]))
+        self.assertNotAlmostEqual(actual[29], old[29])
+        self.assertAlmostEqual(actual[29], pine_rsi(lows, 29)[29])
+
+    def test_partial_29_seed_survives_restart(self):
+        lows, s = rsi29_seed_fixture(), CausalSeries()
+        for x in lows[:28]:
+            s.push(x)
+        restored = CausalSeries(json.loads(json.dumps(s.dump())))
+        self.assertEqual(len(restored.seed), 27)
+        self.assertEqual(restored.dump()['rsi_length'], 29)
+        self.assertIsNone(restored.push(lows[28])['mlrsi_raw'])
+        self.assertAlmostEqual(restored.push(lows[29])['mlrsi_raw'], pine_rsi(lows, 29)[29])
+
+    def test_legacy_27_carry_never_reused_as_29(self):
+        for length in (27, None):
+            old = copy.deepcopy(self.series.dump())
+            if length is None:
+                old.pop('rsi_length')
+            else:
+                old['rsi_length'] = length
+            with self.assertRaisesRegex(ValueError, 'MLRSI_SERIES_STATE_INVALID'):
+                CausalSeries(old)
 
     def test_low_not_close(self):
         s = CausalSeries()
@@ -45,14 +106,14 @@ class MathTests(unittest.TestCase):
         self.assertNotAlmostEqual([s.push(x)['mlrsi_smoothed'] for x in close][-1], self.actual[-1]['mlrsi_smoothed'])
 
     def test_wilder_seed_and_raw(self):
-        raw = pine_rsi(self.low, 27)
+        raw = pine_rsi(self.low, 29)
         np.testing.assert_allclose([v['mlrsi_raw'] if v['mlrsi_raw'] is not None else np.nan for v in self.actual], raw, equal_nan=True)
-        self.assertIsNone(self.actual[26]['mlrsi_raw'])
-        self.assertAlmostEqual(self.actual[27]['mlrsi_raw'], raw[27])
+        self.assertIsNone(self.actual[28]['mlrsi_raw'])
+        self.assertAlmostEqual(self.actual[29]['mlrsi_raw'], raw[29])
 
     def test_ema4_seed_and_update(self):
         np.testing.assert_allclose([v['mlrsi_smoothed'] if v['mlrsi_smoothed'] is not None else np.nan for v in self.actual],
-                                   pine_ema(pine_rsi(self.low, 27), 4), equal_nan=True)
+                                   pine_ema(pine_rsi(self.low, 29), 4), equal_nan=True)
 
     def test_max_data_3000(self):
         self.assertEqual(self.actual[-1]['window_count'], 3000)
@@ -70,7 +131,7 @@ class MathTests(unittest.TestCase):
             self.assertEqual(fn.call_args.kwargs['method'], 'linear')
 
     def test_research_centroids_equal(self):
-        for i in (31, 100, 700, 3028, 3099):
+        for i in (33, 100, 700, 3028, 3099):
             v = self.actual[i]
             np.testing.assert_array_equal([v['lower_threshold'], v['middle_centroid'], v['upper_threshold']], self.reference['centroids'][i])
 
@@ -483,7 +544,7 @@ class ObserverTests(unittest.TestCase):
 
     def test_real_low_math_enters_observer_unchanged(self):
         low = 200 + np.cumsum(np.random.default_rng(151).normal(size=3060))
-        reference = rolling_mlrsi(low, length=27, max_data=3000, max_iter=1000)
+        reference = rolling_mlrsi(low, length=29, max_data=3000, max_iter=1000)
         r = MLRSIObserver(Path(self.tmp.name) / 'real', logger=self.logs.append)
         interval = TIMEFRAMES['15m']
         rows = [candle(i * interval, x, x + 12 + np.sin(i)) for i, x in enumerate(low)]
@@ -492,6 +553,90 @@ class ObserverTests(unittest.TestCase):
         self.assertAlmostEqual(last['mlrsi_smoothed'], reference['rsi'][-1])
         self.assertEqual(last['source_low'], low[-1])
         self.assertTrue(r.frames['15m']['fresh'])
+
+    def test_confirmed_low_math_uses_rsi29(self):
+        lows = rsi29_seed_fixture()
+        self.o.series['15m'] = CausalSeries()
+        for i, low in enumerate(lows):
+            self.o._closed('15m', candle(i * TIMEFRAMES['15m'], low), False)
+        last = self.o.frames['15m']['latest_confirmed_values']
+        expected = rolling_mlrsi(lows, length=29, max_data=3000, max_iter=1000)
+        self.assertAlmostEqual(last['mlrsi_raw'], pine_rsi(lows, 29)[-1])
+        self.assertAlmostEqual(last['mlrsi_smoothed'], expected['rsi'][-1])
+        np.testing.assert_array_equal([last['lower_threshold'], last['middle_centroid'], last['upper_threshold']],
+                                      expected['centroids'][-1])
+        self.assertEqual(last['color'], {-1: 'RED', 0: 'NEUTRAL', 1: 'GREEN'}[expected['state'][-1]])
+
+    def test_provisional_uses_rsi29_without_changing_confirmed(self):
+        lows, s = rsi29_seed_fixture(), CausalSeries()
+        for low in lows:
+            s.push(low)
+        self.o.series['15m'] = s
+        before = copy.deepcopy(s.dump())
+        self.o._open('15m', candle(self.now, low=115), False)
+        provisional = self.o.frames['15m']['latest_provisional_values']
+        extended = lows + [115.]
+        self.assertAlmostEqual(provisional['mlrsi_raw'], pine_rsi(extended, 29)[-1])
+        self.assertAlmostEqual(provisional['mlrsi_smoothed'], pine_ema(pine_rsi(extended, 29), 4)[-1])
+        self.assertNotAlmostEqual(provisional['mlrsi_smoothed'], pine_ema(pine_rsi(extended, 27), 4)[-1])
+        self.assertEqual(s.dump(), before)
+
+    def test_observer_restart_preserves_partial_rsi29_seed_all_timeframes(self):
+        folder = Path(self.tmp.name) / 'seed29'
+        o = MLRSIObserver(folder, logger=self.logs.append)
+        lows = rsi29_seed_fixture()
+        for tf, interval in TIMEFRAMES.items():
+            for i, low in enumerate(lows[:28]):
+                o._closed(tf, candle(i * interval, low), False)
+        o._persist()
+        r = MLRSIObserver(folder, logger=self.logs.append)
+        for tf, interval in TIMEFRAMES.items():
+            self.assertEqual(r.series[tf].dump()['rsi_length'], 29)
+            self.assertEqual(len(r.series[tf].seed), 27)
+            r._closed(tf, candle(28 * interval, lows[28]), False)
+            self.assertIsNone(r.frames[tf]['latest_confirmed_values']['mlrsi_raw'])
+            r._closed(tf, candle(29 * interval, lows[29]), False)
+            self.assertAlmostEqual(r.frames[tf]['latest_confirmed_values']['mlrsi_raw'], pine_rsi(lows, 29)[29])
+
+    def test_old27_state_rebootstraps_instead_of_mixing_presets(self):
+        self.o._persist()
+        old = json.loads(self.o.state_path.read_text('utf-8'))
+        old['config_version'] = 'CAPTURE_LOW27_EMA4_CAUSAL_V1'
+        old['config']['rsi_length'] = 27
+        self.o.state_path.write_text(json.dumps(old), encoding='utf-8')
+        r = MLRSIObserver(self.tmp.name, send=self.sent.append, logger=self.logs.append)
+        for tf in TIMEFRAMES:
+            self.assertEqual(r.series[tf].count, 0)
+            self.assertEqual(list(r.series[tf].history), [])
+            self.assertEqual(r.frames[tf]['confirmed_color'], 'UNKNOWN')
+        self.assertIn('MLRSI_STATE_INVALID_REBOOTSTRAP', self.logs)
+        self.assertEqual(self.sent, [])
+
+    def test_legacy27_journal_preserved_with_original_version(self):
+        self.transition()
+        rows = self.record_events()
+        for row in rows:
+            row['config_version'] = 'CAPTURE_LOW27_EMA4_CAUSAL_V1'
+        old = '\n'.join(json.dumps(row) for row in rows) + '\n'
+        self.o.journal_path.write_text(old, encoding='utf-8')
+        r = MLRSIObserver(self.tmp.name, logger=self.logs.append)
+        self.assertIsNotNone(r.journal_keys)
+        self.assertEqual(r.journal_path.read_text('utf-8'), old)
+        self.assertNotIn('MLRSI_JOURNAL_INVALID', self.logs)
+        current = r._record('COLOR_CHANGE', '15m', True, self.now)
+        self.assertEqual(current['config_version'], CONFIG_VERSION)
+
+    def test_unknown_journal_preset_still_rejected(self):
+        self.transition()
+        row = self.record_events()[0]
+        row['config_version'] = 'UNKNOWN_PRESET'
+        with self.assertRaisesRegex(ValueError, 'MLRSI_JOURNAL_INVALID'):
+            self.o._validate_record(row)
+
+    def test_status_and_startup_show_current_wilder29(self):
+        for text in (self.o.status_text(), mlrsi_telegram.startup(self.o.snapshot())):
+            self.assertIn('RSI: Wilder 29', text)
+            self.assertNotIn('RSI: Wilder 27', text)
 
     def test_worker_nonblocking_and_not_double_started(self):
         with patch('mlrsi_observer.threading.Thread') as thread:

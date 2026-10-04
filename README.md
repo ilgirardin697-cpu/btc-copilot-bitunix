@@ -2,7 +2,7 @@
 
 The existing V8/V7 copilot is an analysis/alert bot. The separate I-GOD Trade Guardian described in [TRADE_GUARDIAN.md](TRADE_GUARDIAN.md) is a new optional service with a restricted Bitunix private read and capital protection client; it starts in SHADOW and is not deployed by this repository's Railway entrypoint.
 
-`trade_guardian.py` hosts a [passive ML RSI 15m/1H/4H observer](docs/MLRSI_MTF_OBSERVER.md), automatic observational Telegram alerts and cached `/mlrsi` through the existing `guardian_commands.py` poller. It always has `trade_authority=false`, uses separate `/data/mlrsi` storage and cannot affect protection or execution decisions. The real V8 service continues on `v8-real-executor` with `python v8_executor.py`, unchanged. `live_auto.py` has no ML RSI hooks. Exact BackQuant TradingView parity is NOT proven. No deployment configuration is changed.
+`trade_guardian.py` hosts a [passive ML RSI 15m/1H/4H observer](docs/MLRSI_MTF_OBSERVER.md) using the current **LOW / Wilder RSI29 / EMA4** captured preset, automatic observational Telegram alerts and cached `/mlrsi` through the existing `guardian_commands.py` poller. It always has `trade_authority=false`, uses separate `/data/mlrsi` storage and cannot affect protection or execution decisions. Frozen RSI27 research remains unchanged. The real V8 service continues on `v8-real-executor` with `python v8_executor.py`, unchanged. `live_auto.py` has no ML RSI hooks. Exact BackQuant TradingView parity is NOT proven. No deployment configuration is changed.
 
 ## What it does
 

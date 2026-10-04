@@ -44,8 +44,8 @@ transporte Guardian es texto plano. No se crea bot ni poller adicional.
 `/status` recibe una sola línea `ML RSI MTF Observer: ON/OFF` y `/help` conserva
 todo su contenido, añadiendo `/mlrsi`. `live_auto.py` vuelve íntegramente al
 baseline main V7.3.8.6, sin hooks ML RSI. No se modifica ningún start command,
-rama de servicio o archivo V8. La versión interna del observer validado
-`V7.3.8.7_MLRSI_1` se conserva como metadata; no cambia la versión de un executor.
+rama de servicio o archivo V8. La versión interna actual del observer es
+`V7.3.8.7_MLRSI_LOW29_2`; no cambia la versión de un executor.
 
 Un fallo de init, arranque, cálculo, mercado, disco, comando o Telegram produce
 un diagnóstico estático y no interrumpe la gestión real. La falta de datos
@@ -53,12 +53,17 @@ excluye ese TF de cualquier nueva confluencia. No se imprime el error externo,
 response body, token, chat ID o credenciales en los logs del observer.
 La entrega usa el Telegram existente; no se redefine su comportamiento.
 
-## Configuración capturada y matemáticas
+## Configuración actual capturada y matemáticas
+
+La referencia actual confirmada es `ML RSI [BackQuant] low 29 Ema 4 1 10 90 5 10 1.000 3.000 3`.
+El observer usa **LOW29_EMA4**, no el preset RSI27 de los estudios congelados.
+`CONFIG_VERSION=CAPTURE_LOW29_EMA4_CAUSAL_V2`. RSI29 se aplica realmente a
+bootstrap, cálculo incremental, confirmed y la copia provisional.
 
 | Campo | Valor | Uso en este port |
 |---|---|---|
 | Calculation Source | LOW | Fuente efectiva del RSI |
-| RSI Length | 27 | Wilder RMA, seed: primeras 27 diferencias |
+| RSI Length | 29 | Wilder RMA, seed: primeras 29 diferencias LOW, 30 velas |
 | Smooth RSI | ON | Activo |
 | Moving Average Type / Period | EMA / 4 | Seed: primer RSI finito |
 | Sigma ALMA | 1 | Metadata; no afecta EMA |
@@ -80,8 +85,12 @@ bajo, RED; entre ambos e igualdad, NEUTRAL. Warmup o no convergencia: UNKNOWN.
 
 `CausalSeries` conserva Wilder/EMA y la cola de 3000 muestras entre ciclos y
 reinicios. Se exige una ventana madura de 3000 antes de declarar disponible
-un TF. Los tests comparan resultados completos con `rolling_mlrsi` de research
-para el mismo LOW, desde el mismo inicio, y fixtures extraídos de ambos PRs.
+un TF. Los tests comparan resultados completos con la misma función pura
+`rolling_mlrsi(length=29)` para el mismo LOW desde el mismo inicio. Los estudios
+históricos RSI27 de #19/#20 y sus resultados/fixtures siguen intactos; cambiar
+este observer no recalcula ni reinterpreta esos resultados como RSI29.
+El primer RSI aparece tras exactamente 29 cambios; posteriores medias Wilder
+usan `(media_anterior * 28 + cambio) / 29`. EMA4 mantiene su seed y política.
 
 No se demuestra identidad visual con TradingView: el Pine exacto y la
 semántica inequívoca de range/step/performance memory no están verificadas;
@@ -209,6 +218,16 @@ el host ML RSI; Guardian continúa. El cierre usa señales de parada, sin `join`
   verificación; cache acotada e incremental, independiente del estado live.
 - `igod_mlrsi_events.jsonl`: fsync append, campos forward descritos abajo.
 
+Cada serie persistida incluye `rsi_length=29`. Un estado anterior LOW27 o sin
+el marcador actual se rechaza y se reconstruye silenciosamente desde la cache
+OHLC pública; no se mezclan seeds/medias RSI27 con RSI29. Un restart del mismo
+preset conserva el seed parcial y las medias/EMA exactamente.
+El journal anterior LOW27 permanece legible **sin reetiquetar sus registros**:
+conserva `CAPTURE_LOW27_EMA4_CAUSAL_V1`; los nuevos usan LOW29_V2. Cualquier
+comparación forward debe separar los presets por `config_version`, nunca
+presentar resultados LOW27 como LOW29. Configuraciones de journal desconocidas
+continúan rechazándose.
+
 La carga inicial/restart catch-up es silenciosa: no reenvía CROSS, RESUME,
 confluencias ni cambios antiguos. Puede emitir una fotografía explícita
 **CURRENT STATUS**, nunca NEW SIGNAL. Mientras el worker ya esté activo,
@@ -270,9 +289,13 @@ normaliza solo estos añadidos y exige también el nuevo audit completo.
 `tests/fixtures/mlrsi_safety_baselines.json` fija blobs Git y SHA256 de los
 módulos de riesgo/autorización y V8. Los archivos operativos V8 de la rama
 `v8-real-executor` se verifican como objetos Git sin portarlos ni ejecutarlos.
-Los cuatro módulos math/public/observer/telegram deben coincidir exactamente
-con el head externamente validado `3f2c9ade84d1003a344e519c2c9b7b72d2712e67`.
-No se cambia matemática, eventos ni persistencia del núcleo.
+El manifest conserva los hashes originales externamente validados del preset
+LOW27. El bloque `live_observer_preset` registra únicamente los tres cambios
+autorizados para LOW29: math, observer/versionado y renderer. Public data sigue
+idéntico. Los hashes del host Guardian y su command poller se fijan al commit
+`e1a11039d2171c90e7fac5a149095ba3b42a820f`, sin cambios en esta corrección.
+La clase ResearchEvents se compara por AST con el port original; CROSS/RESUME
+conservan exactamente sus definiciones. No se altera el research congelado.
 
 Las pruebas ejecutan main y el motor real Guardian con transportes falsos.
 Los traces de GET/POST y actions journal coinciden con baseline para observer
@@ -299,9 +322,9 @@ module-level SkipTest para módulos Guardian/observer; no se cambia ese workflow
 No hay skips condicionales por pandas ni tests dependientes de RealAuto.
 No se inicia observer de producción como parte de los tests.
 
-Validación local de la enmienda (Python 3.12): 150 tests dedicados ML RSI e
+Validación local del preset LOW29 (Python 3.12): 163 tests dedicados ML RSI e
 integración, 311 Guardian/comandos/audit, 16 V8 y 52 Early Breakout; suite completa
-529 tests. Todos pasan, cero fallos y cero skips con dependencias completas.
+542 tests. Todos pasan, cero fallos y cero skips con dependencias completas.
 El ensayo separado de compatibilidad del job V8 sin dependencias ejecuta
 25 tests con 9 skips de módulos que requieren numpy/requests, conforme a la
 política previa; no se usa ese ensayo como sustituto de la regresión completa.

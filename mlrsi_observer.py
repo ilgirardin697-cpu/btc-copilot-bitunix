@@ -17,7 +17,9 @@ from mlrsi_math import CAPTURED_CONFIG, CONFIG_VERSION, TIMEFRAMES, CausalSeries
 from mlrsi_public import PublicHistory, atomic_json, validate_candles
 import mlrsi_telegram as presentation
 
-OBSERVER_VERSION = 'V7.3.8.7_MLRSI_1'
+OBSERVER_VERSION = 'V7.3.8.7_MLRSI_LOW29_2'
+# Old telemetry stays readable under its own config_version; never restore RSI27 carry.
+JOURNAL_CONFIG_VERSIONS = {CONFIG_VERSION, 'CAPTURE_LOW27_EMA4_CAUSAL_V1'}
 EVENT_NAMES = {'GREEN_CROSS', 'RED_CROSS', 'GREEN_RESUME', 'RED_RESUME', 'COLOR_CHANGE',
                'APPROACHING_GREEN', 'APPROACHING_RED', 'PROVISIONAL_GREEN', 'PROVISIONAL_RED',
                'CONFLUENCE_3OF3_GREEN', 'CONFLUENCE_3OF3_RED', 'CONFLUENCE_EXIT_GREEN', 'CONFLUENCE_EXIT_RED'}
@@ -390,7 +392,7 @@ class MLRSIObserver:
     def _validate_record(row):
         if (row['symbol'] != 'BTCUSDT' or row['source'] != 'LOW' or row['timeframe'] not in TIMEFRAMES
                 or row['event'] not in EVENT_NAMES or row['shadow_only'] is not True
-                or row['trade_authority'] is not False or row['config_version'] != CONFIG_VERSION):
+                or row['trade_authority'] is not False or row['config_version'] not in JOURNAL_CONFIG_VERSIONS):
             raise ValueError('MLRSI_JOURNAL_INVALID')
         for k in ('recorded_at_utc', 'candle_timestamp_utc'):
             if datetime.fromisoformat(row[k]).utcoffset().total_seconds() != 0:
