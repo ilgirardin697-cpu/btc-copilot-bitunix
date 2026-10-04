@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-I-GOD BTC Copilot V7.3.8.7 — REAL AUTO EXECUTOR for Bitunix
+I-GOD BTC Copilot V7.3.8.6 — REAL AUTO EXECUTOR for Bitunix
 ======================================================
 
 REAL MONEY CODE.
@@ -1200,37 +1200,6 @@ class RealAuto:
         self.load_pair_rules()
         self.auth_preflight()
         self.reconcile_bot_day_pnl_from_fills()
-        self._init_mlrsi_observer()
-
-    def _init_mlrsi_observer(self):
-        # Public-only observational dependency. Never pass api/state/plan.
-        self.mlrsi_observer = None
-        try:
-            from mlrsi_observer import MLRSIObserver
-            self.mlrsi_observer = MLRSIObserver(OBSERVER_STATE_FILE.parent, send=self.tg.send, logger=log)
-        except Exception:
-            log("MLRSI_INIT_FAILED_IGNORED")
-
-    def _start_mlrsi_observer(self):
-        try:
-            if self.mlrsi_observer is not None:
-                self.mlrsi_observer.start()
-        except Exception:
-            log("MLRSI_START_FAILED_IGNORED")
-
-    def _mlrsi_observer_label(self):
-        try:
-            return "ON" if self.mlrsi_observer is not None and self.mlrsi_observer.config.enabled else "OFF"
-        except Exception:
-            return "OFF"
-
-    def _send_mlrsi_status(self):
-        try:
-            text = (self.mlrsi_observer.status_text() if self.mlrsi_observer is not None else
-                    "ML RSI MTF Observer: OFF / no disponible\nSHADOW ONLY\nTRADE AUTHORITY: NONE")
-            self.tg.send(text)
-        except Exception:
-            log("MLRSI_COMMAND_FAILED_IGNORED")
 
     # -----------------------------
     # Market / startup checks
@@ -3302,7 +3271,7 @@ class RealAuto:
         )
 
         return (
-            "📊 <b>I-GOD V7.3.8.7 — STATUS REAL</b>\n\n"
+            "📊 <b>I-GOD V7.3.8.6 — STATUS REAL</b>\n\n"
             "<b>💰 BITUNIX</b>\n"
             + acct_lines
             + f"Posición exchange: <b>{C.html.escape(ex_text)}</b>\n\n"
@@ -3747,11 +3716,8 @@ class RealAuto:
 
     def commands(self):
         for cmd in self.tg.poll_commands():
-            if cmd == "/mlrsi":
-                self._send_mlrsi_status()
-                continue
             if cmd in ("/status", "/live"):
-                self.tg.send(self.status() + "\nML RSI MTF Observer: " + self._mlrsi_observer_label())
+                self.tg.send(self.status())
 
             elif cmd == "/account":
                 try:
@@ -3838,8 +3804,7 @@ class RealAuto:
 
             elif cmd == "/help":
                 self.tg.send(
-                    "<b>I-GOD V7.3.8.7 comandos</b>\n"
-                    "/mlrsi — estado completo ML RSI 15m / 1H / 4H\n"
+                    "<b>I-GOD V7.3.8.6 comandos</b>\n"
                     "/status — cuenta + bot + mercado\n"
                     "/account — cuenta Futures real\n"
                     "/position — posición/SL/TP reales\n"
@@ -3859,10 +3824,9 @@ class RealAuto:
 
     def run(self):
         self.live.start()
-        self._start_mlrsi_observer()
 
         self.tg.send(
-            "🔴🤖 <b>I-GOD V7.3.8.7 REAL AUTO conectado</b>\n\n"
+            "🔴🤖 <b>I-GOD V7.3.8.6 REAL AUTO conectado</b>\n\n"
             f"{SYMBOL} | sizing {LIVE_SIZING_MODE} "
             f"{LIVE_EQUITY_ALLOC_PCT*100:.0f}% equity "
             f"| risk {LIVE_RISK_PCT*100:.1f}% "

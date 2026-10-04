@@ -1,9 +1,11 @@
-"""Executor isolation tests. All transports/actions are offline fakes."""
+"""Guardian topology, unchanged protection traces and read-only commands; offline only."""
 import ast
 import copy
-import importlib.util
+import json
+import os
 from pathlib import Path
 import subprocess
+from tempfile import TemporaryDirectory
 from types import SimpleNamespace
 import unittest
 from unittest.mock import Mock, patch
@@ -11,14 +13,42 @@ try:
     import numpy
     import requests
 except ImportError:
-    raise unittest.SkipTest('Observer dependencies are installed and fully tested by mlrsi-observer CI') from None
-from mlrsi_safety_audit import BASELINE, verify_live_ast, verify_observer_boundary
+    raise unittest.SkipTest('Dependencies installed in dedicated observer and Guardian CI') from None
+from mlrsi_safety_audit import (BASELINE, HELP_LINE, fingerprint, verify_guardian_ast,
+                               verify_live_ast, verify_protected_sources, verify_observer_boundary)
+from mlrsi_guardian_host import MLRSIHost, StatusCache, UNAVAILABLE, storage_directory
 from mlrsi_observer import MLRSIObserver
+from guardian_commands import COMMANDS, HELP, SnapshotCache, TelegramCommands, render_command
+from guardian_bitunix import Bitunix, POST_ALLOWLIST, PLACE_SL, FLASH_CLOSE
+from guardian_risk import Config
+from guardian_store import Store
+import trade_guardian
+from test_trade_guardian import ARMED, FakeBitunix, FakeMarket, FakeTelegram, position
+
+
+def baseline(path):
+    return subprocess.check_output(['git', 'show', BASELINE + ':' + path]).decode('utf-8')
 
 
 class BoundaryTests(unittest.TestCase):
-    def test_entire_operational_ast_unchanged(self):
+    def test_entire_guardian_and_command_ast_matches_baseline(self):
+        self.assertTrue(verify_guardian_ast())
+
+    def test_live_auto_restored_completely(self):
         self.assertTrue(verify_live_ast())
+
+    def test_v8_main_rules_and_validated_math_hashes(self):
+        self.assertTrue(verify_protected_sources())
+
+    def test_guardian_entire_class_byte_equivalent_ast(self):
+        old = ast.parse(baseline('trade_guardian.py'))
+        new = ast.parse(Path('trade_guardian.py').read_text('utf-8'))
+        a = next(n for n in old.body if isinstance(n, ast.ClassDef) and n.name == 'Guardian')
+        b = next(n for n in new.body if isinstance(n, ast.ClassDef) and n.name == 'Guardian')
+        self.assertEqual(fingerprint(a), fingerprint(b))  # includes _act/reconcile/cycle/lockout
+
+    def test_all_protection_and_risk_sources_frozen(self):
+        self.assertTrue(verify_protected_sources())  # client preflight/permit/execute and all safety flags
 
     def test_zero_trading_http_capability(self):
         self.assertTrue(verify_observer_boundary())
@@ -27,191 +57,409 @@ class BoundaryTests(unittest.TestCase):
         self.assertIs(MLRSIObserver.trade_authority, False)
         self.assertIs(MLRSIObserver.shadow_only, True)
 
-    def test_no_new_credentials(self):
-        for path in ('mlrsi_observer.py', 'mlrsi_public.py', 'mlrsi_math.py', 'mlrsi_telegram.py'):
+    def test_no_new_credentials_or_guardian_object(self):
+        for path in ('mlrsi_math.py', 'mlrsi_public.py', 'mlrsi_observer.py', 'mlrsi_telegram.py', 'mlrsi_guardian_host.py'):
             text = Path(path).read_text('utf-8')
             for forbidden in ('BITUNIX_API_KEY', 'BITUNIX_SECRET_KEY', 'TELEGRAM_BOT_TOKEN', 'TELEGRAM_CHAT_ID'):
                 self.assertNotIn(forbidden, text)
 
-    def test_no_provisional_data_in_live_decisions(self):
-        tree = ast.parse(Path('live_auto.py').read_text('utf-8'))
-        cls = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == 'RealAuto')
-        allowed = {'__init__', 'run', 'commands', '_init_mlrsi_observer', '_start_mlrsi_observer',
-                   '_mlrsi_observer_label', '_send_mlrsi_status'}
-        for method in cls.body:
-            if isinstance(method, ast.FunctionDef) and method.name not in allowed:
-                self.assertFalse(any(isinstance(n, ast.Attribute) and n.attr == 'mlrsi_observer' for n in ast.walk(method)), method.name)
+    def test_single_getupdates_consumer_in_runtime(self):
+        modules = ['trade_guardian.py', 'guardian_commands.py', 'mlrsi_guardian_host.py',
+                   'mlrsi_observer.py', 'mlrsi_public.py', 'mlrsi_telegram.py']
+        calls = []
+        for path in modules:
+            for node in ast.walk(ast.parse(Path(path).read_text('utf-8'))):
+                if isinstance(node, ast.Constant) and isinstance(node.value, str) and 'getUpdates' in node.value:
+                    calls.append(path)
+        self.assertEqual(calls, ['guardian_commands.py'])
+        before = next(n for n in ast.walk(ast.parse(baseline('guardian_commands.py')))
+                      if isinstance(n, ast.FunctionDef) and n.name == 'poll_once')
+        after = next(n for n in ast.walk(ast.parse(Path('guardian_commands.py').read_text('utf-8')))
+                     if isinstance(n, ast.FunctionDef) and n.name == 'poll_once')
+        self.assertEqual(fingerprint(before), fingerprint(after))
+        source = Path('trade_guardian.py').read_text('utf-8')
+        self.assertNotIn('poll_commands', source)
+        self.assertNotIn('live_auto', source)
 
-    def test_no_ml_math_in_authorization_or_execution(self):
-        self.assertTrue(verify_live_ast())
-        # Exact comparison includes sizing, orders, leverage, SL/TP, fee guard,
-        # reversals, thesis exit, daily risk, locks and entry authorization.
-
-    def test_main_guardian_v8_early_research_untouched(self):
-        paths = ['main.py', 'guardian_risk.py', 'guardian_bitunix.py', 'guardian_signals.py',
-                 'trade_guardian.py', 'guardian_commands.py', 'copilot_audit.py', 'trend_v8.py',
-                 'early_breakout_shadow.py', 'railway.json']
-        for path in paths:
-            expected = subprocess.check_output(['git', 'show', BASELINE + ':' + path]).decode('utf-8')
-            self.assertEqual(Path(path).read_text('utf-8'), expected.replace('\r\n', '\n'), path)
+    def test_post_allowlist_unchanged(self):
+        self.assertEqual(POST_ALLOWLIST, {PLACE_SL, FLASH_CLOSE})
 
 
-@unittest.skipUnless(importlib.util.find_spec('pandas') and importlib.util.find_spec('websocket'),
-                     'Integration requires requirements.txt; dedicated CI installs every dependency')
-class RealAutoIntegrationTests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        import live_auto
-        cls.live = live_auto
-        baseline = subprocess.check_output(['git', 'show', BASELINE + ':live_auto.py']).decode('utf-8')
-        tree = ast.parse(baseline)
-        real = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == 'RealAuto')
-        method = copy.deepcopy(next(n for n in real.body if isinstance(n, ast.FunctionDef) and n.name == 'run'))
-        method.name = 'baseline_run'
-        env = dict(live_auto.__dict__)
-        exec(compile(ast.fix_missing_locations(ast.Module(body=[method], type_ignores=[])), '<baseline>', 'exec'), env)
-        cls.baseline_run = staticmethod(env['baseline_run'])
+class HostTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.logs = []
+        self.host = MLRSIHost(self.tmp.name, send=Mock(return_value=True), logger=self.logs.append)
+        self.addCleanup(self.host.stop)
 
-    def bot(self, observer=None, commands=()):
-        bot = self.live.RealAuto.__new__(self.live.RealAuto)
-        bot.mlrsi_observer = observer
-        bot.tg = Mock()
-        bot.tg.poll_commands.return_value = list(commands)
-        bot.state = SimpleNamespace(auto_enabled=False, locked=False, position=None, entry_armed=True,
-                                    save=Mock(), new_day=Mock())
-        bot.api = Mock()
-        bot.plan = SimpleNamespace(action='WAIT', setup='x', bias='WAIT', price=100)
-        return bot
+    def test_public_cache_is_deep_copy_only(self):
+        self.host.status_cache.publish('<b>ML RSI</b> 15m 1H 4H', True)
+        value = self.host.status_cache.read()
+        value['text'] = 'changed'
+        self.assertEqual(self.host.status_cache.read(), {'text': 'ML RSI 15m 1H 4H', 'enabled': True})
+        self.assertEqual(set(vars(self.host.status_cache)), {'_lock', '_value'})
+        self.assertIs(self.host.status_cache.read.__self__, self.host.status_cache)
 
-    def command(self, cmd, observer=None):
-        bot = self.bot(observer or SimpleNamespace(config=SimpleNamespace(enabled=True), status_text=lambda: 'cached ML RSI'), [cmd])
-        with patch('requests.sessions.Session.request', side_effect=AssertionError('Real HTTP forbidden')):
-            bot.commands()
-        for action in ('post', 'place_order', 'place_market', 'flash_close_position', 'change_leverage'):
-            self.assertFalse(getattr(bot.api, action).called)
-        self.assertEqual(bot.state.auto_enabled, False)
-        self.assertFalse(bot.state.save.called)
-        return bot
+    def test_outbound_existing_callback_plain_text(self):
+        self.host._send_text('<b>GREEN CONFIRMED</b>\nSHADOW ONLY')
+        self.host._send.assert_called_once_with('GREEN CONFIRMED\nSHADOW ONLY')
 
-    def test_mlrsi_command_cached_no_api(self):
-        bot = self.command('/mlrsi')
-        bot.tg.send.assert_called_once_with('cached ML RSI')
-        self.assertEqual(bot.api.mock_calls, [])
+    def test_start_is_daemon_no_import_or_join_in_caller(self):
+        with patch('mlrsi_guardian_host.threading.Thread') as factory, patch('mlrsi_observer.MLRSIObserver') as observer:
+            self.host.start()
+            self.host.start()
+            observer.assert_not_called()
+            factory.assert_called_once_with(target=self.host._run, name='guardian-mlrsi-host', daemon=True)
+            factory.return_value.start.assert_called_once()
+            self.host.stop()
+            factory.return_value.join.assert_not_called()
 
-    def test_mlrsi_does_not_change_plan_or_state(self):
-        bot = self.command('/mlrsi')
-        self.assertEqual((bot.plan.action, bot.plan.setup, bot.plan.bias), ('WAIT', 'x', 'WAIT'))
+    def test_constructor_does_no_filesystem_resolution(self):
+        with patch('mlrsi_guardian_host.storage_directory', side_effect=OSError('secret disk')) as resolve:
+            host = MLRSIHost(send=Mock(), logger=self.logs.append)
+            resolve.assert_not_called()
+            host._run()
+        self.assertEqual(self.logs, ['MLRSI_HOST_FAILED_IGNORED'])
 
-    def test_help_preserves_every_existing_command(self):
-        bot = self.command('/help')
-        text = bot.tg.send.call_args.args[0]
-        for cmd in ('/status', '/account', '/position', '/check', '/plan', '/live_on', '/live_off',
-                    '/unlock', '/data', '/why', '/help', '/mlrsi'):
-            self.assertIn(cmd, text)
-        self.assertNotIn('/mlrsi_help', text)
+    def test_explicit_override_cannot_write_guardian_directory(self):
+        host = MLRSIHost(self.tmp.name, send=Mock(), logger=self.logs.append)
+        with patch.dict(os.environ, {'GUARDIAN_STATE_DIR': self.tmp.name}), patch('mlrsi_observer.MLRSIObserver') as observer:
+            host._run()
+        observer.assert_not_called()
+        self.assertEqual(list(Path(self.tmp.name).iterdir()), [])
+        self.assertEqual(self.logs, ['MLRSI_HOST_FAILED_IGNORED'])
 
-    def test_status_one_line_only(self):
-        bot = self.bot(SimpleNamespace(config=SimpleNamespace(enabled=True)), ['/status'])
-        bot.status = Mock(return_value='existing status')
-        bot.commands()
-        bot.tg.send.assert_called_once_with('existing status\nML RSI MTF Observer: ON')
+    def test_heavy_import_init_happens_only_in_worker(self):
+        with patch('mlrsi_observer.MLRSIObserver') as factory:
+            observer = factory.return_value
+            observer.config.enabled = True
+            observer.status_text.return_value = '<b>snapshot</b>'
+            self.host._stop = Mock()
+            self.host._stop.is_set.side_effect = [False, False, True]
+            self.host._run()
+            self.assertEqual(factory.call_args.args, (Path(self.tmp.name),))
+            self.assertEqual(set(factory.call_args.kwargs), {'send', 'logger'})
+            self.assertIs(factory.call_args.kwargs['send'].__self__, self.host)
+            observer.start.assert_called_once()
+            observer.stop.assert_called_once()
+            self.assertEqual(self.host.status_cache.read()['text'], 'snapshot')
+            self.host._stop.wait.assert_called_once_with(1)
 
-    def test_mlrsi_missing_observer_nonfatal(self):
-        bot = self.bot(commands=['/mlrsi'])
-        bot.commands()
-        self.assertIn('no disponible', bot.tg.send.call_args.args[0])
+    def test_import_failure_static_nonfatal(self):
+        import builtins
+        original = builtins.__import__
+        def imported(name, *args, **kwargs):
+            if name == 'mlrsi_observer':
+                raise ImportError('must-not-log secret')
+            return original(name, *args, **kwargs)
+        with patch('builtins.__import__', side_effect=imported):
+            self.host._run()
+        self.assertEqual(self.logs, ['MLRSI_HOST_FAILED_IGNORED'])
 
-    def test_mlrsi_error_static_nonfatal(self):
-        bot = self.bot(Mock(), ['/mlrsi'])
-        bot.mlrsi_observer.status_text.side_effect = RuntimeError('secret token')
-        with patch.object(self.live, 'log') as log:
-            bot.commands()
-        log.assert_called_once_with('MLRSI_COMMAND_FAILED_IGNORED')
-        self.assertEqual(bot.api.mock_calls, [])
+    def test_init_disk_error_nonfatal(self):
+        with patch('mlrsi_observer.MLRSIObserver', side_effect=OSError('must-not-log secret')):
+            self.host._run()
+        self.assertEqual(self.logs, ['MLRSI_HOST_FAILED_IGNORED'])
+        self.assertFalse(self.host.status_cache.read()['enabled'])
 
-    def test_observer_init_failure_nonfatal(self):
-        bot = self.bot()
-        with patch('mlrsi_observer.MLRSIObserver', side_effect=RuntimeError('secret')):
-            bot._init_mlrsi_observer()
-        self.assertIsNone(bot.mlrsi_observer)
+    def test_start_failure_nonfatal(self):
+        with patch('mlrsi_observer.MLRSIObserver') as factory:
+            factory.return_value.start.side_effect = RuntimeError('must-not-log secret')
+            self.host._run()
+            factory.return_value.stop.assert_called_once()
+        self.assertEqual(self.logs, ['MLRSI_HOST_FAILED_IGNORED'])
 
-    def test_observer_constructor_receives_no_trading_capability(self):
-        bot = self.bot()
-        with patch('mlrsi_observer.MLRSIObserver') as observer:
-            bot._init_mlrsi_observer()
-        self.assertEqual(set(observer.call_args.kwargs), {'send', 'logger'})
-        self.assertEqual(observer.call_args.args, (self.live.OBSERVER_STATE_FILE.parent,))
-        self.assertEqual(observer.call_args.kwargs['send'], bot.tg.send)
+    def test_snapshot_failure_nonfatal_and_cached_unknown(self):
+        with patch('mlrsi_observer.MLRSIObserver') as factory:
+            factory.return_value.status_text.side_effect = RuntimeError('must-not-log secret')
+            self.host._stop = Mock()
+            self.host._stop.is_set.side_effect = [False, False, True]
+            self.host._run()
+        self.assertEqual(self.logs, ['MLRSI_STATUS_FAILED_IGNORED'])
+        self.assertEqual(self.host.status_cache.read()['text'], UNAVAILABLE)
 
-    def run_trace(self, action, has_position, mode, baseline=False):
-        trace = []
-        observer = Mock()
-        observer.config.enabled = mode != 'OFF'
-        if mode == 'ERROR':
-            observer.start.side_effect = RuntimeError('observer failed')
-        bot = self.bot(observer)
-        bot.max_leverage = 50
-        bot.live = SimpleNamespace(start=lambda: trace.append('market_start'))
-        bot.observer = SimpleNamespace(observe_signal=lambda *a: trace.append('legacy_observe'), tick=lambda *a: trace.append('legacy_tick'))
-        bot.last_analysis = 0
-        bot.plan = SimpleNamespace(action=action, bias='LONG', setup='test', price=100)
-        bot.analyzer = SimpleNamespace(analyze=lambda: bot.plan)
-        bot.state.position = object() if has_position else None
-        bot.state.new_day = lambda: trace.append('new_day')
-        bot.state.save = lambda: trace.append('save')
-        bot.commands = lambda: trace.append('commands')
-        bot.record_plan_visibility = lambda *a: trace.append('visibility')
-        bot.maybe_visibility_alert = lambda *a: trace.append('notice')
-        bot.evaluate_thesis_change = lambda *a: trace.append('thesis')
-        bot.signal_id = lambda *a: 'id'
-        bot.open_real = lambda *a: trace.append('open')
-        bot.get_mark = lambda: 100
-        bot.manage_real = lambda *a: trace.append('manage')
-        stop = Mock()
-        stop.is_set.side_effect = [False, True]
-        stop.wait.side_effect = lambda *a: trace.append('wait')
-        with patch.object(self.live.C, 'STOP_EVENT', stop), patch.object(self.live, 'LIVE_EXECUTION', True), \
-             patch.object(self.live, 'log'), patch('requests.sessions.Session.request', side_effect=AssertionError('No real HTTP')):
-            (self.baseline_run if baseline else self.live.RealAuto.run)(bot)
-        return trace
+    def test_stop_nonblocking_and_error_nonfatal(self):
+        self.host._observer = Mock()
+        self.host._observer.stop.side_effect = RuntimeError('must-not-log secret')
+        self.host._thread = Mock()
+        self.host.stop()
+        self.host._thread.join.assert_not_called()
+        self.assertEqual(self.logs, ['MLRSI_STOP_FAILED_IGNORED'])
+        self.assertTrue(self.host._stop.is_set())
 
-    def test_observer_off_dispatch_identical_to_main(self):
-        for action in ('WAIT', 'ENTER LONG NOW', 'ENTER SHORT NOW'):
-            for position in (False, True):
-                self.assertEqual(self.run_trace(action, position, 'OFF'), self.run_trace(action, position, 'OFF', True))
+    def test_stop_during_initialization_never_starts_worker(self):
+        self.host.stop()
+        with patch('mlrsi_observer.MLRSIObserver') as factory:
+            self.host._run()
+            factory.return_value.start.assert_not_called()
+            factory.return_value.stop.assert_called_once()
 
-    def test_observer_on_dispatch_identical_even_live_true(self):
-        for action in ('WAIT', 'ENTER LONG NOW', 'ENTER SHORT NOW'):
-            for position in (False, True):
-                self.assertEqual(self.run_trace(action, position, 'ON'), self.run_trace(action, position, 'OFF', True))
+    def test_actual_worker_clustering_error_isolated(self):
+        observer = MLRSIObserver(self.tmp.name, logger=self.logs.append)
+        observer.cycle = Mock(side_effect=ValueError('must-not-log secret'))
+        observer.stop_event = Mock()
+        observer.stop_event.is_set.side_effect = [False, True]
+        observer._worker()
+        self.assertEqual(self.logs, ['MLRSI_OBSERVER_ERROR_IGNORED'])
 
-    def test_observer_exception_does_not_prevent_real_position_management(self):
-        trace = self.run_trace('ENTER SHORT NOW', True, 'ERROR')
-        self.assertIn('thesis', trace)
-        self.assertIn('manage', trace)
-        self.assertEqual(trace, self.run_trace('ENTER SHORT NOW', True, 'OFF', True))
+    def test_logger_failure_nonfatal(self):
+        self.host._logger = Mock(side_effect=RuntimeError('must-not-log secret'))
+        self.host._log('MLRSI_HOST_FAILED_IGNORED')
 
-    def test_worker_math_exception_nonfatal_and_stops(self):
-        from tempfile import TemporaryDirectory
+    def test_storage_explicit(self):
+        self.assertEqual(storage_directory({'MLRSI_STATE_DIR': self.tmp.name}), Path(self.tmp.name))
+
+    def test_storage_railway_volume_default(self):
+        self.assertEqual(storage_directory({'RAILWAY_VOLUME_MOUNT_PATH': self.tmp.name}), Path(self.tmp.name) / 'mlrsi')
+
+    def test_storage_data_default_when_present(self):
+        with patch('mlrsi_guardian_host.Path.is_dir', return_value=True):
+            self.assertEqual(storage_directory({}), Path('/data/mlrsi'))
+
+    def test_storage_safe_local_fallback(self):
+        with patch('mlrsi_guardian_host.Path.is_dir', return_value=False):
+            self.assertEqual(storage_directory({}), Path('mlrsi_observations'))
+
+    def test_storage_rejects_shared_namespaces(self):
+        for name in ('GUARDIAN_STATE_DIR', 'COPILOT_AUDIT_STATE_DIR', 'EARLY_BREAKOUT_STATE_DIR'):
+            for suffix in ('', '/mlrsi'):
+                with self.subTest(name=name, suffix=suffix), self.assertRaises(ValueError):
+                    storage_directory({name: self.tmp.name, 'MLRSI_STATE_DIR': self.tmp.name + suffix})
+
+    def test_storage_rejects_volume_root_and_cwd(self):
+        for path in (self.tmp.name, str(Path.cwd()), '/data'):
+            with self.subTest(path=path), self.assertRaises(ValueError):
+                storage_directory({'MLRSI_STATE_DIR': path, 'RAILWAY_VOLUME_MOUNT_PATH': self.tmp.name})
+
+
+class GuardianTraceTests(unittest.TestCase):
+    def run_trace(self, mode='ON', liq=9900, side='LONG', *, old=False, shadow=False,
+                  ambiguous=False, pending=False, private_fail=False):
+        """Run actual main/cycle/preflight/execute with fake HTTP; no production threads."""
         with TemporaryDirectory() as folder:
-            logs = []
-            o = MLRSIObserver(folder, logger=logs.append)
-            o.cycle = Mock(side_effect=ValueError('secret'))
-            o.stop_event = Mock()
-            o.stop_event.is_set.side_effect = [False, True]
-            o._worker()
-            self.assertEqual(logs, ['MLRSI_OBSERVER_ERROR_IGNORED'])
+            fake = FakeBitunix()
+            fake.positions = [position(side=side, liqPrice=str(liq))]
+            fake.ambiguous, fake.fail = ambiguous, private_fail
+            config = Config(state_dir=folder) if shadow else ARMED
+            client = Bitunix(config, 'fake-key', 'fake-secret', fake)
+            store = Store(folder)
+            if pending:
+                store.append('actions', dict(key='CLOSE:123:1', action='CLOSE', positionId='123',
+                                            risk_epoch=1, status='INTENT', timestamp=1, body={'positionId': '123'}))
+            telegram = FakeTelegram()
+            telegram.send_owner = telegram.send
+            diagnostics = []
+            telegram_factory = Mock(return_value=telegram)
+            telegram_factory._diagnostic = diagnostics.append
+            audit = Mock()
+            host = Mock(status_cache=StatusCache())
+            host.status_cache.publish('cached SHADOW ONLY', mode == 'ON')
+            if mode == 'ERROR':
+                host.start.side_effect = RuntimeError('secret observer failure')
+            if mode == 'STOP_ERROR':
+                host.stop.side_effect = RuntimeError('secret stop failure')
+            if mode == 'WORKER_ERROR':
+                # Run real host bootstrap failure; worker catches it and returns.
+                def failed_worker():
+                    real = MLRSIHost(Path(folder) / 'mlrsi', send=telegram.send, logger=diagnostics.append)
+                    with patch('mlrsi_observer.MLRSIObserver', side_effect=RuntimeError('observer failure')):
+                        real._run()
+                host.start.side_effect = failed_worker
+            host_factory = Mock(return_value=host)
+            if mode == 'INIT_ERROR':
+                host_factory.side_effect = OSError('secret disk failure')
+            commands = Mock()
+            env = dict(trade_guardian.__dict__)
+            env.update(Config=SimpleNamespace(from_env=lambda: config), Store=lambda _: store,
+                       Bitunix=lambda *args: client, Market=lambda _: FakeMarket(), Telegram=telegram_factory,
+                       ForwardAudit=Mock(return_value=audit), runtime_git_sha=lambda: 'offline-fixture',
+                       TelegramCommands=commands)
+            source = baseline('trade_guardian.py') if old else Path('trade_guardian.py').read_text('utf-8')
+            main = next(n for n in ast.parse(source).body if isinstance(n, ast.FunctionDef) and n.name == 'main')
+            exec(compile(ast.fix_missing_locations(ast.Module(body=[main], type_ignores=[])), '<offline-main>', 'exec'), env)
+            def end_cycle(seconds):
+                if seconds > 1:
+                    raise KeyboardInterrupt
+            with patch('mlrsi_guardian_host.MLRSIHost', host_factory), patch('trade_guardian.time.sleep', side_effect=end_cycle), \
+                 patch('requests.sessions.Session.request', side_effect=AssertionError('REAL HTTP FORBIDDEN')), \
+                 patch('builtins.print'):
+                env['main']()
+            trace = [(method, path, options.get('params'), json.loads(options['data']) if options.get('data') else None)
+                     for method, path, options in fake.calls]
+            actions_path = Path(folder) / 'actions.jsonl'
+            actions = [json.loads(line) for line in actions_path.read_text().splitlines()] if actions_path.exists() else []
+            for row in actions:
+                row.pop('timestamp', None)
+            state = copy.deepcopy(store.state)
+            callbacks = commands.call_args.kwargs if commands.called else {}
+            return dict(trace=trace, actions=actions, posts=[t for t in trace if t[0] == 'POST'],
+                        state=state, diagnostics=diagnostics, callbacks=callbacks, host=host)
 
-    def test_owner_authorization_transport_unchanged(self):
-        bot = self.live.C.Telegram('fake-token', 'owner')
-        bot.api = Mock(return_value=[{'update_id': 1, 'message': {'chat': {'id': 'other'}, 'text': '/mlrsi'}},
-                                    {'update_id': 2, 'message': {'chat': {'id': 'owner'}, 'text': '/mlrsi'}}])
-        self.assertEqual(bot.poll_commands(), ['/mlrsi'])
+    def equivalent(self, mode, **scenario):
+        old = self.run_trace(old=True, **scenario)
+        new = self.run_trace(mode, **scenario)
+        self.assertEqual(old['trace'], new['trace'])
+        self.assertEqual(old['actions'], new['actions'])
+        self.assertEqual(old['state'].get('owned_sl'), new['state'].get('owned_sl'))
+        self.assertEqual(bool(old['state'].get('lockout_until')), bool(new['state'].get('lockout_until')))
+        return new
 
-    def test_mlrsi_arbitrary_cached_outputs_zero_bitunix_requests(self):
-        for response in ('UNKNOWN', 'GREEN', 'RED', '3/3 GREEN', 'APPROACHING_GREEN', 'PROVISIONAL_RED'):
-            observer = SimpleNamespace(status_text=lambda: response)
-            self.assertEqual(self.command('/mlrsi', observer).api.mock_calls, [])
+    def test_emergency_off_identical_baseline(self):
+        result = self.equivalent('OFF')
+        self.assertEqual(result['posts'], [('POST', FLASH_CLOSE, {}, {'positionId': '123'})])
+
+    def test_emergency_on_identical_baseline(self):
+        self.equivalent('ON')
+
+    def test_observer_error_during_emergency_exact_same_protection(self):
+        result = self.equivalent('ERROR')
+        self.assertEqual(result['posts'], [('POST', FLASH_CLOSE, {}, {'positionId': '123'})])
+        self.assertIn('MLRSI_HOST_UNAVAILABLE', result['diagnostics'])
+
+    def test_observer_init_error_emergency_not_blocked(self):
+        self.equivalent('INIT_ERROR')
+
+    def test_observer_worker_error_emergency_not_blocked(self):
+        result = self.equivalent('WORKER_ERROR')
+        self.assertIn('MLRSI_HOST_FAILED_IGNORED', result['diagnostics'])
+
+    def test_observer_stop_error_does_not_prevent_shutdown(self):
+        result = self.equivalent('STOP_ERROR')
+        self.assertIn('MLRSI_STOP_FAILED_IGNORED', result['diagnostics'])
+
+    def test_missing_sl_protection_identical_all_modes(self):
+        for mode in ('OFF', 'ON', 'ERROR'):
+            result = self.equivalent(mode, liq=9500)
+            self.assertEqual(len(result['posts']), 1)
+            self.assertEqual(result['posts'][0][1], PLACE_SL)
+
+    def test_short_emergency_identical_all_modes(self):
+        for mode in ('OFF', 'ON', 'ERROR'):
+            result = self.equivalent(mode, liq=10100, side='SHORT')
+            self.assertEqual(result['posts'][0][1], FLASH_CLOSE)
+
+    def test_shadow_zero_posts_all_modes(self):
+        for mode in ('OFF', 'ON', 'ERROR'):
+            self.assertEqual(self.equivalent(mode, shadow=True)['posts'], [])
+
+    def test_pending_reconciliation_identical_no_duplicate(self):
+        for mode in ('OFF', 'ON', 'ERROR'):
+            self.assertEqual(self.equivalent(mode, pending=True)['posts'], [])
+
+    def test_ambiguous_response_identical(self):
+        for mode in ('OFF', 'ON', 'ERROR'):
+            self.equivalent(mode, ambiguous=True)
+
+    def test_private_failure_fail_closed_all_modes(self):
+        for mode in ('OFF', 'ON', 'ERROR'):
+            self.assertEqual(self.equivalent(mode, private_fail=True)['posts'], [])
+
+    def test_command_receives_cache_only_not_observer(self):
+        result = self.run_trace()
+        self.assertIs(result['callbacks']['mlrsi_status'].__self__, result['host'].status_cache)
+        self.assertNotIsInstance(result['callbacks']['mlrsi_status'].__self__, MLRSIHost)
+
+
+class CommandIntegrationTests(unittest.TestCase):
+    def setUp(self):
+        self.cache, self.reply, self.http = SnapshotCache(), Mock(return_value=True), Mock()
+        self.status = StatusCache()
+        with TemporaryDirectory() as folder:
+            observer = MLRSIObserver(folder, logger=lambda _: None)
+            self.status.publish(observer.status_text(), True)
+        self.commands = TelegramCommands('fake-token', 'owner', self.cache, self.reply,
+                                          enabled=True, transport=self.http, mlrsi_status=self.status.read)
+
+    @staticmethod
+    def update(command, owner='owner', identifier=1):
+        return {'update_id': identifier, 'message': {'chat': {'id': owner}, 'text': command}}
+
+    def test_mlrsi_no_recent_event_full_readonly_panel(self):
+        self.assertTrue(self.commands.process(self.update('/mlrsi')))
+        text = self.reply.call_args.args[0]
+        for word in ('15m', '1H', '4H', 'Confirmed', 'Provisional', 'Approaching', 'Upper', 'Lower',
+                     'Middle', 'Último cierre', 'Último evento', 'CONFLUENCIA', 'GREEN_CROSS',
+                     'GREEN_RESUME', 'SHADOW ONLY', 'TRADE AUTHORITY: NONE', 'LOW'):
+            self.assertIn(word, text)
+        self.assertNotIn('<b>', text)
+
+    def test_help_preserves_all_previous_text_and_commands(self):
+        old_help = next(n for n in ast.parse(baseline('guardian_commands.py')).body
+                        if isinstance(n, ast.Assign) and n.targets[0].id == 'HELP').value.value
+        self.assertEqual(HELP.replace(HELP_LINE, ''), old_help)
+        self.assertEqual(COMMANDS, ('/status', '/why', '/position', '/risk', '/levels', '/stats', '/help', '/mlrsi'))
+        self.commands.process(self.update('/help'))
+        self.assertEqual(self.reply.call_args.args[0], HELP)
+        self.assertNotIn('/mlrsi_help', HELP)
+
+    def test_status_adds_exactly_one_information_line(self):
+        self.commands.process(self.update('/status'))
+        self.assertEqual(self.reply.call_args.args[0], render_command('/status', None, 0) + '\nML RSI MTF Observer: ON')
+
+    def test_owner_only_alert_recipients_not_authorized(self):
+        for owner in ('alert-recipient', 'other', ' owner ', '', None):
+            self.assertFalse(self.commands.process(self.update('/mlrsi', owner)))
+        self.reply.assert_not_called()
+        self.assertTrue(self.commands.process(self.update('/mlrsi')))
+
+    def test_disabled_no_polling(self):
+        self.commands.enabled = False
+        self.assertFalse(self.commands.poll_once())
+        self.assertFalse(self.commands.process(self.update('/mlrsi')))
+        self.http.get.assert_not_called()
+
+    def test_mlrsi_same_single_poller_as_help(self):
+        self.http.get.return_value = SimpleNamespace(status_code=200, json=lambda: dict(ok=True, result=[
+            self.update('/mlrsi', identifier=1), self.update('/help', identifier=2)]))
+        self.assertTrue(self.commands.poll_once())
+        self.http.get.assert_called_once()
+        self.assertTrue(self.http.get.call_args.args[0].endswith('/getUpdates'))
+        self.assertEqual(self.reply.call_count, 2)
+
+    def test_command_zero_private_public_requests_writes_or_mutations(self):
+        before = self.status.read()
+        env = dict(os.environ)
+        with patch.object(Bitunix, '_request', side_effect=AssertionError('NO BITUNIX')) as bitunix, \
+             patch.object(MLRSIObserver, 'cycle', side_effect=AssertionError('NO REFRESH')) as cycle, \
+             patch.object(MLRSIObserver, '_persist', side_effect=AssertionError('NO WRITE')) as persist, \
+             patch('requests.sessions.Session.request', side_effect=AssertionError('NO HTTP')) as http:
+            for command in list(COMMANDS) + ['/arm', '/close', '/protect'] + ['/' + str(i) for i in range(200)]:
+                self.assertTrue(self.commands.process(self.update(command)))
+        for call in (bitunix, cycle, persist, http):
+            call.assert_not_called()
+        self.assertEqual(self.status.read(), before)
+        self.assertEqual(dict(os.environ), env)
+
+    def test_cache_reader_error_nonfatal(self):
+        self.commands._mlrsi_status = Mock(side_effect=RuntimeError('token secret'))
+        self.assertTrue(self.commands.process(self.update('/mlrsi')))
+        self.assertIn('no disponible', self.reply.call_args.args[0])
+        self.assertNotIn('token secret', self.reply.call_args.args[0])
+
+    def test_malformed_cache_nonfatal(self):
+        for value in (None, [], {}, {'text': None}):
+            self.commands._mlrsi_status = lambda: value
+            self.assertTrue(self.commands.process(self.update('/mlrsi')))
+            self.assertIn('SHADOW ONLY', self.reply.call_args.args[0])
+
+    def test_missing_observer_nonfatal(self):
+        self.commands._mlrsi_status = None
+        self.assertTrue(self.commands.process(self.update('/mlrsi')))
+        self.assertIn('OFF / no disponible', self.reply.call_args.args[0])
+
+    def test_no_logs_of_token_chat_or_incoming_text(self):
+        with patch('builtins.print') as output:
+            self.commands.process(self.update('/mlrsi private-message'))
+        output.assert_not_called()
+        text = self.reply.call_args.args[0]
+        for word in ('fake-token', 'owner', 'private-message'):
+            self.assertNotIn(word, text)
+
+    def test_telegram_exception_nonfatal_no_other_action(self):
+        self.reply.side_effect = RuntimeError('secret')
+        self.assertFalse(self.commands.process(self.update('/mlrsi')))
+        self.http.get.assert_not_called()
 
 
 if __name__ == '__main__':

@@ -1,0 +1,95 @@
+{
+  "main_commit": "9d0024a45d8e40193162a3864a876ca5ab61d1da",
+  "v8_commit": "724f14fdd723eabf9ebcf3dbd51b4ab271aec9e6",
+  "validated_core_commit": "3f2c9ade84d1003a344e519c2c9b7b72d2712e67",
+  "main_files": {
+    "main.py": {
+      "git_blob": "d70a82b6d0a7bfc2b6fe2c45a1b76594a797c602",
+      "sha256": "f53d55f28384d5294821cbac44de4b7887f68fe510bf49693d3cfc711d52dd8b"
+    },
+    "live_auto.py": {
+      "git_blob": "25ead90b7617871dc35dbf6946808ae53d8bc428",
+      "sha256": "a167f318dc37bc853a443480d808e84a12e8efefc3c3c1a67ccc133a61469ede"
+    },
+    "guardian_bitunix.py": {
+      "git_blob": "0c9adb4169af33cb4898088de8c4df7afb2e7ac9",
+      "sha256": "17b6043196c81eb6b18c5abedbc399ddf34614aedfe6f4556c12863984743f87"
+    },
+    "guardian_risk.py": {
+      "git_blob": "905452bbcb223aa57372e2ab84ca611c21a49efc",
+      "sha256": "6a5e48b4ea56b4c1caa6f00ec3de5ca6fc89e775753c79014f89afc3ad4a0510"
+    },
+    "guardian_store.py": {
+      "git_blob": "bec8f82470b0141fdc36105c098181f69f1b9151",
+      "sha256": "4e1e657308f314edddcd9155ff03dd1f362879c77637ef3cea8997d2cb0ac03e"
+    },
+    "guardian_signals.py": {
+      "git_blob": "97bdddbc0fe353c0673afbc5b679015ad806195d",
+      "sha256": "abee001f1b09fd43811731f16aa78589d0d5e86bd6dd7e01fa0ceb385b9d537a"
+    },
+    "guardian_market.py": {
+      "git_blob": "8a34d0cdd33439394c6723031fe402bd5652e785",
+      "sha256": "1648fa09082db411fd7376954633862eb148dcb9163c165e65100dc64f89381c"
+    },
+    "guardian_telegram.py": {
+      "git_blob": "4f5fa13ff276335c9d9343a5a63bcec3b08a2f25",
+      "sha256": "0df16e21b4a2de5c7721209d5a41a8d18b0dd958c7c3ab8e4fb13f973d3f520a"
+    },
+    "copilot_audit.py": {
+      "git_blob": "7cc3b2346c1ab82efdabe6115de27c9659ab042e",
+      "sha256": "74e903fa8f18a081417716ff5337ddc1fda5e9b6d62dc44c55dcece187167b1d"
+    },
+    "early_breakout_shadow.py": {
+      "git_blob": "dfab9b2ac4a51ae332b0840ff39d0a333e8ed9df",
+      "sha256": "6f8e4cd0a3e529a3f20cd45b6933fbefe4016bcbb0d72deecf03a2bf42214b7c"
+    },
+    "trend_v8.py": {
+      "git_blob": "997bcbe35551b5a783980b795f903bd4a4023c50",
+      "sha256": "e5e26f93bca7c6c15cef2d98165c38e8806cc67762840b619ab0f5308af5bf31"
+    },
+    "railway.json": {
+      "git_blob": "3d7f91deb30f3d1651d1c4e017ea7df29d674cd4",
+      "sha256": "075e54976c4007c66795a52b28c74123d01cb48a8e9727d42883023ee5d7cbe0"
+    }
+  },
+  "v8_files": {
+    "v8_executor.py": {
+      "git_blob": "571d77261b087b09b7932a6293587ef08c0fec60",
+      "sha256": "7b2f8def2967d85cc4e64ab45b4574af7f425d09130239ad406c7b11ce2a1651"
+    },
+    "v8_bitunix.py": {
+      "git_blob": "78e419c49a2f31a3b934a3980729f3fb03535f3b",
+      "sha256": "d2c1a80a3c50abee226aeab711c0ee8e40f450b1f9e8a601fe4e5de49f9658c1"
+    },
+    "trend_v8.py": {
+      "git_blob": "dc375ace78933d22f09252f5a393806e7c0b3ba6",
+      "sha256": "911f7175e53d80e1aa4d34a19155b70c0956d58de067b0fc00da6082b6894e33"
+    },
+    "v8_notifications.py": {
+      "git_blob": "fc30651c978703db554596db287b6cef3b5700fd",
+      "sha256": "73740ab90bdb54ed5feb46cc4aff2ce5a7e9fe9b066406d5df8ffc7e23d7191a"
+    },
+    "railway.json": {
+      "git_blob": "3d7f91deb30f3d1651d1c4e017ea7df29d674cd4",
+      "sha256": "075e54976c4007c66795a52b28c74123d01cb48a8e9727d42883023ee5d7cbe0"
+    }
+  },
+  "validated_core": {
+    "mlrsi_math.py": {
+      "git_blob": "ba014abc571c337db4665af834b0d31b4c976a20",
+      "sha256": "57e8588362f3c3bd78a1652ec76e2b147cdcffcefa1039e750cfd13e0a1eb50c"
+    },
+    "mlrsi_public.py": {
+      "git_blob": "28937dff65594f9b471098e510491ec7823fec8b",
+      "sha256": "e404997ad1a2773b886b2e18b1af0e67848130817a24cef2207ab7b1eb35d7b7"
+    },
+    "mlrsi_observer.py": {
+      "git_blob": "e71b320f7582209862d479868d08ef8c31f80497",
+      "sha256": "f96d63400c2ad6e852726826202cf11b23fee7ec534d01926c2b4c2be21419de"
+    },
+    "mlrsi_telegram.py": {
+      "git_blob": "5fb45c731c21874d05d69b3886ba42d5c571107e",
+      "sha256": "0d2375fc4a6994877292018660f737be35491023e1cc27f9bb70cc49d8b10ae3"
+    }
+  }
+}

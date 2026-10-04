@@ -5,3 +5,4 @@ __pycache__/
 /igod_mlrsi_state.json*
 /igod_mlrsi_events.jsonl
 /igod_mlrsi_cache_*.json*
+/mlrsi_observations/

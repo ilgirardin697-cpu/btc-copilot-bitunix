@@ -308,6 +308,7 @@ def main():
     store = None
     commands = None
     audit = None
+    mlrsi = None
     try:
         config = Config.from_env()
         store = Store(config.state_dir)
@@ -323,10 +324,17 @@ def main():
             print('COPILOT_AUDIT_UNAVAILABLE', flush=True)
         guardian = Guardian(client, store, Market(client), Telegram(os.getenv('TELEGRAM_BOT_TOKEN', ''),
                             os.getenv('TELEGRAM_CHAT_ID', ''), alert_chat_id=os.getenv('TELEGRAM_ALERT_CHAT_ID', '')), audit=audit)
+        try:
+            from mlrsi_guardian_host import MLRSIHost
+            mlrsi = MLRSIHost(send=guardian.telegram.send, logger=Telegram._diagnostic)
+            mlrsi.start()
+        except Exception:
+            Telegram._diagnostic('MLRSI_HOST_UNAVAILABLE')
         commands = TelegramCommands(os.getenv('TELEGRAM_BOT_TOKEN', ''), os.getenv('TELEGRAM_CHAT_ID', ''),
                                     guardian.command_snapshot, guardian.telegram.send_owner,
                                     enabled=os.getenv('GUARDIAN_ENABLE_COMMANDS', 'false').lower() == 'true',
-                                    stats_cache=audit.stats_cache if audit is not None else None)
+                                    stats_cache=audit.stats_cache if audit is not None else None,
+                                    mlrsi_status=mlrsi.status_cache.read if mlrsi is not None else None)
         commands.start()
         while True:
             started = time.monotonic()
@@ -338,6 +346,11 @@ def main():
         print('GUARDIAN STOPPED — SAFE FAILURE; NO NEW MUTATION', flush=True)
         raise SystemExit(1) from None
     finally:
+        if mlrsi is not None:
+            try:
+                mlrsi.stop()
+            except Exception:
+                Telegram._diagnostic('MLRSI_STOP_FAILED_IGNORED')
         if commands is not None:
             commands.stop()
         if store is not None:

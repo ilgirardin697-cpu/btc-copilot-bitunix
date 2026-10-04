@@ -1,4 +1,4 @@
-# Observador pasivo ML RSI multitemporal — V7.3.8.7
+# Observador pasivo ML RSI multitemporal — host Guardian
 
 El observer recoge evidencia de BTCUSDT en **15m, 1H y 4H**. Siempre es
 **SHADOW ONLY**, con **`trade_authority=false`**, incluso con
@@ -15,17 +15,37 @@ es **interesting but inconclusive**. Esos PRs y resultados no se modifican.
 
 ## Arquitectura y límites
 
-`live_auto.py` únicamente crea un `MLRSIObserver` con un directorio observacional,
-un callback del Telegram existente y un logger. Arranca un daemon independiente:
-la descarga, el clustering, las escrituras y los avisos no se ejecutan dentro del
-loop de gestión de posiciones. `/mlrsi` lee una copia pequeña de la última
-fotografía publicada; no refresca APIs ni modifica estado operacional.
+Topología de producción verificada del proyecto Railway `victorious-energy`:
 
-La autenticación de comandos y los destinatarios Telegram existentes no se
-alteran. No se añade polling Telegram. No se conecta el observer a Guardian,
-V8, Forward Audit ni Early Breakout. **El hook corresponde a `live_auto.py`**;
-no cambia el entrypoint Railway ni inicia otro servicio. `/status` y su alias
-`/live` reciben una sola línea `ML RSI MTF Observer: ON/OFF`.
+| Servicio | Rama | Entrypoint | Responsabilidad |
+|---|---|---|---|
+| `btc-copilot-bitunix` | `v8-real-executor` | `python v8_executor.py` | Ejecución V8 REAL, **sin cambios** |
+| `igod-trade-guardian` | `main` | `python trade_guardian.py` | Guardian, Copilot y host ML RSI pasivo |
+
+`trade_guardian.py` crea `MLRSIHost` con **solo** un directorio observacional,
+el callback `guardian.telegram.send` y un logger estático. El host importa,
+inicializa y arranca `MLRSIObserver` en un daemon independiente: imports, disco,
+descarga y clustering no bloquean el ciclo Guardian. No se le pasa Guardian,
+Bitunix, Store, posiciones, permisos, credenciales ni callbacks de protección.
+No hay código ML RSI en `Guardian.cycle`, `_act` o `reconcile`.
+
+`guardian_commands.TelegramCommands` sigue siendo el **único consumidor de
+`getUpdates` en este runtime**. Se añade `/mlrsi` al mismo handler owner-only;
+recibe exclusivamente `StatusCache.read`, no el observer ni el host completo.
+Esta cache independiente contiene solo texto renderizado y un flag ON/OFF.
+El comando no descarga, recalcula ni escribe; lee la última publicación, cuya
+fotografía incluye la antigüedad de los datos. No se habilitan comandos ni se
+cambia `GUARDIAN_ENABLE_COMMANDS=false` por defecto.
+
+Los destinatarios, token y autorización Telegram existentes se conservan.
+Las alertas usan `Telegram.send` del Guardian; las respuestas de comandos,
+`send_owner`. El adaptador elimina únicamente las etiquetas `<b>` porque el
+transporte Guardian es texto plano. No se crea bot ni poller adicional.
+`/status` recibe una sola línea `ML RSI MTF Observer: ON/OFF` y `/help` conserva
+todo su contenido, añadiendo `/mlrsi`. `live_auto.py` vuelve íntegramente al
+baseline main V7.3.8.6, sin hooks ML RSI. No se modifica ningún start command,
+rama de servicio o archivo V8. La versión interna del observer validado
+`V7.3.8.7_MLRSI_1` se conserva como metadata; no cambia la versión de un executor.
 
 Un fallo de init, arranque, cálculo, mercado, disco, comando o Telegram produce
 un diagnóstico estático y no interrumpe la gestión real. La falta de datos
@@ -173,9 +193,13 @@ escrituras. `/help` conserva todos los comandos y añade una sola línea.
 
 ## Persistencia y recuperación
 
-Directorio: el mismo directorio observacional de `OBSERVER_STATE_FILE`, en el
-volumen configurado por `RAILWAY_VOLUME_MOUNT_PATH` o local si no lo hay.
-**Nunca `igod_live_state.json`.**
+Directorio independiente `MLRSI_STATE_DIR`. Si no se configura: se deriva como
+`RAILWAY_VOLUME_MOUNT_PATH/mlrsi` cuando existe ese ajuste; en su ausencia,
+`/data/mlrsi` si `/data` existe; como fallback local, `mlrsi_observations`.
+Se rechazan el directorio de Guardian, Forward Audit o Early Breakout y sus
+descendientes, así como la raíz del volumen. **Nunca Guardian Store, V8 state,
+V8 journal ni `igod_live_state.json`.** Un path inválido deshabilita únicamente
+el host ML RSI; Guardian continúa. El cierre usa señales de parada, sin `join`.
 
 - `igod_mlrsi_state.json`: atomic replace, fsync archivo y directorio donde
   soportado. Config/version/venue/symbol, math carry por TF, últimos cierres,
@@ -197,7 +221,7 @@ approaching usan open timestamp más sus latches; confluencia se deduplica por
 episodio. Un outbox durable conserva eventos antes de append. Tras un crash
 se reconcilian claves ya escritas y se completa el journal sin alertar eventos
 antiguos. Un journal corrupto bloquea nuevos append hasta reparación y deja
-vivo el executor. Un state corrupto fuerza bootstrap silencioso.
+vivo Guardian. Un state corrupto fuerza bootstrap silencioso.
 
 Entrega Telegram es **at-most-once en restart**, no garantía de recepción: un
 crash entre persistencia y envío puede perder una notificación. No se afirma
@@ -224,6 +248,7 @@ MLRSI_APPROACHING_ENABLED=true
 MLRSI_APPROACH_DISTANCE=1.0
 MLRSI_APPROACH_REARM_DISTANCE=1.5
 MLRSI_PROVISIONAL_ALERTS=true
+MLRSI_STATE_DIR=/data/mlrsi
 ```
 
 No hay nuevas variables obligatorias. Valores inválidos usan defaults y un log
@@ -233,28 +258,52 @@ provisional-alerts OFF mantiene el cálculo/journal pero no ese aviso.
 
 ## Auditoría y tests
 
-`mlrsi_safety_audit.py` compara el AST completo de `live_auto.py` con main
-`9d0024a45d8e40193162a3864a876ca5ab61d1da`, retirando solamente los hooks
-especificados, ruta `/mlrsi`, línea `/status`, `/help` y versión de presentación.
-Todo el AST operacional restante debe ser idéntico. También bloquea imports
-operacionales, funciones de órdenes, mutating HTTP y rutas privadas en el
-observer. La suite compara el dispatcher original y actual con observer
-OFF/ON/excepción, LONG/SHORT/WAIT, posición abierta/cerrada y LIVE_EXECUTION=true,
-usando únicamente fakes. Las pruebas no envían órdenes ni Telegram real.
+`mlrsi_safety_audit.py` compara con main inmutable
+`9d0024a45d8e40193162a3864a876ca5ab61d1da`. `live_auto.py` debe estar íntegramente
+restaurado. De los módulos Guardian/commands se retiran únicamente los nodos
+AST exactos auditados de init/start/stop, callback de cache, ruta `/mlrsi`, línea
+`/status` y entrada `/help`; todo lo restante debe coincidir. La clase Guardian
+completa es idéntica, incluidos `_act`, `reconcile`, `cycle`, lockout y manejo
+de posiciones. No se sustituyen los hashes de seguridad anteriores: su test
+normaliza solo estos añadidos y exige también el nuevo audit completo.
+
+`tests/fixtures/mlrsi_safety_baselines.json` fija blobs Git y SHA256 de los
+módulos de riesgo/autorización y V8. Los archivos operativos V8 de la rama
+`v8-real-executor` se verifican como objetos Git sin portarlos ni ejecutarlos.
+Los cuatro módulos math/public/observer/telegram deben coincidir exactamente
+con el head externamente validado `3f2c9ade84d1003a344e519c2c9b7b72d2712e67`.
+No se cambia matemática, eventos ni persistencia del núcleo.
+
+Las pruebas ejecutan main y el motor real Guardian con transportes falsos.
+Los traces de GET/POST y actions journal coinciden con baseline para observer
+OFF/ON/excepción, LONG/SHORT, protección SL, EMERGENCY, respuesta ambigua,
+reconciliación de INTENT y fallo privado. El caso explícito de error ML RSI
+durante EMERGENCY llega al mismo flash-close simulado. SHADOW sigue produciendo
+cero POST. El comando arbitrario no hace ningún HTTP, escritura o mutación.
+Las pruebas no envían órdenes ni Telegram real.
 
 ```text
-python -m py_compile mlrsi_math.py mlrsi_public.py mlrsi_observer.py mlrsi_telegram.py mlrsi_safety_audit.py live_auto.py test_mlrsi_observer.py test_mlrsi_integration.py
+python -m py_compile mlrsi_math.py mlrsi_public.py mlrsi_observer.py mlrsi_telegram.py mlrsi_guardian_host.py mlrsi_safety_audit.py trade_guardian.py guardian_commands.py test_mlrsi_observer.py test_mlrsi_integration.py
 python -m unittest test_mlrsi_observer test_mlrsi_integration -v
+python -m unittest test_trade_guardian test_guardian_commands -v
 python mlrsi_safety_audit.py
 python -m unittest discover -v
 git diff --check
 ```
 
 CI dedicada instala todo `requirements.txt`, incluyendo numpy, requests,
-pandas y websocket-client, y usa Python3.12 como la suite existente. Otras
-jobs mínimas sin pandas omiten únicamente los tests de import dinámico RealAuto;
-el job mínimo V8 sin numpy/requests omite los módulos observer, como ya hace
-con los tests Guardian/research. La dedicada ejecuta todos. Los tests previos y reglas de otros módulos no se
-reescriben. No se inicia observer de producción como parte de los tests.
+pandas y websocket-client, y usa Python3.12 como la suite existente. La dedicada
+y las jobs Guardian/Early ejecutan todos los tests observer/integration sin
+skips. El job legado V8 sin numpy/requests mantiene la política existente de
+module-level SkipTest para módulos Guardian/observer; no se cambia ese workflow.
+No hay skips condicionales por pandas ni tests dependientes de RealAuto.
+No se inicia observer de producción como parte de los tests.
+
+Validación local de la enmienda (Python 3.12): 150 tests dedicados ML RSI e
+integración, 311 Guardian/comandos/audit, 16 V8 y 52 Early Breakout; suite completa
+529 tests. Todos pasan, cero fallos y cero skips con dependencias completas.
+El ensayo separado de compatibilidad del job V8 sin dependencias ejecuta
+25 tests con 9 skips de módulos que requieren numpy/requests, conforme a la
+política previa; no se usa ese ensayo como sustituto de la regresión completa.
 
 **NO MERGE. NO RAILWAY DEPLOY. NO REAL ORDER. NO LIVE LOGIC CHANGE.**

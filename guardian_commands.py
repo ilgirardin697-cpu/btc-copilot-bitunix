@@ -9,13 +9,14 @@ import requests
 from guardian_telegram import _price, _number, render_risk, direction_label, position_relationship
 from copilot_audit import render_stats
 
-COMMANDS = ('/status', '/why', '/position', '/risk', '/levels', '/stats', '/help')
+COMMANDS = ('/status', '/why', '/position', '/risk', '/levels', '/stats', '/help', '/mlrsi')
 NO_DATA = '⚫❓ SIN DATOS SUFICIENTES — NO OPERAR'
 STALE = '⚠️ DATOS DESACTUALIZADOS — NO TOMAR DECISIÓN'
 HELP = ('🤖 I-GOD MANUAL COPILOT\n\n/status\n→ resumen de qué ve ahora\n\n'
         '/why\n→ por qué espera o favorece LONG/SHORT\n\n'
         '/position\n→ tu posición real de Bitunix\n\n/risk\n→ riesgo y liquidación\n\n'
         '/levels\n→ soportes, resistencias y niveles a vigilar\n\n'
+        '/mlrsi\n→ estado completo ML RSI 15m / 1H / 4H\n\n'
         '/stats [30d|90d|all]\n→ resultados posteriores de señales, no de tu cuenta\n\n/help\n→ ayuda\n\n'
         '🔒 Estos comandos son solo consulta.\nNunca abren ni cierran operaciones.')
 
@@ -263,6 +264,8 @@ def _why(data, mark=None):
 def render_command(command, snapshot, now):
     if command not in COMMANDS or command == '/help':
         return HELP
+    if command == '/mlrsi':
+        return 'ML RSI MTF Observer: OFF / no disponible\nSHADOW ONLY\nTRADE AUTHORITY: NONE'
     if command == '/stats':
         return render_stats((snapshot or {}).get('audit_stats'), now_ms=int(now * 1000))
     if not snapshot:
@@ -299,7 +302,8 @@ def render_command(command, snapshot, now):
 
 class TelegramCommands:
     """No Bitunix, Guardian, environment writer, disk store or mutation callback."""
-    def __init__(self, token, owner, cache, reply, enabled=False, transport=None, clock=time.time, stats_cache=None):
+    def __init__(self, token, owner, cache, reply, enabled=False, transport=None, clock=time.time, stats_cache=None,
+                 mlrsi_status=None):
         self._token, self._owner = token.strip(), str(owner).strip()
         self._cache, self._reply = cache, reply
         self.enabled = enabled is True
@@ -309,6 +313,16 @@ class TelegramCommands:
         self._stop = threading.Event()
         self._worker = None
         self._stats_cache = stats_cache
+        self._mlrsi_status = mlrsi_status  # read-only text cache callback; no observer/client
+
+    def _read_mlrsi(self):
+        try:
+            view = self._mlrsi_status() if self._mlrsi_status is not None else {}
+            if not isinstance(view, dict) or not isinstance(view.get('text'), str):
+                raise ValueError
+            return view['text'], view.get('enabled') is True
+        except Exception:
+            return render_command('/mlrsi', None, 0), False
 
     def process(self, update):
         if not self.enabled or not self._token or not self._owner or not isinstance(update, dict):
@@ -323,6 +337,12 @@ class TelegramCommands:
             return False
         command = text.split(maxsplit=1)[0].split('@')[0]
         try:
+            if command == '/mlrsi':
+                return bool(self._reply(self._read_mlrsi()[0]))
+            if command == '/status' and self._mlrsi_status is not None:
+                status = render_command(command, self._cache.read(), self._clock())
+                status += '\nML RSI MTF Observer: ' + ('ON' if self._read_mlrsi()[1] else 'OFF')
+                return bool(self._reply(status))
             if command == '/stats':
                 parts = text.split()
                 window = parts[1] if len(parts) == 2 else 'all'
