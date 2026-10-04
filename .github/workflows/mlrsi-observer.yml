@@ -15,9 +15,9 @@ jobs:
       - name: Install explicit runtime and test dependencies
         run: python -m pip install -r requirements.txt
       - name: Compile observer and integration
-        run: python -m py_compile mlrsi_math.py mlrsi_public.py mlrsi_observer.py mlrsi_telegram.py mlrsi_guardian_host.py mlrsi_safety_audit.py trade_guardian.py guardian_commands.py test_mlrsi_observer.py test_mlrsi_integration.py
+        run: python -m py_compile mlrsi_math.py mlrsi_pine_reference.py mlrsi_public.py mlrsi_observer.py mlrsi_telegram.py mlrsi_guardian_host.py mlrsi_safety_audit.py trade_guardian.py guardian_commands.py test_mlrsi_observer.py test_mlrsi_integration.py test_mlrsi_pine_parity.py
       - name: Dedicated offline math, state and Guardian isolation tests
-        run: python -m unittest test_mlrsi_observer test_mlrsi_integration -v
+        run: python -m unittest test_mlrsi_observer test_mlrsi_integration test_mlrsi_pine_parity -v
       - name: Guardian protection and owner-only command regression
         run: python -m unittest test_trade_guardian test_guardian_commands -v
       - name: Verify unchanged Guardian AST and V8 baseline hashes

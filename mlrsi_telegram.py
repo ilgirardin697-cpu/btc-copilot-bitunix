@@ -1,6 +1,6 @@
 """Read-only HTML presentation; no command polling or operational state."""
 from datetime import datetime, timezone
-from mlrsi_math import CAPTURED_CONFIG, TIMEFRAMES
+from mlrsi_math import CAPTURED_CONFIG, MATH_MODE, TIMEFRAMES
 
 ICONS = {'GREEN': '🟢', 'RED': '🔴', 'NEUTRAL': '⚪', 'UNKNOWN': '⚫'}
 LABELS = {'15m': '15m', '1h': '1H', '4h': '4H'}
@@ -27,6 +27,7 @@ def status(snapshot):
         return '🧠 ML RSI MTF Observer: OFF / no disponible\n👀 SHADOW ONLY\n🚫 TRADE AUTHORITY: NONE'
     lines = ['🧠 <b>ML RSI MTF STATUS</b>', 'BTCUSDT — Binance spot public',
              'Precio público: ' + number(snapshot.get('price')),
+             'Math mode: ' + MATH_MODE,
              'Exact BackQuant TradingView parity is NOT proven.']
     for tf in TIMEFRAMES:
         p = snapshot['timeframes'][tf]
@@ -36,12 +37,16 @@ def status(snapshot):
                   'ML RSI: ' + number(c.get('mlrsi_smoothed')),
                   'Upper: ' + number(c.get('upper_threshold')) + ' | Middle: ' + number(c.get('middle_centroid')),
                   'Lower: ' + number(c.get('lower_threshold')),
+                  'Threshold sample count: ' + str(c.get('threshold_sample_count', c.get('window_count', 0))),
                   'Último cierre: ' + utc(p['last_closed_timestamp']),
                   'Último evento: ' + (p['last_confirmed_event'] or 'none'),
                   'Actualización pública: ' + (str(p['public_read_age_seconds']) + ' s' if p.get('public_read_age_seconds') is not None else 'no disponible'),
                   'Open candle — NOT CONFIRMED:',
                   f"Provisional: {ICONS[o.get('color', 'UNKNOWN')]} {o.get('color', 'UNKNOWN')}",
                   'ML RSI provisional: ' + number(o.get('mlrsi_smoothed')),
+                  'Provisional Upper: ' + number(o.get('upper_threshold')) + ' | Middle: ' + number(o.get('middle_centroid')),
+                  'Provisional Lower: ' + number(o.get('lower_threshold')),
+                  'Provisional threshold sample count: ' + str(o.get('threshold_sample_count', o.get('window_count', 0))),
                   'Approaching: ' + ('🟡 ' if p['approaching_state'] != 'NO' else '') + p['approaching_state'],
                   'Distance GREEN: ' + number(o.get('distance_to_green')) + ' | RED: ' + number(o.get('distance_to_red'))]
         if not p['fresh']:
@@ -70,6 +75,7 @@ def status(snapshot):
 def startup(snapshot):
     return ('🧠 <b>ML RSI MTF OBSERVER — CURRENT STATUS</b>\nBTCUSDT\n\n' + matrix(snapshot)
             + '\n\n' + PRESET_LABEL + '\nMax data: 3000 | Max clustering: 1000'
+            + '\nMath mode: ' + MATH_MODE
             + '\nApproaching: ' + ('ON' if snapshot['approaching_enabled'] else 'OFF')
             + '\nProvisional alerts: ' + ('ON' if snapshot['provisional_alerts'] else 'OFF')
             + '\nClosed candle confirmation: ON\nConsulta: /mlrsi'
@@ -105,6 +111,8 @@ def alert(snapshot, records):
                   'ML RSI: ' + number(row['mlrsi_smoothed']),
                   'Upper: ' + number(row['upper_threshold']) + ' | Middle: ' + number(row['middle_centroid']),
                   'Lower: ' + number(row['lower_threshold']), 'Close: ' + number(row['close'])]
+        lines += ['Math mode: ' + MATH_MODE,
+                  'Threshold sample count: ' + str(row.get('threshold_sample_count', 'no disponible'))]
         if row['candle_complete']:
             lines += ['✅ CLOSED CANDLE — ' + row['candle_timestamp_utc']]
         else:

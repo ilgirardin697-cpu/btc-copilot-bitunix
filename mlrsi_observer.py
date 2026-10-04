@@ -13,13 +13,13 @@ import os
 from itertools import groupby
 import threading
 import time
-from mlrsi_math import CAPTURED_CONFIG, CONFIG_VERSION, TIMEFRAMES, CausalSeries, ResearchEvents
+from mlrsi_math import CAPTURED_CONFIG, CONFIG_VERSION, MATH_MODE, TIMEFRAMES, CausalSeries, ResearchEvents
 from mlrsi_public import PublicHistory, atomic_json, validate_candles
 import mlrsi_telegram as presentation
 
-OBSERVER_VERSION = 'V7.3.8.7_MLRSI_LOW29_2'
+OBSERVER_VERSION = 'V7.3.8.7_MLRSI_PINE_PARITY_3'
 # Old telemetry stays readable under its own config_version; never restore RSI27 carry.
-JOURNAL_CONFIG_VERSIONS = {CONFIG_VERSION, 'CAPTURE_LOW27_EMA4_CAUSAL_V1'}
+JOURNAL_CONFIG_VERSIONS = {CONFIG_VERSION, 'CAPTURE_LOW27_EMA4_CAUSAL_V1', 'CAPTURE_LOW29_EMA4_CAUSAL_V2'}
 EVENT_NAMES = {'GREEN_CROSS', 'RED_CROSS', 'GREEN_RESUME', 'RED_RESUME', 'COLOR_CHANGE',
                'APPROACHING_GREEN', 'APPROACHING_RED', 'PROVISIONAL_GREEN', 'PROVISIONAL_RED',
                'CONFLUENCE_3OF3_GREEN', 'CONFLUENCE_3OF3_RED', 'CONFLUENCE_EXIT_GREEN', 'CONFLUENCE_EXIT_RED'}
@@ -170,7 +170,7 @@ class MLRSIObserver:
     def _publish(self, now_ms):
         view = dict(enabled=self.config.enabled, approaching_enabled=self.config.approaching_enabled,
                     provisional_alerts=self.config.provisional_alerts, price=self.price,
-                    snapshot_timestamp=now_ms, timeframes=copy.deepcopy(self.frames),
+                    snapshot_timestamp=now_ms, math_mode=MATH_MODE, timeframes=copy.deepcopy(self.frames),
                     shadow_only=True, trade_authority=False)
         with self.lock:
             self._cached = view
@@ -300,6 +300,11 @@ class MLRSIObserver:
                     raise ValueError
                 if p['last_closed_timestamp'] is not None and new and new[0]['time'] != p['last_closed_timestamp']:
                     raise ValueError
+                if self.series[tf].count == 0:
+                    # Pine's historical last_bar_index is fixed at the latest
+                    # AVAILABLE candle, including today's open candle if present.
+                    # Do not reset this anchor on same-config process restart.
+                    self.series[tf].configure_bootstrap(len(rows) - 1)
                 prepared[tf] = (rows, closed, tf in self.primed)
                 pending.extend((row['time'] + interval, tf, row) for row in new)
             except Exception:
@@ -421,6 +426,7 @@ class MLRSIObserver:
                     close=v.get('close'), mlrsi_raw=v.get('mlrsi_raw'), mlrsi_smoothed=v.get('mlrsi_smoothed'),
                     lower_threshold=v.get('lower_threshold'), middle_centroid=v.get('middle_centroid'),
                     upper_threshold=v.get('upper_threshold'), distance_to_green=v.get('distance_to_green'),
+                    math_mode=MATH_MODE, threshold_sample_count=v.get('threshold_sample_count', v.get('window_count')),
                     distance_to_red=v.get('distance_to_red'), confirmed_color=p['confirmed_color'],
                     provisional_color=p['latest_provisional_values'].get('color', 'UNKNOWN'),
                     previous_confirmed_color=p['previous_confirmed_color'], event=event,

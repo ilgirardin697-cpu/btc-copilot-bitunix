@@ -12,6 +12,8 @@ except ImportError:
     raise unittest.SkipTest('Observer dependencies are installed and fully tested by mlrsi-observer CI') from None
 from guardian_signals import pine_rsi, pine_ema, rolling_mlrsi, cluster_three
 from mlrsi_math import CAPTURED_CONFIG, CONFIG_VERSION, RSI_LENGTH, CausalSeries, ResearchEvents, TIMEFRAMES
+from mlrsi_math import pine_cluster_three, pine_percentile
+from mlrsi_pine_reference import pine_reference_mlrsi
 from mlrsi_observer import MLRSIObserver, ObserverConfig, empty_frame
 from mlrsi_public import PublicHistory, WARMUP_BARS, URL, atomic_json, validate_candles
 import mlrsi_telegram
@@ -37,7 +39,7 @@ class MathTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.low = 200 + np.cumsum(np.random.default_rng(517).normal(size=3100))
-        cls.reference = rolling_mlrsi(cls.low, length=29, max_data=3000, max_iter=1000)
+        cls.reference = pine_reference_mlrsi(cls.low)
         cls.series = CausalSeries()
         cls.actual = [cls.series.push(x) for x in cls.low]
 
@@ -46,7 +48,7 @@ class MathTests(unittest.TestCase):
 
     def test_current_live_preset_is_low29(self):
         self.assertEqual(RSI_LENGTH, 29)
-        self.assertEqual(CONFIG_VERSION, 'CAPTURE_LOW29_EMA4_CAUSAL_V2')
+        self.assertEqual(CONFIG_VERSION, 'CAPTURE_LOW29_EMA4_PINE_PARITY_V3')
         self.assertEqual(CAPTURED_CONFIG, dict(source='LOW', rsi_length=29, smooth=True, ma_type='EMA',
                                              smoothing_period=4, alma_sigma=1, threshold_range_min=10,
                                              threshold_range_max=90, step=5, performance_memory=10,
@@ -115,34 +117,36 @@ class MathTests(unittest.TestCase):
         np.testing.assert_allclose([v['mlrsi_smoothed'] if v['mlrsi_smoothed'] is not None else np.nan for v in self.actual],
                                    pine_ema(pine_rsi(self.low, 29), 4), equal_nan=True)
 
-    def test_max_data_3000(self):
-        self.assertEqual(self.actual[-1]['window_count'], 3000)
-        np.testing.assert_allclose(self.series.history, self.reference['rsi'][-3000:])
+    def test_array_not_rolling_after_3000(self):
+        self.assertEqual(self.actual[-1]['window_count'], len(self.low))
+        np.testing.assert_allclose(self.series.history[29:], [v['mlrsi_smoothed'] for v in self.reference[29:]])
+        self.assertEqual(self.series.history[:29], [None] * 29)
 
     def test_max_iterations_1000(self):
-        with patch('mlrsi_math.cluster_three', wraps=cluster_three) as fn:
+        with patch('mlrsi_math.pine_cluster_three', wraps=pine_cluster_three) as fn:
             self.series.provisional(190)
             self.assertEqual(fn.call_args.args[1], 1000)
 
     def test_percentile_initialization(self):
-        with patch('guardian_signals.np.quantile', wraps=np.quantile) as fn:
-            cluster_three([10, 15, 20, 40, 70, 80])
-            self.assertEqual(fn.call_args.args[1], [.25, .5, .75])
-            self.assertEqual(fn.call_args.kwargs['method'], 'linear')
+        with patch('mlrsi_math.pine_percentile', wraps=pine_percentile) as fn:
+            pine_cluster_three([10, 15, 20, 40, 70, 80])
+            self.assertEqual([call.args[1] for call in fn.call_args_list], [25, 50, 75])
 
-    def test_research_centroids_equal(self):
+    def test_reference_centroids_equal(self):
         for i in (33, 100, 700, 3028, 3099):
             v = self.actual[i]
-            np.testing.assert_array_equal([v['lower_threshold'], v['middle_centroid'], v['upper_threshold']], self.reference['centroids'][i])
+            expected = self.reference[i]
+            np.testing.assert_allclose([v['lower_threshold'], v['middle_centroid'], v['upper_threshold']],
+                                       [expected[k] for k in ('lower_threshold', 'middle_centroid', 'upper_threshold')], atol=1e-12)
 
-    def test_research_colors_equal(self):
+    def test_reference_colors_equal(self):
         for i, v in enumerate(self.actual):
             if v['valid']:
-                self.assertEqual(v['color'], {-1: 'RED', 0: 'NEUTRAL', 1: 'GREEN'}[int(self.reference['state'][i])])
+                self.assertEqual(v['color'], self.reference[i]['color'])
 
-    def test_research_finite_and_convergence_policy(self):
-        self.assertEqual([v['iterations'] for v in self.actual], self.reference['iterations'].tolist())
-        self.assertEqual([v['converged'] for v in self.actual], self.reference['converged'].tolist())
+    def test_reference_finite_and_convergence_policy(self):
+        self.assertEqual([v['iterations'] for v in self.actual], [v['iterations'] for v in self.reference])
+        self.assertEqual([v['converged'] for v in self.actual], [v['converged'] for v in self.reference])
 
     def test_determinism(self):
         s = CausalSeries()
@@ -544,13 +548,14 @@ class ObserverTests(unittest.TestCase):
 
     def test_real_low_math_enters_observer_unchanged(self):
         low = 200 + np.cumsum(np.random.default_rng(151).normal(size=3060))
-        reference = rolling_mlrsi(low, length=29, max_data=3000, max_iter=1000)
+        reference = pine_reference_mlrsi(low, last_bar_index=len(low) - 1)
         r = MLRSIObserver(Path(self.tmp.name) / 'real', logger=self.logs.append)
         interval = TIMEFRAMES['15m']
         rows = [candle(i * interval, x, x + 12 + np.sin(i)) for i, x in enumerate(low)]
         r.observe({'15m': rows}, len(rows) * interval)
         last = r.frames['15m']['latest_confirmed_values']
-        self.assertAlmostEqual(last['mlrsi_smoothed'], reference['rsi'][-1])
+        self.assertAlmostEqual(last['mlrsi_smoothed'], reference[-1]['mlrsi_smoothed'])
+        self.assertEqual(last['threshold_sample_count'], 3001)
         self.assertEqual(last['source_low'], low[-1])
         self.assertTrue(r.frames['15m']['fresh'])
 
@@ -560,12 +565,12 @@ class ObserverTests(unittest.TestCase):
         for i, low in enumerate(lows):
             self.o._closed('15m', candle(i * TIMEFRAMES['15m'], low), False)
         last = self.o.frames['15m']['latest_confirmed_values']
-        expected = rolling_mlrsi(lows, length=29, max_data=3000, max_iter=1000)
+        expected = pine_reference_mlrsi(lows)[-1]
         self.assertAlmostEqual(last['mlrsi_raw'], pine_rsi(lows, 29)[-1])
-        self.assertAlmostEqual(last['mlrsi_smoothed'], expected['rsi'][-1])
-        np.testing.assert_array_equal([last['lower_threshold'], last['middle_centroid'], last['upper_threshold']],
-                                      expected['centroids'][-1])
-        self.assertEqual(last['color'], {-1: 'RED', 0: 'NEUTRAL', 1: 'GREEN'}[expected['state'][-1]])
+        self.assertAlmostEqual(last['mlrsi_smoothed'], expected['mlrsi_smoothed'])
+        np.testing.assert_allclose([last['lower_threshold'], last['middle_centroid'], last['upper_threshold']],
+                                   [expected[k] for k in ('lower_threshold', 'middle_centroid', 'upper_threshold')], atol=1e-12)
+        self.assertEqual(last['color'], expected['color'])
 
     def test_provisional_uses_rsi29_without_changing_confirmed(self):
         lows, s = rsi29_seed_fixture(), CausalSeries()

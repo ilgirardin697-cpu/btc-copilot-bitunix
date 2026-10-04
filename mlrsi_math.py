@@ -1,13 +1,11 @@
-"""Research mathematical policies with the current LOW29/EMA4 observer preset.
+"""LOW29/EMA4, persistent-array PINE_PARITY contract for the passive observer.
 
-Exact BackQuant TradingView parity is NOT proven. The unchanged research port
-supplies the percentile clustering, tie and empty-cluster policies.
+Exact BackQuant TradingView parity is NOT proven. Historical research is frozen;
+this mode implements the specified Pine contract, not the defective public copy.
 """
-from collections import deque
 import copy
 import math
 import numpy as np
-from guardian_signals import cluster_three, pine_ema
 
 CAPTURED_CONFIG = {
     'source': 'LOW', 'rsi_length': 29, 'smooth': True, 'ma_type': 'EMA',
@@ -16,23 +14,78 @@ CAPTURED_CONFIG = {
     'max_clustering_steps': 1000, 'max_data_points': 3000, 'clusters': 3,
     'wait_for_timeframe_close': True,
 }
-CONFIG_VERSION = 'CAPTURE_LOW29_EMA4_CAUSAL_V2'
+CONFIG_VERSION = 'CAPTURE_LOW29_EMA4_PINE_PARITY_V3'
+MATH_MODE = 'PINE_PARITY'
 RSI_LENGTH = CAPTURED_CONFIG['rsi_length']
+PINE_ARRAY_LIMIT = 100000
 TIMEFRAMES = {'15m': 900000, '1h': 3600000, '4h': 14400000}
 COLORS = {-1: 'RED', 0: 'NEUTRAL', 1: 'GREEN'}
 
 
-class CausalSeries:
-    """Carry Wilder/EMA seed across restarts instead of reseeding a moving tail.
+def pine_percentile(values, percentage):
+    """Explicit linear interpolation: sorted finite samples, rank=(n-1)*p/100.
 
-    Only CLOSED observations enter this instance. An open candle is evaluated
-    on a disposable clone, including its own causal rolling centroid update.
+    No np.quantile dependency. Offline vectors and a Pine validation harness
+    document this contract; they are not TradingView-captured parity evidence.
+    Pine array statistics ignore missing elements unless all are missing.
+    """
+    if not 0 <= percentage <= 100:
+        raise ValueError('MLRSI_PERCENTILE_INVALID')
+    a = sorted(v for v in values if v is not None and math.isfinite(v))
+    if not a:
+        return None
+    rank = (len(a) - 1) * percentage / 100
+    left = math.floor(rank)
+    right = math.ceil(rank)
+    return a[left] + (a[right] - a[left]) * (rank - left)
+
+
+def pine_cluster_three(values, max_iter=1000):
+    """Lloyd assignments in insertion order; first index wins absolute ties.
+
+    np.bincount sums in original sample order (no sorted-prefix reductions).
+    Means of empty clusters are NA, never the old centroid. Pathological NA
+    thresholds return invalid immediately: documented runtime fail-safe instead
+    of publishing a Pine ternary's potentially misleading NEUTRAL.
+    The Pine `for _ = 0 to maxIter` bound is inclusive.
+    """
+    if not isinstance(max_iter, int) or max_iter < 0:
+        raise ValueError('MLRSI_MAX_ITER_INVALID')
+    data = np.asarray([v for v in values if v is not None], dtype=float)
+    if not np.all(np.isfinite(data)):
+        raise ValueError('MLRSI_CLUSTER_INPUT_INVALID')
+    centroids = [pine_percentile(data, p) for p in (25, 50, 75)]
+    if len(data) == 0:
+        return centroids, 0, False
+    for iteration in range(max_iter + 1):
+        distances = np.abs(data[:, None] - np.asarray(centroids)[None, :])
+        assignment = np.argmin(distances, axis=1)  # array.indexof(min): FIRST
+        counts = np.bincount(assignment, minlength=3)
+        sums = np.bincount(assignment, weights=data, minlength=3)
+        updated = [float(sums[i] / counts[i]) if counts[i] else None for i in range(3)]
+        if any(c is None for c in updated):
+            return updated, iteration + 1, False
+        if updated == centroids:  # f_arrays_equal: exact, no epsilon
+            return updated, iteration + 1, True
+        centroids = updated
+    return centroids, max_iter + 1, False
+
+
+class CausalSeries:
+    """Committed LOW series plus Pine `var` array, never a rolling deque.
+
+    Bootstrap caller supplies the LAST AVAILABLE bar index, including the open
+    bar when present. RSI/EMA run on every bar; only bars satisfying the fixed
+    bootstrap gate append. Subsequent realtime bars append without eviction.
+    Default anchor zero models starting a chart with one available bar.
+    Provisional clones implement rollback to the previous committed close.
     """
     def __init__(self, state=None):
         self.previous_low = None
         self.seed = []
         self.up = self.down = self.smoothed = None
-        self.history = deque(maxlen=3000)
+        self.history = []
+        self.bootstrap_last_bar_index = 0
         self.count = 0
         if state is not None:
             self.previous_low = state['previous_low']
@@ -40,9 +93,11 @@ class CausalSeries:
             self.up, self.down, self.smoothed = state['up'], state['down'], state['smoothed']
             self.history.extend(state['history'])
             self.count = state['count']
+            self.bootstrap_last_bar_index = state['bootstrap_last_bar_index']
             values = [self.previous_low, self.up, self.down, self.smoothed, *self.history]
-            if (state.get('rsi_length') != RSI_LENGTH
-                    or len(state['history']) > 3000 or len(self.seed) > RSI_LENGTH or self.count < 0
+            if (state.get('rsi_length') != RSI_LENGTH or state.get('math_mode') != MATH_MODE
+                    or len(state['history']) > PINE_ARRAY_LIMIT or len(self.seed) > RSI_LENGTH or self.count < 0
+                    or type(self.bootstrap_last_bar_index) is not int or self.bootstrap_last_bar_index < 0
                     or any(v is not None and not math.isfinite(v) for v in values)
                     or not isinstance(self.count, int)
                     or any(len(pair) != 2 or any(not math.isfinite(v) or v < 0 for v in pair) for pair in self.seed)
@@ -50,13 +105,24 @@ class CausalSeries:
                 raise ValueError('MLRSI_SERIES_STATE_INVALID')
 
     def dump(self):
-        return dict(rsi_length=RSI_LENGTH, previous_low=self.previous_low, seed=self.seed, up=self.up, down=self.down,
+        return dict(rsi_length=RSI_LENGTH, math_mode=MATH_MODE,
+                    bootstrap_last_bar_index=self.bootstrap_last_bar_index,
+                    previous_low=self.previous_low, seed=self.seed, up=self.up, down=self.down,
                     smoothed=self.smoothed, history=list(self.history), count=self.count)
+
+    def configure_bootstrap(self, last_bar_index):
+        if self.count or type(last_bar_index) is not int or last_bar_index < 0:
+            raise ValueError('MLRSI_BOOTSTRAP_INVALID')
+        self.bootstrap_last_bar_index = last_bar_index
 
     def push(self, low):
         low = float(low)
         if not math.isfinite(low) or low <= 0:
             raise ValueError('MLRSI_LOW_INVALID')
+        bar_index = self.count
+        eligible = max(self.bootstrap_last_bar_index, bar_index) - bar_index <= CAPTURED_CONFIG['max_data_points']
+        if eligible and len(self.history) >= PINE_ARRAY_LIMIT:
+            raise ValueError('MLRSI_PINE_ARRAY_LIMIT')
         self.count += 1
         raw = None
         if self.previous_low is not None:
@@ -66,28 +132,32 @@ class CausalSeries:
                 self.seed.append([gain, loss])
                 if len(self.seed) == RSI_LENGTH:
                     # Same Wilder seed policy, now the first 29 LOW differences.
-                    a = np.asarray(self.seed)
-                    self.up, self.down = float(a[:, 0].mean()), float(a[:, 1].mean())
+                    self.up = sum(p[0] for p in self.seed) / RSI_LENGTH
+                    self.down = sum(p[1] for p in self.seed) / RSI_LENGTH
             else:
-                self.up = (self.up * (RSI_LENGTH - 1) + gain) / RSI_LENGTH
-                self.down = (self.down * (RSI_LENGTH - 1) + loss) / RSI_LENGTH
+                alpha = 1 / RSI_LENGTH  # documented ta.rma recurrence
+                self.up = alpha * gain + (1 - alpha) * self.up
+                self.down = alpha * loss + (1 - alpha) * self.down
             if self.up is not None and self.up + self.down:
-                raw = 100 * self.up / (self.up + self.down)
+                raw = 100. if self.down == 0 else 100 - 100 / (1 + self.up / self.down)
         self.previous_low = low
         if raw is not None:
-            # Use the original finite-value EMA seed/update, not pandas ewm.
-            values = [raw] if self.smoothed is None else [self.smoothed, raw]
-            self.smoothed = float(pine_ema(values, 4)[-1])
-            self.history.append(self.smoothed)
+            alpha = 2 / (CAPTURED_CONFIG['smoothing_period'] + 1)
+            self.smoothed = raw if self.smoothed is None else alpha * raw + (1 - alpha) * self.smoothed
+        # Literal <= gate, including NA slots during seed if they are eligible.
+        # On new realtime bars last_bar_index == bar_index; no shift/remove.
+        if eligible:
+            self.history.append(self.smoothed if raw is not None else None)
         result = dict(mlrsi_raw=raw, mlrsi_smoothed=self.smoothed if raw is not None else None,
-                      valid=False, converged=False, window_count=len(self.history), iterations=0,
+                      valid=False, converged=False, window_count=len(self.history),
+                      threshold_sample_count=len(self.history), iterations=0,
                       lower_threshold=None, middle_centroid=None, upper_threshold=None, color='UNKNOWN')
         if raw is not None and len(self.history) >= 4:
-            c, iterations, converged = cluster_three(self.history, 1000)
-            state = 1 if self.smoothed > c[2] else -1 if self.smoothed < c[0] else 0
-            result.update(lower_threshold=float(c[0]), middle_centroid=float(c[1]),
-                          upper_threshold=float(c[2]), color=COLORS[state],
-                          valid=bool(converged), converged=bool(converged), iterations=int(iterations))
+            c, iterations, converged = pine_cluster_three(self.history, CAPTURED_CONFIG['max_clustering_steps'])
+            valid = all(v is not None and math.isfinite(v) for v in c)
+            color = ('GREEN' if self.smoothed > c[2] else 'RED' if self.smoothed < c[0] else 'NEUTRAL') if valid else 'UNKNOWN'
+            result.update(lower_threshold=c[0], middle_centroid=c[1], upper_threshold=c[2], color=color,
+                          valid=valid, converged=bool(converged), iterations=int(iterations))
         return result
 
     def provisional(self, low):
