@@ -45,7 +45,7 @@ transporte Guardian es texto plano. No se crea bot ni poller adicional.
 todo su contenido, añadiendo `/mlrsi`. `live_auto.py` vuelve íntegramente al
 baseline main V7.3.8.6, sin hooks ML RSI. No se modifica ningún start command,
 rama de servicio o archivo V8. La versión interna actual del observer es
-`V7.3.8.7_MLRSI_PINE_SOURCE_4`; no cambia la versión de un executor.
+`V7.3.8.7_MLRSI_PINE_SOURCE_4_RECOVERY_1`; no cambia la versión de un executor.
 
 Un fallo de init, arranque, cálculo, mercado, disco, comando o Telegram produce
 un diagnóstico estático y no interrumpe la gestión real. La falta de datos
@@ -140,7 +140,7 @@ Se usa **Binance spot BTCUSDT**, la misma venue del research, mediante únicamen
 Referencia: [endpoint market-data-only oficial](https://developers.binance.com/docs/binance-spot-api-docs/faqs/market_data_only).
 Se carga historia paginada pública (mínimo 3232 velas cerradas, normalmente
 cuatro páginas de 1000) y se conserva una cache de precios por TF. Después se
-solicita solamente desde la última vela cacheada, incluida la abierta. Cada
+solicita desde la vela previa a la última cacheada, incluida la abierta. Cada
 ciclo tiene un máximo de ocho páginas por TF para limitar la recuperación.
 
 El worker comprueba datos cada 30 s. No descarga 3000 velas cada ciclo. Los
@@ -189,6 +189,13 @@ Se manda una vez al entrar. Solo se rearma cuando la distancia correspondiente
 es **estrictamente >1.5**; una distancia de 1.5 no rearma. El rearm persiste
 entre velas y reinicios. Si ambas zonas se solapan pueden mostrarse ambas;
 ninguna constituye confirmación ni CROSS.
+Telegram limita cada color APPROACHING a un aviso por TF y timestamp de vela,
+aunque se rearme y reentre durante ella. El timestamp avisado queda persistido.
+PROVISIONAL conserva sus latches independientes.
+
+El provider tiene diagnósticos por TF/código, gracia de finalización de120s,
+rebootstrap público controlado por generación/epoch y recuperación sin alertas
+catch-up falsas. Véase [recuperación y reproducción del freeze](MLRSI_PUBLIC_RECOVERY.md).
 
 ## Confluencia y agrupación
 

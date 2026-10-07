@@ -14,10 +14,10 @@ from itertools import groupby
 import threading
 import time
 from mlrsi_math import CAPTURED_CONFIG, CONFIG_VERSION, MATH_MODE, TIMEFRAMES, CausalSeries, ResearchEvents
-from mlrsi_public import PublicHistory, atomic_json, validate_candles
+from mlrsi_public import PublicHistory, atomic_json, validate_candles, public_error_code
 import mlrsi_telegram as presentation
 
-OBSERVER_VERSION = 'V7.3.8.7_MLRSI_PINE_SOURCE_4'
+OBSERVER_VERSION = 'V7.3.8.7_MLRSI_PINE_SOURCE_4_RECOVERY_1'
 # Old telemetry stays readable under its own config_version; never restore RSI27 carry.
 JOURNAL_CONFIG_VERSIONS = {CONFIG_VERSION, 'CAPTURE_LOW27_EMA4_CAUSAL_V1', 'CAPTURE_LOW29_EMA4_CAUSAL_V2',
                            'CAPTURE_LOW29_EMA4_PINE_PARITY_V3'}
@@ -71,6 +71,7 @@ def empty_frame():
                 last_confirmed_event=None, last_event_timestamp=None, latest_confirmed_values={},
                 latest_provisional_values={}, approaching_state='NO', approaching_green_latched=False,
                 approaching_red_latched=False, provisional_green_latched=False, provisional_red_latched=False,
+                approaching_green_alert_timestamp=None, approaching_red_alert_timestamp=None,
                 provisional_candle_timestamp=None, last_successful_read=None, fresh=False)
 
 
@@ -84,12 +85,15 @@ class MLRSIObserver:
         self.journal_path = self.folder / 'igod_mlrsi_events.jsonl'
         self.config = config or ObserverConfig.from_env(logger=logger)
         self.log, self.clock, self.send = logger, clock, send
-        self.provider = provider or PublicHistory(self.folder)
+        self.provider = provider or PublicHistory(self.folder, logger=logger)
         self.series = {tf: CausalSeries() for tf in TIMEFRAMES}
         self.events = {tf: ResearchEvents(interval) for tf, interval in TIMEFRAMES.items()}
         self.frames = {tf: empty_frame() for tf in TIMEFRAMES}
         self.previous_3of3_green = self.previous_3of3_red = False
         self.primed = set()
+        self.recovering = set()
+        self.provider_generations = {tf: 0 for tf in TIMEFRAMES}
+        self.provider_epochs = {tf: None for tf in TIMEFRAMES}
         self.startup_sent = False
         self.price = None
         self.pending_journal_records = []
@@ -113,6 +117,14 @@ class MLRSIObserver:
             for tf, interval in TIMEFRAMES.items():
                 p = d['timeframes'][tf]
                 frames[tf] = p['observation']
+                # Backwards-compatible storage migration; math config/carry unchanged.
+                for color in ('green', 'red'):
+                    key = 'approaching_' + color + '_alert_timestamp'
+                    frames[tf].setdefault(key, frames[tf]['provisional_candle_timestamp']
+                                         if frames[tf]['approaching_' + color + '_latched'] else None)
+                    stamp = frames[tf][key]
+                    if stamp is not None and (type(stamp) is not int or stamp % interval):
+                        raise ValueError
                 if set(frames[tf]) != set(empty_frame()) or frames[tf]['confirmed_color'] not in presentation.ICONS:
                     raise ValueError
                 if (frames[tf]['previous_confirmed_color'] not in presentation.ICONS
@@ -141,10 +153,20 @@ class MLRSIObserver:
             pending = d.get('pending_journal_records', [])
             for row in pending:
                 self._validate_record(row)
+            generations = d.get('provider_generations', {tf: 0 for tf in TIMEFRAMES})
+            recovering = d.get('recovering_timeframes', [])
+            epochs = d.get('provider_epochs', {tf: None for tf in TIMEFRAMES})
+            if (set(generations) != set(TIMEFRAMES) or any(type(x) is not int or x < 0 for x in generations.values())
+                    or not isinstance(recovering, list) or not set(recovering).issubset(TIMEFRAMES)
+                    or set(epochs) != set(TIMEFRAMES)
+                    or any(x is not None and (not isinstance(x, str) or len(x) != 32 or any(c not in '0123456789abcdef' for c in x)) for x in epochs.values())):
+                raise ValueError
             self.series, self.events, self.frames = series, events, frames
             self.previous_3of3_green = d['previous_3of3_green']
             self.previous_3of3_red = d['previous_3of3_red']
             self.pending_journal_records = pending
+            self.provider_generations, self.recovering = generations, set(recovering)
+            self.provider_epochs = epochs
         except FileNotFoundError:
             pass
         except Exception:
@@ -164,6 +186,8 @@ class MLRSIObserver:
                     config=CAPTURED_CONFIG, symbol='BTCUSDT', venue='BINANCE_SPOT', shadow_only=True,
                     trade_authority=False, previous_3of3_green=self.previous_3of3_green,
                     previous_3of3_red=self.previous_3of3_red,
+                    provider_generations=self.provider_generations, recovering_timeframes=sorted(self.recovering),
+                    provider_epochs=self.provider_epochs,
                     pending_journal_records=self.pending_journal_records,
                     timeframes={tf: dict(observation=self.frames[tf], series=self.series[tf].dump(),
                                         events=self.events[tf].dump()) for tf in TIMEFRAMES}))
@@ -211,12 +235,21 @@ class MLRSIObserver:
             return
         now_ms = int(self.clock() * 1000)
         frames = {}
+        generations = {}
+        epochs = {}
         for tf in TIMEFRAMES:
             try:
                 frames[tf] = self.provider.fetch(tf, now_ms)
-            except Exception:
-                self.log('MLRSI_PUBLIC_READ_FAILED')
-        self.observe(frames, now_ms)
+                generation = self.provider.generation(tf) if hasattr(self.provider, 'generation') else 0
+                if type(generation) is int:
+                    generations[tf] = generation
+                epoch = self.provider.epoch(tf) if hasattr(self.provider, 'epoch') else None
+                if isinstance(epoch, str):
+                    epochs[tf] = epoch
+            except Exception as error:
+                self.recovering.add(tf)
+                self.log('MLRSI_PUBLIC_READ_FAILED ' + tf + ' ' + public_error_code(error))
+        self.observe(frames, now_ms, generations, epochs)
 
     @staticmethod
     def _distances(values):
@@ -266,7 +299,11 @@ class MLRSIObserver:
                 p['approaching_state'] = state if p['approaching_state'] == 'NO' else p['approaching_state'] + ' + ' + state
                 if not p[latch]:
                     p[latch] = True
-                    if emit:
+                    alert_stamp = 'approaching_' + lower + '_alert_timestamp'
+                    key = 'BTCUSDT|' + tf + '|' + str(row['time']) + '|APPROACHING_' + color
+                    known = self.journal_keys or set()
+                    if emit and p[alert_stamp] != row['time'] and key not in known:
+                        p[alert_stamp] = row['time']
                         changes.append(('APPROACHING_' + color, tf, False))
             provisional_latch = 'provisional_' + lower + '_latched'
             if values['color'] == color and p['confirmed_color'] != color and not p[provisional_latch]:
@@ -275,7 +312,7 @@ class MLRSIObserver:
                     changes.append(('PROVISIONAL_' + color, tf, False))
         return changes
 
-    def observe(self, frames, now_ms):
+    def observe(self, frames, now_ms, generations=None, epochs=None):
         """Only the worker/test harness writes observations; commands read cache.
 
         First successful history per TF is silent, including restart catch-up.
@@ -284,6 +321,9 @@ class MLRSIObserver:
         if not self.config.enabled:
             return
         records, alerts, prepared, pending = [], [], {}, []
+        recovering = set(self.recovering)
+        generations = generations or {}
+        epochs = epochs or {}
         for tf, interval in TIMEFRAMES.items():
             p = self.frames[tf]
             p['fresh'] = False
@@ -296,11 +336,28 @@ class MLRSIObserver:
                 closed = [r for r in rows if r['time'] + interval <= now_ms]
                 if not closed or closed[-1]['time'] + interval <= now_ms - interval:
                     raise ValueError
+                if (generations.get(tf, self.provider_generations[tf]) != self.provider_generations[tf]
+                        or epochs.get(tf, self.provider_epochs[tf]) != self.provider_epochs[tf]):
+                    # Only public carry for this TF is rebuilt, never operational state.
+                    saved_latches = {k: p[k] for k in ('approaching_green_alert_timestamp', 'approaching_red_alert_timestamp')}
+                    self.series[tf], self.events[tf] = CausalSeries(), ResearchEvents(interval)
+                    self.frames[tf] = p = empty_frame()
+                    p.update(saved_latches)
+                    self.primed.discard(tf)
+                    self.recovering.add(tf)
+                    recovering.add(tf)
+                    self.log('MLRSI_TIMEFRAME_REBOOTSTRAP ' + tf)
                 new = [r for r in closed if p['last_closed_timestamp'] is None or r['time'] + interval > p['last_closed_timestamp']]
                 if any(b['time'] - a['time'] != interval for a, b in zip(new, new[1:])):
                     raise ValueError
                 if p['last_closed_timestamp'] is not None and new and new[0]['time'] != p['last_closed_timestamp']:
-                    raise ValueError
+                    self.recovering.add(tf)
+                    if hasattr(self.provider, 'reset'):
+                        self.provider.reset(tf)
+                    raise ValueError('MLRSI_HISTORY_GAP')
+                if tf in self.primed and len(new) > 1:
+                    self.recovering.add(tf)
+                    recovering.add(tf)
                 if self.series[tf].count == 0:
                     # Pine's historical last_bar_index is fixed at the latest
                     # AVAILABLE candle, including today's open candle if present.
@@ -309,6 +366,7 @@ class MLRSIObserver:
                 prepared[tf] = (rows, closed, tf in self.primed)
                 pending.extend((row['time'] + interval, tf, row) for row in new)
             except Exception:
+                self.recovering.add(tf)
                 self.log('MLRSI_TIMEFRAME_UNAVAILABLE')
         # Advance all coincident closes before journaling their shared MTF context.
         # Catch-up is journaled with its original closed timestamp, never resent as live.
@@ -320,7 +378,7 @@ class MLRSIObserver:
                 record = self._record(*change, now_ms)
                 records.append(record)
                 tf = change[1]
-                if timestamp == now_ms // TIMEFRAMES[tf] * TIMEFRAMES[tf]:
+                if tf not in recovering and timestamp == now_ms // TIMEFRAMES[tf] * TIMEFRAMES[tf]:
                     alerts.append(record)
         for tf, (rows, closed, emit) in prepared.items():
             interval, p = TIMEFRAMES[tf], self.frames[tf]
@@ -330,7 +388,7 @@ class MLRSIObserver:
                 p.update(fresh=True, last_successful_read=now_ms)
                 open_rows = [r for r in rows if r['time'] <= now_ms < r['time'] + interval]
                 if open_rows:
-                    for change in self._open(tf, open_rows[-1], emit):
+                    for change in self._open(tf, open_rows[-1], emit and tf not in recovering):
                         record = self._record(*change, now_ms)
                         records.append(record)
                         alerts.append(record)
@@ -339,14 +397,18 @@ class MLRSIObserver:
                 elif tf == '15m':
                     self.price = closed[-1]['close']
                 self.primed.add(tf)
+                self.provider_generations[tf] = generations.get(tf, self.provider_generations[tf])
+                self.provider_epochs[tf] = epochs.get(tf, self.provider_epochs[tf])
+                self.recovering.discard(tf)
             except Exception:
+                self.recovering.add(tf)
                 self.log('MLRSI_TIMEFRAME_UNAVAILABLE')
         ready = all(p['fresh'] for p in self.frames.values()) and len(self.primed) == 3
         first_ready = ready and not self.startup_sent
         if ready:
             green = all(p['confirmed_color'] == 'GREEN' for p in self.frames.values())
             red = all(p['confirmed_color'] == 'RED' for p in self.frames.values())
-            if not first_ready:
+            if not first_ready and not recovering:
                 if green and not self.previous_3of3_green:
                     record = self._record('CONFLUENCE_3OF3_GREEN', '15m', True, now_ms)
                     records.append(record)
@@ -378,6 +440,8 @@ class MLRSIObserver:
             if permitted:
                 self._notify(presentation.alert(self.snapshot(), permitted))
         except Exception:
+            # Persistence failure also requires silent recovery, not delayed alerts.
+            self.recovering.update(TIMEFRAMES)
             self.log('MLRSI_STORAGE_OR_PRESENTATION_FAILED')
 
     def _flush_journal(self):

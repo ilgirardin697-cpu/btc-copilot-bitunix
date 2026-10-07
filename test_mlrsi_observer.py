@@ -338,7 +338,7 @@ class ObserverTests(unittest.TestCase):
         for distance in (.8, .5, .2, 1.2, 1.5, 1.7, .9):
             with patch.object(self.o.series['15m'], 'provisional', return_value=values(rsi=60-distance)):
                 changes += self.o._open('15m', candle(self.now), True)
-        self.assertEqual([e[0] for e in changes], ['APPROACHING_GREEN', 'APPROACHING_GREEN'])
+        self.assertEqual([e[0] for e in changes], ['APPROACHING_GREEN'])
 
     def test_approaching_red_symmetric(self):
         self.assertEqual(self.open_value(rsi=40.9)['approaching_state'], 'APPROACHING_RED')
@@ -348,7 +348,7 @@ class ObserverTests(unittest.TestCase):
         for distance in (.9, .2, 1.5, 1.7, .8):
             with patch.object(self.o.series['15m'], 'provisional', return_value=values(rsi=40+distance)):
                 changes += self.o._open('15m', candle(self.now), True)
-        self.assertEqual([e[0] for e in changes], ['APPROACHING_RED', 'APPROACHING_RED'])
+        self.assertEqual([e[0] for e in changes], ['APPROACHING_RED'])
 
     def test_threshold_tie_neutral_not_approaching(self):
         self.assertEqual(self.open_value(rsi=60)['approaching_state'], 'NO')
@@ -490,8 +490,7 @@ class ObserverTests(unittest.TestCase):
             self.o.observe({'15m': rows}, self.now)
         records = self.record_events()
         self.assertEqual([r['mlrsi_smoothed'] for r in records if r['event'].endswith('_CROSS')], [61, 39])
-        self.assertEqual(len(self.sent), 1)
-        self.assertNotIn('GREEN_CROSS', self.sent[0])
+        self.assertFalse(self.sent)  # recovery never sends latest catch-up as new
 
     def test_outbox_recovers_after_journal_failure(self):
         with patch.object(self.o, '_flush_journal', side_effect=OSError('crash')):
@@ -742,7 +741,7 @@ class ObserverTests(unittest.TestCase):
         self.o.provider = Mock()
         self.o.provider.fetch.side_effect = RuntimeError('secret response')
         self.o.cycle()
-        self.assertEqual(self.logs.count('MLRSI_PUBLIC_READ_FAILED'), 3)
+        self.assertEqual(sum(line.startswith('MLRSI_PUBLIC_READ_FAILED ') for line in self.logs), 3)
         self.assertNotIn('secret response', str(self.logs))
 
     def test_disabled_no_network_or_files(self):
@@ -825,7 +824,7 @@ class PublicTests(unittest.TestCase):
         self.transport.get.return_value = self.response([candle(self.now)])
         self.p.fetch('15m', self.now)
         self.assertEqual(self.transport.get.call_count, 1)
-        self.assertEqual(self.transport.get.call_args.kwargs['params']['startTime'], self.now)
+        self.assertEqual(self.transport.get.call_args.kwargs['params']['startTime'], self.now - self.interval)
 
     def test_cache_restart_incremental(self):
         cached = [candle(i * self.interval) for i in range(4000-WARMUP_BARS, 4001)]
@@ -841,7 +840,7 @@ class PublicTests(unittest.TestCase):
 
     def test_http_error_safe(self):
         self.transport.get.return_value = Mock(status_code=500)
-        with self.assertRaisesRegex(ValueError, '^MLRSI_PUBLIC_UNAVAILABLE$'):
+        with self.assertRaisesRegex(ValueError, '^HTTP_500$'):
             self.p.fetch('15m', self.now)
 
     def test_no_netrc_credentials(self):
@@ -857,7 +856,7 @@ class PublicTests(unittest.TestCase):
         self.p.verified_at['15m'] = self.now
         self.transport.get.return_value = self.response([candle(self.now-self.interval, low=99), candle(self.now)])
         with self.assertRaisesRegex(ValueError, 'MLRSI_CLOSED_CANDLE_REVISED'):
-            self.p.fetch('15m', self.now)
+            self.p.fetch('15m', self.now + 120001)
 
     def test_open_cache_refresh_allowed(self):
         self.p.cache['15m'] = [candle(i * self.interval) for i in range(4000-WARMUP_BARS, 4001)]

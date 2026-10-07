@@ -108,11 +108,19 @@ def verify_protected_sources():
     preset = manifest['live_observer_preset']
     assert preset['config_version'] == 'CAPTURE_LOW29_EMA4_PINE_PARITY_V4' and preset['rsi_length'] == 29
     assert set(preset['files']) == {'mlrsi_math.py', 'mlrsi_observer.py', 'mlrsi_telegram.py'}
+    recovery = manifest['provider_recovery']
+    assert recovery['baseline_commit'] == 'f6612014be20aca52fd35b872bc504e8f0727eb1'
+    assert set(recovery['files']) == {'mlrsi_public.py', 'mlrsi_observer.py'}
+    for path in ('mlrsi_math.py', 'mlrsi_pine_reference.py', 'mlrsi_telegram.py'):
+        old = subprocess.check_output(['git', 'show', recovery['baseline_commit'] + ':' + path])
+        assert Path(path).read_bytes().replace(b'\r\n', b'\n') == old.replace(b'\r\n', b'\n'), path + ' V4 mathematics/presentation changed'
     for group in ('main_files', 'validated_core', 'integration_files'):
         for path, record in manifest[group].items():
             # Only the three explicitly authorized passive mathematical files change.
             if group == 'validated_core' and path in preset['files']:
                 record = preset['files'][path]
+            if group == 'validated_core' and path == 'mlrsi_public.py':
+                record = recovery['files'][path]
             current = subprocess.check_output(['git', 'hash-object', '--path=' + path, path]).decode().strip()
             assert current == record['git_blob'], path + ' differs from immutable baseline'
     historical = ast.parse(subprocess.check_output(['git', 'show', manifest['validated_core_commit'] + ':mlrsi_math.py']).decode('utf-8'))
