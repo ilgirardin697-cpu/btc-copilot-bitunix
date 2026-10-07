@@ -1,0 +1,53 @@
+// Diagnostic harness written for this repository; NOT BackQuant's source.
+// Paste into a separate TradingView study to capture real builtin fixtures.
+// No orders. Compare its Data Window with the original author indicator.
+//@version=5
+// PRIOR V3 conventional-clustering harness, NOT the current author-source diagnostic.
+// Use mlrsi_backquant_diagnostic.pine for literal BackQuant array/NA behavior.
+indicator("I-GOD Pine contract validation - NOT original BackQuant", overlay=false)
+r = ta.rsi(low, 29)
+s = ta.ema(r, 4)
+var samples = array.new_float(0)
+if last_bar_index - bar_index <= 3000
+    array.push(samples, s)
+c = array.new_float(0)
+if array.size(samples) > 3
+    array.push(c, array.percentile_linear_interpolation(samples, 25))
+    array.push(c, array.percentile_linear_interpolation(samples, 50))
+    array.push(c, array.percentile_linear_interpolation(samples, 75))
+    for attempt = 0 to 1000
+        a = array.new_float(0)
+        b = array.new_float(0)
+        d = array.new_float(0)
+        for value in samples
+            distances = array.new_float(0)
+            for center in c
+                array.push(distances, math.abs(value - center))
+            idx = array.indexof(distances, array.min(distances))
+            if idx == 0
+                array.push(a, value)
+            else if idx == 1
+                array.push(b, value)
+            else
+                array.push(d, value)
+        next_c = array.from(array.avg(a), array.avg(b), array.avg(d))
+        equal = true
+        for idx = 0 to 2
+            if array.get(next_c, idx) != array.get(c, idx)
+                equal := false
+        c := next_c
+        if equal
+            break
+lo = array.size(c) == 3 ? array.get(c, 0) : na
+mid = array.size(c) == 3 ? array.get(c, 1) : na
+hi = array.size(c) == 3 ? array.get(c, 2) : na
+plot(r, "Raw builtin RSI29")
+plot(s, "Builtin EMA4", color=s > hi ? color.green : s < lo ? color.red : color.gray)
+plot(lo, "Lower")
+plot(mid, "Middle")
+plot(hi, "Upper")
+plot(array.size(samples), "Threshold sample count", display=display.data_window)
+vector = array.from(1.0, 2.0, 3.0, 4.0)
+plot(array.percentile_linear_interpolation(vector, 25), "Builtin P25 vector", display=display.data_window)
+plot(array.percentile_linear_interpolation(vector, 50), "Builtin P50 vector", display=display.data_window)
+plot(array.percentile_linear_interpolation(vector, 75), "Builtin P75 vector", display=display.data_window)
