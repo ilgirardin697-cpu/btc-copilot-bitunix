@@ -1,0 +1,81 @@
+[
+  {
+    "source_commit": "6f83f9ab2451dd3ef33e9ca7ab90b2d15dd95258",
+    "source_path": "research/confluence_artifacts/data_manifest.json",
+    "inherited_archive_manifest_sha256": "e605b71e9a86bc6945b4815a69f0282bbbfa9865adb9abeabaa1615dc243dcc7",
+    "dataset_sha256": "6a6f472fcd87a74c7d6aa4e7b67638b53997b17016b61b3fd260e814f8cfd76c",
+    "rows_5m": 710208,
+    "rows_1h": 59184,
+    "funding_rows": 7398
+  },
+  {
+    "url": "https://fapi.binance.com/fapi/v1/klines",
+    "params": {
+      "symbol": "BTCUSDT",
+      "interval": "1h",
+      "startTime": 1569888000000,
+      "endTime": 1577836799999,
+      "limit": 1500
+    },
+    "sha256": "297f601e046848563dc64721c39373bc7f8ad93ccf3524cd1049c3f40e74baf9",
+    "rows": 1500
+  },
+  {
+    "url": "https://fapi.binance.com/fapi/v1/klines",
+    "params": {
+      "symbol": "BTCUSDT",
+      "interval": "1h",
+      "startTime": 1575288000000,
+      "endTime": 1577836799999,
+      "limit": 1500
+    },
+    "sha256": "e8519eb3118b9c74d2e25dc59ea492f92ae0cc9ff359a6fd79726bb0dabaef6f",
+    "rows": 708
+  },
+  {
+    "url": "https://fapi.binance.com/fapi/v1/klines",
+    "params": {
+      "symbol": "BTCUSDT",
+      "interval": "1h",
+      "startTime": 1790899200000,
+      "endTime": 1792090799999,
+      "limit": 1500
+    },
+    "sha256": "5b088927f839472f2339c287c9a41e0bc731ff4a32b8be154a287f5b589041c2",
+    "rows": 331
+  },
+  {
+    "url": "https://fapi.binance.com/fapi/v1/fundingRate",
+    "params": {
+      "symbol": "BTCUSDT",
+      "startTime": 1790870400004,
+      "endTime": 1792090799999,
+      "limit": 1000
+    },
+    "sha256": "87f3cbd7f3af06e4092756a40205e8c82f227f80ce493d43aa57c8949b51dac8",
+    "rows": 42
+  },
+  {
+    "url": "https://fapi.binance.com/fapi/v1/fundingRate",
+    "params": {
+      "symbol": "BTCUSDT",
+      "startTime": 1792080000001,
+      "endTime": 1792090799999,
+      "limit": 1000
+    },
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "rows": 0
+  },
+  {
+    "rows": 61723,
+    "first_timestamp": 1569888000000,
+    "last_timestamp": 1792087200000,
+    "cutoff": 1792090800000,
+    "funding_rows": 7440,
+    "dataset_sha256": "e355d2dfe58f479a4c789e1ff6cdffceabcf4cb55ff5c5d0c7c465d9d59fee25",
+    "array_sha256": "2a034fc6c4d0c67ea5fba46ae4ac16102082cecf2b2b0fa0133705dfbb613c14",
+    "venue": "BINANCE_USDM_PERPETUAL",
+    "funding_expected_8h": 7440,
+    "complete": true
+  }
+]

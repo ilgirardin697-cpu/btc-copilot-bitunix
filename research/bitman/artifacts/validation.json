@@ -1,0 +1,47 @@
+{
+  "runtime": {
+    "python": "3.12.12",
+    "numpy": "2.3.5",
+    "requests": "2.32.5"
+  },
+  "groups": {
+    "dedicated": {
+      "passed": 63,
+      "failed": 0,
+      "skipped": 0,
+      "total": 63
+    },
+    "guardian": {
+      "passed": 311,
+      "failed": 0,
+      "skipped": 0,
+      "total": 311
+    },
+    "v8": {
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0,
+      "total": 16
+    },
+    "early_breakout": {
+      "passed": 52,
+      "failed": 0,
+      "skipped": 0,
+      "total": 52
+    },
+    "full": {
+      "passed": 471,
+      "failed": 0,
+      "skipped": 0,
+      "total": 471
+    }
+  },
+  "compile": "PASS",
+  "safety": "PASS",
+  "trade_authority": false,
+  "historical_backtest": "EXECUTED",
+  "forward_validation": false,
+  "primary_result_sha256": "6c980cd376e08632994dfeb2edde028b2b60953ca29edca45a92184da4a41403",
+  "selection_lock_sha256": "4ed2c591e13d7cb212b34d0b3890e3a69aacc7145c2e89e3eb607df6f8ab446a",
+  "note": "Offline tests; no market/account requests. No deployment or merge. CI status recorded on GitHub separately."
+}

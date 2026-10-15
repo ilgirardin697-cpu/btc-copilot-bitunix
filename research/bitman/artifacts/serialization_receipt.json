@@ -1,0 +1,8 @@
+{
+  "reason": "Initial TEST export TypeError: Object of type int64 is not JSON serializable",
+  "scope": "JSON scalar normalization only; no strategy/engine source changes",
+  "code_sha256": "4872e2c8b46178d8ccf796493d1ba1280d1034cd33ee4a466f42dab03fc91f06",
+  "selection_sha256": "4ed2c591e13d7cb212b34d0b3890e3a69aacc7145c2e89e3eb607df6f8ab446a",
+  "preregistered_sha256": "c5dc9a67e6445723419ebb5823032542b5a9b6bed5a6f02e3c96747d83e49614",
+  "selection_repeated": false
+}
