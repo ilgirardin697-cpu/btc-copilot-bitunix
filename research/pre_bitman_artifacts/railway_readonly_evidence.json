@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "observed_on": "2026-10-15",
+  "read_only": true,
+  "forward_volume_data": "PENDING / NOT ACCESSIBLE FROM CURRENT CONNECTOR",
+  "guardian": {
+    "source": {
+      "repo": "ilgirardin697-cpu/btc-copilot-bitunix",
+      "branch": "mlrsi-mtf-observer",
+      "commitSha": "55c1c988df1dbfea80ed02fd13965f34f1727f14"
+    },
+    "start_command": "python trade_guardian.py",
+    "deployment": {
+      "id": "c0fcd155-f63b-476f-a5ae-b7c6d0eaf33d",
+      "status": "SUCCESS",
+      "createdAt": "2026-10-07T13:59:36.668Z",
+      "url": null
+    },
+    "volume_mounts": [
+      {
+        "name": "igod-guardian-data",
+        "mount_path": "/data",
+        "size_mb": 500,
+        "state": "live"
+      }
+    ],
+    "domains_count": 0
+  },
+  "v8": {
+    "source": {
+      "repo": "ilgirardin697-cpu/btc-copilot-bitunix",
+      "branch": "v8-real-executor",
+      "commitSha": "724f14fdd723eabf9ebcf3dbd51b4ab271aec9e6",
+      "upstreamUrl": "https://github.com/ilgirardin697-cpu/btc-copilot-bitunix"
+    },
+    "start_command": "python v8_executor.py",
+    "deployment": {
+      "id": "fe4b0817-53b8-49b6-b977-bfef153bf9a1",
+      "status": "SUCCESS",
+      "createdAt": "2026-10-02T18:50:59.344Z",
+      "url": null
+    }
+  },
+  "logs": {
+    "entries": 101,
+    "from": "2026-10-15T18:42:52.841574286Z",
+    "to": "2026-10-15T18:59:32.860776440Z",
+    "used_for_performance": false,
+    "reason": "Runtime logs are not an export of immutable signal/outcome journals."
+  },
+  "access": {
+    "railway_connector": "config, deployment, logs only; no filesystem/exec/export capability exposed",
+    "railway_cli_installed": false,
+    "local_railway_auth_config_present": false,
+    "local_forward_exports": false
+  },
+  "no_secrets_read": true,
+  "no_mutations": true
+}

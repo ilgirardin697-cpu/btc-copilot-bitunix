@@ -1,0 +1,23 @@
+name: BITMAN isolated research
+on:
+  pull_request:
+  push:
+    branches: [bitman-phase2-research]
+permissions:
+  contents: read
+jobs:
+  bitman:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r research/bitman/requirements-study.txt
+      - run: python -m compileall -q research/bitman test_bitman.py
+      - run: python -m unittest test_bitman -v
+      - run: python -m research.bitman.safety
+      - run: python -m unittest discover -v
+      - run: git diff --check

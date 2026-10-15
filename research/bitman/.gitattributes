@@ -1,0 +1,5 @@
+*.py text eol=lf
+*.md text eol=lf
+artifacts/*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+vendor/mlrsi_math.py -text
+artifacts/preregistered.json -text

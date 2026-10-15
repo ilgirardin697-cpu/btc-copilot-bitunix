@@ -1,0 +1,13 @@
+{
+  "python_compile": "PASS",
+  "dedicated_unittest": {"passed": 29, "failed": 0, "skipped": 0},
+  "repository_unittest_discover": {"passed": 408, "failed": 0, "skipped": 0},
+  "git_diff_check": "PASS",
+  "protected_worktree_vs_main": "UNCHANGED",
+  "forward_volume_data": "PENDING / NOT ACCESSIBLE FROM CURRENT CONNECTOR",
+  "production_journals_read": false,
+  "railway_mutations": false,
+  "new_strategy_implemented": false,
+  "test_data_is_synthetic_not_live_evidence": true,
+  "prior_runner_environment_issue": "Cached embedded interpreter loaded an incomplete requests namespace; final run used the normal project Python. No production change or test skip."
+}
