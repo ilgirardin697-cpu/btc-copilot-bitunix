@@ -1,4 +1,5 @@
 """Reproduce the deployed cache poison; public-only recovery, no network tests."""
+import ast
 import copy
 import hashlib
 import json
@@ -255,6 +256,13 @@ class ProviderRecoveryTests(unittest.TestCase):
         for path in ('mlrsi_math.py', 'mlrsi_pine_reference.py', 'mlrsi_telegram.py', 'trade_guardian.py',
                      'guardian_commands.py', 'guardian_risk.py', 'guardian_bitunix.py', 'live_auto.py', 'trend_v8.py'):
             old = subprocess.check_output(['git', 'show', DEPLOYED + ':' + path])
+            if path == 'guardian_commands.py':
+                # Normalize only exact audited manual additions; keep the old baseline.
+                from bitman_manual.safety import fingerprint, strip_commands, verify_command_extension
+                self.assertTrue(verify_command_extension())
+                current = strip_commands(ast.parse(Path(path).read_text('utf-8')))
+                self.assertEqual(fingerprint(current), fingerprint(ast.parse(old.decode('utf-8'))), path)
+                continue
             self.assertEqual(Path(path).read_bytes().replace(b'\r\n', b'\n'), old.replace(b'\r\n', b'\n'), path)
         self.assertEqual(CONFIG_VERSION, 'CAPTURE_LOW29_EMA4_PINE_PARITY_V4')
         self.assertEqual(CAPTURED_CONFIG['rsi_length'], 29)

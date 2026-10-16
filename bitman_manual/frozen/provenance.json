@@ -1,0 +1,95 @@
+{
+  "core.py": {
+    "source_commit": "4027242b86fcad81209cffde4c85e59c9418088d",
+    "source_path": "research/bitman_direction/core.py",
+    "selected_symbols": null,
+    "original_sha256": "994e46e72bc87903a7f4efded8ddeae0d0a205ca5f010e2d31cbf3c574ff6b6f",
+    "vendored_sha256": "315837f01d857970ac0e4cfb99a0c1c123a502c0246a1ca5eb500b69c7bde5d3",
+    "import_rewrites": [
+      [
+        "from research.bitman_real.indicators import",
+        "from .indicators import"
+      ],
+      [
+        "from research.bitman_real.events import geometry",
+        "from .geometry import geometry"
+      ],
+      [
+        "from research.bitman_real.market import",
+        "from .market import"
+      ],
+      [
+        "from .spec import",
+        "from .constants import"
+      ]
+    ]
+  },
+  "levels.py": {
+    "source_commit": "4027242b86fcad81209cffde4c85e59c9418088d",
+    "source_path": "research/bitman_direction/levels.py",
+    "selected_symbols": null,
+    "original_sha256": "4c8ab5d6fae49ef0118ffbdd21abc062e4ea5814fd0ddf19329a315e2ed8b44e",
+    "vendored_sha256": "f2175c1320e491e7ba00b9e5c3f0b511ef021afc61a72599c9b3d310d8a7249e",
+    "import_rewrites": [
+      [
+        "from .spec import",
+        "from .constants import"
+      ]
+    ]
+  },
+  "confirmed.py": {
+    "source_commit": "4027242b86fcad81209cffde4c85e59c9418088d",
+    "source_path": "research/bitman_direction/confirmed.py",
+    "selected_symbols": null,
+    "original_sha256": "f30c03f21dbf59579215e6b9cf0362a6d4892d2c9bf9be78520567a55affc828",
+    "vendored_sha256": "8362f8e33a20886b52a5151cce68cff221f9012d5969ec7b9130b99c01d736c9",
+    "import_rewrites": [
+      [
+        "from .spec import",
+        "from .constants import"
+      ]
+    ]
+  },
+  "indicators.py": {
+    "source_commit": "4027242b86fcad81209cffde4c85e59c9418088d",
+    "source_path": "research/bitman_real/indicators.py",
+    "selected_symbols": null,
+    "original_sha256": "5a0c37e737375d7278f84490d8b4f8e1779189ead5f7e77bda6d468d86e037b5",
+    "vendored_sha256": "5a0c37e737375d7278f84490d8b4f8e1779189ead5f7e77bda6d468d86e037b5",
+    "import_rewrites": []
+  },
+  "market.py": {
+    "source_commit": "4027242b86fcad81209cffde4c85e59c9418088d",
+    "source_path": "research/bitman_real/market.py",
+    "selected_symbols": [
+      "validate",
+      "aggregate"
+    ],
+    "original_sha256": "806723ced9edc629960851ede1ec9f8470a8466f662b8e82d85e88b611c7cd81",
+    "vendored_sha256": "689d4dbc8df3eea8c45838ef04b7eb0d0dc732c35f722abf87a78a5ad93f0188",
+    "import_rewrites": []
+  },
+  "geometry.py": {
+    "source_commit": "4027242b86fcad81209cffde4c85e59c9418088d",
+    "source_path": "research/bitman_real/events.py",
+    "selected_symbols": [
+      "geometry"
+    ],
+    "original_sha256": "2d94f1a56dd5ddf171dee564d63bd47615953664a1e7913dbeefb494b03c614d",
+    "vendored_sha256": "8a0b828afe68feb36ac981410e0ff38401b3d52ab4fb3b142c4dae987d4b6e33",
+    "import_rewrites": []
+  },
+  "constants.py": {
+    "source_commit": "4027242b86fcad81209cffde4c85e59c9418088d",
+    "source_path": "research/bitman_direction/spec.py",
+    "selected_symbols": [
+      "VERSION",
+      "HOUR",
+      "TIMEFRAMES",
+      "MLRSI_CONFIG"
+    ],
+    "original_sha256": "ad5f493aa96959a8a0d972da0d999976f418abf85bb08f9892be317a10475ba0",
+    "vendored_sha256": "19a0862ead10c817178644875ae404278806119cb6190cf55ba01750b5bf1aa7",
+    "import_rewrites": []
+  }
+}

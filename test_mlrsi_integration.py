@@ -390,13 +390,16 @@ class CommandIntegrationTests(unittest.TestCase):
         self.assertNotIn('RSI: Wilder 27', self.reply.call_args.args[0])
 
     def test_help_preserves_all_previous_text_and_commands(self):
+        from bitman_manual.safety import HELP_LINE as BITMAN_HELP_LINE
         old_help = next(n for n in ast.parse(baseline('guardian_commands.py')).body
                         if isinstance(n, ast.Assign) and n.targets[0].id == 'HELP').value.value
-        self.assertEqual(HELP.replace(HELP_LINE, ''), old_help)
-        self.assertEqual(COMMANDS, ('/status', '/why', '/position', '/risk', '/levels', '/stats', '/help', '/mlrsi'))
+        self.assertEqual(HELP.count(BITMAN_HELP_LINE), 1)
+        self.assertEqual(HELP.replace(BITMAN_HELP_LINE, '').replace(HELP_LINE, ''), old_help)
+        self.assertEqual(COMMANDS, ('/status', '/why', '/position', '/risk', '/levels', '/stats', '/help', '/mlrsi', '/bitman'))
         self.commands.process(self.update('/help'))
         self.assertEqual(self.reply.call_args.args[0], HELP)
         self.assertNotIn('/mlrsi_help', HELP)
+        self.assertNotIn('/bitman_help', HELP)
 
     def test_status_adds_exactly_one_information_line(self):
         self.commands.process(self.update('/status'))
@@ -428,7 +431,8 @@ class CommandIntegrationTests(unittest.TestCase):
         with patch.object(Bitunix, '_request', side_effect=AssertionError('NO BITUNIX')) as bitunix, \
              patch.object(MLRSIObserver, 'cycle', side_effect=AssertionError('NO REFRESH')) as cycle, \
              patch.object(MLRSIObserver, '_persist', side_effect=AssertionError('NO WRITE')) as persist, \
-             patch('requests.sessions.Session.request', side_effect=AssertionError('NO HTTP')) as http:
+             patch('requests.sessions.Session.request', side_effect=AssertionError('NO HTTP')) as http, \
+             patch('bitman_manual.host.BitmanHost.request', return_value=True):
             for command in list(COMMANDS) + ['/arm', '/close', '/protect'] + ['/' + str(i) for i in range(200)]:
                 self.assertTrue(self.commands.process(self.update(command)))
         for call in (bitunix, cycle, persist, http):

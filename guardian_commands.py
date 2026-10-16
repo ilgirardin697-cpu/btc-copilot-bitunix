@@ -8,8 +8,9 @@ from datetime import datetime, timezone
 import requests
 from guardian_telegram import _price, _number, render_risk, direction_label, position_relationship
 from copilot_audit import render_stats
+from bitman_manual.render import unavailable as bitman_unavailable
 
-COMMANDS = ('/status', '/why', '/position', '/risk', '/levels', '/stats', '/help', '/mlrsi')
+COMMANDS = ('/status', '/why', '/position', '/risk', '/levels', '/stats', '/help', '/mlrsi', '/bitman')
 NO_DATA = '⚫❓ SIN DATOS SUFICIENTES — NO OPERAR'
 STALE = '⚠️ DATOS DESACTUALIZADOS — NO TOMAR DECISIÓN'
 HELP = ('🤖 I-GOD MANUAL COPILOT\n\n/status\n→ resumen de qué ve ahora\n\n'
@@ -17,6 +18,7 @@ HELP = ('🤖 I-GOD MANUAL COPILOT\n\n/status\n→ resumen de qué ve ahora\n\n'
         '/position\n→ tu posición real de Bitunix\n\n/risk\n→ riesgo y liquidación\n\n'
         '/levels\n→ soportes, resistencias y niveles a vigilar\n\n'
         '/mlrsi\n→ estado completo ML RSI 15m / 1H / 4H\n\n'
+        '/bitman\n→ contexto direccional BTC, manual y SHADOW ONLY\n\n'
         '/stats [30d|90d|all]\n→ resultados posteriores de señales, no de tu cuenta\n\n/help\n→ ayuda\n\n'
         '🔒 Estos comandos son solo consulta.\nNunca abren ni cierran operaciones.')
 
@@ -266,6 +268,8 @@ def render_command(command, snapshot, now):
         return HELP
     if command == '/mlrsi':
         return 'ML RSI MTF Observer: OFF / no disponible\nSHADOW ONLY\nTRADE AUTHORITY: NONE'
+    if command == '/bitman':
+        return bitman_unavailable()
     if command == '/stats':
         return render_stats((snapshot or {}).get('audit_stats'), now_ms=int(now * 1000))
     if not snapshot:
@@ -314,6 +318,16 @@ class TelegramCommands:
         self._worker = None
         self._stats_cache = stats_cache
         self._mlrsi_status = mlrsi_status  # read-only text cache callback; no observer/client
+        self._bitman = None  # created only after an authorized manual /bitman
+
+    def _request_bitman(self):
+        try:
+            if self._bitman is None:
+                from bitman_manual.host import BitmanHost
+                self._bitman = BitmanHost()
+            return self._bitman.request(self._reply)
+        except Exception:
+            return bool(self._reply(bitman_unavailable()))
 
     def _read_mlrsi(self):
         try:
@@ -337,6 +351,8 @@ class TelegramCommands:
             return False
         command = text.split(maxsplit=1)[0].split('@')[0]
         try:
+            if command == '/bitman':
+                return self._request_bitman()
             if command == '/mlrsi':
                 return bool(self._reply(self._read_mlrsi()[0]))
             if command == '/status' and self._mlrsi_status is not None:
@@ -392,6 +408,11 @@ class TelegramCommands:
 
     def stop(self):
         self._stop.set()
+        if self._bitman is not None:
+            try:
+                self._bitman.stop()
+            except Exception:
+                pass
 
     def _run(self):
         while not self._stop.is_set():
