@@ -1,0 +1,4780 @@
+{
+  "version": "BITMAN_BTC_DIRECTION_ENGINE_0_1",
+  "scope": "SUPPLEMENTARY_DESCRIPTIVE_NOT_PRIMARY_EPISODES",
+  "source_sha256": "2e6ab6e37e68e28093ba59b51476bf47d83d5943502b63f1a3f0a2ccfb1ffdf1",
+  "changes_primary_protocol": false,
+  "used_for_selection_or_classification": false,
+  "note": "Existing frozen detail labels; nested transitions overlap primary episodes. Not independent extra signals.",
+  "periods": {
+    "TRAIN": {
+      "UP_WITH_1H_PULLBACK": {
+        "n_episodes": 323,
+        "horizons": {
+          "4": {
+            "n_total": 323,
+            "n_complete": 323,
+            "n_incomplete": 0,
+            "n_directional": 323,
+            "raw_return_mean": 0.001080247475769796,
+            "signed_return": {
+              "mean": 0.001080247475769796,
+              "median": 0.0020578984989279014
+            },
+            "mfe": {
+              "mean": 0.010342553736742394,
+              "median": 0.008099099398651388
+            },
+            "mae": {
+              "mean": -0.012024939493080273,
+              "median": -0.00790165638016005
+            },
+            "directional_accuracy": 0.5851393188854489,
+            "targets": {
+              "2": {
+                "n": 323,
+                "favorable_hit_rate": 0.11764705882352941,
+                "adverse_hit_rate": 0.15479876160990713,
+                "median_hour_to_target": 3.0,
+                "median_hour_to_adverse": 2.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.11145510835913312,
+                  "ADVERSE_FIRST": 0.15479876160990713,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.7337461300309598
+                },
+                "median_adverse_before_touch": 0.003892483135862157,
+                "median_adverse_including_touch_bar": 0.003892483135862157
+              },
+              "5": {
+                "n": 323,
+                "favorable_hit_rate": 0.006191950464396285,
+                "adverse_hit_rate": 0.02476780185758514,
+                "median_hour_to_target": 3.5,
+                "median_hour_to_adverse": 2.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.006191950464396285,
+                  "ADVERSE_FIRST": 0.02476780185758514,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9690402476780186
+                },
+                "median_adverse_before_touch": 0.014853150108394442,
+                "median_adverse_including_touch_bar": 0.014853150108394442
+              },
+              "10": {
+                "n": 323,
+                "favorable_hit_rate": 0.0,
+                "adverse_hit_rate": 0.006191950464396285,
+                "median_hour_to_target": null,
+                "median_hour_to_adverse": 2.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0,
+                  "ADVERSE_FIRST": 0.006191950464396285,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9938080495356038
+                },
+                "median_adverse_before_touch": null,
+                "median_adverse_including_touch_bar": null
+              }
+            }
+          },
+          "12": {
+            "n_total": 323,
+            "n_complete": 323,
+            "n_incomplete": 0,
+            "n_directional": 323,
+            "raw_return_mean": 0.002095146228349359,
+            "signed_return": {
+              "mean": 0.002095146228349359,
+              "median": 0.0026256580094619064
+            },
+            "mfe": {
+              "mean": 0.019332286549204308,
+              "median": 0.014685490265511136
+            },
+            "mae": {
+              "mean": -0.020587350324831975,
+              "median": -0.012622381927375637
+            },
+            "directional_accuracy": 0.5758513931888545,
+            "targets": {
+              "2": {
+                "n": 323,
+                "favorable_hit_rate": 0.33436532507739936,
+                "adverse_hit_rate": 0.33436532507739936,
+                "median_hour_to_target": 6.0,
+                "median_hour_to_adverse": 5.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.3065015479876161,
+                  "ADVERSE_FIRST": 0.29102167182662536,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.4024767801857585
+                },
+                "median_adverse_before_touch": 0.00572851724744583,
+                "median_adverse_including_touch_bar": 0.005814858657681721
+              },
+              "5": {
+                "n": 323,
+                "favorable_hit_rate": 0.058823529411764705,
+                "adverse_hit_rate": 0.08668730650154799,
+                "median_hour_to_target": 8.0,
+                "median_hour_to_adverse": 7.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.058823529411764705,
+                  "ADVERSE_FIRST": 0.08668730650154799,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.8544891640866873
+                },
+                "median_adverse_before_touch": 0.003441714299985521,
+                "median_adverse_including_touch_bar": 0.003441714299985521
+              },
+              "10": {
+                "n": 323,
+                "favorable_hit_rate": 0.01238390092879257,
+                "adverse_hit_rate": 0.018575851393188854,
+                "median_hour_to_target": 7.5,
+                "median_hour_to_adverse": 8.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.01238390092879257,
+                  "ADVERSE_FIRST": 0.018575851393188854,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9690402476780186
+                },
+                "median_adverse_before_touch": 0.0024482134893449303,
+                "median_adverse_including_touch_bar": 0.0024482134893449303
+              }
+            }
+          },
+          "24": {
+            "n_total": 323,
+            "n_complete": 323,
+            "n_incomplete": 0,
+            "n_directional": 323,
+            "raw_return_mean": 0.005831526136805849,
+            "signed_return": {
+              "mean": 0.005831526136805849,
+              "median": 0.0051942619581197835
+            },
+            "mfe": {
+              "mean": 0.030028831916513763,
+              "median": 0.02253403235306939
+            },
+            "mae": {
+              "mean": -0.028687673984343322,
+              "median": -0.018352042596346485
+            },
+            "directional_accuracy": 0.56656346749226,
+            "targets": {
+              "2": {
+                "n": 323,
+                "favorable_hit_rate": 0.544891640866873,
+                "adverse_hit_rate": 0.47058823529411764,
+                "median_hour_to_target": 10.0,
+                "median_hour_to_adverse": 7.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.4674922600619195,
+                  "ADVERSE_FIRST": 0.38699690402476783,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.14551083591331268
+                },
+                "median_adverse_before_touch": 0.008260713069622727,
+                "median_adverse_including_touch_bar": 0.008554312833870648
+              },
+              "5": {
+                "n": 323,
+                "favorable_hit_rate": 0.16408668730650156,
+                "adverse_hit_rate": 0.13622291021671826,
+                "median_hour_to_target": 15.0,
+                "median_hour_to_adverse": 11.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.1609907120743034,
+                  "ADVERSE_FIRST": 0.13622291021671826,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.7027863777089783
+                },
+                "median_adverse_before_touch": 0.006214136009043414,
+                "median_adverse_including_touch_bar": 0.006214136009043414
+              },
+              "10": {
+                "n": 323,
+                "favorable_hit_rate": 0.034055727554179564,
+                "adverse_hit_rate": 0.04024767801857585,
+                "median_hour_to_target": 18.0,
+                "median_hour_to_adverse": 13.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.034055727554179564,
+                  "ADVERSE_FIRST": 0.04024767801857585,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9256965944272446
+                },
+                "median_adverse_before_touch": 0.004578106395316528,
+                "median_adverse_including_touch_bar": 0.004578106395316528
+              }
+            }
+          },
+          "72": {
+            "n_total": 323,
+            "n_complete": 323,
+            "n_incomplete": 0,
+            "n_directional": 323,
+            "raw_return_mean": 0.01793454482001442,
+            "signed_return": {
+              "mean": 0.01793454482001442,
+              "median": 0.01452749714638446
+            },
+            "mfe": {
+              "mean": 0.061411039812993125,
+              "median": 0.04497479601144638
+            },
+            "mae": {
+              "mean": -0.04553278032547422,
+              "median": -0.03280769689728802
+            },
+            "directional_accuracy": 0.631578947368421,
+            "targets": {
+              "2": {
+                "n": 323,
+                "favorable_hit_rate": 0.8018575851393189,
+                "adverse_hit_rate": 0.6873065015479877,
+                "median_hour_to_target": 15.0,
+                "median_hour_to_adverse": 13.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.56656346749226,
+                  "ADVERSE_FIRST": 0.42724458204334365,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.006191950464396285
+                },
+                "median_adverse_before_touch": 0.011442926349738092,
+                "median_adverse_including_touch_bar": 0.011504081851307024
+              },
+              "5": {
+                "n": 323,
+                "favorable_hit_rate": 0.46439628482972134,
+                "adverse_hit_rate": 0.28792569659442724,
+                "median_hour_to_target": 33.0,
+                "median_hour_to_adverse": 26.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.44272445820433437,
+                  "ADVERSE_FIRST": 0.2724458204334365,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.2848297213622291
+                },
+                "median_adverse_before_touch": 0.012566255909318036,
+                "median_adverse_including_touch_bar": 0.012566255909318036
+              },
+              "10": {
+                "n": 323,
+                "favorable_hit_rate": 0.17956656346749225,
+                "adverse_hit_rate": 0.09287925696594428,
+                "median_hour_to_target": 39.5,
+                "median_hour_to_adverse": 26.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.17337461300309598,
+                  "ADVERSE_FIRST": 0.09287925696594428,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.7337461300309598
+                },
+                "median_adverse_before_touch": 0.007186491054614663,
+                "median_adverse_including_touch_bar": 0.007639871966874157
+              }
+            }
+          }
+        },
+        "matched": {
+          "4": {
+            "n": 315,
+            "mean": 0.00014183466617299884,
+            "ci95": [
+              -0.0017175064856922392,
+              0.0017731763301994685
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "12": {
+            "n": 315,
+            "mean": -0.001288722602898717,
+            "ci95": [
+              -0.004864370027896885,
+              0.002341283585237601
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "24": {
+            "n": 315,
+            "mean": 0.0001556634962953532,
+            "ci95": [
+              -0.006750640005746612,
+              0.0067519369381042315
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "72": {
+            "n": 315,
+            "mean": 0.0018541432253520473,
+            "ci95": [
+              -0.01475276844229179,
+              0.01616731532111567
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          }
+        },
+        "episode_extension": {
+          "n_total": 323,
+          "n_complete": 323,
+          "n_incomplete": 0,
+          "n_directional": 323,
+          "raw_return_mean": 0.0018689950629787804,
+          "signed_return": {
+            "mean": 0.0018689950629787804,
+            "median": 0.0030144101496318854
+          },
+          "mfe": {
+            "mean": 0.008779046656361013,
+            "median": 0.0069259776892303115
+          },
+          "mae": {
+            "mean": -0.010249888452293934,
+            "median": -0.005413049879659182
+          },
+          "directional_accuracy": 0.6501547987616099,
+          "targets": {
+            "2": {
+              "n": 323,
+              "favorable_hit_rate": 0.07739938080495357,
+              "adverse_hit_rate": 0.11764705882352941,
+              "median_hour_to_target": 2.0,
+              "median_hour_to_adverse": 3.0,
+              "race": {
+                "FAVORABLE_FIRST": 0.07430340557275542,
+                "ADVERSE_FIRST": 0.11455108359133127,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.8111455108359134
+              },
+              "median_adverse_before_touch": 0.005250771035752111,
+              "median_adverse_including_touch_bar": 0.005250771035752111
+            },
+            "5": {
+              "n": 323,
+              "favorable_hit_rate": 0.006191950464396285,
+              "adverse_hit_rate": 0.018575851393188854,
+              "median_hour_to_target": 4.0,
+              "median_hour_to_adverse": 2.5,
+              "race": {
+                "FAVORABLE_FIRST": 0.006191950464396285,
+                "ADVERSE_FIRST": 0.018575851393188854,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.9752321981424149
+              },
+              "median_adverse_before_touch": 0.01562163110849668,
+              "median_adverse_including_touch_bar": 0.01562163110849668
+            },
+            "10": {
+              "n": 323,
+              "favorable_hit_rate": 0.0,
+              "adverse_hit_rate": 0.006191950464396285,
+              "median_hour_to_target": null,
+              "median_hour_to_adverse": 2.5,
+              "race": {
+                "FAVORABLE_FIRST": 0.0,
+                "ADVERSE_FIRST": 0.006191950464396285,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.9938080495356038
+              },
+              "median_adverse_before_touch": null,
+              "median_adverse_including_touch_bar": null
+            }
+          }
+        },
+        "median_persistence_hours": 2.0,
+        "false_reversal_n": 0,
+        "false_reversal_rate": null,
+        "mature_72h_for_timing": 323,
+        "aligned_hourly_impulse_within72h": 0.9690402476780186,
+        "median_hours_to_aligned_impulse": 11.0,
+        "macro_flip_within72h": 0.006191950464396285
+      },
+      "DOWN_WITH_1H_PULLBACK": {
+        "n_episodes": 159,
+        "horizons": {
+          "4": {
+            "n_total": 159,
+            "n_complete": 159,
+            "n_incomplete": 0,
+            "n_directional": 159,
+            "raw_return_mean": -0.0010777614206328074,
+            "signed_return": {
+              "mean": 0.0010777614206328074,
+              "median": -9.608588797060946e-06
+            },
+            "mfe": {
+              "mean": 0.012459766239529692,
+              "median": 0.00788874703295972
+            },
+            "mae": {
+              "mean": -0.011833695783849591,
+              "median": -0.008168770416000504
+            },
+            "directional_accuracy": 0.4968553459119497,
+            "targets": {
+              "2": {
+                "n": 159,
+                "favorable_hit_rate": 0.13836477987421383,
+                "adverse_hit_rate": 0.16981132075471697,
+                "median_hour_to_target": 2.5,
+                "median_hour_to_adverse": 2.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.11949685534591195,
+                  "ADVERSE_FIRST": 0.14465408805031446,
+                  "AMBIGUOUS": 0.012578616352201259,
+                  "UNRESOLVED": 0.7232704402515723
+                },
+                "median_adverse_before_touch": 0.004349055582312689,
+                "median_adverse_including_touch_bar": 0.005813786625918471
+              },
+              "5": {
+                "n": 159,
+                "favorable_hit_rate": 0.031446540880503145,
+                "adverse_hit_rate": 0.012578616352201259,
+                "median_hour_to_target": 3.0,
+                "median_hour_to_adverse": 2.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.031446540880503145,
+                  "ADVERSE_FIRST": 0.012578616352201259,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9559748427672956
+                },
+                "median_adverse_before_touch": 0.013000212430390734,
+                "median_adverse_including_touch_bar": 0.013000212430390734
+              },
+              "10": {
+                "n": 159,
+                "favorable_hit_rate": 0.012578616352201259,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": 3.5,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.012578616352201259,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9874213836477987
+                },
+                "median_adverse_before_touch": 0.02600755063079163,
+                "median_adverse_including_touch_bar": 0.02793830055906865
+              }
+            }
+          },
+          "12": {
+            "n_total": 159,
+            "n_complete": 159,
+            "n_incomplete": 0,
+            "n_directional": 159,
+            "raw_return_mean": -5.350287612285403e-05,
+            "signed_return": {
+              "mean": 5.350287612285403e-05,
+              "median": -0.00071087945223125
+            },
+            "mfe": {
+              "mean": 0.02234515859187425,
+              "median": 0.012735166425470346
+            },
+            "mae": {
+              "mean": -0.021334573379989317,
+              "median": -0.01434055733276951
+            },
+            "directional_accuracy": 0.49056603773584906,
+            "targets": {
+              "2": {
+                "n": 159,
+                "favorable_hit_rate": 0.33962264150943394,
+                "adverse_hit_rate": 0.4025157232704403,
+                "median_hour_to_target": 6.0,
+                "median_hour_to_adverse": 5.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.29559748427672955,
+                  "ADVERSE_FIRST": 0.33962264150943394,
+                  "AMBIGUOUS": 0.018867924528301886,
+                  "UNRESOLVED": 0.34591194968553457
+                },
+                "median_adverse_before_touch": 0.004875383467732752,
+                "median_adverse_including_touch_bar": 0.00572597774778949
+              },
+              "5": {
+                "n": 159,
+                "favorable_hit_rate": 0.09433962264150944,
+                "adverse_hit_rate": 0.0880503144654088,
+                "median_hour_to_target": 5.0,
+                "median_hour_to_adverse": 9.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.09433962264150944,
+                  "ADVERSE_FIRST": 0.08176100628930817,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.8238993710691824
+                },
+                "median_adverse_before_touch": 0.005490069919127594,
+                "median_adverse_including_touch_bar": 0.005490069919127594
+              },
+              "10": {
+                "n": 159,
+                "favorable_hit_rate": 0.031446540880503145,
+                "adverse_hit_rate": 0.006289308176100629,
+                "median_hour_to_target": 9.0,
+                "median_hour_to_adverse": 11.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.031446540880503145,
+                  "ADVERSE_FIRST": 0.006289308176100629,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9622641509433962
+                },
+                "median_adverse_before_touch": 0.015732984830039376,
+                "median_adverse_including_touch_bar": 0.015732984830039376
+              }
+            }
+          },
+          "24": {
+            "n_total": 159,
+            "n_complete": 157,
+            "n_incomplete": 2,
+            "n_directional": 157,
+            "raw_return_mean": -0.00021287094558683584,
+            "signed_return": {
+              "mean": 0.00021287094558683584,
+              "median": -0.0030022380901630896
+            },
+            "mfe": {
+              "mean": 0.03151082426292458,
+              "median": 0.015956571431165578
+            },
+            "mae": {
+              "mean": -0.029912301083905402,
+              "median": -0.02278252011507398
+            },
+            "directional_accuracy": 0.445859872611465,
+            "targets": {
+              "2": {
+                "n": 157,
+                "favorable_hit_rate": 0.45222929936305734,
+                "adverse_hit_rate": 0.5286624203821656,
+                "median_hour_to_target": 7.0,
+                "median_hour_to_adverse": 7.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.3630573248407643,
+                  "ADVERSE_FIRST": 0.445859872611465,
+                  "AMBIGUOUS": 0.01910828025477707,
+                  "UNRESOLVED": 0.17197452229299362
+                },
+                "median_adverse_before_touch": 0.006137503332709349,
+                "median_adverse_including_touch_bar": 0.006272332296233918
+              },
+              "5": {
+                "n": 157,
+                "favorable_hit_rate": 0.18471337579617833,
+                "adverse_hit_rate": 0.1464968152866242,
+                "median_hour_to_target": 14.0,
+                "median_hour_to_adverse": 11.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.17834394904458598,
+                  "ADVERSE_FIRST": 0.1337579617834395,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.6878980891719745
+                },
+                "median_adverse_before_touch": 0.005321263588329961,
+                "median_adverse_including_touch_bar": 0.005321263588329961
+              },
+              "10": {
+                "n": 157,
+                "favorable_hit_rate": 0.05732484076433121,
+                "adverse_hit_rate": 0.03821656050955414,
+                "median_hour_to_target": 12.0,
+                "median_hour_to_adverse": 18.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.05732484076433121,
+                  "ADVERSE_FIRST": 0.03821656050955414,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9044585987261147
+                },
+                "median_adverse_before_touch": 0.011128975342949099,
+                "median_adverse_including_touch_bar": 0.011128975342949099
+              }
+            }
+          },
+          "72": {
+            "n_total": 159,
+            "n_complete": 155,
+            "n_incomplete": 4,
+            "n_directional": 155,
+            "raw_return_mean": -0.0016602922122374987,
+            "signed_return": {
+              "mean": 0.0016602922122374987,
+              "median": -0.0035179706500867436
+            },
+            "mfe": {
+              "mean": 0.05799761398248409,
+              "median": 0.038831101688081904
+            },
+            "mae": {
+              "mean": -0.04881716043296731,
+              "median": -0.036620618359850976
+            },
+            "directional_accuracy": 0.45161290322580644,
+            "targets": {
+              "2": {
+                "n": 155,
+                "favorable_hit_rate": 0.6709677419354839,
+                "adverse_hit_rate": 0.7225806451612903,
+                "median_hour_to_target": 12.0,
+                "median_hour_to_adverse": 11.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.4129032258064516,
+                  "ADVERSE_FIRST": 0.5096774193548387,
+                  "AMBIGUOUS": 0.01935483870967742,
+                  "UNRESOLVED": 0.05806451612903226
+                },
+                "median_adverse_before_touch": 0.010548046858167459,
+                "median_adverse_including_touch_bar": 0.010902649335375103
+              },
+              "5": {
+                "n": 155,
+                "favorable_hit_rate": 0.41935483870967744,
+                "adverse_hit_rate": 0.33548387096774196,
+                "median_hour_to_target": 25.0,
+                "median_hour_to_adverse": 29.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.4,
+                  "ADVERSE_FIRST": 0.2903225806451613,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.3096774193548387
+                },
+                "median_adverse_before_touch": 0.011128975342949099,
+                "median_adverse_including_touch_bar": 0.011128975342949099
+              },
+              "10": {
+                "n": 155,
+                "favorable_hit_rate": 0.1032258064516129,
+                "adverse_hit_rate": 0.1032258064516129,
+                "median_hour_to_target": 21.0,
+                "median_hour_to_adverse": 40.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.1032258064516129,
+                  "ADVERSE_FIRST": 0.1032258064516129,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.7935483870967742
+                },
+                "median_adverse_before_touch": 0.008502766404934525,
+                "median_adverse_including_touch_bar": 0.008502766404934525
+              }
+            }
+          }
+        },
+        "matched": {
+          "4": {
+            "n": 157,
+            "mean": -0.0008389598507701916,
+            "ci95": [
+              -0.0041769357865975125,
+              0.0028413469064158896
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "12": {
+            "n": 157,
+            "mean": -0.0038181335362986093,
+            "ci95": [
+              -0.00897017102450098,
+              0.0007735413780745887
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "24": {
+            "n": 155,
+            "mean": -0.0016318298732996871,
+            "ci95": [
+              -0.009507589191637859,
+              0.006054506409993473
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "72": {
+            "n": 153,
+            "mean": 0.001708909495953715,
+            "ci95": [
+              -0.01794899875763787,
+              0.019776473003736555
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          }
+        },
+        "episode_extension": {
+          "n_total": 159,
+          "n_complete": 159,
+          "n_incomplete": 0,
+          "n_directional": 159,
+          "raw_return_mean": -0.0002449623365169623,
+          "signed_return": {
+            "mean": 0.0002449623365169623,
+            "median": 0.0012911128759391932
+          },
+          "mfe": {
+            "mean": 0.008905367881818222,
+            "median": 0.005973898975285441
+          },
+          "mae": {
+            "mean": -0.010267765501865098,
+            "median": -0.0055535737337200075
+          },
+          "directional_accuracy": 0.5723270440251572,
+          "targets": {
+            "2": {
+              "n": 159,
+              "favorable_hit_rate": 0.08176100628930817,
+              "adverse_hit_rate": 0.14465408805031446,
+              "median_hour_to_target": 2.0,
+              "median_hour_to_adverse": 2.0,
+              "race": {
+                "FAVORABLE_FIRST": 0.06289308176100629,
+                "ADVERSE_FIRST": 0.12578616352201258,
+                "AMBIGUOUS": 0.012578616352201259,
+                "UNRESOLVED": 0.7987421383647799
+              },
+              "median_adverse_before_touch": 0.006279849908528368,
+              "median_adverse_including_touch_bar": 0.009001098098145421
+            },
+            "5": {
+              "n": 159,
+              "favorable_hit_rate": 0.006289308176100629,
+              "adverse_hit_rate": 0.018867924528301886,
+              "median_hour_to_target": 2.0,
+              "median_hour_to_adverse": 3.0,
+              "race": {
+                "FAVORABLE_FIRST": 0.006289308176100629,
+                "ADVERSE_FIRST": 0.018867924528301886,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.9748427672955975
+              },
+              "median_adverse_before_touch": 0.019036296296296218,
+              "median_adverse_including_touch_bar": 0.03062370370370382
+            },
+            "10": {
+              "n": 159,
+              "favorable_hit_rate": 0.0,
+              "adverse_hit_rate": 0.0,
+              "median_hour_to_target": null,
+              "median_hour_to_adverse": null,
+              "race": {
+                "FAVORABLE_FIRST": 0.0,
+                "ADVERSE_FIRST": 0.0,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 1.0
+              },
+              "median_adverse_before_touch": null,
+              "median_adverse_including_touch_bar": null
+            }
+          }
+        },
+        "median_persistence_hours": 2.0,
+        "false_reversal_n": 0,
+        "false_reversal_rate": null,
+        "mature_72h_for_timing": 155,
+        "aligned_hourly_impulse_within72h": 1.0,
+        "median_hours_to_aligned_impulse": 12.0,
+        "macro_flip_within72h": 0.0064516129032258064
+      },
+      "POSSIBLE_BULLISH_TRANSITION": {
+        "n_episodes": 133,
+        "horizons": {
+          "4": {
+            "n_total": 133,
+            "n_complete": 133,
+            "n_incomplete": 0,
+            "n_directional": 133,
+            "raw_return_mean": -0.0016399090435724238,
+            "signed_return": {
+              "mean": -0.0016399090435724238,
+              "median": -0.0017266775777413645
+            },
+            "mfe": {
+              "mean": 0.010837519727605643,
+              "median": 0.007086902451213906
+            },
+            "mae": {
+              "mean": -0.011061624044216348,
+              "median": -0.006353184286311042
+            },
+            "directional_accuracy": 0.41353383458646614,
+            "targets": {
+              "2": {
+                "n": 133,
+                "favorable_hit_rate": 0.14285714285714285,
+                "adverse_hit_rate": 0.15789473684210525,
+                "median_hour_to_target": 2.0,
+                "median_hour_to_adverse": 2.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.13533834586466165,
+                  "ADVERSE_FIRST": 0.13533834586466165,
+                  "AMBIGUOUS": 0.007518796992481203,
+                  "UNRESOLVED": 0.7218045112781954
+                },
+                "median_adverse_before_touch": 0.00018556837040073493,
+                "median_adverse_including_touch_bar": 0.0032690968852771007
+              },
+              "5": {
+                "n": 133,
+                "favorable_hit_rate": 0.022556390977443608,
+                "adverse_hit_rate": 0.022556390977443608,
+                "median_hour_to_target": 2.0,
+                "median_hour_to_adverse": 4.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.022556390977443608,
+                  "ADVERSE_FIRST": 0.022556390977443608,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9548872180451128
+                },
+                "median_adverse_before_touch": 0.0032690968852771007,
+                "median_adverse_including_touch_bar": 0.0032690968852771007
+              },
+              "10": {
+                "n": 133,
+                "favorable_hit_rate": 0.0,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": null,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 1.0
+                },
+                "median_adverse_before_touch": null,
+                "median_adverse_including_touch_bar": null
+              }
+            }
+          },
+          "12": {
+            "n_total": 133,
+            "n_complete": 133,
+            "n_incomplete": 0,
+            "n_directional": 133,
+            "raw_return_mean": -0.0014199981334326285,
+            "signed_return": {
+              "mean": -0.0014199981334326285,
+              "median": -0.0018390098866680749
+            },
+            "mfe": {
+              "mean": 0.01955655223373404,
+              "median": 0.012419296321206419
+            },
+            "mae": {
+              "mean": -0.020462128466767857,
+              "median": -0.013374526678141097
+            },
+            "directional_accuracy": 0.42857142857142855,
+            "targets": {
+              "2": {
+                "n": 133,
+                "favorable_hit_rate": 0.3157894736842105,
+                "adverse_hit_rate": 0.3383458646616541,
+                "median_hour_to_target": 5.0,
+                "median_hour_to_adverse": 5.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.2857142857142857,
+                  "ADVERSE_FIRST": 0.2932330827067669,
+                  "AMBIGUOUS": 0.007518796992481203,
+                  "UNRESOLVED": 0.41353383458646614
+                },
+                "median_adverse_before_touch": 0.003235401451754494,
+                "median_adverse_including_touch_bar": 0.004662207524681328
+              },
+              "5": {
+                "n": 133,
+                "favorable_hit_rate": 0.08270676691729323,
+                "adverse_hit_rate": 0.10526315789473684,
+                "median_hour_to_target": 7.0,
+                "median_hour_to_adverse": 7.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.07518796992481203,
+                  "ADVERSE_FIRST": 0.10526315789473684,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.8195488721804511
+                },
+                "median_adverse_before_touch": 0.0032690968852771007,
+                "median_adverse_including_touch_bar": 0.0032690968852771007
+              },
+              "10": {
+                "n": 133,
+                "favorable_hit_rate": 0.015037593984962405,
+                "adverse_hit_rate": 0.015037593984962405,
+                "median_hour_to_target": 5.5,
+                "median_hour_to_adverse": 10.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.015037593984962405,
+                  "ADVERSE_FIRST": 0.015037593984962405,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9699248120300752
+                },
+                "median_adverse_before_touch": 0.028237226485060662,
+                "median_adverse_including_touch_bar": 0.028237226485060662
+              }
+            }
+          },
+          "24": {
+            "n_total": 133,
+            "n_complete": 133,
+            "n_incomplete": 0,
+            "n_directional": 133,
+            "raw_return_mean": -0.0066754459554325424,
+            "signed_return": {
+              "mean": -0.0066754459554325424,
+              "median": -0.004409644238156041
+            },
+            "mfe": {
+              "mean": 0.02640890103147014,
+              "median": 0.017946365167273104
+            },
+            "mae": {
+              "mean": -0.03318102001973113,
+              "median": -0.020520408545385282
+            },
+            "directional_accuracy": 0.42857142857142855,
+            "targets": {
+              "2": {
+                "n": 133,
+                "favorable_hit_rate": 0.43609022556390975,
+                "adverse_hit_rate": 0.518796992481203,
+                "median_hour_to_target": 6.0,
+                "median_hour_to_adverse": 7.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.39097744360902253,
+                  "ADVERSE_FIRST": 0.42857142857142855,
+                  "AMBIGUOUS": 0.007518796992481203,
+                  "UNRESOLVED": 0.17293233082706766
+                },
+                "median_adverse_before_touch": 0.005438162293812943,
+                "median_adverse_including_touch_bar": 0.006676188905672731
+              },
+              "5": {
+                "n": 133,
+                "favorable_hit_rate": 0.13533834586466165,
+                "adverse_hit_rate": 0.21804511278195488,
+                "median_hour_to_target": 11.0,
+                "median_hour_to_adverse": 13.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.12781954887218044,
+                  "ADVERSE_FIRST": 0.21804511278195488,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.6541353383458647
+                },
+                "median_adverse_before_touch": 0.007420556165264214,
+                "median_adverse_including_touch_bar": 0.007420556165264214
+              },
+              "10": {
+                "n": 133,
+                "favorable_hit_rate": 0.022556390977443608,
+                "adverse_hit_rate": 0.05263157894736842,
+                "median_hour_to_target": 6.0,
+                "median_hour_to_adverse": 15.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.022556390977443608,
+                  "ADVERSE_FIRST": 0.05263157894736842,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.924812030075188
+                },
+                "median_adverse_before_touch": 0.010201882087991665,
+                "median_adverse_including_touch_bar": 0.010201882087991665
+              }
+            }
+          },
+          "72": {
+            "n_total": 133,
+            "n_complete": 133,
+            "n_incomplete": 0,
+            "n_directional": 133,
+            "raw_return_mean": -0.010983980978834379,
+            "signed_return": {
+              "mean": -0.010983980978834379,
+              "median": -0.00338886589403975
+            },
+            "mfe": {
+              "mean": 0.05359468232442759,
+              "median": 0.02845546473762295
+            },
+            "mae": {
+              "mean": -0.06065419148738182,
+              "median": -0.040325924447602524
+            },
+            "directional_accuracy": 0.44360902255639095,
+            "targets": {
+              "2": {
+                "n": 133,
+                "favorable_hit_rate": 0.6616541353383458,
+                "adverse_hit_rate": 0.6616541353383458,
+                "median_hour_to_target": 13.5,
+                "median_hour_to_adverse": 12.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.48120300751879697,
+                  "ADVERSE_FIRST": 0.48120300751879697,
+                  "AMBIGUOUS": 0.007518796992481203,
+                  "UNRESOLVED": 0.03007518796992481
+                },
+                "median_adverse_before_touch": 0.01127778213147973,
+                "median_adverse_including_touch_bar": 0.012317047479362242
+              },
+              "5": {
+                "n": 133,
+                "favorable_hit_rate": 0.3157894736842105,
+                "adverse_hit_rate": 0.42857142857142855,
+                "median_hour_to_target": 30.5,
+                "median_hour_to_adverse": 24.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.2556390977443609,
+                  "ADVERSE_FIRST": 0.42857142857142855,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.3157894736842105
+                },
+                "median_adverse_before_touch": 0.015057234059943025,
+                "median_adverse_including_touch_bar": 0.015057234059943025
+              },
+              "10": {
+                "n": 133,
+                "favorable_hit_rate": 0.10526315789473684,
+                "adverse_hit_rate": 0.18796992481203006,
+                "median_hour_to_target": 48.5,
+                "median_hour_to_adverse": 49.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.10526315789473684,
+                  "ADVERSE_FIRST": 0.18796992481203006,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.706766917293233
+                },
+                "median_adverse_before_touch": 0.01545993953482605,
+                "median_adverse_including_touch_bar": 0.01545993953482605
+              }
+            }
+          }
+        },
+        "matched": {
+          "4": {
+            "n": 130,
+            "mean": -0.0020188020232034636,
+            "ci95": [
+              -0.004743174693698808,
+              0.0010777166376382296
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "12": {
+            "n": 130,
+            "mean": -0.0028367761900509004,
+            "ci95": [
+              -0.007730803248473319,
+              0.0021262931362060126
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "24": {
+            "n": 130,
+            "mean": -0.00846562559197014,
+            "ci95": [
+              -0.018912517509339075,
+              0.0008134230483175499
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "72": {
+            "n": 130,
+            "mean": -0.01352607480640546,
+            "ci95": [
+              -0.03379536403337799,
+              0.005591346729173179
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          }
+        },
+        "episode_extension": {
+          "n_total": 133,
+          "n_complete": 133,
+          "n_incomplete": 0,
+          "n_directional": 133,
+          "raw_return_mean": -0.0007374337902443786,
+          "signed_return": {
+            "mean": -0.0007374337902443786,
+            "median": -0.002044041691151466
+          },
+          "mfe": {
+            "mean": 0.011754836132291821,
+            "median": 0.005726428117196258
+          },
+          "mae": {
+            "mean": -0.009571854153477711,
+            "median": -0.0058233772309010945
+          },
+          "directional_accuracy": 0.37593984962406013,
+          "targets": {
+            "2": {
+              "n": 133,
+              "favorable_hit_rate": 0.16541353383458646,
+              "adverse_hit_rate": 0.12781954887218044,
+              "median_hour_to_target": 2.0,
+              "median_hour_to_adverse": 2.0,
+              "race": {
+                "FAVORABLE_FIRST": 0.15789473684210525,
+                "ADVERSE_FIRST": 0.10526315789473684,
+                "AMBIGUOUS": 0.007518796992481203,
+                "UNRESOLVED": 0.7293233082706767
+              },
+              "median_adverse_before_touch": 0.0005288269686922753,
+              "median_adverse_including_touch_bar": 0.0027629187927237786
+            },
+            "5": {
+              "n": 133,
+              "favorable_hit_rate": 0.045112781954887216,
+              "adverse_hit_rate": 0.007518796992481203,
+              "median_hour_to_target": 5.0,
+              "median_hour_to_adverse": 3.0,
+              "race": {
+                "FAVORABLE_FIRST": 0.045112781954887216,
+                "ADVERSE_FIRST": 0.007518796992481203,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.9473684210526315
+              },
+              "median_adverse_before_touch": 0.002928739581210482,
+              "median_adverse_including_touch_bar": 0.002928739581210482
+            },
+            "10": {
+              "n": 133,
+              "favorable_hit_rate": 0.007518796992481203,
+              "adverse_hit_rate": 0.0,
+              "median_hour_to_target": 5.0,
+              "median_hour_to_adverse": null,
+              "race": {
+                "FAVORABLE_FIRST": 0.007518796992481203,
+                "ADVERSE_FIRST": 0.0,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.9924812030075187
+              },
+              "median_adverse_before_touch": 0.0032690968852771007,
+              "median_adverse_including_touch_bar": 0.0032690968852771007
+            }
+          }
+        },
+        "median_persistence_hours": 3.0,
+        "false_reversal_n": 0,
+        "false_reversal_rate": null,
+        "mature_72h_for_timing": 133,
+        "aligned_hourly_impulse_within72h": 0.9849624060150376,
+        "median_hours_to_aligned_impulse": 1.0,
+        "macro_flip_within72h": 0.11278195488721804
+      },
+      "POSSIBLE_BEARISH_TRANSITION": {
+        "n_episodes": 144,
+        "horizons": {
+          "4": {
+            "n_total": 144,
+            "n_complete": 144,
+            "n_incomplete": 0,
+            "n_directional": 144,
+            "raw_return_mean": 0.0002468944981020016,
+            "signed_return": {
+              "mean": -0.0002468944981020016,
+              "median": -0.0008504172296626145
+            },
+            "mfe": {
+              "mean": 0.01409727288119439,
+              "median": 0.008852199638968716
+            },
+            "mae": {
+              "mean": -0.011104926425514146,
+              "median": -0.008227508672908002
+            },
+            "directional_accuracy": 0.4722222222222222,
+            "targets": {
+              "2": {
+                "n": 144,
+                "favorable_hit_rate": 0.1875,
+                "adverse_hit_rate": 0.16666666666666666,
+                "median_hour_to_target": 2.0,
+                "median_hour_to_adverse": 3.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.1736111111111111,
+                  "ADVERSE_FIRST": 0.1527777777777778,
+                  "AMBIGUOUS": 0.006944444444444444,
+                  "UNRESOLVED": 0.6666666666666666
+                },
+                "median_adverse_before_touch": 0.0024895521360879247,
+                "median_adverse_including_touch_bar": 0.003861857672150304
+              },
+              "5": {
+                "n": 144,
+                "favorable_hit_rate": 0.034722222222222224,
+                "adverse_hit_rate": 0.006944444444444444,
+                "median_hour_to_target": 2.0,
+                "median_hour_to_adverse": 3.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.034722222222222224,
+                  "ADVERSE_FIRST": 0.006944444444444444,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9583333333333334
+                },
+                "median_adverse_before_touch": 0.004395148929195791,
+                "median_adverse_including_touch_bar": 0.011629025220525113
+              },
+              "10": {
+                "n": 144,
+                "favorable_hit_rate": 0.006944444444444444,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": 2.0,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.006944444444444444,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9930555555555556
+                },
+                "median_adverse_before_touch": 0.004395148929195791,
+                "median_adverse_including_touch_bar": 0.004395148929195791
+              }
+            }
+          },
+          "12": {
+            "n_total": 144,
+            "n_complete": 144,
+            "n_incomplete": 0,
+            "n_directional": 144,
+            "raw_return_mean": 0.002420596175827997,
+            "signed_return": {
+              "mean": -0.002420596175827997,
+              "median": -0.00525600444927643
+            },
+            "mfe": {
+              "mean": 0.022425477395634958,
+              "median": 0.014378617176937558
+            },
+            "mae": {
+              "mean": -0.020666046343388214,
+              "median": -0.016170108037379505
+            },
+            "directional_accuracy": 0.4097222222222222,
+            "targets": {
+              "2": {
+                "n": 144,
+                "favorable_hit_rate": 0.3958333333333333,
+                "adverse_hit_rate": 0.4166666666666667,
+                "median_hour_to_target": 5.0,
+                "median_hour_to_adverse": 6.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.3541666666666667,
+                  "ADVERSE_FIRST": 0.3402777777777778,
+                  "AMBIGUOUS": 0.006944444444444444,
+                  "UNRESOLVED": 0.2986111111111111
+                },
+                "median_adverse_before_touch": 0.004473028948213775,
+                "median_adverse_including_touch_bar": 0.006480190304322786
+              },
+              "5": {
+                "n": 144,
+                "favorable_hit_rate": 0.09722222222222222,
+                "adverse_hit_rate": 0.0625,
+                "median_hour_to_target": 6.5,
+                "median_hour_to_adverse": 9.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.09027777777777778,
+                  "ADVERSE_FIRST": 0.05555555555555555,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.8541666666666666
+                },
+                "median_adverse_before_touch": 0.005127892821288227,
+                "median_adverse_including_touch_bar": 0.007342423433270517
+              },
+              "10": {
+                "n": 144,
+                "favorable_hit_rate": 0.020833333333333332,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": 7.0,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.020833333333333332,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9791666666666666
+                },
+                "median_adverse_before_touch": 0.02509534722692086,
+                "median_adverse_including_touch_bar": 0.02509534722692086
+              }
+            }
+          },
+          "24": {
+            "n_total": 144,
+            "n_complete": 144,
+            "n_incomplete": 0,
+            "n_directional": 144,
+            "raw_return_mean": 0.0065645323917937395,
+            "signed_return": {
+              "mean": -0.0065645323917937395,
+              "median": -0.0073055433938447045
+            },
+            "mfe": {
+              "mean": 0.029355831534157377,
+              "median": 0.020924345197748606
+            },
+            "mae": {
+              "mean": -0.029945577463424633,
+              "median": -0.024530932543375794
+            },
+            "directional_accuracy": 0.375,
+            "targets": {
+              "2": {
+                "n": 144,
+                "favorable_hit_rate": 0.5138888888888888,
+                "adverse_hit_rate": 0.5555555555555556,
+                "median_hour_to_target": 6.0,
+                "median_hour_to_adverse": 8.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.4513888888888889,
+                  "ADVERSE_FIRST": 0.4375,
+                  "AMBIGUOUS": 0.006944444444444444,
+                  "UNRESOLVED": 0.10416666666666667
+                },
+                "median_adverse_before_touch": 0.005652924370139312,
+                "median_adverse_including_touch_bar": 0.006875679232188681
+              },
+              "5": {
+                "n": 144,
+                "favorable_hit_rate": 0.14583333333333334,
+                "adverse_hit_rate": 0.2222222222222222,
+                "median_hour_to_target": 10.0,
+                "median_hour_to_adverse": 17.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.1388888888888889,
+                  "ADVERSE_FIRST": 0.2152777777777778,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.6458333333333334
+                },
+                "median_adverse_before_touch": 0.009180136123014826,
+                "median_adverse_including_touch_bar": 0.010116222531078023
+              },
+              "10": {
+                "n": 144,
+                "favorable_hit_rate": 0.041666666666666664,
+                "adverse_hit_rate": 0.013888888888888888,
+                "median_hour_to_target": 11.0,
+                "median_hour_to_adverse": 20.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.041666666666666664,
+                  "ADVERSE_FIRST": 0.013888888888888888,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9444444444444444
+                },
+                "median_adverse_before_touch": 0.012872750305764846,
+                "median_adverse_including_touch_bar": 0.012872750305764846
+              }
+            }
+          },
+          "72": {
+            "n_total": 144,
+            "n_complete": 144,
+            "n_incomplete": 0,
+            "n_directional": 144,
+            "raw_return_mean": 0.022585600885193055,
+            "signed_return": {
+              "mean": -0.022585600885193055,
+              "median": -0.020331615125008473
+            },
+            "mfe": {
+              "mean": 0.04295232503325681,
+              "median": 0.03391952068772386
+            },
+            "mae": {
+              "mean": -0.06047923367503863,
+              "median": -0.04666559825920136
+            },
+            "directional_accuracy": 0.4027777777777778,
+            "targets": {
+              "2": {
+                "n": 144,
+                "favorable_hit_rate": 0.7222222222222222,
+                "adverse_hit_rate": 0.75,
+                "median_hour_to_target": 11.0,
+                "median_hour_to_adverse": 11.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.5138888888888888,
+                  "ADVERSE_FIRST": 0.4791666666666667,
+                  "AMBIGUOUS": 0.006944444444444444,
+                  "UNRESOLVED": 0.0
+                },
+                "median_adverse_before_touch": 0.010171680223492241,
+                "median_adverse_including_touch_bar": 0.011079288251015229
+              },
+              "5": {
+                "n": 144,
+                "favorable_hit_rate": 0.2638888888888889,
+                "adverse_hit_rate": 0.4861111111111111,
+                "median_hour_to_target": 21.0,
+                "median_hour_to_adverse": 29.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.2222222222222222,
+                  "ADVERSE_FIRST": 0.4652777777777778,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.3125
+                },
+                "median_adverse_before_touch": 0.011125438151878941,
+                "median_adverse_including_touch_bar": 0.011391334492452887
+              },
+              "10": {
+                "n": 144,
+                "favorable_hit_rate": 0.1111111111111111,
+                "adverse_hit_rate": 0.18055555555555555,
+                "median_hour_to_target": 34.0,
+                "median_hour_to_adverse": 53.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.1111111111111111,
+                  "ADVERSE_FIRST": 0.1736111111111111,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.7152777777777778
+                },
+                "median_adverse_before_touch": 0.014705780722705675,
+                "median_adverse_including_touch_bar": 0.014705780722705675
+              }
+            }
+          }
+        },
+        "matched": {
+          "4": {
+            "n": 142,
+            "mean": 0.00021767849840256676,
+            "ci95": [
+              -0.001910299809261354,
+              0.002386419947264294
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "12": {
+            "n": 142,
+            "mean": 0.00020842325436180962,
+            "ci95": [
+              -0.00495794692103089,
+              0.004858670458134319
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "24": {
+            "n": 142,
+            "mean": -0.0010227069194026748,
+            "ci95": [
+              -0.007791616536440858,
+              0.0068108752281542525
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "72": {
+            "n": 142,
+            "mean": -0.004789976471476757,
+            "ci95": [
+              -0.023385833306674653,
+              0.01299312049665893
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          }
+        },
+        "episode_extension": {
+          "n_total": 144,
+          "n_complete": 144,
+          "n_incomplete": 0,
+          "n_directional": 144,
+          "raw_return_mean": 0.000624506197549331,
+          "signed_return": {
+            "mean": -0.000624506197549331,
+            "median": -0.001728488294300945
+          },
+          "mfe": {
+            "mean": 0.015611400832044812,
+            "median": 0.008253949252424064
+          },
+          "mae": {
+            "mean": -0.009506936578234038,
+            "median": -0.006541213034341964
+          },
+          "directional_accuracy": 0.3402777777777778,
+          "targets": {
+            "2": {
+              "n": 144,
+              "favorable_hit_rate": 0.2222222222222222,
+              "adverse_hit_rate": 0.125,
+              "median_hour_to_target": 2.0,
+              "median_hour_to_adverse": 3.0,
+              "race": {
+                "FAVORABLE_FIRST": 0.20833333333333334,
+                "ADVERSE_FIRST": 0.09722222222222222,
+                "AMBIGUOUS": 0.006944444444444444,
+                "UNRESOLVED": 0.6875
+              },
+              "median_adverse_before_touch": 0.001974116034263562,
+              "median_adverse_including_touch_bar": 0.0035022967536552096
+            },
+            "5": {
+              "n": 144,
+              "favorable_hit_rate": 0.04861111111111111,
+              "adverse_hit_rate": 0.0,
+              "median_hour_to_target": 2.0,
+              "median_hour_to_adverse": null,
+              "race": {
+                "FAVORABLE_FIRST": 0.04861111111111111,
+                "ADVERSE_FIRST": 0.0,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.9513888888888888
+              },
+              "median_adverse_before_touch": 0.005504710743526209,
+              "median_adverse_including_touch_bar": 0.009180136123014826
+            },
+            "10": {
+              "n": 144,
+              "favorable_hit_rate": 0.013888888888888888,
+              "adverse_hit_rate": 0.0,
+              "median_hour_to_target": 4.5,
+              "median_hour_to_adverse": null,
+              "race": {
+                "FAVORABLE_FIRST": 0.013888888888888888,
+                "ADVERSE_FIRST": 0.0,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.9861111111111112
+              },
+              "median_adverse_before_touch": 0.014745248078058326,
+              "median_adverse_including_touch_bar": 0.014745248078058326
+            }
+          }
+        },
+        "median_persistence_hours": 4.0,
+        "false_reversal_n": 0,
+        "false_reversal_rate": null,
+        "mature_72h_for_timing": 144,
+        "aligned_hourly_impulse_within72h": 0.9930555555555556,
+        "median_hours_to_aligned_impulse": 1.0,
+        "macro_flip_within72h": 0.09027777777777778
+      }
+    },
+    "VALIDATION": {
+      "UP_WITH_1H_PULLBACK": {
+        "n_episodes": 244,
+        "horizons": {
+          "4": {
+            "n_total": 244,
+            "n_complete": 244,
+            "n_incomplete": 0,
+            "n_directional": 244,
+            "raw_return_mean": 0.0006252361428112191,
+            "signed_return": {
+              "mean": 0.0006252361428112191,
+              "median": 0.001039998670876674
+            },
+            "mfe": {
+              "mean": 0.007016897891585529,
+              "median": 0.004860993078580678
+            },
+            "mae": {
+              "mean": -0.007337588712240595,
+              "median": -0.00475279615261448
+            },
+            "directional_accuracy": 0.5737704918032787,
+            "targets": {
+              "2": {
+                "n": 244,
+                "favorable_hit_rate": 0.05737704918032787,
+                "adverse_hit_rate": 0.05737704918032787,
+                "median_hour_to_target": 3.0,
+                "median_hour_to_adverse": 2.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.05737704918032787,
+                  "ADVERSE_FIRST": 0.05737704918032787,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.8852459016393442
+                },
+                "median_adverse_before_touch": 0.002952126869557037,
+                "median_adverse_including_touch_bar": 0.002952126869557037
+              },
+              "5": {
+                "n": 244,
+                "favorable_hit_rate": 0.0,
+                "adverse_hit_rate": 0.004098360655737705,
+                "median_hour_to_target": null,
+                "median_hour_to_adverse": 2.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0,
+                  "ADVERSE_FIRST": 0.004098360655737705,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9959016393442623
+                },
+                "median_adverse_before_touch": null,
+                "median_adverse_including_touch_bar": null
+              },
+              "10": {
+                "n": 244,
+                "favorable_hit_rate": 0.0,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": null,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 1.0
+                },
+                "median_adverse_before_touch": null,
+                "median_adverse_including_touch_bar": null
+              }
+            }
+          },
+          "12": {
+            "n_total": 244,
+            "n_complete": 244,
+            "n_incomplete": 0,
+            "n_directional": 244,
+            "raw_return_mean": 0.0004053035787555738,
+            "signed_return": {
+              "mean": 0.0004053035787555738,
+              "median": 0.00057740664569228
+            },
+            "mfe": {
+              "mean": 0.012869040514533572,
+              "median": 0.00849823066876576
+            },
+            "mae": {
+              "mean": -0.012323024769658302,
+              "median": -0.008523770064852887
+            },
+            "directional_accuracy": 0.5204918032786885,
+            "targets": {
+              "2": {
+                "n": 244,
+                "favorable_hit_rate": 0.19262295081967212,
+                "adverse_hit_rate": 0.1885245901639344,
+                "median_hour_to_target": 6.0,
+                "median_hour_to_adverse": 7.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.19262295081967212,
+                  "ADVERSE_FIRST": 0.1762295081967213,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.6311475409836066
+                },
+                "median_adverse_before_touch": 0.0033045887301730303,
+                "median_adverse_including_touch_bar": 0.0035121683467218556
+              },
+              "5": {
+                "n": 244,
+                "favorable_hit_rate": 0.03278688524590164,
+                "adverse_hit_rate": 0.00819672131147541,
+                "median_hour_to_target": 9.5,
+                "median_hour_to_adverse": 7.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.03278688524590164,
+                  "ADVERSE_FIRST": 0.00819672131147541,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9590163934426229
+                },
+                "median_adverse_before_touch": 0.003971329052225192,
+                "median_adverse_including_touch_bar": 0.003971329052225192
+              },
+              "10": {
+                "n": 244,
+                "favorable_hit_rate": 0.0,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": null,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 1.0
+                },
+                "median_adverse_before_touch": null,
+                "median_adverse_including_touch_bar": null
+              }
+            }
+          },
+          "24": {
+            "n_total": 244,
+            "n_complete": 244,
+            "n_incomplete": 0,
+            "n_directional": 244,
+            "raw_return_mean": -0.0010452492908703665,
+            "signed_return": {
+              "mean": -0.0010452492908703665,
+              "median": -0.0026589452672564073
+            },
+            "mfe": {
+              "mean": 0.01851038952584793,
+              "median": 0.011524518339784295
+            },
+            "mae": {
+              "mean": -0.01882826252317788,
+              "median": -0.015124637085161985
+            },
+            "directional_accuracy": 0.45901639344262296,
+            "targets": {
+              "2": {
+                "n": 244,
+                "favorable_hit_rate": 0.35655737704918034,
+                "adverse_hit_rate": 0.38524590163934425,
+                "median_hour_to_target": 11.0,
+                "median_hour_to_adverse": 13.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.3483606557377049,
+                  "ADVERSE_FIRST": 0.3401639344262295,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.3114754098360656
+                },
+                "median_adverse_before_touch": 0.003597028314622497,
+                "median_adverse_including_touch_bar": 0.003943122997064563
+              },
+              "5": {
+                "n": 244,
+                "favorable_hit_rate": 0.07377049180327869,
+                "adverse_hit_rate": 0.06147540983606557,
+                "median_hour_to_target": 13.5,
+                "median_hour_to_adverse": 19.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.07377049180327869,
+                  "ADVERSE_FIRST": 0.06147540983606557,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.8647540983606558
+                },
+                "median_adverse_before_touch": 0.0022088945609988753,
+                "median_adverse_including_touch_bar": 0.0022088945609988753
+              },
+              "10": {
+                "n": 244,
+                "favorable_hit_rate": 0.004098360655737705,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": 22.0,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.004098360655737705,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9959016393442623
+                },
+                "median_adverse_before_touch": 0.0002576630911935718,
+                "median_adverse_including_touch_bar": 0.0002576630911935718
+              }
+            }
+          },
+          "72": {
+            "n_total": 244,
+            "n_complete": 244,
+            "n_incomplete": 0,
+            "n_directional": 244,
+            "raw_return_mean": -0.0026210230477153058,
+            "signed_return": {
+              "mean": -0.0026210230477153058,
+              "median": -0.0026805840226672983
+            },
+            "mfe": {
+              "mean": 0.03278719611981994,
+              "median": 0.02538495029226695
+            },
+            "mae": {
+              "mean": -0.034203288737648475,
+              "median": -0.027026713853625373
+            },
+            "directional_accuracy": 0.45491803278688525,
+            "targets": {
+              "2": {
+                "n": 244,
+                "favorable_hit_rate": 0.569672131147541,
+                "adverse_hit_rate": 0.639344262295082,
+                "median_hour_to_target": 20.0,
+                "median_hour_to_adverse": 21.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.48770491803278687,
+                  "ADVERSE_FIRST": 0.5040983606557377,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.00819672131147541
+                },
+                "median_adverse_before_touch": 0.005836012819048997,
+                "median_adverse_including_touch_bar": 0.006512729425695696
+              },
+              "5": {
+                "n": 244,
+                "favorable_hit_rate": 0.20901639344262296,
+                "adverse_hit_rate": 0.20081967213114754,
+                "median_hour_to_target": 42.0,
+                "median_hour_to_adverse": 31.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.20901639344262296,
+                  "ADVERSE_FIRST": 0.20081967213114754,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.5901639344262295
+                },
+                "median_adverse_before_touch": 0.003575251938947366,
+                "median_adverse_including_touch_bar": 0.003575251938947366
+              },
+              "10": {
+                "n": 244,
+                "favorable_hit_rate": 0.045081967213114756,
+                "adverse_hit_rate": 0.036885245901639344,
+                "median_hour_to_target": 48.0,
+                "median_hour_to_adverse": 43.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.045081967213114756,
+                  "ADVERSE_FIRST": 0.036885245901639344,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9180327868852459
+                },
+                "median_adverse_before_touch": 0.0014426961104913039,
+                "median_adverse_including_touch_bar": 0.0014426961104913039
+              }
+            }
+          }
+        },
+        "matched": {
+          "4": {
+            "n": 239,
+            "mean": -7.382564449779783e-05,
+            "ci95": [
+              -0.0014629691419315396,
+              0.0013868657719206974
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "12": {
+            "n": 239,
+            "mean": -0.00048028969669072855,
+            "ci95": [
+              -0.00302748885320307,
+              0.0020074378727358566
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "24": {
+            "n": 239,
+            "mean": -0.0027610484453386933,
+            "ci95": [
+              -0.007168961567206737,
+              0.0012959664389647233
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "72": {
+            "n": 239,
+            "mean": -0.008167997192786072,
+            "ci95": [
+              -0.016370898272057115,
+              -0.00013654055919296314
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          }
+        },
+        "episode_extension": {
+          "n_total": 244,
+          "n_complete": 244,
+          "n_incomplete": 0,
+          "n_directional": 244,
+          "raw_return_mean": -6.36757067953079e-05,
+          "signed_return": {
+            "mean": -6.36757067953079e-05,
+            "median": 0.0011697271565520584
+          },
+          "mfe": {
+            "mean": 0.004986780668508125,
+            "median": 0.0038497811773567925
+          },
+          "mae": {
+            "mean": -0.006452424135909529,
+            "median": -0.0035174679313523805
+          },
+          "directional_accuracy": 0.610655737704918,
+          "targets": {
+            "2": {
+              "n": 244,
+              "favorable_hit_rate": 0.01639344262295082,
+              "adverse_hit_rate": 0.06147540983606557,
+              "median_hour_to_target": 2.5,
+              "median_hour_to_adverse": 3.0,
+              "race": {
+                "FAVORABLE_FIRST": 0.01639344262295082,
+                "ADVERSE_FIRST": 0.05737704918032787,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.9262295081967213
+              },
+              "median_adverse_before_touch": 0.0017764860006667105,
+              "median_adverse_including_touch_bar": 0.0017764860006667105
+            },
+            "5": {
+              "n": 244,
+              "favorable_hit_rate": 0.0,
+              "adverse_hit_rate": 0.004098360655737705,
+              "median_hour_to_target": null,
+              "median_hour_to_adverse": 2.0,
+              "race": {
+                "FAVORABLE_FIRST": 0.0,
+                "ADVERSE_FIRST": 0.004098360655737705,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.9959016393442623
+              },
+              "median_adverse_before_touch": null,
+              "median_adverse_including_touch_bar": null
+            },
+            "10": {
+              "n": 244,
+              "favorable_hit_rate": 0.0,
+              "adverse_hit_rate": 0.0,
+              "median_hour_to_target": null,
+              "median_hour_to_adverse": null,
+              "race": {
+                "FAVORABLE_FIRST": 0.0,
+                "ADVERSE_FIRST": 0.0,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 1.0
+              },
+              "median_adverse_before_touch": null,
+              "median_adverse_including_touch_bar": null
+            }
+          }
+        },
+        "median_persistence_hours": 2.0,
+        "false_reversal_n": 0,
+        "false_reversal_rate": null,
+        "mature_72h_for_timing": 244,
+        "aligned_hourly_impulse_within72h": 0.9754098360655737,
+        "median_hours_to_aligned_impulse": 10.0,
+        "macro_flip_within72h": 0.004098360655737705
+      },
+      "DOWN_WITH_1H_PULLBACK": {
+        "n_episodes": 295,
+        "horizons": {
+          "4": {
+            "n_total": 295,
+            "n_complete": 295,
+            "n_incomplete": 0,
+            "n_directional": 295,
+            "raw_return_mean": 0.00047960861660437424,
+            "signed_return": {
+              "mean": -0.00047960861660437424,
+              "median": 0.0006048561306489786
+            },
+            "mfe": {
+              "mean": 0.00823039591784903,
+              "median": 0.004687362462097888
+            },
+            "mae": {
+              "mean": -0.008924897401774752,
+              "median": -0.0050199280109224365
+            },
+            "directional_accuracy": 0.5694915254237288,
+            "targets": {
+              "2": {
+                "n": 295,
+                "favorable_hit_rate": 0.08813559322033898,
+                "adverse_hit_rate": 0.12542372881355932,
+                "median_hour_to_target": 2.5,
+                "median_hour_to_adverse": 2.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.08135593220338982,
+                  "ADVERSE_FIRST": 0.12542372881355932,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.7932203389830509
+                },
+                "median_adverse_before_touch": 0.0034164257660053154,
+                "median_adverse_including_touch_bar": 0.004085549996295401
+              },
+              "5": {
+                "n": 295,
+                "favorable_hit_rate": 0.010169491525423728,
+                "adverse_hit_rate": 0.01694915254237288,
+                "median_hour_to_target": 3.0,
+                "median_hour_to_adverse": 3.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.010169491525423728,
+                  "ADVERSE_FIRST": 0.01694915254237288,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9728813559322034
+                },
+                "median_adverse_before_touch": 0.004841281962939092,
+                "median_adverse_including_touch_bar": 0.004841281962939092
+              },
+              "10": {
+                "n": 295,
+                "favorable_hit_rate": 0.0,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": null,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 1.0
+                },
+                "median_adverse_before_touch": null,
+                "median_adverse_including_touch_bar": null
+              }
+            }
+          },
+          "12": {
+            "n_total": 295,
+            "n_complete": 295,
+            "n_incomplete": 0,
+            "n_directional": 295,
+            "raw_return_mean": 0.0005515948335141218,
+            "signed_return": {
+              "mean": -0.0005515948335141218,
+              "median": 0.0006792072926866677
+            },
+            "mfe": {
+              "mean": 0.014531766891748123,
+              "median": 0.008956276684855102
+            },
+            "mae": {
+              "mean": -0.01520561199774429,
+              "median": -0.009539876871740738
+            },
+            "directional_accuracy": 0.5254237288135594,
+            "targets": {
+              "2": {
+                "n": 295,
+                "favorable_hit_rate": 0.2135593220338983,
+                "adverse_hit_rate": 0.2677966101694915,
+                "median_hour_to_target": 5.0,
+                "median_hour_to_adverse": 5.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.18305084745762712,
+                  "ADVERSE_FIRST": 0.24745762711864408,
+                  "AMBIGUOUS": 0.003389830508474576,
+                  "UNRESOLVED": 0.5661016949152542
+                },
+                "median_adverse_before_touch": 0.0041349889920732075,
+                "median_adverse_including_touch_bar": 0.004841281962939092
+              },
+              "5": {
+                "n": 295,
+                "favorable_hit_rate": 0.05084745762711865,
+                "adverse_hit_rate": 0.05084745762711865,
+                "median_hour_to_target": 7.0,
+                "median_hour_to_adverse": 5.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.04745762711864407,
+                  "ADVERSE_FIRST": 0.04745762711864407,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9050847457627119
+                },
+                "median_adverse_before_touch": 0.00907910959015501,
+                "median_adverse_including_touch_bar": 0.00907910959015501
+              },
+              "10": {
+                "n": 295,
+                "favorable_hit_rate": 0.003389830508474576,
+                "adverse_hit_rate": 0.006779661016949152,
+                "median_hour_to_target": 10.0,
+                "median_hour_to_adverse": 12.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.003389830508474576,
+                  "ADVERSE_FIRST": 0.006779661016949152,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9898305084745763
+                },
+                "median_adverse_before_touch": 0.007315847337835857,
+                "median_adverse_including_touch_bar": 0.007315847337835857
+              }
+            }
+          },
+          "24": {
+            "n_total": 295,
+            "n_complete": 295,
+            "n_incomplete": 0,
+            "n_directional": 295,
+            "raw_return_mean": 0.0015906257191929474,
+            "signed_return": {
+              "mean": -0.0015906257191929474,
+              "median": 0.001312177511164525
+            },
+            "mfe": {
+              "mean": 0.021327788954928106,
+              "median": 0.012825555478432449
+            },
+            "mae": {
+              "mean": -0.02284975720860604,
+              "median": -0.017042821158690158
+            },
+            "directional_accuracy": 0.5525423728813559,
+            "targets": {
+              "2": {
+                "n": 295,
+                "favorable_hit_rate": 0.3254237288135593,
+                "adverse_hit_rate": 0.4135593220338983,
+                "median_hour_to_target": 8.0,
+                "median_hour_to_adverse": 8.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.26101694915254237,
+                  "ADVERSE_FIRST": 0.376271186440678,
+                  "AMBIGUOUS": 0.003389830508474576,
+                  "UNRESOLVED": 0.3593220338983051
+                },
+                "median_adverse_before_touch": 0.005110251682601263,
+                "median_adverse_including_touch_bar": 0.005176945351109241
+              },
+              "5": {
+                "n": 295,
+                "favorable_hit_rate": 0.09491525423728814,
+                "adverse_hit_rate": 0.10847457627118644,
+                "median_hour_to_target": 11.0,
+                "median_hour_to_adverse": 13.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.09152542372881356,
+                  "ADVERSE_FIRST": 0.1016949152542373,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.8067796610169492
+                },
+                "median_adverse_before_touch": 0.008047381265449571,
+                "median_adverse_including_touch_bar": 0.008047381265449571
+              },
+              "10": {
+                "n": 295,
+                "favorable_hit_rate": 0.01694915254237288,
+                "adverse_hit_rate": 0.023728813559322035,
+                "median_hour_to_target": 17.0,
+                "median_hour_to_adverse": 20.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.01694915254237288,
+                  "ADVERSE_FIRST": 0.023728813559322035,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9593220338983051
+                },
+                "median_adverse_before_touch": 0.02475835224397427,
+                "median_adverse_including_touch_bar": 0.02475835224397427
+              }
+            }
+          },
+          "72": {
+            "n_total": 295,
+            "n_complete": 295,
+            "n_incomplete": 0,
+            "n_directional": 295,
+            "raw_return_mean": 0.0026744574894226087,
+            "signed_return": {
+              "mean": -0.0026744574894226087,
+              "median": -0.0008253497288881473
+            },
+            "mfe": {
+              "mean": 0.03827331385017572,
+              "median": 0.027054971566431107
+            },
+            "mae": {
+              "mean": -0.03993805917231504,
+              "median": -0.026422093821909964
+            },
+            "directional_accuracy": 0.488135593220339,
+            "targets": {
+              "2": {
+                "n": 295,
+                "favorable_hit_rate": 0.6169491525423729,
+                "adverse_hit_rate": 0.6406779661016949,
+                "median_hour_to_target": 23.0,
+                "median_hour_to_adverse": 15.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.41694915254237286,
+                  "ADVERSE_FIRST": 0.47796610169491527,
+                  "AMBIGUOUS": 0.003389830508474576,
+                  "UNRESOLVED": 0.1016949152542373
+                },
+                "median_adverse_before_touch": 0.009207642716859477,
+                "median_adverse_including_touch_bar": 0.009702720978957968
+              },
+              "5": {
+                "n": 295,
+                "favorable_hit_rate": 0.2305084745762712,
+                "adverse_hit_rate": 0.28135593220338984,
+                "median_hour_to_target": 29.0,
+                "median_hour_to_adverse": 29.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.22372881355932203,
+                  "ADVERSE_FIRST": 0.24745762711864408,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.5288135593220339
+                },
+                "median_adverse_before_touch": 0.014452552212439684,
+                "median_adverse_including_touch_bar": 0.015440827221794184
+              },
+              "10": {
+                "n": 295,
+                "favorable_hit_rate": 0.0711864406779661,
+                "adverse_hit_rate": 0.05423728813559322,
+                "median_hour_to_target": 38.0,
+                "median_hour_to_adverse": 29.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0711864406779661,
+                  "ADVERSE_FIRST": 0.05423728813559322,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.8745762711864407
+                },
+                "median_adverse_before_touch": 0.024354411789295982,
+                "median_adverse_including_touch_bar": 0.024354411789295982
+              }
+            }
+          }
+        },
+        "matched": {
+          "4": {
+            "n": 286,
+            "mean": -0.00017791609693129778,
+            "ci95": [
+              -0.001688328260245214,
+              0.0012578317058759647
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "12": {
+            "n": 286,
+            "mean": -0.0008026509572195352,
+            "ci95": [
+              -0.004213026093793846,
+              0.002710958571156719
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "24": {
+            "n": 286,
+            "mean": -0.0017870454951768187,
+            "ci95": [
+              -0.007701309019071733,
+              0.004471107181272864
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "72": {
+            "n": 286,
+            "mean": -0.004030566390027989,
+            "ci95": [
+              -0.014320273311136774,
+              0.005043655185015969
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          }
+        },
+        "episode_extension": {
+          "n_total": 295,
+          "n_complete": 295,
+          "n_incomplete": 0,
+          "n_directional": 295,
+          "raw_return_mean": -0.0006522556364604274,
+          "signed_return": {
+            "mean": 0.0006522556364604274,
+            "median": 0.0011677298424886962
+          },
+          "mfe": {
+            "mean": 0.006689806564685291,
+            "median": 0.0037866786781742823
+          },
+          "mae": {
+            "mean": -0.007298285689018079,
+            "median": -0.0037031040264075
+          },
+          "directional_accuracy": 0.5932203389830508,
+          "targets": {
+            "2": {
+              "n": 295,
+              "favorable_hit_rate": 0.06440677966101695,
+              "adverse_hit_rate": 0.09491525423728814,
+              "median_hour_to_target": 2.0,
+              "median_hour_to_adverse": 2.0,
+              "race": {
+                "FAVORABLE_FIRST": 0.05084745762711865,
+                "ADVERSE_FIRST": 0.09152542372881356,
+                "AMBIGUOUS": 0.003389830508474576,
+                "UNRESOLVED": 0.8542372881355932
+              },
+              "median_adverse_before_touch": 0.0032977029793039847,
+              "median_adverse_including_touch_bar": 0.004841281962939092
+            },
+            "5": {
+              "n": 295,
+              "favorable_hit_rate": 0.006779661016949152,
+              "adverse_hit_rate": 0.020338983050847456,
+              "median_hour_to_target": 3.0,
+              "median_hour_to_adverse": 3.0,
+              "race": {
+                "FAVORABLE_FIRST": 0.006779661016949152,
+                "ADVERSE_FIRST": 0.020338983050847456,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.9728813559322034
+              },
+              "median_adverse_before_touch": 0.0033755648074472733,
+              "median_adverse_including_touch_bar": 0.0033755648074472733
+            },
+            "10": {
+              "n": 295,
+              "favorable_hit_rate": 0.0,
+              "adverse_hit_rate": 0.0,
+              "median_hour_to_target": null,
+              "median_hour_to_adverse": null,
+              "race": {
+                "FAVORABLE_FIRST": 0.0,
+                "ADVERSE_FIRST": 0.0,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 1.0
+              },
+              "median_adverse_before_touch": null,
+              "median_adverse_including_touch_bar": null
+            }
+          }
+        },
+        "median_persistence_hours": 2.0,
+        "false_reversal_n": 0,
+        "false_reversal_rate": null,
+        "mature_72h_for_timing": 295,
+        "aligned_hourly_impulse_within72h": 0.9864406779661017,
+        "median_hours_to_aligned_impulse": 11.0,
+        "macro_flip_within72h": 0.006779661016949152
+      },
+      "POSSIBLE_BULLISH_TRANSITION": {
+        "n_episodes": 139,
+        "horizons": {
+          "4": {
+            "n_total": 139,
+            "n_complete": 139,
+            "n_incomplete": 0,
+            "n_directional": 139,
+            "raw_return_mean": 0.0015991306217369074,
+            "signed_return": {
+              "mean": 0.0015991306217369074,
+              "median": 0.00082475458591591
+            },
+            "mfe": {
+              "mean": 0.01010224939682315,
+              "median": 0.007351703238116736
+            },
+            "mae": {
+              "mean": -0.006946414377699775,
+              "median": -0.0051715366578560795
+            },
+            "directional_accuracy": 0.5683453237410072,
+            "targets": {
+              "2": {
+                "n": 139,
+                "favorable_hit_rate": 0.1366906474820144,
+                "adverse_hit_rate": 0.050359712230215826,
+                "median_hour_to_target": 3.0,
+                "median_hour_to_adverse": 3.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.1366906474820144,
+                  "ADVERSE_FIRST": 0.050359712230215826,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.8129496402877698
+                },
+                "median_adverse_before_touch": 0.002232823010367646,
+                "median_adverse_including_touch_bar": 0.0030536477164782028
+              },
+              "5": {
+                "n": 139,
+                "favorable_hit_rate": 0.0,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": null,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 1.0
+                },
+                "median_adverse_before_touch": null,
+                "median_adverse_including_touch_bar": null
+              },
+              "10": {
+                "n": 139,
+                "favorable_hit_rate": 0.0,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": null,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 1.0
+                },
+                "median_adverse_before_touch": null,
+                "median_adverse_including_touch_bar": null
+              }
+            }
+          },
+          "12": {
+            "n_total": 139,
+            "n_complete": 139,
+            "n_incomplete": 0,
+            "n_directional": 139,
+            "raw_return_mean": 0.0007692323446506132,
+            "signed_return": {
+              "mean": 0.0007692323446506132,
+              "median": -0.00044784700577971126
+            },
+            "mfe": {
+              "mean": 0.016221311383792326,
+              "median": 0.011086219423589228
+            },
+            "mae": {
+              "mean": -0.013823822281074809,
+              "median": -0.009227187819736526
+            },
+            "directional_accuracy": 0.48201438848920863,
+            "targets": {
+              "2": {
+                "n": 139,
+                "favorable_hit_rate": 0.26618705035971224,
+                "adverse_hit_rate": 0.23741007194244604,
+                "median_hour_to_target": 4.0,
+                "median_hour_to_adverse": 7.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.2446043165467626,
+                  "ADVERSE_FIRST": 0.20863309352517986,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.5467625899280576
+                },
+                "median_adverse_before_touch": 0.004192138923473698,
+                "median_adverse_including_touch_bar": 0.004192138923473698
+              },
+              "5": {
+                "n": 139,
+                "favorable_hit_rate": 0.050359712230215826,
+                "adverse_hit_rate": 0.04316546762589928,
+                "median_hour_to_target": 10.0,
+                "median_hour_to_adverse": 10.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.050359712230215826,
+                  "ADVERSE_FIRST": 0.04316546762589928,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9064748201438849
+                },
+                "median_adverse_before_touch": 0.006027153914477834,
+                "median_adverse_including_touch_bar": 0.006027153914477834
+              },
+              "10": {
+                "n": 139,
+                "favorable_hit_rate": 0.007194244604316547,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": 12.0,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.007194244604316547,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9928057553956835
+                },
+                "median_adverse_before_touch": 0.018796941728130623,
+                "median_adverse_including_touch_bar": 0.018796941728130623
+              }
+            }
+          },
+          "24": {
+            "n_total": 139,
+            "n_complete": 139,
+            "n_incomplete": 0,
+            "n_directional": 139,
+            "raw_return_mean": 0.0012715981318586471,
+            "signed_return": {
+              "mean": 0.0012715981318586471,
+              "median": -0.00014254659491808042
+            },
+            "mfe": {
+              "mean": 0.02276459681537037,
+              "median": 0.015072348442738415
+            },
+            "mae": {
+              "mean": -0.020964395269803388,
+              "median": -0.01400768414680198
+            },
+            "directional_accuracy": 0.4892086330935252,
+            "targets": {
+              "2": {
+                "n": 139,
+                "favorable_hit_rate": 0.39568345323741005,
+                "adverse_hit_rate": 0.37410071942446044,
+                "median_hour_to_target": 6.0,
+                "median_hour_to_adverse": 10.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.34532374100719426,
+                  "ADVERSE_FIRST": 0.30935251798561153,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.34532374100719426
+                },
+                "median_adverse_before_touch": 0.005632629897316166,
+                "median_adverse_including_touch_bar": 0.006027153914477834
+              },
+              "5": {
+                "n": 139,
+                "favorable_hit_rate": 0.11510791366906475,
+                "adverse_hit_rate": 0.1079136690647482,
+                "median_hour_to_target": 16.5,
+                "median_hour_to_adverse": 13.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.11510791366906475,
+                  "ADVERSE_FIRST": 0.1079136690647482,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.7769784172661871
+                },
+                "median_adverse_before_touch": 0.005237622454711377,
+                "median_adverse_including_touch_bar": 0.005237622454711377
+              },
+              "10": {
+                "n": 139,
+                "favorable_hit_rate": 0.02877697841726619,
+                "adverse_hit_rate": 0.007194244604316547,
+                "median_hour_to_target": 22.0,
+                "median_hour_to_adverse": 20.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.02877697841726619,
+                  "ADVERSE_FIRST": 0.007194244604316547,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9640287769784173
+                },
+                "median_adverse_before_touch": 0.0062803065924860735,
+                "median_adverse_including_touch_bar": 0.0062803065924860735
+              }
+            }
+          },
+          "72": {
+            "n_total": 139,
+            "n_complete": 139,
+            "n_incomplete": 0,
+            "n_directional": 139,
+            "raw_return_mean": 0.011374707722851563,
+            "signed_return": {
+              "mean": 0.011374707722851563,
+              "median": 0.0023679364027824334
+            },
+            "mfe": {
+              "mean": 0.04469829035217907,
+              "median": 0.027743087213355944
+            },
+            "mae": {
+              "mean": -0.031700115613959384,
+              "median": -0.02644636557054758
+            },
+            "directional_accuracy": 0.539568345323741,
+            "targets": {
+              "2": {
+                "n": 139,
+                "favorable_hit_rate": 0.6402877697841727,
+                "adverse_hit_rate": 0.5539568345323741,
+                "median_hour_to_target": 15.0,
+                "median_hour_to_adverse": 14.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.4892086330935252,
+                  "ADVERSE_FIRST": 0.41007194244604317,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.10071942446043165
+                },
+                "median_adverse_before_touch": 0.008687553495948519,
+                "median_adverse_including_touch_bar": 0.00895776566757489
+              },
+              "5": {
+                "n": 139,
+                "favorable_hit_rate": 0.2733812949640288,
+                "adverse_hit_rate": 0.2517985611510791,
+                "median_hour_to_target": 30.0,
+                "median_hour_to_adverse": 35.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.23741007194244604,
+                  "ADVERSE_FIRST": 0.2517985611510791,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.5107913669064749
+                },
+                "median_adverse_before_touch": 0.010638004239728882,
+                "median_adverse_including_touch_bar": 0.010638004239728882
+              },
+              "10": {
+                "n": 139,
+                "favorable_hit_rate": 0.1366906474820144,
+                "adverse_hit_rate": 0.014388489208633094,
+                "median_hour_to_target": 42.0,
+                "median_hour_to_adverse": 43.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.1366906474820144,
+                  "ADVERSE_FIRST": 0.014388489208633094,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.8489208633093526
+                },
+                "median_adverse_before_touch": 0.009969778024802922,
+                "median_adverse_including_touch_bar": 0.009969778024802922
+              }
+            }
+          }
+        },
+        "matched": {
+          "4": {
+            "n": 136,
+            "mean": 0.002494020191031143,
+            "ci95": [
+              0.0004922566901078659,
+              0.004646850032547592
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "12": {
+            "n": 136,
+            "mean": 0.0001572626576957669,
+            "ci95": [
+              -0.0034309309829399686,
+              0.004048982058401633
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "24": {
+            "n": 136,
+            "mean": 0.002515106454699406,
+            "ci95": [
+              -0.006052434865639983,
+              0.011492389666552277
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "72": {
+            "n": 136,
+            "mean": 0.017234020387465455,
+            "ci95": [
+              0.0012649071247554434,
+              0.03284769249360376
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          }
+        },
+        "episode_extension": {
+          "n_total": 139,
+          "n_complete": 139,
+          "n_incomplete": 0,
+          "n_directional": 139,
+          "raw_return_mean": 0.0005749743408248925,
+          "signed_return": {
+            "mean": 0.0005749743408248925,
+            "median": -0.0006959777287127711
+          },
+          "mfe": {
+            "mean": 0.009578021588538614,
+            "median": 0.005863469269952404
+          },
+          "mae": {
+            "mean": -0.006148385278818487,
+            "median": -0.004788347014324845
+          },
+          "directional_accuracy": 0.4244604316546763,
+          "targets": {
+            "2": {
+              "n": 139,
+              "favorable_hit_rate": 0.12949640287769784,
+              "adverse_hit_rate": 0.007194244604316547,
+              "median_hour_to_target": 3.0,
+              "median_hour_to_adverse": 3.0,
+              "race": {
+                "FAVORABLE_FIRST": 0.12949640287769784,
+                "ADVERSE_FIRST": 0.007194244604316547,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.8633093525179856
+              },
+              "median_adverse_before_touch": 0.0025651965849038394,
+              "median_adverse_including_touch_bar": 0.0029756089379591177
+            },
+            "5": {
+              "n": 139,
+              "favorable_hit_rate": 0.007194244604316547,
+              "adverse_hit_rate": 0.0,
+              "median_hour_to_target": 7.0,
+              "median_hour_to_adverse": null,
+              "race": {
+                "FAVORABLE_FIRST": 0.007194244604316547,
+                "ADVERSE_FIRST": 0.0,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.9928057553956835
+              },
+              "median_adverse_before_touch": 0.0028975701594400327,
+              "median_adverse_including_touch_bar": 0.0028975701594400327
+            },
+            "10": {
+              "n": 139,
+              "favorable_hit_rate": 0.0,
+              "adverse_hit_rate": 0.0,
+              "median_hour_to_target": null,
+              "median_hour_to_adverse": null,
+              "race": {
+                "FAVORABLE_FIRST": 0.0,
+                "ADVERSE_FIRST": 0.0,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 1.0
+              },
+              "median_adverse_before_touch": null,
+              "median_adverse_including_touch_bar": null
+            }
+          }
+        },
+        "median_persistence_hours": 4.0,
+        "false_reversal_n": 0,
+        "false_reversal_rate": null,
+        "mature_72h_for_timing": 139,
+        "aligned_hourly_impulse_within72h": 1.0,
+        "median_hours_to_aligned_impulse": 1.0,
+        "macro_flip_within72h": 0.1510791366906475
+      },
+      "POSSIBLE_BEARISH_TRANSITION": {
+        "n_episodes": 139,
+        "horizons": {
+          "4": {
+            "n_total": 139,
+            "n_complete": 139,
+            "n_incomplete": 0,
+            "n_directional": 139,
+            "raw_return_mean": -0.0004930758127745977,
+            "signed_return": {
+              "mean": 0.0004930758127745977,
+              "median": -0.0006462569158465215
+            },
+            "mfe": {
+              "mean": 0.008571191874540581,
+              "median": 0.005102977348654503
+            },
+            "mae": {
+              "mean": -0.006511264167212615,
+              "median": -0.004797243225041825
+            },
+            "directional_accuracy": 0.4316546762589928,
+            "targets": {
+              "2": {
+                "n": 139,
+                "favorable_hit_rate": 0.08633093525179857,
+                "adverse_hit_rate": 0.03597122302158273,
+                "median_hour_to_target": 3.0,
+                "median_hour_to_adverse": 2.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.07913669064748201,
+                  "ADVERSE_FIRST": 0.02877697841726619,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.8920863309352518
+                },
+                "median_adverse_before_touch": 0.0016192330405295774,
+                "median_adverse_including_touch_bar": 0.001942149646480651
+              },
+              "5": {
+                "n": 139,
+                "favorable_hit_rate": 0.014388489208633094,
+                "adverse_hit_rate": 0.007194244604316547,
+                "median_hour_to_target": 2.5,
+                "median_hour_to_adverse": 1.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.007194244604316547,
+                  "ADVERSE_FIRST": 0.007194244604316547,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9856115107913669
+                },
+                "median_adverse_before_touch": 0.030799009751166673,
+                "median_adverse_including_touch_bar": 0.030799009751166673
+              },
+              "10": {
+                "n": 139,
+                "favorable_hit_rate": 0.007194244604316547,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": 4.0,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.007194244604316547,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9928057553956835
+                },
+                "median_adverse_before_touch": 0.06001906343203278,
+                "median_adverse_including_touch_bar": 0.06001906343203278
+              }
+            }
+          },
+          "12": {
+            "n_total": 139,
+            "n_complete": 139,
+            "n_incomplete": 0,
+            "n_directional": 139,
+            "raw_return_mean": -0.0005361869893532876,
+            "signed_return": {
+              "mean": 0.0005361869893532876,
+              "median": -0.0007890147626457011
+            },
+            "mfe": {
+              "mean": 0.013900508206794218,
+              "median": 0.009223585353442476
+            },
+            "mae": {
+              "mean": -0.011712038816261363,
+              "median": -0.0077492118913353725
+            },
+            "directional_accuracy": 0.460431654676259,
+            "targets": {
+              "2": {
+                "n": 139,
+                "favorable_hit_rate": 0.23741007194244604,
+                "adverse_hit_rate": 0.16546762589928057,
+                "median_hour_to_target": 8.0,
+                "median_hour_to_adverse": 8.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.2302158273381295,
+                  "ADVERSE_FIRST": 0.15827338129496402,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.6115107913669064
+                },
+                "median_adverse_before_touch": 0.0027247956403271267,
+                "median_adverse_including_touch_bar": 0.0031365453998621895
+              },
+              "5": {
+                "n": 139,
+                "favorable_hit_rate": 0.03597122302158273,
+                "adverse_hit_rate": 0.02158273381294964,
+                "median_hour_to_target": 5.0,
+                "median_hour_to_adverse": 7.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.02877697841726619,
+                  "ADVERSE_FIRST": 0.02158273381294964,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9496402877697842
+                },
+                "median_adverse_before_touch": 0.004169379841194365,
+                "median_adverse_including_touch_bar": 0.004169379841194365
+              },
+              "10": {
+                "n": 139,
+                "favorable_hit_rate": 0.007194244604316547,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": 4.0,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.007194244604316547,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9928057553956835
+                },
+                "median_adverse_before_touch": 0.06001906343203278,
+                "median_adverse_including_touch_bar": 0.06001906343203278
+              }
+            }
+          },
+          "24": {
+            "n_total": 139,
+            "n_complete": 139,
+            "n_incomplete": 0,
+            "n_directional": 139,
+            "raw_return_mean": -0.0006533237180853747,
+            "signed_return": {
+              "mean": 0.0006533237180853747,
+              "median": -0.0013001621067256774
+            },
+            "mfe": {
+              "mean": 0.01971089373885288,
+              "median": 0.01317358264758417
+            },
+            "mae": {
+              "mean": -0.017436379981543515,
+              "median": -0.011825619335795068
+            },
+            "directional_accuracy": 0.45323741007194246,
+            "targets": {
+              "2": {
+                "n": 139,
+                "favorable_hit_rate": 0.35251798561151076,
+                "adverse_hit_rate": 0.3237410071942446,
+                "median_hour_to_target": 11.0,
+                "median_hour_to_adverse": 12.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.33093525179856115,
+                  "ADVERSE_FIRST": 0.302158273381295,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.3669064748201439
+                },
+                "median_adverse_before_touch": 0.004169379841194365,
+                "median_adverse_including_touch_bar": 0.004199674802896514
+              },
+              "5": {
+                "n": 139,
+                "favorable_hit_rate": 0.06474820143884892,
+                "adverse_hit_rate": 0.06474820143884892,
+                "median_hour_to_target": 7.0,
+                "median_hour_to_adverse": 16.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.05755395683453238,
+                  "ADVERSE_FIRST": 0.06474820143884892,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.8776978417266187
+                },
+                "median_adverse_before_touch": 0.00632300884955761,
+                "median_adverse_including_touch_bar": 0.00632300884955761
+              },
+              "10": {
+                "n": 139,
+                "favorable_hit_rate": 0.02158273381294964,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": 19.0,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.02158273381294964,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9784172661870504
+                },
+                "median_adverse_before_touch": 0.026537997587454676,
+                "median_adverse_including_touch_bar": 0.026537997587454676
+              }
+            }
+          },
+          "72": {
+            "n_total": 139,
+            "n_complete": 139,
+            "n_incomplete": 0,
+            "n_directional": 139,
+            "raw_return_mean": -0.0008621850821371677,
+            "signed_return": {
+              "mean": 0.0008621850821371677,
+              "median": 0.002480306083371131
+            },
+            "mfe": {
+              "mean": 0.032407327607341385,
+              "median": 0.021930749758919954
+            },
+            "mae": {
+              "mean": -0.03261961039610789,
+              "median": -0.026127220613696878
+            },
+            "directional_accuracy": 0.5611510791366906,
+            "targets": {
+              "2": {
+                "n": 139,
+                "favorable_hit_rate": 0.5755395683453237,
+                "adverse_hit_rate": 0.5467625899280576,
+                "median_hour_to_target": 18.5,
+                "median_hour_to_adverse": 19.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.43884892086330934,
+                  "ADVERSE_FIRST": 0.4460431654676259,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.11510791366906475
+                },
+                "median_adverse_before_touch": 0.0071650879289630875,
+                "median_adverse_including_touch_bar": 0.007193336477890111
+              },
+              "5": {
+                "n": 139,
+                "favorable_hit_rate": 0.20863309352517986,
+                "adverse_hit_rate": 0.20863309352517986,
+                "median_hour_to_target": 39.0,
+                "median_hour_to_adverse": 34.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.2014388489208633,
+                  "ADVERSE_FIRST": 0.19424460431654678,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.60431654676259
+                },
+                "median_adverse_before_touch": 0.011224397958265353,
+                "median_adverse_including_touch_bar": 0.011224397958265353
+              },
+              "10": {
+                "n": 139,
+                "favorable_hit_rate": 0.04316546762589928,
+                "adverse_hit_rate": 0.03597122302158273,
+                "median_hour_to_target": 34.5,
+                "median_hour_to_adverse": 51.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.04316546762589928,
+                  "ADVERSE_FIRST": 0.03597122302158273,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.920863309352518
+                },
+                "median_adverse_before_touch": 0.01713972731127289,
+                "median_adverse_including_touch_bar": 0.01713972731127289
+              }
+            }
+          }
+        },
+        "matched": {
+          "4": {
+            "n": 136,
+            "mean": 0.0008399435832949896,
+            "ci95": [
+              -0.0008750043556075978,
+              0.0029114343804330393
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "12": {
+            "n": 136,
+            "mean": 0.0009856670671139734,
+            "ci95": [
+              -0.002309968219088027,
+              0.004474400894938913
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "24": {
+            "n": 136,
+            "mean": 0.0012278924761568912,
+            "ci95": [
+              -0.0054731388453363025,
+              0.009320813808464706
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "72": {
+            "n": 136,
+            "mean": 0.00039558010901092494,
+            "ci95": [
+              -0.010969600117976796,
+              0.014398120804214787
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          }
+        },
+        "episode_extension": {
+          "n_total": 139,
+          "n_complete": 139,
+          "n_incomplete": 0,
+          "n_directional": 139,
+          "raw_return_mean": 0.0006966452032724243,
+          "signed_return": {
+            "mean": -0.0006966452032724243,
+            "median": -0.001205727204220075
+          },
+          "mfe": {
+            "mean": 0.0073272185822136245,
+            "median": 0.003418223472287596
+          },
+          "mae": {
+            "mean": -0.005962076816850945,
+            "median": -0.004230536055629841
+          },
+          "directional_accuracy": 0.3597122302158273,
+          "targets": {
+            "2": {
+              "n": 139,
+              "favorable_hit_rate": 0.07194244604316546,
+              "adverse_hit_rate": 0.02158273381294964,
+              "median_hour_to_target": 3.5,
+              "median_hour_to_adverse": 2.0,
+              "race": {
+                "FAVORABLE_FIRST": 0.07194244604316546,
+                "ADVERSE_FIRST": 0.014388489208633094,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.9136690647482014
+              },
+              "median_adverse_before_touch": 0.0016192330405295774,
+              "median_adverse_including_touch_bar": 0.0021741191236038793
+            },
+            "5": {
+              "n": 139,
+              "favorable_hit_rate": 0.014388489208633094,
+              "adverse_hit_rate": 0.007194244604316547,
+              "median_hour_to_target": 5.5,
+              "median_hour_to_adverse": 1.0,
+              "race": {
+                "FAVORABLE_FIRST": 0.014388489208633094,
+                "ADVERSE_FIRST": 0.007194244604316547,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.9784172661870504
+              },
+              "median_adverse_before_touch": 0.002712877207657005,
+              "median_adverse_including_touch_bar": 0.002712877207657005
+            },
+            "10": {
+              "n": 139,
+              "favorable_hit_rate": 0.0,
+              "adverse_hit_rate": 0.0,
+              "median_hour_to_target": null,
+              "median_hour_to_adverse": null,
+              "race": {
+                "FAVORABLE_FIRST": 0.0,
+                "ADVERSE_FIRST": 0.0,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 1.0
+              },
+              "median_adverse_before_touch": null,
+              "median_adverse_including_touch_bar": null
+            }
+          }
+        },
+        "median_persistence_hours": 4.0,
+        "false_reversal_n": 0,
+        "false_reversal_rate": null,
+        "mature_72h_for_timing": 139,
+        "aligned_hourly_impulse_within72h": 1.0,
+        "median_hours_to_aligned_impulse": 1.0,
+        "macro_flip_within72h": 0.11510791366906475
+      }
+    },
+    "TEST": {
+      "UP_WITH_1H_PULLBACK": {
+        "n_episodes": 368,
+        "horizons": {
+          "4": {
+            "n_total": 368,
+            "n_complete": 368,
+            "n_incomplete": 0,
+            "n_directional": 368,
+            "raw_return_mean": -0.0004619229102408605,
+            "signed_return": {
+              "mean": -0.0004619229102408605,
+              "median": -7.741247127107664e-05
+            },
+            "mfe": {
+              "mean": 0.006146791379303463,
+              "median": 0.00409954497938636
+            },
+            "mae": {
+              "mean": -0.007785328894361685,
+              "median": -0.004515283272762793
+            },
+            "directional_accuracy": 0.483695652173913,
+            "targets": {
+              "2": {
+                "n": 368,
+                "favorable_hit_rate": 0.04619565217391304,
+                "adverse_hit_rate": 0.07880434782608696,
+                "median_hour_to_target": 3.0,
+                "median_hour_to_adverse": 3.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.043478260869565216,
+                  "ADVERSE_FIRST": 0.07336956521739131,
+                  "AMBIGUOUS": 0.002717391304347826,
+                  "UNRESOLVED": 0.8804347826086957
+                },
+                "median_adverse_before_touch": 0.002319767799520145,
+                "median_adverse_including_touch_bar": 0.0036986223560203646
+              },
+              "5": {
+                "n": 368,
+                "favorable_hit_rate": 0.0,
+                "adverse_hit_rate": 0.010869565217391304,
+                "median_hour_to_target": null,
+                "median_hour_to_adverse": 2.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0,
+                  "ADVERSE_FIRST": 0.010869565217391304,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9891304347826086
+                },
+                "median_adverse_before_touch": null,
+                "median_adverse_including_touch_bar": null
+              },
+              "10": {
+                "n": 368,
+                "favorable_hit_rate": 0.0,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": null,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 1.0
+                },
+                "median_adverse_before_touch": null,
+                "median_adverse_including_touch_bar": null
+              }
+            }
+          },
+          "12": {
+            "n_total": 368,
+            "n_complete": 368,
+            "n_incomplete": 0,
+            "n_directional": 368,
+            "raw_return_mean": 0.00047854154383851217,
+            "signed_return": {
+              "mean": 0.00047854154383851217,
+              "median": 0.000551613490595404
+            },
+            "mfe": {
+              "mean": 0.011258417679099965,
+              "median": 0.007437798268857043
+            },
+            "mae": {
+              "mean": -0.012702591021064335,
+              "median": -0.008731692447748407
+            },
+            "directional_accuracy": 0.5353260869565217,
+            "targets": {
+              "2": {
+                "n": 368,
+                "favorable_hit_rate": 0.1793478260869565,
+                "adverse_hit_rate": 0.1766304347826087,
+                "median_hour_to_target": 7.0,
+                "median_hour_to_adverse": 5.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.16576086956521738,
+                  "ADVERSE_FIRST": 0.16576086956521738,
+                  "AMBIGUOUS": 0.002717391304347826,
+                  "UNRESOLVED": 0.6657608695652174
+                },
+                "median_adverse_before_touch": 0.0030447800044920426,
+                "median_adverse_including_touch_bar": 0.0036869706680596748
+              },
+              "5": {
+                "n": 368,
+                "favorable_hit_rate": 0.019021739130434784,
+                "adverse_hit_rate": 0.029891304347826088,
+                "median_hour_to_target": 9.0,
+                "median_hour_to_adverse": 6.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.019021739130434784,
+                  "ADVERSE_FIRST": 0.029891304347826088,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9510869565217391
+                },
+                "median_adverse_before_touch": 0.005487326009050886,
+                "median_adverse_including_touch_bar": 0.005487326009050886
+              },
+              "10": {
+                "n": 368,
+                "favorable_hit_rate": 0.0,
+                "adverse_hit_rate": 0.002717391304347826,
+                "median_hour_to_target": null,
+                "median_hour_to_adverse": 7.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0,
+                  "ADVERSE_FIRST": 0.002717391304347826,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9972826086956522
+                },
+                "median_adverse_before_touch": null,
+                "median_adverse_including_touch_bar": null
+              }
+            }
+          },
+          "24": {
+            "n_total": 368,
+            "n_complete": 368,
+            "n_incomplete": 0,
+            "n_directional": 368,
+            "raw_return_mean": 0.002256878029075009,
+            "signed_return": {
+              "mean": 0.002256878029075009,
+              "median": 0.0003556543524039224
+            },
+            "mfe": {
+              "mean": 0.017632401951705227,
+              "median": 0.01202514862977222
+            },
+            "mae": {
+              "mean": -0.017036260969483453,
+              "median": -0.012288010450327846
+            },
+            "directional_accuracy": 0.5163043478260869,
+            "targets": {
+              "2": {
+                "n": 368,
+                "favorable_hit_rate": 0.34782608695652173,
+                "adverse_hit_rate": 0.296195652173913,
+                "median_hour_to_target": 12.0,
+                "median_hour_to_adverse": 9.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.3125,
+                  "ADVERSE_FIRST": 0.27717391304347827,
+                  "AMBIGUOUS": 0.002717391304347826,
+                  "UNRESOLVED": 0.4076086956521739
+                },
+                "median_adverse_before_touch": 0.004585279588922742,
+                "median_adverse_including_touch_bar": 0.0048104226014583085
+              },
+              "5": {
+                "n": 368,
+                "favorable_hit_rate": 0.059782608695652176,
+                "adverse_hit_rate": 0.04619565217391304,
+                "median_hour_to_target": 17.0,
+                "median_hour_to_adverse": 8.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.059782608695652176,
+                  "ADVERSE_FIRST": 0.04619565217391304,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.8940217391304348
+                },
+                "median_adverse_before_touch": 0.0028957271186622613,
+                "median_adverse_including_touch_bar": 0.0028957271186622613
+              },
+              "10": {
+                "n": 368,
+                "favorable_hit_rate": 0.005434782608695652,
+                "adverse_hit_rate": 0.010869565217391304,
+                "median_hour_to_target": 18.0,
+                "median_hour_to_adverse": 17.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.005434782608695652,
+                  "ADVERSE_FIRST": 0.010869565217391304,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9836956521739131
+                },
+                "median_adverse_before_touch": 0.004095299415460607,
+                "median_adverse_including_touch_bar": 0.004095299415460607
+              }
+            }
+          },
+          "72": {
+            "n_total": 368,
+            "n_complete": 368,
+            "n_incomplete": 0,
+            "n_directional": 368,
+            "raw_return_mean": 0.005337808314657663,
+            "signed_return": {
+              "mean": 0.005337808314657663,
+              "median": -0.00013277246213494465
+            },
+            "mfe": {
+              "mean": 0.0323537780945068,
+              "median": 0.02347106308557856
+            },
+            "mae": {
+              "mean": -0.02867764240423443,
+              "median": -0.02141710189897067
+            },
+            "directional_accuracy": 0.49728260869565216,
+            "targets": {
+              "2": {
+                "n": 368,
+                "favorable_hit_rate": 0.5516304347826086,
+                "adverse_hit_rate": 0.5407608695652174,
+                "median_hour_to_target": 19.0,
+                "median_hour_to_adverse": 22.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.4701086956521739,
+                  "ADVERSE_FIRST": 0.45108695652173914,
+                  "AMBIGUOUS": 0.002717391304347826,
+                  "UNRESOLVED": 0.07608695652173914
+                },
+                "median_adverse_before_touch": 0.007937919465474397,
+                "median_adverse_including_touch_bar": 0.007987673068902912
+              },
+              "5": {
+                "n": 368,
+                "favorable_hit_rate": 0.23097826086956522,
+                "adverse_hit_rate": 0.16847826086956522,
+                "median_hour_to_target": 38.0,
+                "median_hour_to_adverse": 44.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.22826086956521738,
+                  "ADVERSE_FIRST": 0.16576086956521738,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.6059782608695652
+                },
+                "median_adverse_before_touch": 0.008280816611271224,
+                "median_adverse_including_touch_bar": 0.008280816611271224
+              },
+              "10": {
+                "n": 368,
+                "favorable_hit_rate": 0.021739130434782608,
+                "adverse_hit_rate": 0.024456521739130436,
+                "median_hour_to_target": 41.5,
+                "median_hour_to_adverse": 30.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.021739130434782608,
+                  "ADVERSE_FIRST": 0.024456521739130436,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9538043478260869
+                },
+                "median_adverse_before_touch": 0.008127487028992464,
+                "median_adverse_including_touch_bar": 0.008127487028992464
+              }
+            }
+          }
+        },
+        "matched": {
+          "4": {
+            "n": 367,
+            "mean": -0.0009374587181226228,
+            "ci95": [
+              -0.001940994963222758,
+              9.093902550127201e-05
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "12": {
+            "n": 367,
+            "mean": -0.001203546594496147,
+            "ci95": [
+              -0.002920235852368462,
+              0.0008090677732559232
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "24": {
+            "n": 367,
+            "mean": 0.0006550971478675074,
+            "ci95": [
+              -0.0027056216406811913,
+              0.003912613195381915
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "72": {
+            "n": 367,
+            "mean": -0.0023303016849595013,
+            "ci95": [
+              -0.01007550651122079,
+              0.006125834883971504
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          }
+        },
+        "episode_extension": {
+          "n_total": 368,
+          "n_complete": 368,
+          "n_incomplete": 0,
+          "n_directional": 368,
+          "raw_return_mean": 6.769746538475581e-05,
+          "signed_return": {
+            "mean": 6.769746538475581e-05,
+            "median": 0.0007884462423203287
+          },
+          "mfe": {
+            "mean": 0.004801614704372706,
+            "median": 0.003465714528019914
+          },
+          "mae": {
+            "mean": -0.00602460754677507,
+            "median": -0.0029963019132471236
+          },
+          "directional_accuracy": 0.5760869565217391,
+          "targets": {
+            "2": {
+              "n": 368,
+              "favorable_hit_rate": 0.024456521739130436,
+              "adverse_hit_rate": 0.06793478260869565,
+              "median_hour_to_target": 3.0,
+              "median_hour_to_adverse": 3.0,
+              "race": {
+                "FAVORABLE_FIRST": 0.019021739130434784,
+                "ADVERSE_FIRST": 0.06521739130434782,
+                "AMBIGUOUS": 0.002717391304347826,
+                "UNRESOLVED": 0.9130434782608695
+              },
+              "median_adverse_before_touch": 0.005487326009050886,
+              "median_adverse_including_touch_bar": 0.005487326009050886
+            },
+            "5": {
+              "n": 368,
+              "favorable_hit_rate": 0.0,
+              "adverse_hit_rate": 0.005434782608695652,
+              "median_hour_to_target": null,
+              "median_hour_to_adverse": 2.0,
+              "race": {
+                "FAVORABLE_FIRST": 0.0,
+                "ADVERSE_FIRST": 0.005434782608695652,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.9945652173913043
+              },
+              "median_adverse_before_touch": null,
+              "median_adverse_including_touch_bar": null
+            },
+            "10": {
+              "n": 368,
+              "favorable_hit_rate": 0.0,
+              "adverse_hit_rate": 0.0,
+              "median_hour_to_target": null,
+              "median_hour_to_adverse": null,
+              "race": {
+                "FAVORABLE_FIRST": 0.0,
+                "ADVERSE_FIRST": 0.0,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 1.0
+              },
+              "median_adverse_before_touch": null,
+              "median_adverse_including_touch_bar": null
+            }
+          }
+        },
+        "median_persistence_hours": 2.0,
+        "false_reversal_n": 0,
+        "false_reversal_rate": null,
+        "mature_72h_for_timing": 368,
+        "aligned_hourly_impulse_within72h": 0.9809782608695652,
+        "median_hours_to_aligned_impulse": 12.0,
+        "macro_flip_within72h": 0.010869565217391304
+      },
+      "DOWN_WITH_1H_PULLBACK": {
+        "n_episodes": 274,
+        "horizons": {
+          "4": {
+            "n_total": 274,
+            "n_complete": 274,
+            "n_incomplete": 0,
+            "n_directional": 274,
+            "raw_return_mean": 0.0008280504654039958,
+            "signed_return": {
+              "mean": -0.0008280504654039958,
+              "median": -9.172367980536666e-05
+            },
+            "mfe": {
+              "mean": 0.007013092193914571,
+              "median": 0.0046148472113321515
+            },
+            "mae": {
+              "mean": -0.007902292700184155,
+              "median": -0.005502603692224106
+            },
+            "directional_accuracy": 0.49635036496350365,
+            "targets": {
+              "2": {
+                "n": 274,
+                "favorable_hit_rate": 0.040145985401459854,
+                "adverse_hit_rate": 0.08759124087591241,
+                "median_hour_to_target": 2.0,
+                "median_hour_to_adverse": 3.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.040145985401459854,
+                  "ADVERSE_FIRST": 0.08759124087591241,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.8722627737226277
+                },
+                "median_adverse_before_touch": 0.002700328120055495,
+                "median_adverse_including_touch_bar": 0.004519136441904603
+              },
+              "5": {
+                "n": 274,
+                "favorable_hit_rate": 0.010948905109489052,
+                "adverse_hit_rate": 0.0072992700729927005,
+                "median_hour_to_target": 4.0,
+                "median_hour_to_adverse": 2.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.010948905109489052,
+                  "ADVERSE_FIRST": 0.0072992700729927005,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9817518248175182
+                },
+                "median_adverse_before_touch": 0.00023166825106457622,
+                "median_adverse_including_touch_bar": 0.00023166825106457622
+              },
+              "10": {
+                "n": 274,
+                "favorable_hit_rate": 0.0,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": null,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 1.0
+                },
+                "median_adverse_before_touch": null,
+                "median_adverse_including_touch_bar": null
+              }
+            }
+          },
+          "12": {
+            "n_total": 274,
+            "n_complete": 274,
+            "n_incomplete": 0,
+            "n_directional": 274,
+            "raw_return_mean": 0.002026018251792439,
+            "signed_return": {
+              "mean": -0.002026018251792439,
+              "median": -0.0016975855789088667
+            },
+            "mfe": {
+              "mean": 0.01290633955540617,
+              "median": 0.008022283966004295
+            },
+            "mae": {
+              "mean": -0.014403818986440279,
+              "median": -0.010130813671522798
+            },
+            "directional_accuracy": 0.4562043795620438,
+            "targets": {
+              "2": {
+                "n": 274,
+                "favorable_hit_rate": 0.19343065693430658,
+                "adverse_hit_rate": 0.24817518248175183,
+                "median_hour_to_target": 6.0,
+                "median_hour_to_adverse": 7.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.1897810218978102,
+                  "ADVERSE_FIRST": 0.23357664233576642,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.5766423357664233
+                },
+                "median_adverse_before_touch": 0.005282145291311213,
+                "median_adverse_including_touch_bar": 0.005557845733606515
+              },
+              "5": {
+                "n": 274,
+                "favorable_hit_rate": 0.040145985401459854,
+                "adverse_hit_rate": 0.0364963503649635,
+                "median_hour_to_target": 10.0,
+                "median_hour_to_adverse": 8.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.040145985401459854,
+                  "ADVERSE_FIRST": 0.0364963503649635,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9233576642335767
+                },
+                "median_adverse_before_touch": 0.0027560740661456418,
+                "median_adverse_including_touch_bar": 0.0027560740661456418
+              },
+              "10": {
+                "n": 274,
+                "favorable_hit_rate": 0.0,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": null,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 1.0
+                },
+                "median_adverse_before_touch": null,
+                "median_adverse_including_touch_bar": null
+              }
+            }
+          },
+          "24": {
+            "n_total": 274,
+            "n_complete": 274,
+            "n_incomplete": 0,
+            "n_directional": 274,
+            "raw_return_mean": 0.0023812074157897214,
+            "signed_return": {
+              "mean": -0.0023812074157897214,
+              "median": -0.0009784768306824176
+            },
+            "mfe": {
+              "mean": 0.018289090108369703,
+              "median": 0.012136396512681946
+            },
+            "mae": {
+              "mean": -0.01989771438064491,
+              "median": -0.014831528449724574
+            },
+            "directional_accuracy": 0.48175182481751827,
+            "targets": {
+              "2": {
+                "n": 274,
+                "favorable_hit_rate": 0.3467153284671533,
+                "adverse_hit_rate": 0.35766423357664234,
+                "median_hour_to_target": 11.0,
+                "median_hour_to_adverse": 9.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.3248175182481752,
+                  "ADVERSE_FIRST": 0.3284671532846715,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.3467153284671533
+                },
+                "median_adverse_before_touch": 0.005965033576298628,
+                "median_adverse_including_touch_bar": 0.005965033576298628
+              },
+              "5": {
+                "n": 274,
+                "favorable_hit_rate": 0.06569343065693431,
+                "adverse_hit_rate": 0.06934306569343066,
+                "median_hour_to_target": 12.0,
+                "median_hour_to_adverse": 12.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.06569343065693431,
+                  "ADVERSE_FIRST": 0.06934306569343066,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.864963503649635
+                },
+                "median_adverse_before_touch": 0.005332540422399501,
+                "median_adverse_including_touch_bar": 0.005332540422399501
+              },
+              "10": {
+                "n": 274,
+                "favorable_hit_rate": 0.0,
+                "adverse_hit_rate": 0.0072992700729927005,
+                "median_hour_to_target": null,
+                "median_hour_to_adverse": 19.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0,
+                  "ADVERSE_FIRST": 0.0072992700729927005,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9927007299270073
+                },
+                "median_adverse_before_touch": null,
+                "median_adverse_including_touch_bar": null
+              }
+            }
+          },
+          "72": {
+            "n_total": 274,
+            "n_complete": 274,
+            "n_incomplete": 0,
+            "n_directional": 274,
+            "raw_return_mean": 0.0016068157411309781,
+            "signed_return": {
+              "mean": -0.0016068157411309781,
+              "median": -0.004527931509896832
+            },
+            "mfe": {
+              "mean": 0.03457300086514449,
+              "median": 0.02702479121324547
+            },
+            "mae": {
+              "mean": -0.03501845768489465,
+              "median": -0.029564595900751556
+            },
+            "directional_accuracy": 0.43795620437956206,
+            "targets": {
+              "2": {
+                "n": 274,
+                "favorable_hit_rate": 0.6131386861313869,
+                "adverse_hit_rate": 0.6605839416058394,
+                "median_hour_to_target": 20.5,
+                "median_hour_to_adverse": 19.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.4781021897810219,
+                  "ADVERSE_FIRST": 0.5,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.021897810218978103
+                },
+                "median_adverse_before_touch": 0.008546375506279125,
+                "median_adverse_including_touch_bar": 0.008546375506279125
+              },
+              "5": {
+                "n": 274,
+                "favorable_hit_rate": 0.22992700729927007,
+                "adverse_hit_rate": 0.24452554744525548,
+                "median_hour_to_target": 34.0,
+                "median_hour_to_adverse": 41.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.22627737226277372,
+                  "ADVERSE_FIRST": 0.23357664233576642,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.5401459854014599
+                },
+                "median_adverse_before_touch": 0.00691065044132011,
+                "median_adverse_including_touch_bar": 0.00691065044132011
+              },
+              "10": {
+                "n": 274,
+                "favorable_hit_rate": 0.043795620437956206,
+                "adverse_hit_rate": 0.040145985401459854,
+                "median_hour_to_target": 62.5,
+                "median_hour_to_adverse": 49.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.043795620437956206,
+                  "ADVERSE_FIRST": 0.040145985401459854,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.916058394160584
+                },
+                "median_adverse_before_touch": 0.008558640841103138,
+                "median_adverse_including_touch_bar": 0.008558640841103138
+              }
+            }
+          }
+        },
+        "matched": {
+          "4": {
+            "n": 270,
+            "mean": -0.002399090263908988,
+            "ci95": [
+              -0.004465021396535917,
+              -0.000550057754287808
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "12": {
+            "n": 270,
+            "mean": -0.00392870259843408,
+            "ci95": [
+              -0.0068296693920508016,
+              -0.0008612061618729245
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "24": {
+            "n": 270,
+            "mean": -0.0033392432619345678,
+            "ci95": [
+              -0.007949812861270795,
+              0.001377673226412208
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "72": {
+            "n": 270,
+            "mean": -0.00016814743200847896,
+            "ci95": [
+              -0.008355123545756937,
+              0.0077075223179212254
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          }
+        },
+        "episode_extension": {
+          "n_total": 274,
+          "n_complete": 274,
+          "n_incomplete": 0,
+          "n_directional": 274,
+          "raw_return_mean": 0.0005375544627722335,
+          "signed_return": {
+            "mean": -0.0005375544627722335,
+            "median": 0.0006109659602728801
+          },
+          "mfe": {
+            "mean": 0.005358313053142685,
+            "median": 0.004032029341257515
+          },
+          "mae": {
+            "mean": -0.007237805576667676,
+            "median": -0.0047890711172218214
+          },
+          "directional_accuracy": 0.5437956204379562,
+          "targets": {
+            "2": {
+              "n": 274,
+              "favorable_hit_rate": 0.029197080291970802,
+              "adverse_hit_rate": 0.06934306569343066,
+              "median_hour_to_target": 1.5,
+              "median_hour_to_adverse": 3.0,
+              "race": {
+                "FAVORABLE_FIRST": 0.029197080291970802,
+                "ADVERSE_FIRST": 0.06934306569343066,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.9014598540145985
+              },
+              "median_adverse_before_touch": 0.0013501640600277476,
+              "median_adverse_including_touch_bar": 0.003301792025295125
+            },
+            "5": {
+              "n": 274,
+              "favorable_hit_rate": 0.0,
+              "adverse_hit_rate": 0.0072992700729927005,
+              "median_hour_to_target": null,
+              "median_hour_to_adverse": 2.5,
+              "race": {
+                "FAVORABLE_FIRST": 0.0,
+                "ADVERSE_FIRST": 0.0072992700729927005,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.9927007299270073
+              },
+              "median_adverse_before_touch": null,
+              "median_adverse_including_touch_bar": null
+            },
+            "10": {
+              "n": 274,
+              "favorable_hit_rate": 0.0,
+              "adverse_hit_rate": 0.0,
+              "median_hour_to_target": null,
+              "median_hour_to_adverse": null,
+              "race": {
+                "FAVORABLE_FIRST": 0.0,
+                "ADVERSE_FIRST": 0.0,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 1.0
+              },
+              "median_adverse_before_touch": null,
+              "median_adverse_including_touch_bar": null
+            }
+          }
+        },
+        "median_persistence_hours": 2.0,
+        "false_reversal_n": 0,
+        "false_reversal_rate": null,
+        "mature_72h_for_timing": 274,
+        "aligned_hourly_impulse_within72h": 0.9562043795620438,
+        "median_hours_to_aligned_impulse": 10.0,
+        "macro_flip_within72h": 0.010948905109489052
+      },
+      "POSSIBLE_BULLISH_TRANSITION": {
+        "n_episodes": 212,
+        "horizons": {
+          "4": {
+            "n_total": 212,
+            "n_complete": 212,
+            "n_incomplete": 0,
+            "n_directional": 212,
+            "raw_return_mean": 0.0007628531219560301,
+            "signed_return": {
+              "mean": 0.0007628531219560301,
+              "median": 7.0565525324362e-05
+            },
+            "mfe": {
+              "mean": 0.007286963459610687,
+              "median": 0.0050932088106510065
+            },
+            "mae": {
+              "mean": -0.00612176174914447,
+              "median": -0.004702895259358242
+            },
+            "directional_accuracy": 0.5047169811320755,
+            "targets": {
+              "2": {
+                "n": 212,
+                "favorable_hit_rate": 0.05188679245283019,
+                "adverse_hit_rate": 0.0330188679245283,
+                "median_hour_to_target": 2.0,
+                "median_hour_to_adverse": 4.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.05188679245283019,
+                  "ADVERSE_FIRST": 0.0330188679245283,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9150943396226415
+                },
+                "median_adverse_before_touch": 0.002106713190617948,
+                "median_adverse_including_touch_bar": 0.002281217778894118
+              },
+              "5": {
+                "n": 212,
+                "favorable_hit_rate": 0.0047169811320754715,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": 3.0,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0047169811320754715,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9952830188679245
+                },
+                "median_adverse_before_touch": 0.0019464851294260788,
+                "median_adverse_including_touch_bar": 0.0019464851294260788
+              },
+              "10": {
+                "n": 212,
+                "favorable_hit_rate": 0.0,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": null,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 1.0
+                },
+                "median_adverse_before_touch": null,
+                "median_adverse_including_touch_bar": null
+              }
+            }
+          },
+          "12": {
+            "n_total": 212,
+            "n_complete": 212,
+            "n_incomplete": 0,
+            "n_directional": 212,
+            "raw_return_mean": -0.0004318698410484388,
+            "signed_return": {
+              "mean": -0.0004318698410484388,
+              "median": -0.0005724691978160612
+            },
+            "mfe": {
+              "mean": 0.012784727426404376,
+              "median": 0.009146002526112529
+            },
+            "mae": {
+              "mean": -0.011786213555427144,
+              "median": -0.00827146022360603
+            },
+            "directional_accuracy": 0.4811320754716981,
+            "targets": {
+              "2": {
+                "n": 212,
+                "favorable_hit_rate": 0.19339622641509435,
+                "adverse_hit_rate": 0.18396226415094338,
+                "median_hour_to_target": 6.0,
+                "median_hour_to_adverse": 7.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.19339622641509435,
+                  "ADVERSE_FIRST": 0.1792452830188679,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.6273584905660378
+                },
+                "median_adverse_before_touch": 0.0030862604971556573,
+                "median_adverse_including_touch_bar": 0.0032358249727637567
+              },
+              "5": {
+                "n": 212,
+                "favorable_hit_rate": 0.02358490566037736,
+                "adverse_hit_rate": 0.0047169811320754715,
+                "median_hour_to_target": 7.0,
+                "median_hour_to_adverse": 5.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.02358490566037736,
+                  "ADVERSE_FIRST": 0.0047169811320754715,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9716981132075472
+                },
+                "median_adverse_before_touch": 0.002281217778894118,
+                "median_adverse_including_touch_bar": 0.002281217778894118
+              },
+              "10": {
+                "n": 212,
+                "favorable_hit_rate": 0.0,
+                "adverse_hit_rate": 0.0047169811320754715,
+                "median_hour_to_target": null,
+                "median_hour_to_adverse": 12.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0,
+                  "ADVERSE_FIRST": 0.0047169811320754715,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9952830188679245
+                },
+                "median_adverse_before_touch": null,
+                "median_adverse_including_touch_bar": null
+              }
+            }
+          },
+          "24": {
+            "n_total": 212,
+            "n_complete": 212,
+            "n_incomplete": 0,
+            "n_directional": 212,
+            "raw_return_mean": 0.00019933877918897137,
+            "signed_return": {
+              "mean": 0.00019933877918897137,
+              "median": 0.0013776848357049953
+            },
+            "mfe": {
+              "mean": 0.018424237477794977,
+              "median": 0.01436833302789764
+            },
+            "mae": {
+              "mean": -0.01727744695829266,
+              "median": -0.011165675393713936
+            },
+            "directional_accuracy": 0.5188679245283019,
+            "targets": {
+              "2": {
+                "n": 212,
+                "favorable_hit_rate": 0.3113207547169811,
+                "adverse_hit_rate": 0.33490566037735847,
+                "median_hour_to_target": 10.0,
+                "median_hour_to_adverse": 12.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.3018867924528302,
+                  "ADVERSE_FIRST": 0.3018867924528302,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.39622641509433965
+                },
+                "median_adverse_before_touch": 0.003741738222377111,
+                "median_adverse_including_touch_bar": 0.003898807235473145
+              },
+              "5": {
+                "n": 212,
+                "favorable_hit_rate": 0.05660377358490566,
+                "adverse_hit_rate": 0.04245283018867924,
+                "median_hour_to_target": 14.5,
+                "median_hour_to_adverse": 16.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.05660377358490566,
+                  "ADVERSE_FIRST": 0.04245283018867924,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9009433962264151
+                },
+                "median_adverse_before_touch": 0.0033357696527230307,
+                "median_adverse_including_touch_bar": 0.0033357696527230307
+              },
+              "10": {
+                "n": 212,
+                "favorable_hit_rate": 0.0,
+                "adverse_hit_rate": 0.0047169811320754715,
+                "median_hour_to_target": null,
+                "median_hour_to_adverse": 12.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0,
+                  "ADVERSE_FIRST": 0.0047169811320754715,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9952830188679245
+                },
+                "median_adverse_before_touch": null,
+                "median_adverse_including_touch_bar": null
+              }
+            }
+          },
+          "72": {
+            "n_total": 212,
+            "n_complete": 212,
+            "n_incomplete": 0,
+            "n_directional": 212,
+            "raw_return_mean": 1.8091981933273116e-05,
+            "signed_return": {
+              "mean": 1.8091981933273116e-05,
+              "median": -0.0015941884274545126
+            },
+            "mfe": {
+              "mean": 0.03211113043162476,
+              "median": 0.0263311022285162
+            },
+            "mae": {
+              "mean": -0.030509518498726258,
+              "median": -0.023213458248925234
+            },
+            "directional_accuracy": 0.4669811320754717,
+            "targets": {
+              "2": {
+                "n": 212,
+                "favorable_hit_rate": 0.589622641509434,
+                "adverse_hit_rate": 0.5613207547169812,
+                "median_hour_to_target": 22.0,
+                "median_hour_to_adverse": 20.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.49056603773584906,
+                  "ADVERSE_FIRST": 0.42452830188679247,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.08490566037735849
+                },
+                "median_adverse_before_touch": 0.006680479568681008,
+                "median_adverse_including_touch_bar": 0.006680479568681008
+              },
+              "5": {
+                "n": 212,
+                "favorable_hit_rate": 0.18396226415094338,
+                "adverse_hit_rate": 0.2358490566037736,
+                "median_hour_to_target": 43.0,
+                "median_hour_to_adverse": 40.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.18396226415094338,
+                  "ADVERSE_FIRST": 0.2358490566037736,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.5801886792452831
+                },
+                "median_adverse_before_touch": 0.006680479568681008,
+                "median_adverse_including_touch_bar": 0.006680479568681008
+              },
+              "10": {
+                "n": 212,
+                "favorable_hit_rate": 0.02358490566037736,
+                "adverse_hit_rate": 0.02830188679245283,
+                "median_hour_to_target": 65.0,
+                "median_hour_to_adverse": 54.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.02358490566037736,
+                  "ADVERSE_FIRST": 0.02830188679245283,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9481132075471698
+                },
+                "median_adverse_before_touch": 0.0035156670027536308,
+                "median_adverse_including_touch_bar": 0.0035156670027536308
+              }
+            }
+          }
+        },
+        "matched": {
+          "4": {
+            "n": 209,
+            "mean": 0.0013514086026704304,
+            "ci95": [
+              8.860139789548526e-05,
+              0.002681742585001057
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "12": {
+            "n": 209,
+            "mean": 0.0008878259602793028,
+            "ci95": [
+              -0.0018805630602737493,
+              0.003728747450174557
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "24": {
+            "n": 209,
+            "mean": 0.0003412791395711279,
+            "ci95": [
+              -0.004447471914613432,
+              0.005148014275720959
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "72": {
+            "n": 209,
+            "mean": -0.000837477796654619,
+            "ci95": [
+              -0.00993801303256182,
+              0.008836331221828976
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          }
+        },
+        "episode_extension": {
+          "n_total": 212,
+          "n_complete": 212,
+          "n_incomplete": 0,
+          "n_directional": 212,
+          "raw_return_mean": 0.0008630744965284534,
+          "signed_return": {
+            "mean": 0.0008630744965284534,
+            "median": -0.0011956996150289112
+          },
+          "mfe": {
+            "mean": 0.008060339765884293,
+            "median": 0.004234974649872547
+          },
+          "mae": {
+            "mean": -0.005418736331156533,
+            "median": -0.00416692852435091
+          },
+          "directional_accuracy": 0.3915094339622642,
+          "targets": {
+            "2": {
+              "n": 212,
+              "favorable_hit_rate": 0.09905660377358491,
+              "adverse_hit_rate": 0.018867924528301886,
+              "median_hour_to_target": 5.0,
+              "median_hour_to_adverse": 1.0,
+              "race": {
+                "FAVORABLE_FIRST": 0.09905660377358491,
+                "ADVERSE_FIRST": 0.018867924528301886,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.8820754716981132
+              },
+              "median_adverse_before_touch": 0.0019464851294260788,
+              "median_adverse_including_touch_bar": 0.002106713190617948
+            },
+            "5": {
+              "n": 212,
+              "favorable_hit_rate": 0.018867924528301886,
+              "adverse_hit_rate": 0.0,
+              "median_hour_to_target": 6.5,
+              "median_hour_to_adverse": null,
+              "race": {
+                "FAVORABLE_FIRST": 0.018867924528301886,
+                "ADVERSE_FIRST": 0.0,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.9811320754716981
+              },
+              "median_adverse_before_touch": 0.0021138514541600983,
+              "median_adverse_including_touch_bar": 0.0021138514541600983
+            },
+            "10": {
+              "n": 212,
+              "favorable_hit_rate": 0.0,
+              "adverse_hit_rate": 0.0,
+              "median_hour_to_target": null,
+              "median_hour_to_adverse": null,
+              "race": {
+                "FAVORABLE_FIRST": 0.0,
+                "ADVERSE_FIRST": 0.0,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 1.0
+              },
+              "median_adverse_before_touch": null,
+              "median_adverse_including_touch_bar": null
+            }
+          }
+        },
+        "median_persistence_hours": 4.0,
+        "false_reversal_n": 0,
+        "false_reversal_rate": null,
+        "mature_72h_for_timing": 212,
+        "aligned_hourly_impulse_within72h": 0.9952830188679245,
+        "median_hours_to_aligned_impulse": 1.0,
+        "macro_flip_within72h": 0.13679245283018868
+      },
+      "POSSIBLE_BEARISH_TRANSITION": {
+        "n_episodes": 174,
+        "horizons": {
+          "4": {
+            "n_total": 174,
+            "n_complete": 174,
+            "n_incomplete": 0,
+            "n_directional": 174,
+            "raw_return_mean": 0.0011579530593643092,
+            "signed_return": {
+              "mean": -0.0011579530593643092,
+              "median": -0.0016080728190144278
+            },
+            "mfe": {
+              "mean": 0.007147603951864164,
+              "median": 0.004341791983015819
+            },
+            "mae": {
+              "mean": -0.006715946132839859,
+              "median": -0.005477610752335327
+            },
+            "directional_accuracy": 0.40804597701149425,
+            "targets": {
+              "2": {
+                "n": 174,
+                "favorable_hit_rate": 0.06321839080459771,
+                "adverse_hit_rate": 0.028735632183908046,
+                "median_hour_to_target": 2.0,
+                "median_hour_to_adverse": 4.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.06321839080459771,
+                  "ADVERSE_FIRST": 0.028735632183908046,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9080459770114943
+                },
+                "median_adverse_before_touch": 0.0028259250568756222,
+                "median_adverse_including_touch_bar": 0.00324853394085145
+              },
+              "5": {
+                "n": 174,
+                "favorable_hit_rate": 0.0,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": null,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 1.0
+                },
+                "median_adverse_before_touch": null,
+                "median_adverse_including_touch_bar": null
+              },
+              "10": {
+                "n": 174,
+                "favorable_hit_rate": 0.0,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": null,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.0,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 1.0
+                },
+                "median_adverse_before_touch": null,
+                "median_adverse_including_touch_bar": null
+              }
+            }
+          },
+          "12": {
+            "n_total": 174,
+            "n_complete": 174,
+            "n_incomplete": 0,
+            "n_directional": 174,
+            "raw_return_mean": 0.0009429580585312866,
+            "signed_return": {
+              "mean": -0.0009429580585312866,
+              "median": -0.0014443728329904815
+            },
+            "mfe": {
+              "mean": 0.013403221964648986,
+              "median": 0.009714487741527444
+            },
+            "mae": {
+              "mean": -0.011833705455108475,
+              "median": -0.009436337506517734
+            },
+            "directional_accuracy": 0.42528735632183906,
+            "targets": {
+              "2": {
+                "n": 174,
+                "favorable_hit_rate": 0.21264367816091953,
+                "adverse_hit_rate": 0.1724137931034483,
+                "median_hour_to_target": 6.0,
+                "median_hour_to_adverse": 8.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.20689655172413793,
+                  "ADVERSE_FIRST": 0.16091954022988506,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.632183908045977
+                },
+                "median_adverse_before_touch": 0.0035662622993082316,
+                "median_adverse_including_touch_bar": 0.0036825864348679627
+              },
+              "5": {
+                "n": 174,
+                "favorable_hit_rate": 0.017241379310344827,
+                "adverse_hit_rate": 0.005747126436781609,
+                "median_hour_to_target": 7.0,
+                "median_hour_to_adverse": 11.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.017241379310344827,
+                  "ADVERSE_FIRST": 0.005747126436781609,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9770114942528736
+                },
+                "median_adverse_before_touch": 0.0036825864348679627,
+                "median_adverse_including_touch_bar": 0.0036825864348679627
+              },
+              "10": {
+                "n": 174,
+                "favorable_hit_rate": 0.005747126436781609,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": 6.0,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.005747126436781609,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9942528735632183
+                },
+                "median_adverse_before_touch": 0.0036825864348679627,
+                "median_adverse_including_touch_bar": 0.0036825864348679627
+              }
+            }
+          },
+          "24": {
+            "n_total": 174,
+            "n_complete": 172,
+            "n_incomplete": 2,
+            "n_directional": 172,
+            "raw_return_mean": 0.0015583625080382185,
+            "signed_return": {
+              "mean": -0.0015583625080382185,
+              "median": -0.002736514924944422
+            },
+            "mfe": {
+              "mean": 0.017784124724965152,
+              "median": 0.012013979972644973
+            },
+            "mae": {
+              "mean": -0.017782235552088913,
+              "median": -0.012959192973363454
+            },
+            "directional_accuracy": 0.42441860465116277,
+            "targets": {
+              "2": {
+                "n": 172,
+                "favorable_hit_rate": 0.3313953488372093,
+                "adverse_hit_rate": 0.313953488372093,
+                "median_hour_to_target": 9.0,
+                "median_hour_to_adverse": 11.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.313953488372093,
+                  "ADVERSE_FIRST": 0.27906976744186046,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.4069767441860465
+                },
+                "median_adverse_before_touch": 0.005727519266842451,
+                "median_adverse_including_touch_bar": 0.005727519266842451
+              },
+              "5": {
+                "n": 172,
+                "favorable_hit_rate": 0.046511627906976744,
+                "adverse_hit_rate": 0.046511627906976744,
+                "median_hour_to_target": 17.0,
+                "median_hour_to_adverse": 16.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.046511627906976744,
+                  "ADVERSE_FIRST": 0.046511627906976744,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9069767441860465
+                },
+                "median_adverse_before_touch": 0.005428014814828908,
+                "median_adverse_including_touch_bar": 0.005428014814828908
+              },
+              "10": {
+                "n": 172,
+                "favorable_hit_rate": 0.005813953488372093,
+                "adverse_hit_rate": 0.0,
+                "median_hour_to_target": 6.0,
+                "median_hour_to_adverse": null,
+                "race": {
+                  "FAVORABLE_FIRST": 0.005813953488372093,
+                  "ADVERSE_FIRST": 0.0,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9941860465116279
+                },
+                "median_adverse_before_touch": 0.0036825864348679627,
+                "median_adverse_including_touch_bar": 0.0036825864348679627
+              }
+            }
+          },
+          "72": {
+            "n_total": 174,
+            "n_complete": 172,
+            "n_incomplete": 2,
+            "n_directional": 172,
+            "raw_return_mean": 0.006253173236206049,
+            "signed_return": {
+              "mean": -0.006253173236206049,
+              "median": -0.00308922813123802
+            },
+            "mfe": {
+              "mean": 0.029492119444595993,
+              "median": 0.023816246779974792
+            },
+            "mae": {
+              "mean": -0.03350554143643365,
+              "median": -0.02491112196056633
+            },
+            "directional_accuracy": 0.46511627906976744,
+            "targets": {
+              "2": {
+                "n": 172,
+                "favorable_hit_rate": 0.5697674418604651,
+                "adverse_hit_rate": 0.5930232558139535,
+                "median_hour_to_target": 19.5,
+                "median_hour_to_adverse": 23.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.4941860465116279,
+                  "ADVERSE_FIRST": 0.45348837209302323,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.05232558139534884
+                },
+                "median_adverse_before_touch": 0.009471718072556312,
+                "median_adverse_including_touch_bar": 0.009471718072556312
+              },
+              "5": {
+                "n": 172,
+                "favorable_hit_rate": 0.16279069767441862,
+                "adverse_hit_rate": 0.22674418604651161,
+                "median_hour_to_target": 31.0,
+                "median_hour_to_adverse": 47.0,
+                "race": {
+                  "FAVORABLE_FIRST": 0.14534883720930233,
+                  "ADVERSE_FIRST": 0.22674418604651161,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.627906976744186
+                },
+                "median_adverse_before_touch": 0.012821772720829738,
+                "median_adverse_including_touch_bar": 0.012821772720829738
+              },
+              "10": {
+                "n": 172,
+                "favorable_hit_rate": 0.023255813953488372,
+                "adverse_hit_rate": 0.03488372093023256,
+                "median_hour_to_target": 25.5,
+                "median_hour_to_adverse": 60.5,
+                "race": {
+                  "FAVORABLE_FIRST": 0.023255813953488372,
+                  "ADVERSE_FIRST": 0.03488372093023256,
+                  "AMBIGUOUS": 0.0,
+                  "UNRESOLVED": 0.9418604651162791
+                },
+                "median_adverse_before_touch": 0.01240341679127921,
+                "median_adverse_including_touch_bar": 0.01240341679127921
+              }
+            }
+          }
+        },
+        "matched": {
+          "4": {
+            "n": 170,
+            "mean": -0.0014247557852739838,
+            "ci95": [
+              -0.0028850797254021425,
+              4.462100909696181e-05
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "12": {
+            "n": 170,
+            "mean": 0.0013069445161276625,
+            "ci95": [
+              -0.0013146149082444896,
+              0.003931763832080722
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "24": {
+            "n": 170,
+            "mean": -0.0004485420523568625,
+            "ci95": [
+              -0.004284509818998558,
+              0.00357912593293239
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          },
+          "72": {
+            "n": 170,
+            "mean": -0.0037298505743877156,
+            "ci95": [
+              -0.01425081361380647,
+              0.006128328988122184
+            ],
+            "blocks": "calendar7day",
+            "repetitions": 1000,
+            "seed": 8192,
+            "independent_events": false
+          }
+        },
+        "episode_extension": {
+          "n_total": 174,
+          "n_complete": 174,
+          "n_incomplete": 0,
+          "n_directional": 174,
+          "raw_return_mean": 0.00030282440244664983,
+          "signed_return": {
+            "mean": -0.00030282440244664983,
+            "median": -0.0015592881410758652
+          },
+          "mfe": {
+            "mean": 0.008110961232416612,
+            "median": 0.003967835445239765
+          },
+          "mae": {
+            "mean": -0.005808769520481188,
+            "median": -0.0048906716250011195
+          },
+          "directional_accuracy": 0.367816091954023,
+          "targets": {
+            "2": {
+              "n": 174,
+              "favorable_hit_rate": 0.09770114942528736,
+              "adverse_hit_rate": 0.022988505747126436,
+              "median_hour_to_target": 4.0,
+              "median_hour_to_adverse": 4.0,
+              "race": {
+                "FAVORABLE_FIRST": 0.09770114942528736,
+                "ADVERSE_FIRST": 0.022988505747126436,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.8793103448275862
+              },
+              "median_adverse_before_touch": 0.0027195757886466776,
+              "median_adverse_including_touch_bar": 0.0028259250568756222
+            },
+            "5": {
+              "n": 174,
+              "favorable_hit_rate": 0.011494252873563218,
+              "adverse_hit_rate": 0.0,
+              "median_hour_to_target": 7.0,
+              "median_hour_to_adverse": null,
+              "race": {
+                "FAVORABLE_FIRST": 0.011494252873563218,
+                "ADVERSE_FIRST": 0.0,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.9885057471264368
+              },
+              "median_adverse_before_touch": 0.00320108111175732,
+              "median_adverse_including_touch_bar": 0.00320108111175732
+            },
+            "10": {
+              "n": 174,
+              "favorable_hit_rate": 0.005747126436781609,
+              "adverse_hit_rate": 0.0,
+              "median_hour_to_target": 6.0,
+              "median_hour_to_adverse": null,
+              "race": {
+                "FAVORABLE_FIRST": 0.005747126436781609,
+                "ADVERSE_FIRST": 0.0,
+                "AMBIGUOUS": 0.0,
+                "UNRESOLVED": 0.9942528735632183
+              },
+              "median_adverse_before_touch": 0.0036825864348679627,
+              "median_adverse_including_touch_bar": 0.0036825864348679627
+            }
+          }
+        },
+        "median_persistence_hours": 4.0,
+        "false_reversal_n": 0,
+        "false_reversal_rate": null,
+        "mature_72h_for_timing": 172,
+        "aligned_hourly_impulse_within72h": 1.0,
+        "median_hours_to_aligned_impulse": 1.0,
+        "macro_flip_within72h": 0.06976744186046512
+      }
+    }
+  }
+}

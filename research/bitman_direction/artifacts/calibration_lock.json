@@ -1,0 +1,11 @@
+{
+  "matching_volatility_quartiles": [
+    0.007571451355781214,
+    0.010086942395942641,
+    0.013571842794099488
+  ],
+  "source": "TRAIN_ONLY",
+  "end": 1640995200000,
+  "purpose": "Evaluation controls only; never engine decisions",
+  "no_parameter_selection": true
+}
