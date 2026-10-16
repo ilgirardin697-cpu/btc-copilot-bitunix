@@ -38,6 +38,7 @@ class ObserverConfig:
     approach_distance: float = 1.0
     rearm_distance: float = 1.5
     provisional_alerts: bool = True
+    approaching_alerts: bool = True
 
     @classmethod
     def from_env(cls, environ=None, logger=print):
@@ -63,7 +64,8 @@ class ObserverConfig:
             logger('MLRSI_CONFIG_INVALID_DEFAULT_USED')
             approach, rearm = 1.0, 1.5
         return cls(flag('MLRSI_OBSERVER_ENABLED'), flag('MLRSI_TELEGRAM_ALERTS'),
-                   flag('MLRSI_APPROACHING_ENABLED'), approach, rearm, flag('MLRSI_PROVISIONAL_ALERTS'))
+                   flag('MLRSI_APPROACHING_ENABLED'), approach, rearm, flag('MLRSI_PROVISIONAL_ALERTS'),
+                   flag('MLRSI_APPROACHING_ALERTS'))
 
 
 def empty_frame():
@@ -436,7 +438,10 @@ class MLRSIObserver:
             if first_ready:
                 self.startup_sent = True
                 self._notify(presentation.startup(self.snapshot()))
-            permitted = [] if first_ready else [r for r in alerts if not r['event'].startswith('PROVISIONAL_') or self.config.provisional_alerts]
+            # Notification-only gates: calculation, latches and durable telemetry are already complete.
+            permitted = [] if first_ready else [r for r in alerts
+                if (not r['event'].startswith('PROVISIONAL_') or self.config.provisional_alerts)
+                and (not r['event'].startswith('APPROACHING_') or self.config.approaching_alerts)]
             if permitted:
                 self._notify(presentation.alert(self.snapshot(), permitted))
         except Exception:
