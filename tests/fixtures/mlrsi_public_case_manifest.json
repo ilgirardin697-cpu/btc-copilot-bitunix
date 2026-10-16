@@ -1,0 +1,153 @@
+{
+  "description": "Preserved V3 public replay before the authoritative source/table correction; NOT current observer output.",
+  "tradingview_source_page": "https://www.tradingview.com/script/DKa7Dmc5-Machine-Learning-RSI-BackQuant/",
+  "official_pine_source_available": true,
+  "source_access": [
+    {
+      "url": "https://pine-facade.tradingview.com/pine-facade/get/USER;d581ed0024f6459aa8c889950373508c/25.0",
+      "status": 401,
+      "bytes": 71,
+      "sha256": "5026a76bf211fd8d8f475a2c18a690cddae7fb51654d99653ef6cfd25b7e3d79"
+    },
+    {
+      "url": "https://pine-facade.tradingview.com/pine-facade/get/PUB;d581ed0024f6459aa8c889950373508c/25.0",
+      "status": 404,
+      "bytes": 45,
+      "sha256": "c6b8276e505f18b49e02fb5dad481306496e1468a2502acdaa5a1559675ce933"
+    }
+  ],
+  "user_reported_tv_color": "GREEN",
+  "observer_replay_color": "NEUTRAL",
+  "visual_parity_passed": false,
+  "as_of_utc": "2026-10-04T08:49:00+00:00",
+  "note": "TradingView threshold values NOW AVAILABLE in mlrsi_tradingview_fixture_20261004.json; prior calculated replay retained unchanged.",
+  "rows": 4000,
+  "closed_rows": 3999,
+  "sample_count": 3000,
+  "last_6_closed": [
+    {
+      "time": 1791098100000,
+      "close": 84972.74,
+      "mlrsi_raw": 56.95735390259827,
+      "mlrsi_smoothed": 58.04867281310492,
+      "valid": true,
+      "converged": true,
+      "window_count": 2995,
+      "threshold_sample_count": 2995,
+      "iterations": 22,
+      "lower_threshold": 42.512609787024566,
+      "middle_centroid": 53.27560042331817,
+      "upper_threshold": 68.50796087463176,
+      "color": "NEUTRAL"
+    },
+    {
+      "time": 1791099000000,
+      "close": 84972.0,
+      "mlrsi_raw": 56.33858981147594,
+      "mlrsi_smoothed": 57.36463961245333,
+      "valid": true,
+      "converged": true,
+      "window_count": 2996,
+      "threshold_sample_count": 2996,
+      "iterations": 22,
+      "lower_threshold": 42.512609787024566,
+      "middle_centroid": 53.27824705062505,
+      "upper_threshold": 68.50796087463176,
+      "color": "NEUTRAL"
+    },
+    {
+      "time": 1791099900000,
+      "close": 85106.0,
+      "mlrsi_raw": 58.66592757880218,
+      "mlrsi_smoothed": 57.88515479899287,
+      "valid": true,
+      "converged": true,
+      "window_count": 2997,
+      "threshold_sample_count": 2997,
+      "iterations": 21,
+      "lower_threshold": 42.512609787024566,
+      "middle_centroid": 53.281226939207436,
+      "upper_threshold": 68.50796087463176,
+      "color": "NEUTRAL"
+    },
+    {
+      "time": 1791100800000,
+      "close": 85149.9,
+      "mlrsi_raw": 63.87398979098861,
+      "mlrsi_smoothed": 60.28068879579117,
+      "valid": true,
+      "converged": true,
+      "window_count": 2998,
+      "threshold_sample_count": 2998,
+      "iterations": 21,
+      "lower_threshold": 42.512609787024566,
+      "middle_centroid": 53.28575147822267,
+      "upper_threshold": 68.50796087463176,
+      "color": "NEUTRAL"
+    },
+    {
+      "time": 1791101700000,
+      "close": 85137.99,
+      "mlrsi_raw": 64.90762405690774,
+      "mlrsi_smoothed": 62.13146290023779,
+      "valid": true,
+      "converged": true,
+      "window_count": 2999,
+      "threshold_sample_count": 2999,
+      "iterations": 21,
+      "lower_threshold": 42.512609787024566,
+      "middle_centroid": 53.28575147822267,
+      "upper_threshold": 68.49077354855523,
+      "color": "NEUTRAL"
+    },
+    {
+      "time": 1791102600000,
+      "close": 85077.04,
+      "mlrsi_raw": 59.20312261692944,
+      "mlrsi_smoothed": 60.96012678691446,
+      "valid": true,
+      "converged": true,
+      "window_count": 3000,
+      "threshold_sample_count": 3000,
+      "iterations": 21,
+      "lower_threshold": 42.512609787024566,
+      "middle_centroid": 53.28575147822267,
+      "upper_threshold": 68.47052987446479,
+      "color": "NEUTRAL"
+    }
+  ],
+  "old_rolling_last": {
+    "rsi": 60.96012678691446,
+    "centroids": [
+      42.51260978702454,
+      53.28575147822266,
+      68.47052987446487
+    ],
+    "color": 0
+  },
+  "sources": [
+    {
+      "url": "https://data-api.binance.vision/api/v3/klines?symbol=BTCUSDT&interval=15m&startTime=1787504400000&endTime=1791103740000&limit=1000",
+      "rows": 1000,
+      "sha256": "c50aa5d372ceb76645cf5bcc604043add77ec052a280563f1bc580f94e7d396c"
+    },
+    {
+      "url": "https://data-api.binance.vision/api/v3/klines?symbol=BTCUSDT&interval=15m&startTime=1788404400000&endTime=1791103740000&limit=1000",
+      "rows": 1000,
+      "sha256": "b281c32ee4be996921ab80c35e1b4e25a5bd3c3bea28248322cb612b42779690"
+    },
+    {
+      "url": "https://data-api.binance.vision/api/v3/klines?symbol=BTCUSDT&interval=15m&startTime=1789304400000&endTime=1791103740000&limit=1000",
+      "rows": 1000,
+      "sha256": "7ef1a3d46ffc39d3a24cbe0855c8aefde73b76c0037dad2482671190a24d85e2"
+    },
+    {
+      "url": "https://data-api.binance.vision/api/v3/klines?symbol=BTCUSDT&interval=15m&startTime=1790204400000&endTime=1791103740000&limit=1000",
+      "rows": 1000,
+      "sha256": "3534369fe6b999179a81d820a774d2f2e6a459a4842cab9e4477b564ee1ee7ea"
+    }
+  ],
+  "config_version": "CAPTURE_LOW29_EMA4_PINE_PARITY_V3",
+  "source_provenance": "User supplied exact Source Code tab; prior automated HTTP access records retained.",
+  "paired_fixture": "mlrsi_tradingview_fixture_20261004.json"
+}

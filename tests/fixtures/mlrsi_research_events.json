@@ -1,0 +1,92 @@
+{
+  "colors": [
+    "NEUTRAL",
+    "GREEN",
+    "GREEN",
+    "GREEN",
+    "GREEN",
+    "GREEN",
+    "GREEN",
+    "NEUTRAL",
+    "RED",
+    "RED",
+    "RED",
+    "RED",
+    "RED",
+    "GREEN",
+    "GREEN",
+    "GREEN",
+    "RED",
+    "RED",
+    "RED"
+  ],
+  "rsi": [
+    50,
+    61,
+    62,
+    61,
+    62,
+    63,
+    63,
+    50,
+    39,
+    38,
+    39,
+    38,
+    37,
+    61,
+    60,
+    61,
+    39,
+    40,
+    39
+  ],
+  "references": [
+    {
+      "commit": "c049302691e7857691adaf652cd283874c0734a2",
+      "file": "research/mlrsi_pattern_backtest.py",
+      "interval": 900000,
+      "events": {
+        "GREEN_CROSS": [
+          1,
+          13
+        ],
+        "GREEN_RESUME": [
+          4,
+          15
+        ],
+        "RED_CROSS": [
+          8,
+          16
+        ],
+        "RED_RESUME": [
+          11,
+          18
+        ]
+      }
+    },
+    {
+      "commit": "47eee36f7208382d7939a047161c49f61136378e",
+      "file": "research/mlrsi_1h_core.py",
+      "interval": 3600000,
+      "events": {
+        "GREEN_CROSS": [
+          1,
+          13
+        ],
+        "GREEN_RESUME": [
+          4,
+          15
+        ],
+        "RED_CROSS": [
+          8,
+          16
+        ],
+        "RED_RESUME": [
+          11,
+          18
+        ]
+      }
+    }
+  ]
+}
