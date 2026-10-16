@@ -1,0 +1,148 @@
+{
+  "protocol": {
+    "version": "BITMAN_REAL_PHASE4_V1",
+    "base_sha": "ee4e59016220ec733b19a37d14429f8fdde6d348",
+    "cutoff": "2026-10-15T19:00:00Z",
+    "old_study": "PR23 INCONCLUSIVE: not a rejection of the complete Bitman methodology",
+    "timeframes": {
+      "1H": 3600000,
+      "4H": 14400000
+    },
+    "context": "Closed1D SMA200 and confirmed AO divergence2L/2R, diagnostic only",
+    "candidates": {
+      "1": [
+        {
+          "family": "C0_IMPULSE",
+          "lag": 6,
+          "bb_reference": 50.0,
+          "reentry_bars": 3
+        },
+        {
+          "family": "C1_BBWP50",
+          "lag": 6,
+          "bb_reference": 50.0,
+          "reentry_bars": 3
+        },
+        {
+          "family": "C2_K_CONTEXT",
+          "lag": 6,
+          "bb_reference": 50.0,
+          "reentry_bars": 3
+        },
+        {
+          "family": "C3_K_TRANSITION",
+          "lag": 6,
+          "bb_reference": 50.0,
+          "reentry_bars": 3
+        },
+        {
+          "family": "C4_K_SEPARATION",
+          "lag": 6,
+          "bb_reference": 50.0,
+          "reentry_bars": 3
+        },
+        {
+          "family": "C5_K_REENTRY",
+          "lag": 6,
+          "bb_reference": 50.0,
+          "reentry_bars": 3
+        }
+      ],
+      "-1": [
+        {
+          "family": "C0_IMPULSE",
+          "lag": 6,
+          "bb_reference": 50.0,
+          "reentry_bars": 3
+        },
+        {
+          "family": "C1_BBWP50",
+          "lag": 6,
+          "bb_reference": 50.0,
+          "reentry_bars": 3
+        },
+        {
+          "family": "C2_K_CONTEXT",
+          "lag": 6,
+          "bb_reference": 50.0,
+          "reentry_bars": 3
+        },
+        {
+          "family": "C3_K_TRANSITION",
+          "lag": 6,
+          "bb_reference": 50.0,
+          "reentry_bars": 3
+        }
+      ]
+    },
+    "math": "Unmodified PR23 public KONKORDE_PROXY, ADX14/DI14, AO5/34, BBWP CLOSE/SMA7/prior100",
+    "oscillator_anchor": "ZERO_CROSS: priorAO<=0 andAO>0 LONG, >=0 and<0 SHORT; STATE_RESUME: same AO sign, slope<=0 to>0 LONG or >=0 to<0 SHORT. No repeated rising-bar anchors.",
+    "sequence": "After anchor, first ADX slope<=0 to>0 at age0..6TFbars; then DI may align while ADX still rising within the same window. At trigger AO must retain sign and improving slope. Consume each anchor at first AO/ADX/DI qualification, BEFORE volatility/K gates. No future oscillator/divergence/pivot knowledge.",
+    "families": {
+      "C0": "Sequence + BBWP rising",
+      "C1": "C0 + BBWP>=50 (publicly mentioned reference, mapped to our BBWP proxy, not verified proprietary volatility parity)",
+      "C2": "C0 + LONG positive mountain/inside; SHORT recentEXIT<=lag, outside and mountain falling",
+      "C3": "C0 + LONG recentENTRY<=lag and positive/inside; SHORT EXIT on the same closed bar, no sign-inverted inside geometry",
+      "C4": "LONG ONLY C0 + inside positive mountain and separation increasing across consecutive inside bars",
+      "C5": "LONG ONLY C0 + recent quickREENTRY<=lag, prior EXIT age<=3TFbars, inside positive mountain"
+    },
+    "unavailable_short": "C4/C5 have NO SHORT analogue: outside separation/reentry geometry does not justify mirroring",
+    "reentry": "3bars primary is an explicit research implementation, not an exact public constant;2/5 neighbors diagnostic only",
+    "near_zero": "Unchanged PR23 TRAIN tercile boundaries, descriptive only, never a gate",
+    "event_selection": "Physically trim data to end2023 before features. EachTF/side independently: TRAIN andVALIDATION >=30 matched24h events, positive directional mean AND positive matched-control excess both. Select highest min(TRAIN,VALIDATION) matched excess, then higher minimum n, then family name. If none eligible, deterministic diagnostic fallback, never promotable. No TEST selection.",
+    "controls": "Match non-candidate-event times by UTCyear/month/hour, trailing24TF trend sign, no future returns; exclude union of all registered candidate events. No return-based resampling.",
+    "stages": "Freeze protocol -> DEV event study -> freeze4selected parents -> DEV strategy check -> freeze eligibility -> TEST events and only frozen selected strategies/diagnostic ablations/controls",
+    "strategy_development_gate": "Selected parent only: >=20 net trades and positive expectancy in TRAIN andVALIDATION. Failure marks nonpromotable; do not rerank to another family after strategy results.",
+    "execution": "Academic1x nominal at entry fixedqty. Signal closedTF, nextTF open (sameboundary next1H open). No pyramiding, no samebar reverse; LONG andSHORT independent; never add their1x curves.",
+    "primary_exit": "Initial2ATR14 of signalTF frozen at signal; opposite confirmedAO sign exits nextopen; max168h. Stops checked on public1H data, conservative stop/gap precedence, no TP optimization.",
+    "alternate_exit": "Selected-only diagnostic initial2ATR plus3ATR trailing of frozen ATR, updated after1Hclose for nextbar; oppositeAO and168h cap retained. Not selected or used to rescue primary.",
+    "costs": {
+      "base": {
+        "fee_bps": 5,
+        "slip_bps": 2,
+        "stop_slip_bps": 5
+      },
+      "stress": {
+        "fee_bps": 6,
+        "slip_bps": 5,
+        "stop_slip_bps": 10
+      }
+    },
+    "funding": "Verified historical signed settlement on remaining fixedqty; current1Hopen price proxy; charge pre-order holdings at settlement boundary. Not exact Bitunix margin/liquidation modeling.",
+    "robustness": "Frozen selected parents: lag3/9 neighbors, reentry2/5 if used, BBWP40/60 if50used (diagnostic, NEVER selection). Deduplicate identical signal masks before stability count. 2ATRstop1.6/2.4 neighbors; removebest1/3; weekly bootstrap500 seed6241; yearly/regime/volatility cohorts.",
+    "ablation": "RemoveAO: ADXturn/DI events with no AO anchor/sign dependence; removeADX_DI: AO anchors only, no ADXturn nor DI gate; removeBBWP removes rising AND50; removeK removes that family geometry only (absent=no-op, not independent evidence). All share identical exits unless nativeK comparator explicitly labeled.",
+    "comparisons": "K_ENTRY common exit and nativeENTRY/EXIT LONG only; AOADXstate baseline; EMA10/55 LONG/SHORT baseline; exact V8 lastclosed4H close>SMA200 LONG/FLAT; event comparisons same horizons/matching. No unsupported K-only SHORT strategy.",
+    "walk_forward": "Annual2022..2026: anchored TRAIN2020..year-2, VALIDATION year-1, selectevents only beforeyear; strategy DEV eligibility then evaluateyear. GlobalTEST selection never changes. EarlierTEST years may become past fold data.",
+    "regimes": "Bull/bear uses lastclosed4H close/SMA200; rangeADX<20 diagnostic only; volatility cutpoint TRAIN median signalTF ATR/close. Closed1D context unavailable until warmup, not defaultbear.",
+    "splits": {
+      "TRAIN": "2020-2021",
+      "VALIDATION": "2022-2023",
+      "TEST": "2024-cutoff; reused OOS, not virgin"
+    },
+    "promotion": {
+      "expectancy_positive": true,
+      "pf_gt": 1.2,
+      "sharpe_gt": 0.75,
+      "maxdd_lt": 0.25,
+      "min_test_trades": 100,
+      "positive_neighbor_fraction": 0.75,
+      "stress_positive": true,
+      "without_best3_positive": true,
+      "positive_test_years_at_least": 2,
+      "matched_event_excess_positive": true,
+      "walk_forward_positive_years_at_least": 3,
+      "comparable_advantage": "Higher totalreturn vs AOADX baseline OR lowerDD with positive netreturn; K-family additionally needs positive matched24h increment over noK on TRAIN/VALIDATION"
+    },
+    "classification": "PROMISING FOR SHADOW only if all gates for an independently evaluated side/TF; REJECT when all four frozen primary strategies have nonpositiveTESTexpectancy; otherwise INCONCLUSIVE. No live classification, no private-methodology rejection.",
+    "evidence_grade": "A requires independent forward evidence (unavailable); B only PROMISING FOR SHADOW; C otherwise. Grades are evidence labels, not probabilities or sizing.",
+    "rsi": "PRIVATE / PARITY NOT PROVEN, excluded; production ML RSI unchanged",
+    "trend_speed": "NOT IMPLEMENTED / FORMULA NOT VERIFIED",
+    "shadow_only": true,
+    "trade_authority": false,
+    "forward_volume_data": "PENDING / NOT ACCESSIBLE FROM CURRENT CONNECTOR"
+  },
+  "code_sha256": "96b1bbd6d83ba60bd6b5cc553bddfa6706f0d25d29c5b367d8ecc3c46f127919",
+  "data_manifest_sha256": "2718396e94228f0f3345911ae6d2c486b240cfdbdd0ae9503ac14469e2983518",
+  "frozen_at": "2026-10-16T08:10:25.153693+00:00",
+  "base_sha": "ee4e59016220ec733b19a37d14429f8fdde6d348"
+}
