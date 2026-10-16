@@ -1,0 +1,55 @@
+{
+  "runtime": {
+    "python": "3.12.12",
+    "numpy": "2.3.5",
+    "requests": "2.32.5"
+  },
+  "compile": "PASS",
+  "tests": {
+    "dedicated": {
+      "passed": 68,
+      "failed": 0,
+      "skipped": 0,
+      "total": 68
+    },
+    "guardian": {
+      "passed": 311,
+      "failed": 0,
+      "skipped": 0,
+      "total": 311
+    },
+    "v8": {
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0,
+      "total": 16
+    },
+    "early_breakout": {
+      "passed": 52,
+      "failed": 0,
+      "skipped": 0,
+      "total": 52
+    },
+    "full": {
+      "passed": 447,
+      "failed": 0,
+      "skipped": 0,
+      "total": 447
+    }
+  },
+  "safety": "PASS",
+  "replay": "BYTE_IDENTICAL",
+  "result_sha256": "e58941540727476c95f7a441afebdd2b9d1ed22b49b382790596d082f9a13741",
+  "trade_authority": false,
+  "forward_validation": false,
+  "telegram_sent": false,
+  "production_changed": false,
+  "commands": [
+    "python -m compileall -q research/bitman_real test_bitman_real.py",
+    "python -m unittest test_bitman_real -v",
+    "python -m research.bitman_real.safety",
+    "python -m unittest discover -v",
+    "git diff --check"
+  ],
+  "note": "Local test evidence. GitHub CI results recorded separately; no live service/observer launched."
+}

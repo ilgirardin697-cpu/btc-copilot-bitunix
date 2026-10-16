@@ -1,0 +1,23 @@
+name: BITMAN REAL isolated observer
+on:
+  pull_request:
+  push:
+    branches: [bitman-real-observer]
+permissions:
+  contents: read
+jobs:
+  bitman_real:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r research/bitman_real/requirements-study.txt
+      - run: python -m compileall -q research/bitman_real test_bitman_real.py
+      - run: python -m unittest test_bitman_real -v
+      - run: python -m research.bitman_real.safety
+      - run: python -m unittest discover -v
+      - run: git diff --check HEAD^ HEAD
