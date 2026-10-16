@@ -1,0 +1,24 @@
+name: Manual Bitman read-only command
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  bitman_manual:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install existing runtime dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Compile manual runtime
+        run: python -m compileall -q bitman_manual guardian_commands.py test_bitman_manual.py
+      - name: Manual routing, causal provenance, isolation and existing command regression
+        run: python -m unittest test_bitman_manual test_guardian_commands test_mlrsi_alert_controls -v
+      - name: Guardian protection and V8 baseline audit
+        run: python mlrsi_safety_audit.py
+      - name: Patch whitespace
+        run: git diff --check HEAD^ HEAD

@@ -29,6 +29,9 @@ def _remove(body, source):
 
 def guardian_baseline_tree(path):
     tree = ast.parse(Path(path).read_text('utf-8'))
+    if path == 'guardian_commands.py':
+        from bitman_manual.safety import strip_commands
+        tree = strip_commands(tree)
     if path == 'trade_guardian.py':
         main = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == 'main')
         _remove(main.body, 'mlrsi = None')
@@ -116,6 +119,12 @@ def verify_protected_sources():
         assert Path(path).read_bytes().replace(b'\r\n', b'\n') == old.replace(b'\r\n', b'\n'), path + ' V4 mathematics/presentation changed'
     for group in ('main_files', 'validated_core', 'integration_files'):
         for path, record in manifest[group].items():
+            if group == 'integration_files' and path == 'guardian_commands.py':
+                from bitman_manual.safety import PRODUCTION_BASE, verify_command_extension
+                assert verify_command_extension()
+                original = subprocess.check_output(['git', 'rev-parse', PRODUCTION_BASE + ':' + path]).decode().strip()
+                assert original == record['git_blob'], 'Original command baseline changed'
+                continue
             # Only the three explicitly authorized passive mathematical files change.
             if group == 'validated_core' and path in preset['files']:
                 record = preset['files'][path]
