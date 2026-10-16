@@ -1,0 +1,23 @@
+name: BITMAN REAL Phase4 research
+on:
+  pull_request:
+  push:
+    branches: [bitman-real-phase4]
+permissions:
+  contents: read
+jobs:
+  bitman_phase4:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5 requests==2.32.5
+      - run: python -m compileall -q research/bitman_phase4 test_bitman_phase4.py
+      - run: python -m unittest test_bitman_phase4 -v
+      - run: python -m research.bitman_phase4.safety
+      - run: python -m unittest discover -v
+      - run: git diff --check HEAD^ HEAD

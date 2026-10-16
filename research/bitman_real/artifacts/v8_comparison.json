@@ -1,0 +1,1872 @@
+{
+  "fresh_price_event_study": {
+    "V8_LONG_SIGNAL/TRAIN": {
+      "1": {
+        "n_total": 65,
+        "n_complete": 65,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": -0.0013860640080329543,
+          "median": -0.0016122043766142458
+        },
+        "mfe": {
+          "mean": 0.0044310597608797275,
+          "median": 0.0028909500466536286
+        },
+        "mae": {
+          "mean": -0.0061694362223381595,
+          "median": -0.004388276436934735
+        },
+        "first_up1_hour": {
+          "n_hit": 5,
+          "hit_fraction": 0.07692307692307693,
+          "median_hour_if_hit": 1.0
+        },
+        "first_down1_hour": {
+          "n_hit": 9,
+          "hit_fraction": 0.13846153846153847,
+          "median_hour_if_hit": 1.0
+        },
+        "first_up2_hour": {
+          "n_hit": 1,
+          "hit_fraction": 0.015384615384615385,
+          "median_hour_if_hit": 1.0
+        },
+        "first_down2_hour": {
+          "n_hit": 3,
+          "hit_fraction": 0.046153846153846156,
+          "median_hour_if_hit": 1.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.06153846153846154,
+          "DOWN_FIRST": 0.12307692307692308,
+          "AMBIGUOUS": 0.015384615384615385,
+          "UNRESOLVED": 0.8
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.015384615384615385,
+          "DOWN_FIRST": 0.046153846153846156,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.9384615384615385
+        }
+      },
+      "4": {
+        "n_total": 65,
+        "n_complete": 65,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": -0.002860361697336409,
+          "median": -0.0026539702494344786
+        },
+        "mfe": {
+          "mean": 0.007837687038096092,
+          "median": 0.005572279510664302
+        },
+        "mae": {
+          "mean": -0.011092673282593585,
+          "median": -0.0075711041592462225
+        },
+        "first_up1_hour": {
+          "n_hit": 17,
+          "hit_fraction": 0.26153846153846155,
+          "median_hour_if_hit": 2.0
+        },
+        "first_down1_hour": {
+          "n_hit": 24,
+          "hit_fraction": 0.36923076923076925,
+          "median_hour_if_hit": 2.0
+        },
+        "first_up2_hour": {
+          "n_hit": 4,
+          "hit_fraction": 0.06153846153846154,
+          "median_hour_if_hit": 2.0
+        },
+        "first_down2_hour": {
+          "n_hit": 8,
+          "hit_fraction": 0.12307692307692308,
+          "median_hour_if_hit": 2.5
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.23076923076923078,
+          "DOWN_FIRST": 0.3230769230769231,
+          "AMBIGUOUS": 0.015384615384615385,
+          "UNRESOLVED": 0.4307692307692308
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.06153846153846154,
+          "DOWN_FIRST": 0.12307692307692308,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.8153846153846154
+        }
+      },
+      "12": {
+        "n_total": 65,
+        "n_complete": 65,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": -0.0023805932920191006,
+          "median": -0.0007038610595228034
+        },
+        "mfe": {
+          "mean": 0.015207958317642784,
+          "median": 0.009295800214106364
+        },
+        "mae": {
+          "mean": -0.0193276660464551,
+          "median": -0.013888214818326916
+        },
+        "first_up1_hour": {
+          "n_hit": 31,
+          "hit_fraction": 0.47692307692307695,
+          "median_hour_if_hit": 3.0
+        },
+        "first_down1_hour": {
+          "n_hit": 43,
+          "hit_fraction": 0.6615384615384615,
+          "median_hour_if_hit": 4.0
+        },
+        "first_up2_hour": {
+          "n_hit": 13,
+          "hit_fraction": 0.2,
+          "median_hour_if_hit": 6.0
+        },
+        "first_down2_hour": {
+          "n_hit": 18,
+          "hit_fraction": 0.27692307692307694,
+          "median_hour_if_hit": 5.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.3076923076923077,
+          "DOWN_FIRST": 0.46153846153846156,
+          "AMBIGUOUS": 0.03076923076923077,
+          "UNRESOLVED": 0.2
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.15384615384615385,
+          "DOWN_FIRST": 0.26153846153846155,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.5846153846153846
+        }
+      },
+      "24": {
+        "n_total": 65,
+        "n_complete": 65,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": -0.00937688011492036,
+          "median": -0.007651923707922892
+        },
+        "mfe": {
+          "mean": 0.020174887189443245,
+          "median": 0.013017906392044809
+        },
+        "mae": {
+          "mean": -0.03132906176413183,
+          "median": -0.02085115785659608
+        },
+        "first_up1_hour": {
+          "n_hit": 38,
+          "hit_fraction": 0.5846153846153846,
+          "median_hour_if_hit": 5.0
+        },
+        "first_down1_hour": {
+          "n_hit": 52,
+          "hit_fraction": 0.8,
+          "median_hour_if_hit": 5.0
+        },
+        "first_up2_hour": {
+          "n_hit": 20,
+          "hit_fraction": 0.3076923076923077,
+          "median_hour_if_hit": 9.5
+        },
+        "first_down2_hour": {
+          "n_hit": 35,
+          "hit_fraction": 0.5384615384615384,
+          "median_hour_if_hit": 12.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.3384615384615385,
+          "DOWN_FIRST": 0.5538461538461539,
+          "AMBIGUOUS": 0.03076923076923077,
+          "UNRESOLVED": 0.07692307692307693
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.23076923076923078,
+          "DOWN_FIRST": 0.5076923076923077,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.26153846153846155
+        }
+      },
+      "48": {
+        "n_total": 65,
+        "n_complete": 65,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": -0.008158321863414362,
+          "median": -0.00938562153289546
+        },
+        "mfe": {
+          "mean": 0.029915592451058712,
+          "median": 0.017776520035402976
+        },
+        "mae": {
+          "mean": -0.04238667636635804,
+          "median": -0.030802198079684318
+        },
+        "first_up1_hour": {
+          "n_hit": 48,
+          "hit_fraction": 0.7384615384615385,
+          "median_hour_if_hit": 7.0
+        },
+        "first_down1_hour": {
+          "n_hit": 57,
+          "hit_fraction": 0.8769230769230769,
+          "median_hour_if_hit": 5.0
+        },
+        "first_up2_hour": {
+          "n_hit": 28,
+          "hit_fraction": 0.4307692307692308,
+          "median_hour_if_hit": 15.0
+        },
+        "first_down2_hour": {
+          "n_hit": 45,
+          "hit_fraction": 0.6923076923076923,
+          "median_hour_if_hit": 17.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.4,
+          "DOWN_FIRST": 0.5692307692307692,
+          "AMBIGUOUS": 0.03076923076923077,
+          "UNRESOLVED": 0.0
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.2923076923076923,
+          "DOWN_FIRST": 0.6307692307692307,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.07692307692307693
+        }
+      },
+      "72": {
+        "n_total": 65,
+        "n_complete": 65,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": -0.002760592922043422,
+          "median": -0.00338886589403975
+        },
+        "mfe": {
+          "mean": 0.042865836285818165,
+          "median": 0.02379214675224528
+        },
+        "mae": {
+          "mean": -0.0485014083310007,
+          "median": -0.03604832685259973
+        },
+        "first_up1_hour": {
+          "n_hit": 53,
+          "hit_fraction": 0.8153846153846154,
+          "median_hour_if_hit": 9.0
+        },
+        "first_down1_hour": {
+          "n_hit": 57,
+          "hit_fraction": 0.8769230769230769,
+          "median_hour_if_hit": 5.0
+        },
+        "first_up2_hour": {
+          "n_hit": 36,
+          "hit_fraction": 0.5538461538461539,
+          "median_hour_if_hit": 20.5
+        },
+        "first_down2_hour": {
+          "n_hit": 48,
+          "hit_fraction": 0.7384615384615385,
+          "median_hour_if_hit": 17.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.4,
+          "DOWN_FIRST": 0.5692307692307692,
+          "AMBIGUOUS": 0.03076923076923077,
+          "UNRESOLVED": 0.0
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.3384615384615385,
+          "DOWN_FIRST": 0.6461538461538462,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.015384615384615385
+        }
+      }
+    },
+    "V8_LONG_SIGNAL/VALIDATION": {
+      "1": {
+        "n_total": 63,
+        "n_complete": 63,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": 0.0007412981322829884,
+          "median": -0.0007203457659676893
+        },
+        "mfe": {
+          "mean": 0.005171499563005997,
+          "median": 0.0026926302409453484
+        },
+        "mae": {
+          "mean": -0.0033375512145856342,
+          "median": -0.002832734649816593
+        },
+        "first_up1_hour": {
+          "n_hit": 10,
+          "hit_fraction": 0.15873015873015872,
+          "median_hour_if_hit": 1.0
+        },
+        "first_down1_hour": {
+          "n_hit": 2,
+          "hit_fraction": 0.031746031746031744,
+          "median_hour_if_hit": 1.0
+        },
+        "first_up2_hour": {
+          "n_hit": 2,
+          "hit_fraction": 0.031746031746031744,
+          "median_hour_if_hit": 1.0
+        },
+        "first_down2_hour": {
+          "n_hit": 0,
+          "hit_fraction": 0.0,
+          "median_hour_if_hit": null
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.15873015873015872,
+          "DOWN_FIRST": 0.031746031746031744,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.8095238095238095
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.031746031746031744,
+          "DOWN_FIRST": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.9682539682539683
+        }
+      },
+      "4": {
+        "n_total": 63,
+        "n_complete": 63,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": 0.0007529032412545416,
+          "median": -0.0009205674419087151
+        },
+        "mfe": {
+          "mean": 0.008255654512268059,
+          "median": 0.005752217615723643
+        },
+        "mae": {
+          "mean": -0.00678920769621362,
+          "median": -0.00540710087433216
+        },
+        "first_up1_hour": {
+          "n_hit": 22,
+          "hit_fraction": 0.3492063492063492,
+          "median_hour_if_hit": 2.0
+        },
+        "first_down1_hour": {
+          "n_hit": 13,
+          "hit_fraction": 0.20634920634920634,
+          "median_hour_if_hit": 3.0
+        },
+        "first_up2_hour": {
+          "n_hit": 4,
+          "hit_fraction": 0.06349206349206349,
+          "median_hour_if_hit": 1.5
+        },
+        "first_down2_hour": {
+          "n_hit": 3,
+          "hit_fraction": 0.047619047619047616,
+          "median_hour_if_hit": 3.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.3333333333333333,
+          "DOWN_FIRST": 0.19047619047619047,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.47619047619047616
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.06349206349206349,
+          "DOWN_FIRST": 0.047619047619047616,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.8888888888888888
+        }
+      },
+      "12": {
+        "n_total": 63,
+        "n_complete": 63,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": 0.0014712467710345678,
+          "median": -0.0020981955518254436
+        },
+        "mfe": {
+          "mean": 0.014022230425366664,
+          "median": 0.009462831316793041
+        },
+        "mae": {
+          "mean": -0.011864140499948361,
+          "median": -0.009138887542162077
+        },
+        "first_up1_hour": {
+          "n_hit": 30,
+          "hit_fraction": 0.47619047619047616,
+          "median_hour_if_hit": 2.0
+        },
+        "first_down1_hour": {
+          "n_hit": 27,
+          "hit_fraction": 0.42857142857142855,
+          "median_hour_if_hit": 5.0
+        },
+        "first_up2_hour": {
+          "n_hit": 12,
+          "hit_fraction": 0.19047619047619047,
+          "median_hour_if_hit": 5.0
+        },
+        "first_down2_hour": {
+          "n_hit": 10,
+          "hit_fraction": 0.15873015873015872,
+          "median_hour_if_hit": 8.5
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.4444444444444444,
+          "DOWN_FIRST": 0.30158730158730157,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.25396825396825395
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.1746031746031746,
+          "DOWN_FIRST": 0.14285714285714285,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.6825396825396826
+        }
+      },
+      "24": {
+        "n_total": 63,
+        "n_complete": 63,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": 0.0013390079499602477,
+          "median": -0.0017603634298694049
+        },
+        "mfe": {
+          "mean": 0.022298930473724825,
+          "median": 0.011420532429117669
+        },
+        "mae": {
+          "mean": -0.01831364261845702,
+          "median": -0.013733348443794147
+        },
+        "first_up1_hour": {
+          "n_hit": 36,
+          "hit_fraction": 0.5714285714285714,
+          "median_hour_if_hit": 3.0
+        },
+        "first_down1_hour": {
+          "n_hit": 38,
+          "hit_fraction": 0.6031746031746031,
+          "median_hour_if_hit": 8.5
+        },
+        "first_up2_hour": {
+          "n_hit": 18,
+          "hit_fraction": 0.2857142857142857,
+          "median_hour_if_hit": 9.5
+        },
+        "first_down2_hour": {
+          "n_hit": 15,
+          "hit_fraction": 0.23809523809523808,
+          "median_hour_if_hit": 9.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.49206349206349204,
+          "DOWN_FIRST": 0.3968253968253968,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.1111111111111111
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.2698412698412698,
+          "DOWN_FIRST": 0.2222222222222222,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.5079365079365079
+        }
+      },
+      "48": {
+        "n_total": 63,
+        "n_complete": 63,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": 0.0034330778988520515,
+          "median": -0.001829415391213396
+        },
+        "mfe": {
+          "mean": 0.03347999810331265,
+          "median": 0.01744837522010556
+        },
+        "mae": {
+          "mean": -0.024862189397416478,
+          "median": -0.016495129571769906
+        },
+        "first_up1_hour": {
+          "n_hit": 42,
+          "hit_fraction": 0.6666666666666666,
+          "median_hour_if_hit": 4.0
+        },
+        "first_down1_hour": {
+          "n_hit": 44,
+          "hit_fraction": 0.6984126984126984,
+          "median_hour_if_hit": 9.5
+        },
+        "first_up2_hour": {
+          "n_hit": 28,
+          "hit_fraction": 0.4444444444444444,
+          "median_hour_if_hit": 16.0
+        },
+        "first_down2_hour": {
+          "n_hit": 21,
+          "hit_fraction": 0.3333333333333333,
+          "median_hour_if_hit": 13.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.5396825396825397,
+          "DOWN_FIRST": 0.3968253968253968,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.06349206349206349
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.4126984126984127,
+          "DOWN_FIRST": 0.2857142857142857,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.30158730158730157
+        }
+      },
+      "72": {
+        "n_total": 63,
+        "n_complete": 63,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": 0.003647734073469335,
+          "median": -0.002014330811244247
+        },
+        "mfe": {
+          "mean": 0.04151943057333852,
+          "median": 0.019245717961776654
+        },
+        "mae": {
+          "mean": -0.031607885336571474,
+          "median": -0.017760950534059794
+        },
+        "first_up1_hour": {
+          "n_hit": 44,
+          "hit_fraction": 0.6984126984126984,
+          "median_hour_if_hit": 4.5
+        },
+        "first_down1_hour": {
+          "n_hit": 45,
+          "hit_fraction": 0.7142857142857143,
+          "median_hour_if_hit": 10.0
+        },
+        "first_up2_hour": {
+          "n_hit": 31,
+          "hit_fraction": 0.49206349206349204,
+          "median_hour_if_hit": 17.0
+        },
+        "first_down2_hour": {
+          "n_hit": 28,
+          "hit_fraction": 0.4444444444444444,
+          "median_hour_if_hit": 21.5
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.5714285714285714,
+          "DOWN_FIRST": 0.3968253968253968,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.031746031746031744
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.4603174603174603,
+          "DOWN_FIRST": 0.3492063492063492,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.19047619047619047
+        }
+      }
+    },
+    "V8_LONG_SIGNAL/TEST": {
+      "1": {
+        "n_total": 83,
+        "n_complete": 83,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": -0.0001469277208497462,
+          "median": -0.000680132828008162
+        },
+        "mfe": {
+          "mean": 0.0029272446180801407,
+          "median": 0.0020830610886055645
+        },
+        "mae": {
+          "mean": -0.002988716417387338,
+          "median": -0.002216400398598495
+        },
+        "first_up1_hour": {
+          "n_hit": 3,
+          "hit_fraction": 0.03614457831325301,
+          "median_hour_if_hit": 1.0
+        },
+        "first_down1_hour": {
+          "n_hit": 2,
+          "hit_fraction": 0.024096385542168676,
+          "median_hour_if_hit": 1.0
+        },
+        "first_up2_hour": {
+          "n_hit": 1,
+          "hit_fraction": 0.012048192771084338,
+          "median_hour_if_hit": 1.0
+        },
+        "first_down2_hour": {
+          "n_hit": 0,
+          "hit_fraction": 0.0,
+          "median_hour_if_hit": null
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.03614457831325301,
+          "DOWN_FIRST": 0.024096385542168676,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.9397590361445783
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.012048192771084338,
+          "DOWN_FIRST": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.9879518072289156
+        }
+      },
+      "4": {
+        "n_total": 83,
+        "n_complete": 83,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": 0.0013907369877695344,
+          "median": 0.00029367343514019595
+        },
+        "mfe": {
+          "mean": 0.007090369990284285,
+          "median": 0.0047095265187431234
+        },
+        "mae": {
+          "mean": -0.006093660616795563,
+          "median": -0.005543766669376948
+        },
+        "first_up1_hour": {
+          "n_hit": 14,
+          "hit_fraction": 0.1686746987951807,
+          "median_hour_if_hit": 3.0
+        },
+        "first_down1_hour": {
+          "n_hit": 10,
+          "hit_fraction": 0.12048192771084337,
+          "median_hour_if_hit": 3.0
+        },
+        "first_up2_hour": {
+          "n_hit": 7,
+          "hit_fraction": 0.08433734939759036,
+          "median_hour_if_hit": 2.0
+        },
+        "first_down2_hour": {
+          "n_hit": 1,
+          "hit_fraction": 0.012048192771084338,
+          "median_hour_if_hit": 4.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.1686746987951807,
+          "DOWN_FIRST": 0.12048192771084337,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.7108433734939759
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.08433734939759036,
+          "DOWN_FIRST": 0.012048192771084338,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.9036144578313253
+        }
+      },
+      "12": {
+        "n_total": 83,
+        "n_complete": 83,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": -6.198136456367588e-05,
+          "median": 0.0005627901749654107
+        },
+        "mfe": {
+          "mean": 0.011297303840070574,
+          "median": 0.009538152179419113
+        },
+        "mae": {
+          "mean": -0.010139465192967392,
+          "median": -0.00784671642521495
+        },
+        "first_up1_hour": {
+          "n_hit": 40,
+          "hit_fraction": 0.4819277108433735,
+          "median_hour_if_hit": 5.5
+        },
+        "first_down1_hour": {
+          "n_hit": 27,
+          "hit_fraction": 0.3253012048192771,
+          "median_hour_if_hit": 6.0
+        },
+        "first_up2_hour": {
+          "n_hit": 13,
+          "hit_fraction": 0.1566265060240964,
+          "median_hour_if_hit": 4.0
+        },
+        "first_down2_hour": {
+          "n_hit": 10,
+          "hit_fraction": 0.12048192771084337,
+          "median_hour_if_hit": 7.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.4457831325301205,
+          "DOWN_FIRST": 0.27710843373493976,
+          "AMBIGUOUS": 0.012048192771084338,
+          "UNRESOLVED": 0.26506024096385544
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.1566265060240964,
+          "DOWN_FIRST": 0.10843373493975904,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.7349397590361446
+        }
+      },
+      "24": {
+        "n_total": 83,
+        "n_complete": 83,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": 0.0016660143855559018,
+          "median": 0.0027733592075860347
+        },
+        "mfe": {
+          "mean": 0.015898931127120083,
+          "median": 0.013469151567251147
+        },
+        "mae": {
+          "mean": -0.013644584323036451,
+          "median": -0.010719152525875186
+        },
+        "first_up1_hour": {
+          "n_hit": 51,
+          "hit_fraction": 0.6144578313253012,
+          "median_hour_if_hit": 6.0
+        },
+        "first_down1_hour": {
+          "n_hit": 43,
+          "hit_fraction": 0.5180722891566265,
+          "median_hour_if_hit": 8.0
+        },
+        "first_up2_hour": {
+          "n_hit": 23,
+          "hit_fraction": 0.27710843373493976,
+          "median_hour_if_hit": 10.0
+        },
+        "first_down2_hour": {
+          "n_hit": 19,
+          "hit_fraction": 0.2289156626506024,
+          "median_hour_if_hit": 11.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.5421686746987951,
+          "DOWN_FIRST": 0.3614457831325301,
+          "AMBIGUOUS": 0.012048192771084338,
+          "UNRESOLVED": 0.08433734939759036
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.27710843373493976,
+          "DOWN_FIRST": 0.20481927710843373,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.5180722891566265
+        }
+      },
+      "48": {
+        "n_total": 83,
+        "n_complete": 83,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": 0.004868418715956731,
+          "median": 0.0030966358029973495
+        },
+        "mfe": {
+          "mean": 0.02557868211716357,
+          "median": 0.020003857404609526
+        },
+        "mae": {
+          "mean": -0.02004099635050864,
+          "median": -0.016053214461779985
+        },
+        "first_up1_hour": {
+          "n_hit": 64,
+          "hit_fraction": 0.7710843373493976,
+          "median_hour_if_hit": 7.0
+        },
+        "first_down1_hour": {
+          "n_hit": 56,
+          "hit_fraction": 0.6746987951807228,
+          "median_hour_if_hit": 13.0
+        },
+        "first_up2_hour": {
+          "n_hit": 42,
+          "hit_fraction": 0.5060240963855421,
+          "median_hour_if_hit": 23.5
+        },
+        "first_down2_hour": {
+          "n_hit": 33,
+          "hit_fraction": 0.39759036144578314,
+          "median_hour_if_hit": 23.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.6024096385542169,
+          "DOWN_FIRST": 0.3855421686746988,
+          "AMBIGUOUS": 0.012048192771084338,
+          "UNRESOLVED": 0.0
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.46987951807228917,
+          "DOWN_FIRST": 0.3373493975903614,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.1927710843373494
+        }
+      },
+      "72": {
+        "n_total": 83,
+        "n_complete": 82,
+        "n_incomplete": 1,
+        "forward_return": {
+          "mean": 0.006547290319160378,
+          "median": 0.007718915957553807
+        },
+        "mfe": {
+          "mean": 0.034225083660310865,
+          "median": 0.027094701838247692
+        },
+        "mae": {
+          "mean": -0.024062005039627223,
+          "median": -0.018730690965070573
+        },
+        "first_up1_hour": {
+          "n_hit": 66,
+          "hit_fraction": 0.8048780487804879,
+          "median_hour_if_hit": 9.5
+        },
+        "first_down1_hour": {
+          "n_hit": 56,
+          "hit_fraction": 0.6829268292682927,
+          "median_hour_if_hit": 13.0
+        },
+        "first_up2_hour": {
+          "n_hit": 52,
+          "hit_fraction": 0.6341463414634146,
+          "median_hour_if_hit": 26.0
+        },
+        "first_down2_hour": {
+          "n_hit": 41,
+          "hit_fraction": 0.5,
+          "median_hour_if_hit": 26.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.5975609756097561,
+          "DOWN_FIRST": 0.3902439024390244,
+          "AMBIGUOUS": 0.012195121951219513,
+          "UNRESOLVED": 0.0
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.5609756097560976,
+          "DOWN_FIRST": 0.3902439024390244,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.04878048780487805
+        }
+      }
+    },
+    "V8_FLAT_SIGNAL/TRAIN": {
+      "1": {
+        "n_total": 65,
+        "n_complete": 65,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": 0.00194810966986187,
+          "median": 0.0012583043783394032
+        },
+        "mfe": {
+          "mean": 0.008274899410630645,
+          "median": 0.004870138654137657
+        },
+        "mae": {
+          "mean": -0.007764542182886062,
+          "median": -0.0051433980123047895
+        },
+        "first_up1_hour": {
+          "n_hit": 15,
+          "hit_fraction": 0.23076923076923078,
+          "median_hour_if_hit": 1.0
+        },
+        "first_down1_hour": {
+          "n_hit": 15,
+          "hit_fraction": 0.23076923076923078,
+          "median_hour_if_hit": 1.0
+        },
+        "first_up2_hour": {
+          "n_hit": 3,
+          "hit_fraction": 0.046153846153846156,
+          "median_hour_if_hit": 1.0
+        },
+        "first_down2_hour": {
+          "n_hit": 3,
+          "hit_fraction": 0.046153846153846156,
+          "median_hour_if_hit": 1.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.15384615384615385,
+          "DOWN_FIRST": 0.15384615384615385,
+          "AMBIGUOUS": 0.07692307692307693,
+          "UNRESOLVED": 0.6153846153846154
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.046153846153846156,
+          "DOWN_FIRST": 0.046153846153846156,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.9076923076923077
+        }
+      },
+      "4": {
+        "n_total": 65,
+        "n_complete": 65,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": 0.004728647963677916,
+          "median": 0.002246759197670478
+        },
+        "mfe": {
+          "mean": 0.013612295921761367,
+          "median": 0.008104694156029657
+        },
+        "mae": {
+          "mean": -0.010999841895840216,
+          "median": -0.007857936774627095
+        },
+        "first_up1_hour": {
+          "n_hit": 28,
+          "hit_fraction": 0.4307692307692308,
+          "median_hour_if_hit": 1.0
+        },
+        "first_down1_hour": {
+          "n_hit": 24,
+          "hit_fraction": 0.36923076923076925,
+          "median_hour_if_hit": 1.0
+        },
+        "first_up2_hour": {
+          "n_hit": 9,
+          "hit_fraction": 0.13846153846153847,
+          "median_hour_if_hit": 2.0
+        },
+        "first_down2_hour": {
+          "n_hit": 8,
+          "hit_fraction": 0.12307692307692308,
+          "median_hour_if_hit": 2.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.3230769230769231,
+          "DOWN_FIRST": 0.24615384615384617,
+          "AMBIGUOUS": 0.07692307692307693,
+          "UNRESOLVED": 0.35384615384615387
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.13846153846153847,
+          "DOWN_FIRST": 0.12307692307692308,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.7384615384615385
+        }
+      },
+      "12": {
+        "n_total": 65,
+        "n_complete": 65,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": 0.0010592725293118968,
+          "median": 0.0014384040788841812
+        },
+        "mfe": {
+          "mean": 0.019902960527484092,
+          "median": 0.013060689732897535
+        },
+        "mae": {
+          "mean": -0.01908138547748692,
+          "median": -0.010729173496213051
+        },
+        "first_up1_hour": {
+          "n_hit": 39,
+          "hit_fraction": 0.6,
+          "median_hour_if_hit": 2.0
+        },
+        "first_down1_hour": {
+          "n_hit": 35,
+          "hit_fraction": 0.5384615384615384,
+          "median_hour_if_hit": 2.0
+        },
+        "first_up2_hour": {
+          "n_hit": 18,
+          "hit_fraction": 0.27692307692307694,
+          "median_hour_if_hit": 4.5
+        },
+        "first_down2_hour": {
+          "n_hit": 18,
+          "hit_fraction": 0.27692307692307694,
+          "median_hour_if_hit": 6.5
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.4307692307692308,
+          "DOWN_FIRST": 0.3076923076923077,
+          "AMBIGUOUS": 0.09230769230769231,
+          "UNRESOLVED": 0.16923076923076924
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.24615384615384617,
+          "DOWN_FIRST": 0.23076923076923078,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.5230769230769231
+        }
+      },
+      "24": {
+        "n_total": 65,
+        "n_complete": 65,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": 0.0005761809186349404,
+          "median": 0.0023468110072457637
+        },
+        "mfe": {
+          "mean": 0.02704643681045093,
+          "median": 0.018048608800377952
+        },
+        "mae": {
+          "mean": -0.029094303262095146,
+          "median": -0.01995009411000148
+        },
+        "first_up1_hour": {
+          "n_hit": 47,
+          "hit_fraction": 0.7230769230769231,
+          "median_hour_if_hit": 4.0
+        },
+        "first_down1_hour": {
+          "n_hit": 45,
+          "hit_fraction": 0.6923076923076923,
+          "median_hour_if_hit": 4.0
+        },
+        "first_up2_hour": {
+          "n_hit": 29,
+          "hit_fraction": 0.4461538461538462,
+          "median_hour_if_hit": 7.0
+        },
+        "first_down2_hour": {
+          "n_hit": 32,
+          "hit_fraction": 0.49230769230769234,
+          "median_hour_if_hit": 10.5
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.5230769230769231,
+          "DOWN_FIRST": 0.3384615384615385,
+          "AMBIGUOUS": 0.09230769230769231,
+          "UNRESOLVED": 0.046153846153846156
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.38461538461538464,
+          "DOWN_FIRST": 0.38461538461538464,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.23076923076923078
+        }
+      },
+      "48": {
+        "n_total": 65,
+        "n_complete": 65,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": -0.0026972361754123574,
+          "median": 0.0011934925933254625
+        },
+        "mfe": {
+          "mean": 0.035583332324946336,
+          "median": 0.022291369528886218
+        },
+        "mae": {
+          "mean": -0.04190843826258175,
+          "median": -0.03168150433926065
+        },
+        "first_up1_hour": {
+          "n_hit": 51,
+          "hit_fraction": 0.7846153846153846,
+          "median_hour_if_hit": 4.0
+        },
+        "first_down1_hour": {
+          "n_hit": 52,
+          "hit_fraction": 0.8,
+          "median_hour_if_hit": 7.0
+        },
+        "first_up2_hour": {
+          "n_hit": 35,
+          "hit_fraction": 0.5384615384615384,
+          "median_hour_if_hit": 11.0
+        },
+        "first_down2_hour": {
+          "n_hit": 42,
+          "hit_fraction": 0.6461538461538462,
+          "median_hour_if_hit": 14.5
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.5538461538461539,
+          "DOWN_FIRST": 0.35384615384615387,
+          "AMBIGUOUS": 0.09230769230769231,
+          "UNRESOLVED": 0.0
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.4307692307692308,
+          "DOWN_FIRST": 0.47692307692307695,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.09230769230769231
+        }
+      },
+      "72": {
+        "n_total": 65,
+        "n_complete": 65,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": -0.001932315710128408,
+          "median": 0.004518621052375549
+        },
+        "mfe": {
+          "mean": 0.04370839183724468,
+          "median": 0.025946685215614718
+        },
+        "mae": {
+          "mean": -0.04970591553754495,
+          "median": -0.03430889176301655
+        },
+        "first_up1_hour": {
+          "n_hit": 53,
+          "hit_fraction": 0.8153846153846154,
+          "median_hour_if_hit": 4.0
+        },
+        "first_down1_hour": {
+          "n_hit": 54,
+          "hit_fraction": 0.8307692307692308,
+          "median_hour_if_hit": 7.0
+        },
+        "first_up2_hour": {
+          "n_hit": 42,
+          "hit_fraction": 0.6461538461538462,
+          "median_hour_if_hit": 17.5
+        },
+        "first_down2_hour": {
+          "n_hit": 46,
+          "hit_fraction": 0.7076923076923077,
+          "median_hour_if_hit": 15.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.5538461538461539,
+          "DOWN_FIRST": 0.35384615384615387,
+          "AMBIGUOUS": 0.09230769230769231,
+          "UNRESOLVED": 0.0
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.47692307692307695,
+          "DOWN_FIRST": 0.5076923076923077,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.015384615384615385
+        }
+      }
+    },
+    "V8_FLAT_SIGNAL/VALIDATION": {
+      "1": {
+        "n_total": 62,
+        "n_complete": 62,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": -0.00018910715472862435,
+          "median": 0.0007571939841982678
+        },
+        "mfe": {
+          "mean": 0.003404905810564482,
+          "median": 0.0026648570940069893
+        },
+        "mae": {
+          "mean": -0.00489001701799494,
+          "median": -0.002158522045293765
+        },
+        "first_up1_hour": {
+          "n_hit": 2,
+          "hit_fraction": 0.03225806451612903,
+          "median_hour_if_hit": 1.0
+        },
+        "first_down1_hour": {
+          "n_hit": 8,
+          "hit_fraction": 0.12903225806451613,
+          "median_hour_if_hit": 1.0
+        },
+        "first_up2_hour": {
+          "n_hit": 0,
+          "hit_fraction": 0.0,
+          "median_hour_if_hit": null
+        },
+        "first_down2_hour": {
+          "n_hit": 3,
+          "hit_fraction": 0.04838709677419355,
+          "median_hour_if_hit": 1.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.016129032258064516,
+          "DOWN_FIRST": 0.11290322580645161,
+          "AMBIGUOUS": 0.016129032258064516,
+          "UNRESOLVED": 0.8548387096774194
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.0,
+          "DOWN_FIRST": 0.04838709677419355,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.9516129032258065
+        }
+      },
+      "4": {
+        "n_total": 62,
+        "n_complete": 62,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": -0.0013541692361014699,
+          "median": 0.001216484149190733
+        },
+        "mfe": {
+          "mean": 0.005924043186589513,
+          "median": 0.004761278581910777
+        },
+        "mae": {
+          "mean": -0.008987343805721405,
+          "median": -0.003943351606131851
+        },
+        "first_up1_hour": {
+          "n_hit": 7,
+          "hit_fraction": 0.11290322580645161,
+          "median_hour_if_hit": 2.0
+        },
+        "first_down1_hour": {
+          "n_hit": 19,
+          "hit_fraction": 0.3064516129032258,
+          "median_hour_if_hit": 2.0
+        },
+        "first_up2_hour": {
+          "n_hit": 2,
+          "hit_fraction": 0.03225806451612903,
+          "median_hour_if_hit": 2.0
+        },
+        "first_down2_hour": {
+          "n_hit": 6,
+          "hit_fraction": 0.0967741935483871,
+          "median_hour_if_hit": 2.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.06451612903225806,
+          "DOWN_FIRST": 0.2903225806451613,
+          "AMBIGUOUS": 0.016129032258064516,
+          "UNRESOLVED": 0.6290322580645161
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.016129032258064516,
+          "DOWN_FIRST": 0.0967741935483871,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.8870967741935484
+        }
+      },
+      "12": {
+        "n_total": 62,
+        "n_complete": 62,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": -0.003778955679104369,
+          "median": 0.0006144064654728387
+        },
+        "mfe": {
+          "mean": 0.01082857460426491,
+          "median": 0.006775662374850389
+        },
+        "mae": {
+          "mean": -0.014978972798546712,
+          "median": -0.008468798320584003
+        },
+        "first_up1_hour": {
+          "n_hit": 22,
+          "hit_fraction": 0.3548387096774194,
+          "median_hour_if_hit": 5.0
+        },
+        "first_down1_hour": {
+          "n_hit": 25,
+          "hit_fraction": 0.4032258064516129,
+          "median_hour_if_hit": 3.0
+        },
+        "first_up2_hour": {
+          "n_hit": 7,
+          "hit_fraction": 0.11290322580645161,
+          "median_hour_if_hit": 9.0
+        },
+        "first_down2_hour": {
+          "n_hit": 10,
+          "hit_fraction": 0.16129032258064516,
+          "median_hour_if_hit": 3.5
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.25806451612903225,
+          "DOWN_FIRST": 0.3709677419354839,
+          "AMBIGUOUS": 0.016129032258064516,
+          "UNRESOLVED": 0.3548387096774194
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.08064516129032258,
+          "DOWN_FIRST": 0.16129032258064516,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.7580645161290323
+        }
+      },
+      "24": {
+        "n_total": 62,
+        "n_complete": 62,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": -0.004215863940870905,
+          "median": 0.00035487846971204995
+        },
+        "mfe": {
+          "mean": 0.015390972613203546,
+          "median": 0.008775190366055008
+        },
+        "mae": {
+          "mean": -0.02010796944408177,
+          "median": -0.010654535297350831
+        },
+        "first_up1_hour": {
+          "n_hit": 29,
+          "hit_fraction": 0.46774193548387094,
+          "median_hour_if_hit": 8.0
+        },
+        "first_down1_hour": {
+          "n_hit": 33,
+          "hit_fraction": 0.532258064516129,
+          "median_hour_if_hit": 3.0
+        },
+        "first_up2_hour": {
+          "n_hit": 13,
+          "hit_fraction": 0.20967741935483872,
+          "median_hour_if_hit": 10.0
+        },
+        "first_down2_hour": {
+          "n_hit": 18,
+          "hit_fraction": 0.2903225806451613,
+          "median_hour_if_hit": 10.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.3548387096774194,
+          "DOWN_FIRST": 0.45161290322580644,
+          "AMBIGUOUS": 0.016129032258064516,
+          "UNRESOLVED": 0.1774193548387097
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.1774193548387097,
+          "DOWN_FIRST": 0.2903225806451613,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.532258064516129
+        }
+      },
+      "48": {
+        "n_total": 62,
+        "n_complete": 62,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": -0.003149066107604887,
+          "median": -0.0007286971325568548
+        },
+        "mfe": {
+          "mean": 0.025868740889250223,
+          "median": 0.014561232833690263
+        },
+        "mae": {
+          "mean": -0.027937348684008975,
+          "median": -0.014665140846155555
+        },
+        "first_up1_hour": {
+          "n_hit": 40,
+          "hit_fraction": 0.6451612903225806,
+          "median_hour_if_hit": 11.0
+        },
+        "first_down1_hour": {
+          "n_hit": 39,
+          "hit_fraction": 0.6290322580645161,
+          "median_hour_if_hit": 5.0
+        },
+        "first_up2_hour": {
+          "n_hit": 20,
+          "hit_fraction": 0.3225806451612903,
+          "median_hour_if_hit": 19.0
+        },
+        "first_down2_hour": {
+          "n_hit": 27,
+          "hit_fraction": 0.43548387096774194,
+          "median_hour_if_hit": 15.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.46774193548387094,
+          "DOWN_FIRST": 0.46774193548387094,
+          "AMBIGUOUS": 0.016129032258064516,
+          "UNRESOLVED": 0.04838709677419355
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.2903225806451613,
+          "DOWN_FIRST": 0.41935483870967744,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.2903225806451613
+        }
+      },
+      "72": {
+        "n_total": 62,
+        "n_complete": 62,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": -0.006331708815148295,
+          "median": -0.0040834553709896415
+        },
+        "mfe": {
+          "mean": 0.031917087276312206,
+          "median": 0.014995295722594615
+        },
+        "mae": {
+          "mean": -0.03613507202106721,
+          "median": -0.02381379693907726
+        },
+        "first_up1_hour": {
+          "n_hit": 43,
+          "hit_fraction": 0.6935483870967742,
+          "median_hour_if_hit": 12.0
+        },
+        "first_down1_hour": {
+          "n_hit": 43,
+          "hit_fraction": 0.6935483870967742,
+          "median_hour_if_hit": 7.0
+        },
+        "first_up2_hour": {
+          "n_hit": 24,
+          "hit_fraction": 0.3870967741935484,
+          "median_hour_if_hit": 22.5
+        },
+        "first_down2_hour": {
+          "n_hit": 33,
+          "hit_fraction": 0.532258064516129,
+          "median_hour_if_hit": 19.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.4838709677419355,
+          "DOWN_FIRST": 0.46774193548387094,
+          "AMBIGUOUS": 0.016129032258064516,
+          "UNRESOLVED": 0.03225806451612903
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.3225806451612903,
+          "DOWN_FIRST": 0.45161290322580644,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.22580645161290322
+        }
+      }
+    },
+    "V8_FLAT_SIGNAL/TEST": {
+      "1": {
+        "n_total": 84,
+        "n_complete": 84,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": -0.0005778630263804268,
+          "median": -3.371321528555793e-05
+        },
+        "mfe": {
+          "mean": 0.003268796971839672,
+          "median": 0.002415717779261861
+        },
+        "mae": {
+          "mean": -0.004200177032592615,
+          "median": -0.0025460923474550645
+        },
+        "first_up1_hour": {
+          "n_hit": 4,
+          "hit_fraction": 0.047619047619047616,
+          "median_hour_if_hit": 1.0
+        },
+        "first_down1_hour": {
+          "n_hit": 10,
+          "hit_fraction": 0.11904761904761904,
+          "median_hour_if_hit": 1.0
+        },
+        "first_up2_hour": {
+          "n_hit": 0,
+          "hit_fraction": 0.0,
+          "median_hour_if_hit": null
+        },
+        "first_down2_hour": {
+          "n_hit": 2,
+          "hit_fraction": 0.023809523809523808,
+          "median_hour_if_hit": 1.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.047619047619047616,
+          "DOWN_FIRST": 0.11904761904761904,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.8333333333333334
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.0,
+          "DOWN_FIRST": 0.023809523809523808,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.9761904761904762
+        }
+      },
+      "4": {
+        "n_total": 84,
+        "n_complete": 84,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": 6.342023948871247e-05,
+          "median": 0.0012684934419227023
+        },
+        "mfe": {
+          "mean": 0.006099100970087355,
+          "median": 0.00482415287195237
+        },
+        "mae": {
+          "mean": -0.007159990799039695,
+          "median": -0.0044251269785237635
+        },
+        "first_up1_hour": {
+          "n_hit": 12,
+          "hit_fraction": 0.14285714285714285,
+          "median_hour_if_hit": 3.0
+        },
+        "first_down1_hour": {
+          "n_hit": 24,
+          "hit_fraction": 0.2857142857142857,
+          "median_hour_if_hit": 2.0
+        },
+        "first_up2_hour": {
+          "n_hit": 1,
+          "hit_fraction": 0.011904761904761904,
+          "median_hour_if_hit": 4.0
+        },
+        "first_down2_hour": {
+          "n_hit": 5,
+          "hit_fraction": 0.05952380952380952,
+          "median_hour_if_hit": 2.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.10714285714285714,
+          "DOWN_FIRST": 0.2857142857142857,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.6071428571428571
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.011904761904761904,
+          "DOWN_FIRST": 0.05952380952380952,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.9285714285714286
+        }
+      },
+      "12": {
+        "n_total": 84,
+        "n_complete": 84,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": 0.0011574661351748778,
+          "median": 0.0014123049676504351
+        },
+        "mfe": {
+          "mean": 0.010820876069963284,
+          "median": 0.009345043103528017
+        },
+        "mae": {
+          "mean": -0.010075620952880456,
+          "median": -0.00875240455067089
+        },
+        "first_up1_hour": {
+          "n_hit": 39,
+          "hit_fraction": 0.4642857142857143,
+          "median_hour_if_hit": 6.0
+        },
+        "first_down1_hour": {
+          "n_hit": 38,
+          "hit_fraction": 0.4523809523809524,
+          "median_hour_if_hit": 3.0
+        },
+        "first_up2_hour": {
+          "n_hit": 12,
+          "hit_fraction": 0.14285714285714285,
+          "median_hour_if_hit": 9.0
+        },
+        "first_down2_hour": {
+          "n_hit": 8,
+          "hit_fraction": 0.09523809523809523,
+          "median_hour_if_hit": 3.5
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.36904761904761907,
+          "DOWN_FIRST": 0.39285714285714285,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.23809523809523808
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.14285714285714285,
+          "DOWN_FIRST": 0.09523809523809523,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.7619047619047619
+        }
+      },
+      "24": {
+        "n_total": 84,
+        "n_complete": 84,
+        "n_incomplete": 0,
+        "forward_return": {
+          "mean": 0.0003365841046053636,
+          "median": 0.0017946399288457648
+        },
+        "mfe": {
+          "mean": 0.016032331891683786,
+          "median": 0.013388242926230642
+        },
+        "mae": {
+          "mean": -0.016159948774845227,
+          "median": -0.014126964934162323
+        },
+        "first_up1_hour": {
+          "n_hit": 52,
+          "hit_fraction": 0.6190476190476191,
+          "median_hour_if_hit": 8.5
+        },
+        "first_down1_hour": {
+          "n_hit": 50,
+          "hit_fraction": 0.5952380952380952,
+          "median_hour_if_hit": 5.5
+        },
+        "first_up2_hour": {
+          "n_hit": 23,
+          "hit_fraction": 0.27380952380952384,
+          "median_hour_if_hit": 12.0
+        },
+        "first_down2_hour": {
+          "n_hit": 24,
+          "hit_fraction": 0.2857142857142857,
+          "median_hour_if_hit": 14.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.44047619047619047,
+          "DOWN_FIRST": 0.4642857142857143,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.09523809523809523
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.27380952380952384,
+          "DOWN_FIRST": 0.2619047619047619,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.4642857142857143
+        }
+      },
+      "48": {
+        "n_total": 84,
+        "n_complete": 83,
+        "n_incomplete": 1,
+        "forward_return": {
+          "mean": 0.004261234605870014,
+          "median": 0.006159941558710802
+        },
+        "mfe": {
+          "mean": 0.024628165816985653,
+          "median": 0.021004417786445684
+        },
+        "mae": {
+          "mean": -0.022651767886243006,
+          "median": -0.018289973963714456
+        },
+        "first_up1_hour": {
+          "n_hit": 61,
+          "hit_fraction": 0.7349397590361446,
+          "median_hour_if_hit": 10.0
+        },
+        "first_down1_hour": {
+          "n_hit": 58,
+          "hit_fraction": 0.6987951807228916,
+          "median_hour_if_hit": 7.5
+        },
+        "first_up2_hour": {
+          "n_hit": 44,
+          "hit_fraction": 0.5301204819277109,
+          "median_hour_if_hit": 21.5
+        },
+        "first_down2_hour": {
+          "n_hit": 38,
+          "hit_fraction": 0.4578313253012048,
+          "median_hour_if_hit": 22.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.4939759036144578,
+          "DOWN_FIRST": 0.4819277108433735,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.024096385542168676
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.43373493975903615,
+          "DOWN_FIRST": 0.42168674698795183,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.14457831325301204
+        }
+      },
+      "72": {
+        "n_total": 84,
+        "n_complete": 82,
+        "n_incomplete": 2,
+        "forward_return": {
+          "mean": 0.006312352577122974,
+          "median": 0.003289753792799277
+        },
+        "mfe": {
+          "mean": 0.030979604941171794,
+          "median": 0.024726218473458128
+        },
+        "mae": {
+          "mean": -0.027081349509394455,
+          "median": -0.020129047881377926
+        },
+        "first_up1_hour": {
+          "n_hit": 65,
+          "hit_fraction": 0.7926829268292683,
+          "median_hour_if_hit": 11.0
+        },
+        "first_down1_hour": {
+          "n_hit": 60,
+          "hit_fraction": 0.7317073170731707,
+          "median_hour_if_hit": 8.0
+        },
+        "first_up2_hour": {
+          "n_hit": 49,
+          "hit_fraction": 0.5975609756097561,
+          "median_hour_if_hit": 27.0
+        },
+        "first_down2_hour": {
+          "n_hit": 41,
+          "hit_fraction": 0.5,
+          "median_hour_if_hit": 23.0
+        },
+        "race_1pct": {
+          "UP_FIRST": 0.524390243902439,
+          "DOWN_FIRST": 0.47560975609756095,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.0
+        },
+        "race_2pct": {
+          "UP_FIRST": 0.4878048780487805,
+          "DOWN_FIRST": 0.43902439024390244,
+          "AMBIGUOUS": 0.0,
+          "UNRESOLVED": 0.07317073170731707
+        }
+      }
+    }
+  },
+  "archived_funded_strategy_metrics": {
+    "TRAIN": {
+      "total_return": 2.572524676981601,
+      "cagr": 0.8892894640054636,
+      "sharpe": 1.4063298928066053,
+      "sortino": 1.9836673069920332,
+      "max_dd": -0.5364709021144584,
+      "trades": 65,
+      "win_rate": 0.16923076923076924,
+      "expectancy": 0.026561651152434168,
+      "profit_factor": 2.586798613725062,
+      "avg_winner": 0.25586833744306736,
+      "avg_loser": -0.020148970128991105,
+      "payoff_ratio": 12.698829558286667,
+      "fees": 0.14394490501765822,
+      "slippage": 0.057578122674151494,
+      "funding": 1.2426296613979708,
+      "turnover": 287.8898100353166,
+      "longest_losing_streak": 14,
+      "insolvent": false,
+      "simultaneous_signal_conflicts": 0,
+      "tp1_rate": 0.0
+    },
+    "VALIDATION": {
+      "total_return": 0.39864085893268686,
+      "cagr": 0.18277736568612202,
+      "sharpe": 0.6717501737752427,
+      "sortino": 0.9637552636001353,
+      "max_dd": -0.3430389151395894,
+      "trades": 63,
+      "win_rate": 0.15873015873015872,
+      "expectancy": 0.007902281386738102,
+      "profit_factor": 1.6968880810940175,
+      "avg_winner": 0.12122249040133462,
+      "avg_loser": -0.013478890125449918,
+      "payoff_ratio": 8.993506829798294,
+      "fees": 0.05694440092013533,
+      "slippage": 0.022777783113650828,
+      "funding": 0.09027693288523372,
+      "turnover": 113.88880184027062,
+      "longest_losing_streak": 16,
+      "insolvent": false,
+      "simultaneous_signal_conflicts": 0,
+      "tp1_rate": 0.0
+    },
+    "TEST": {
+      "total_return": 0.6654573480098642,
+      "cagr": 0.2006671613842066,
+      "sharpe": 0.7317387874093798,
+      "sortino": 1.0500391307929762,
+      "max_dd": -0.3200796038401219,
+      "trades": 84,
+      "win_rate": 0.13095238095238096,
+      "expectancy": 0.009086141060460129,
+      "profit_factor": 1.8492809239374324,
+      "avg_winner": 0.15108369449369408,
+      "avg_loser": -0.012310750552766906,
+      "payoff_ratio": 12.272500677039323,
+      "fees": 0.12339057009150016,
+      "slippage": 0.049356269712164995,
+      "funding": 0.20368511102958017,
+      "turnover": 246.78114018300033,
+      "longest_losing_streak": 21,
+      "insolvent": false,
+      "simultaneous_signal_conflicts": 0,
+      "tp1_rate": 0.0
+    },
+    "ALL": {
+      "total_return": 7.331172459696292,
+      "cagr": 0.3665054138100867,
+      "sharpe": 0.9650270502197285,
+      "sortino": 1.3713723198220562,
+      "max_dd": -0.5364709021144584,
+      "trades": 211,
+      "win_rate": 0.14691943127962084,
+      "expectancy": 0.014173757581115677,
+      "profit_factor": 2.1071975808851624,
+      "avg_winner": 0.18360558721231482,
+      "avg_loser": -0.015006168633146393,
+      "payoff_ratio": 12.235340792236428,
+      "fees": 0.959620073856058,
+      "slippage": 0.38384847998283556,
+      "funding": 2.586370548264443,
+      "turnover": 1919.2401477121155,
+      "longest_losing_streak": 21,
+      "insolvent": false,
+      "simultaneous_signal_conflicts": 0,
+      "tp1_rate": 0.0
+    }
+  },
+  "source_commit": "44029b4768e2b4bc47643bb51bf8a28432623a39",
+  "note": "Fresh table is gross event behavior, not funded strategy PnL. Archived net V8 remains an independent mechanical strategy; no replacement proposed."
+}

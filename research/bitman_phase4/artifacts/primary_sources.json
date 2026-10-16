@@ -1,0 +1,133 @@
+{
+  "videos": {
+    "tDnUVybgL20": {
+      "url": "https://www.youtube.com/watch?v=tDnUVybgL20",
+      "user_attested_date": "2024",
+      "publication_metadata_independently_verified": false,
+      "provider": "vidIQ public transcript",
+      "language": "es",
+      "characters": 30452,
+      "cache_file_sha256": "a8eca690b35b46443ee098a6f0247545987022d4558eb29be0335e5681466a2f",
+      "transcript_utf8_sha256": "77059a930665e33222412d940b3d42c86a315bf3b549ce5c87090b876a3d76d7",
+      "claims": [
+        {
+          "character_offset": 870,
+          "paraphrase": "Zero line is part of the simplified Koncorde interpretation."
+        },
+        {
+          "character_offset": 2507,
+          "paraphrase": "MA entering/leaving the mountain defines entry/exit in the explanation."
+        },
+        {
+          "character_offset": 8947,
+          "paraphrase": "Quick exit/reentry can be interesting; no exact bar count is supplied."
+        }
+      ],
+      "note": "Character offsets, not video timestamps; no visual verification or full copyrighted transcript committed."
+    },
+    "GtRimUXhMG4": {
+      "url": "https://www.youtube.com/watch?v=GtRimUXhMG4",
+      "user_attested_date": "2026-09-07",
+      "publication_metadata_independently_verified": false,
+      "provider": "vidIQ public transcript",
+      "language": "es",
+      "characters": 41518,
+      "cache_file_sha256": "8ee26bc7ec00d908afb6f06f1cf8274533fd6745584db117132bf2bf37ad1ffd",
+      "transcript_utf8_sha256": "d288c48bea161ce14fb6bf62cc1257da889f5644cfec28026ab05c2b58a46c0e",
+      "claims": [
+        {
+          "character_offset": 7559,
+          "paraphrase": "The creator names Awesome Oscillator."
+        },
+        {
+          "character_offset": 8598,
+          "paraphrase": "Oscillator zero crossing and subsequent ADX turn are distinct observations."
+        },
+        {
+          "character_offset": 8897,
+          "paraphrase": "An ADX turn can lag the oscillator; an impulse is not assumed before it turns."
+        },
+        {
+          "character_offset": 26571,
+          "paraphrase": "A modified/adapted RSI is discussed, without a reproducible private formula."
+        },
+        {
+          "character_offset": 30756,
+          "paraphrase": "Interpreting only a green or red bar is insufficient."
+        }
+      ],
+      "note": "Character offsets, not video timestamps; no visual verification or full copyrighted transcript committed."
+    },
+    "H-oPU2snPJQ": {
+      "url": "https://www.youtube.com/watch?v=H-oPU2snPJQ",
+      "user_attested_date": "2026-10-06",
+      "publication_metadata_independently_verified": false,
+      "provider": "vidIQ public transcript",
+      "language": "es",
+      "characters": 46399,
+      "cache_file_sha256": "4405afde52e7169a7941b4508b43d1dd6be068bea9a97f900438ebe15168555d",
+      "transcript_utf8_sha256": "4140e0a59b8a4d4cd428320e0f0d02b95b0e0686b4989e53d334af5dddd8fbe0",
+      "claims": [
+        {
+          "character_offset": 8708,
+          "paraphrase": "Oscillator reaching/breaking zero precedes the described ADX impulse."
+        },
+        {
+          "character_offset": 9248,
+          "paraphrase": "Volatility is sought alongside the developing impulse, rather than assumed from color."
+        }
+      ],
+      "note": "Character offsets, not video timestamps; no visual verification or full copyrighted transcript committed."
+    },
+    "chmnhyuJUic": {
+      "url": "https://www.youtube.com/watch?v=chmnhyuJUic",
+      "user_attested_date": "2026-10-14",
+      "publication_metadata_independently_verified": false,
+      "provider": "vidIQ public transcript",
+      "language": "es",
+      "characters": 31990,
+      "cache_file_sha256": "3b9512cad15e1b62b1dc19b29f2d921fe3296c43bd8c03e89713aa34f8b68d42",
+      "transcript_utf8_sha256": "51e948a2df5895684e546f06b7cf3107cced4baa01e9d38d2fd399b68c52b1ef",
+      "claims": [
+        {
+          "character_offset": 6213,
+          "paraphrase": "Oscillator zero is a meaningful reference in the commentary."
+        },
+        {
+          "character_offset": 6581,
+          "paraphrase": "An isolated colored candle is not enough."
+        },
+        {
+          "character_offset": 6979,
+          "paraphrase": "ADX turn is discussed in relation to the oscillator crossing zero."
+        },
+        {
+          "character_offset": 9252,
+          "paraphrase": "Volatility starting to increase is relevant."
+        },
+        {
+          "character_offset": 11571,
+          "paraphrase": "A volatility reference around 50 percent is explicitly mentioned."
+        },
+        {
+          "character_offset": 11645,
+          "paraphrase": "Koncorde near zero is discussed as context."
+        },
+        {
+          "character_offset": 12998,
+          "paraphrase": "An adapted hourly RSI is discussed, without revealing its formula."
+        }
+      ],
+      "note": "Character offsets, not video timestamps; no visual verification or full copyrighted transcript committed."
+    }
+  },
+  "authorization": {
+    "maximum_credits": 20,
+    "transcript_calls": 4,
+    "nominal_credits_per_call": 5,
+    "nominal_total": 20,
+    "actual_billed_credits": null,
+    "note": "The tool did not return actual billed credits. No extra paid calls authorized or made."
+  },
+  "limitation": "Primary public statements support qualitative hypotheses, not private indicator parity. The volatility indicator in the videos is not proven mathematically identical to our BBWP proxy."
+}

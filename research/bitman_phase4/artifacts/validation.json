@@ -1,0 +1,61 @@
+{
+  "runtime": {
+    "python": "3.12.12",
+    "numpy": "2.3.5",
+    "requests": "2.32.5"
+  },
+  "compile": "PASS",
+  "tests": {
+    "dedicated": {
+      "passed": 69,
+      "failed": 0,
+      "skipped": 0,
+      "total": 69
+    },
+    "full": {
+      "passed": 516,
+      "failed": 0,
+      "skipped": 0,
+      "total": 516
+    },
+    "included_full": {
+      "guardian_and_commands": 311,
+      "v8": 16,
+      "early_breakout": 52,
+      "parent_pr23": 68
+    }
+  },
+  "replay": {
+    "results.json": {
+      "byte_identical_uncompressed": true,
+      "sha256": "11f4914aa3b87a49f28880c56289a016ed6b5333db606bb9c08a182cfcc776ad"
+    },
+    "events.jsonl.gz": {
+      "byte_identical_uncompressed": true,
+      "sha256": "b8fe40946b07a16e6c0a097f48ad466313953d20f2d3e4f2127b082eb52c2c03"
+    },
+    "trades.json.gz": {
+      "byte_identical_uncompressed": true,
+      "sha256": "b5ccf6544bb147c7470dc3050922f9ee8406db1ce33799c93d11182949fd0873"
+    }
+  },
+  "safety": "PASS",
+  "code_protocol_lock": "PASS",
+  "trade_authority": false,
+  "production_configuration_changed": false,
+  "telegram_sent": false,
+  "forward_validated": false,
+  "credit_calls": 4,
+  "maximum_authorized_credits": 20,
+  "actual_billed_credits": null,
+  "commands": [
+    "python -m compileall -q research/bitman_phase4 test_bitman_phase4.py",
+    "python -m unittest test_bitman_phase4 -v",
+    "python -m research.bitman_phase4.safety",
+    "python -m unittest discover -v",
+    "git diff --check",
+    "git diff --cached --check"
+  ],
+  "note": "Local evidence; subset counts executed inside full suite. GitHub CI recorded separately. No runtime observer started.",
+  "diff_check": "PASS"
+}
