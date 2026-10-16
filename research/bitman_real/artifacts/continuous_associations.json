@@ -1,0 +1,281 @@
+{
+  "1H": {
+    "KONKORDE_ENTRY": {
+      "TRAIN": {
+        "distance_to_zero": {
+          "n": 1155,
+          "spearman": -0.08133277611547866,
+          "minimum": 0.1731684857803426,
+          "median": 50.88709278682753,
+          "maximum": 123.3955489871215
+        },
+        "separation": {
+          "n": 1155,
+          "spearman": -0.018944880058623142,
+          "minimum": 0.005749682025667724,
+          "median": 4.0463819464084025,
+          "maximum": 68.15324546813753
+        }
+      },
+      "VALIDATION": {
+        "distance_to_zero": {
+          "n": 1223,
+          "spearman": -0.04041894963626646,
+          "minimum": 0.04933166825280757,
+          "median": 47.13656436964057,
+          "maximum": 117.22439562027705
+        },
+        "separation": {
+          "n": 1223,
+          "spearman": -0.011439716863094616,
+          "minimum": 0.00019596625102735743,
+          "median": 4.717299045997251,
+          "maximum": 51.17243687822587
+        }
+      },
+      "TEST": {
+        "distance_to_zero": {
+          "n": 1630,
+          "spearman": 0.0038268659512530976,
+          "minimum": 0.008679789620968714,
+          "median": 48.7077668125225,
+          "maximum": 123.49514684372573
+        },
+        "separation": {
+          "n": 1630,
+          "spearman": -0.00015542035896698306,
+          "minimum": 0.004817927889810392,
+          "median": 4.578734252431168,
+          "maximum": 65.99058448615882
+        }
+      }
+    },
+    "KONKORDE_EXIT": {
+      "TRAIN": {
+        "distance_to_zero": {
+          "n": 1156,
+          "spearman": -0.04075715117276488,
+          "minimum": 0.8426753590203422,
+          "median": 73.07901178827046,
+          "maximum": 132.15892976537899
+        },
+        "separation": {
+          "n": 0,
+          "spearman": null
+        }
+      },
+      "VALIDATION": {
+        "distance_to_zero": {
+          "n": 1222,
+          "spearman": -0.0076861403038748595,
+          "minimum": 0.1650512165655672,
+          "median": 66.83357798442265,
+          "maximum": 128.41904619878574
+        },
+        "separation": {
+          "n": 0,
+          "spearman": null
+        }
+      },
+      "TEST": {
+        "distance_to_zero": {
+          "n": 1630,
+          "spearman": -0.030155965045804572,
+          "minimum": 0.13494329645500092,
+          "median": 72.67545704014096,
+          "maximum": 125.99491507891092
+        },
+        "separation": {
+          "n": 0,
+          "spearman": null
+        }
+      }
+    }
+  },
+  "4H": {
+    "KONKORDE_ENTRY": {
+      "TRAIN": {
+        "distance_to_zero": {
+          "n": 289,
+          "spearman": -0.04422105556218431,
+          "minimum": 1.2377299440220986,
+          "median": 53.28827034250036,
+          "maximum": 123.76669836736224
+        },
+        "separation": {
+          "n": 289,
+          "spearman": 0.08617607286322237,
+          "minimum": 0.0018980156910117785,
+          "median": 4.8545766047791705,
+          "maximum": 46.51667590873862
+        }
+      },
+      "VALIDATION": {
+        "distance_to_zero": {
+          "n": 305,
+          "spearman": -0.08834991287282816,
+          "minimum": 0.10722398506171071,
+          "median": 47.756392003437526,
+          "maximum": 119.10169410236696
+        },
+        "separation": {
+          "n": 305,
+          "spearman": -0.007759393662555618,
+          "minimum": 0.00769052684715632,
+          "median": 4.988073775318028,
+          "maximum": 77.96027719210507
+        }
+      },
+      "TEST": {
+        "distance_to_zero": {
+          "n": 391,
+          "spearman": -0.039172391364572595,
+          "minimum": 0.17914874424352956,
+          "median": 51.29089951091434,
+          "maximum": 119.22394031242989
+        },
+        "separation": {
+          "n": 391,
+          "spearman": -0.041574756993098254,
+          "minimum": 0.019433452138244434,
+          "median": 4.507599754049025,
+          "maximum": 47.540286477035515
+        }
+      }
+    },
+    "KONKORDE_EXIT": {
+      "TRAIN": {
+        "distance_to_zero": {
+          "n": 288,
+          "spearman": -0.026627724260435887,
+          "minimum": 10.835087193514257,
+          "median": 78.38989876432329,
+          "maximum": 126.8294125073486
+        },
+        "separation": {
+          "n": 0,
+          "spearman": null
+        }
+      },
+      "VALIDATION": {
+        "distance_to_zero": {
+          "n": 305,
+          "spearman": -0.09924376998426636,
+          "minimum": 0.4760734498086602,
+          "median": 65.89407076655748,
+          "maximum": 123.79298540338704
+        },
+        "separation": {
+          "n": 0,
+          "spearman": null
+        }
+      },
+      "TEST": {
+        "distance_to_zero": {
+          "n": 392,
+          "spearman": -0.006477732148285799,
+          "minimum": 0.2025552541846527,
+          "median": 73.95623077104418,
+          "maximum": 129.89689465290635
+        },
+        "separation": {
+          "n": 0,
+          "spearman": null
+        }
+      }
+    }
+  },
+  "1D": {
+    "KONKORDE_ENTRY": {
+      "TRAIN": {
+        "distance_to_zero": {
+          "n": 54,
+          "spearman": 0.09106155898608728,
+          "minimum": 6.545079967554572,
+          "median": 58.17183186988247,
+          "maximum": 119.04777743323156
+        },
+        "separation": {
+          "n": 54,
+          "spearman": -0.0836668572517629,
+          "minimum": 0.007007018137201726,
+          "median": 3.627570339634092,
+          "maximum": 22.222457000746843
+        }
+      },
+      "VALIDATION": {
+        "distance_to_zero": {
+          "n": 44,
+          "spearman": 0.14883720930232558,
+          "minimum": 4.848659858272971,
+          "median": 45.43187028198528,
+          "maximum": 106.5199780691309
+        },
+        "separation": {
+          "n": 44,
+          "spearman": 0.18308668076109932,
+          "minimum": 0.028165026303518914,
+          "median": 5.513744725755691,
+          "maximum": 21.957343838100435
+        }
+      },
+      "TEST": {
+        "distance_to_zero": {
+          "n": 64,
+          "spearman": 0.2823260073260073,
+          "minimum": 4.436920142622452,
+          "median": 47.90533641222541,
+          "maximum": 119.28868496366215
+        },
+        "separation": {
+          "n": 64,
+          "spearman": -0.05787545787545787,
+          "minimum": 0.04904663778131635,
+          "median": 2.7291228543078176,
+          "maximum": 15.160002827678582
+        }
+      }
+    },
+    "KONKORDE_EXIT": {
+      "TRAIN": {
+        "distance_to_zero": {
+          "n": 55,
+          "spearman": -0.14769119769119773,
+          "minimum": 15.625629020436788,
+          "median": 75.99358663796367,
+          "maximum": 122.47364766087135
+        },
+        "separation": {
+          "n": 0,
+          "spearman": null
+        }
+      },
+      "VALIDATION": {
+        "distance_to_zero": {
+          "n": 44,
+          "spearman": -0.2869626497533474,
+          "minimum": 11.326619853829644,
+          "median": 65.94684665956808,
+          "maximum": 120.49249695902992
+        },
+        "separation": {
+          "n": 0,
+          "spearman": null
+        }
+      },
+      "TEST": {
+        "distance_to_zero": {
+          "n": 64,
+          "spearman": 0.03182234432234432,
+          "minimum": 14.810291370857698,
+          "median": 80.26543479093138,
+          "maximum": 120.07506511387375
+        },
+        "separation": {
+          "n": 0,
+          "spearman": null
+        }
+      }
+    }
+  }
+}
