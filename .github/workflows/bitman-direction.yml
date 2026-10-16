@@ -1,0 +1,23 @@
+name: BITMAN BTC Direction Engine research
+on:
+  pull_request:
+  push:
+    branches: [bitman-direction-engine]
+permissions:
+  contents: read
+jobs:
+  bitman_direction:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5 requests==2.32.5
+      - run: python -m compileall -q research/bitman_direction test_bitman_direction.py
+      - run: python -m unittest test_bitman_direction -v
+      - run: python -m research.bitman_direction.safety
+      - run: python -m unittest discover -v
+      - run: git diff --check HEAD^ HEAD

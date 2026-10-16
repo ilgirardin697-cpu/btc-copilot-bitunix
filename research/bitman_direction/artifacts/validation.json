@@ -1,0 +1,58 @@
+{
+  "runtime": {
+    "python": "3.12.12",
+    "numpy": "2.3.5",
+    "requests": "2.32.5"
+  },
+  "compile": "PASS",
+  "tests": {
+    "dedicated": {
+      "passed": 92,
+      "failed": 0,
+      "skipped": 0,
+      "total": 92
+    },
+    "full": {
+      "passed": 608,
+      "failed": 0,
+      "skipped": 0,
+      "total": 608
+    },
+    "included_full": {
+      "previous_phase4": 69,
+      "previous_real_observer": 68,
+      "guardian_commands": 311,
+      "v8": 16,
+      "early_breakout": 52
+    }
+  },
+  "replay": {
+    "results.json": {
+      "equal_uncompressed": true,
+      "sha256": "6d4cdd7b5493ed4373e2ce92be86bc9e27cec53e9713f20d03d0678aec6e9d48"
+    },
+    "episodes_and_outcomes.jsonl.gz": {
+      "equal_uncompressed": true,
+      "sha256": "ec5abbd966246970d1ebd783f77912a631bb0ae6d6ea1ca77b185f9bc3ff697c"
+    }
+  },
+  "safety": "PASS",
+  "frozen_protocol": "PASS",
+  "trade_authority": false,
+  "actual_confirmed_ml_ablation": "PENDING",
+  "forward_live_data": "PENDING / NOT ACCESSIBLE FROM CURRENT CONNECTOR",
+  "new_vidiq_calls": 0,
+  "telegram_sent": false,
+  "production_changed": false,
+  "previous_final_status_local_sha256": "717eabb4f7beb08b0dfc61159d4e34e8092a8b8a672f98d8dd4b00ce907ca20b",
+  "note": "Local counts. Guardian/V8/etc subsets executed inside full suite. GitHub CI status recorded separately.",
+  "commands": [
+    "python -m compileall -q research/bitman_direction test_bitman_direction.py",
+    "python -m unittest test_bitman_direction -v",
+    "python -m research.bitman_direction.safety",
+    "python -m unittest discover -v",
+    "git diff --check",
+    "git diff --cached --check"
+  ],
+  "diff_check": "PASS"
+}
