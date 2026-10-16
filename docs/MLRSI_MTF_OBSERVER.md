@@ -20,7 +20,13 @@ Topología de producción verificada del proyecto Railway `victorious-energy`:
 | Servicio | Rama | Entrypoint | Responsabilidad |
 |---|---|---|---|
 | `btc-copilot-bitunix` | `v8-real-executor` | `python v8_executor.py` | Ejecución V8 REAL, **sin cambios** |
-| `igod-trade-guardian` | `main` | `python trade_guardian.py` | Guardian, Copilot y host ML RSI pasivo |
+| `igod-trade-guardian` | `mlrsi-mtf-observer` | `python trade_guardian.py` | Guardian, Copilot y host ML RSI pasivo |
+
+Verificación read-only del servicio Guardian el 2026-10-16: environment
+`production`, deployment `c0fcd155-f63b-476f-a5ae-b7c6d0eaf33d` en `SUCCESS`,
+source fijado al commit `55c1c988df1dbfea80ed02fd13965f34f1727f14`.
+Este cambio parte de ese SHA y propone un PR contra `mlrsi-mtf-observer`;
+no cambia el servicio ni incluye ramas research BITMAN.
 
 `trade_guardian.py` crea `MLRSIHost` con **solo** un directorio observacional,
 el callback `guardian.telegram.send` y un logger estático. El host importa,
@@ -303,6 +309,7 @@ credenciales, chat IDs, señales de entrada operacional ni retornos futuros.
 MLRSI_OBSERVER_ENABLED=true
 MLRSI_TELEGRAM_ALERTS=true
 MLRSI_APPROACHING_ENABLED=true
+MLRSI_APPROACHING_ALERTS=true
 MLRSI_APPROACH_DISTANCE=1.0
 MLRSI_APPROACH_REARM_DISTANCE=1.5
 MLRSI_PROVISIONAL_ALERTS=true
@@ -313,6 +320,63 @@ No hay nuevas variables obligatorias. Valores inválidos usan defaults y un log
 estático; rearm debe superar approach o ambos vuelven a1.0/1.5. OFF no arranca
 worker, no descarga ni escribe archivos. Telegram OFF no detiene telemetry;
 provisional-alerts OFF mantiene el cálculo/journal pero no ese aviso.
+
+### Reducción de ruido preparada; pendiente de revisión
+
+`MLRSI_APPROACHING_ALERTS` es un control nuevo exclusivamente para las
+notificaciones automáticas APPROACHING. Se aplica junto al control existente
+`MLRSI_PROVISIONAL_ALERTS`, **después** de publicar el snapshot y persistir
+estado, outbox y journal. Los dos conservan default `true`: introducir el
+control no cambia por sí mismo la política de producción.
+
+La evidencia forward observada entre 2026-10-04 y 2026-10-16 y la decisión
+revisada por el usuario justifican preparar esta política de visibilidad:
+
+| Familia | Evidencia real disponible | Política propuesta |
+|---|---|---|
+| CONFIRMED | Mantener las transiciones existentes | KEEP_VISIBLE |
+| PROVISIONAL | 66: 51 confirmed del mismo lado; 15 UNKNOWN | KEEP_INTERNAL |
+| APPROACHING | 63: 8 confirmed del mismo lado; 11 NEUTRAL; 44 UNKNOWN | DISABLE_VISIBLE_ALERTS |
+
+UNKNOWN no se cuenta como fallo. La muestra y los gaps impiden una conclusión
+fuerte sobre edge. Estos recuentos proceden de la auditoría forward existente;
+las pruebas de este cambio usan fixtures sintéticos, sin reconstruir eventos
+reales ni tocar los RAW locales.
+
+Configuración recomendada **para una aplicación posterior, no realizada**:
+
+```dotenv
+MLRSI_OBSERVER_ENABLED=true
+MLRSI_TELEGRAM_ALERTS=true
+MLRSI_APPROACHING_ENABLED=true
+MLRSI_PROVISIONAL_ALERTS=false
+MLRSI_APPROACHING_ALERTS=false
+```
+
+`MLRSI_CONFIRMED_ALERTS=ON` describe la política deseada; no existe una variable
+con ese nombre en este runtime y no se añade una nueva puerta para CONFIRMED.
+Su control efectivo continúa siendo `MLRSI_TELEGRAM_ALERTS=true`, con los dos
+filtros de vela abierta en `false`. Los valores admitidos son `true`/`false`,
+no las cadenas `ON`/`OFF`. No usar `MLRSI_APPROACHING_ENABLED=false` para
+silenciar Telegram: ese control también desactiva el estado/evento APPROACHING.
+
+Los filtros no afectan cálculo, latches, dedupe, journal, estado persistente,
+snapshot ni consulta `/mlrsi`. Un evento silenciado sigue consumiendo su dedupe;
+habilitar después su alerta no lo convierte en un nuevo evento. La matriz de
+estado, el mensaje CURRENT STATUS de arranque y las respuestas manuales
+conservan su comportamiento. Las transiciones confirmed, BACK TO NEUTRAL,
+CROSS, RESUME y confluencia conservan sus rutas, condiciones y frecuencia.
+
+**Auditoría de duplicación:** `observe` ya agrupa los records de un ciclo en una
+única llamada a `presentation.alert` / `_notify`. El renderer prioriza CROSS
+y omite la fila COLOR_CHANGE redundante del mismo TF. Los 51 pares históricos
+COLOR_CHANGE+CROSS representan dos registros de una transición, sin demostrar
+dos entregas. No se cambia sender, agrupación, dedupe ni los journals históricos.
+
+**DELIVERY ATTRIBUTION: NOT AVAILABLE.** El callback recibe solo texto y devuelve
+un resultado genérico; no hay vínculo explícito `event_id -> attempt -> result`.
+Los 166 accepted / 44 timeout del sender compartido no se atribuyen a ML RSI.
+No se añaden retries, backoff ni instrumentación del sender en este cambio.
 
 ## Auditoría y tests
 
@@ -336,6 +400,19 @@ idéntico. Los hashes del host Guardian y su command poller se fijan al commit
 La clase ResearchEvents se compara por AST con el port original; CROSS/RESUME
 conservan exactamente sus definiciones. No se altera el research congelado.
 
+Para el control de Telegram se actualiza únicamente el blob/SHA del observer
+en `live_observer_preset`; el bloque `provider_recovery` conserva su hash previo.
+`test_mlrsi_alert_controls.py` compara el AST completo del observer con el SHA
+de producción `55c1c988...`, retirando solo el campo nuevo, su lectura de entorno
+y el filtro exacto de notificación. Todo lo demás debe coincidir, incluida la
+matemática invocada, persistencia, snapshot y dedupe. Los restantes hashes de
+seguridad y el propio auditor no cambian.
+
+Las pruebas nuevas comparan con alertas ON/OFF los bytes del journal y estado,
+snapshot, status y claves dedupe para ambos colores y los tres TF. Verifican
+que no hay replay al habilitar después el envío, que CROSS+COLOR_CHANGE genera
+un solo mensaje y que RESUME y confirmed siguen visibles con ambos filtros OFF.
+
 Las pruebas ejecutan main y el motor real Guardian con transportes falsos.
 Los traces de GET/POST y actions journal coinciden con baseline para observer
 OFF/ON/excepción, LONG/SHORT, protección SL, EMERGENCY, respuesta ambigua,
@@ -347,6 +424,7 @@ Las pruebas no envían órdenes ni Telegram real.
 ```text
 python -m py_compile mlrsi_math.py mlrsi_public.py mlrsi_observer.py mlrsi_telegram.py mlrsi_guardian_host.py mlrsi_safety_audit.py trade_guardian.py guardian_commands.py test_mlrsi_observer.py test_mlrsi_integration.py mlrsi_pine_reference.py test_mlrsi_pine_parity.py test_mlrsi_source_parity.py
 python -m unittest test_mlrsi_observer test_mlrsi_integration test_mlrsi_pine_parity test_mlrsi_source_parity -v
+python -m unittest test_mlrsi_alert_controls -v
 python -m unittest test_trade_guardian test_guardian_commands -v
 python mlrsi_safety_audit.py
 python -m unittest discover -v

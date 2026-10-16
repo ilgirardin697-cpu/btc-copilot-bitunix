@@ -102,8 +102,8 @@
         "sha256": "d1d67cd501f8ef5d7de0ad7fc2cfc26e71521b16e1a3c375cd04237df3cf7e17"
       },
       "mlrsi_observer.py": {
-        "git_blob": "009ea947cb8238334bef1c353a44084af3b09fc9",
-        "sha256": "0018d55c1d785e412f06713708383c4a957c47385cb5b9fec98637a1578c1ba9"
+        "git_blob": "01119f252c90a5832a7eb2aa4650272c2d1f8819",
+        "sha256": "7c119ebe918edc398c4803d4b1d6c56ff6dd04d7be41c186d165395adbdc090c"
       },
       "mlrsi_telegram.py": {
         "git_blob": "9cd367470f90a0e48cf10e8e7aa78cee5b5265eb",
