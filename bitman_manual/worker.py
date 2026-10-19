@@ -7,15 +7,19 @@ from .frozen import core
 from .frozen.constants import HOUR
 from .confirmed import read_current
 from .public import fetch_closed
+from .transport import OFFICIAL_URL, validate_market_url
 
 
 def calculate(request, now_ms=None, transport=None):
     now = int(time.time() * 1000) if now_ms is None else now_ms
-    if not isinstance(request, dict) or set(request) != {'mlrsi_state_path', 'public_cache'}:
+    required = {'mlrsi_state_path', 'public_cache'}
+    if (not isinstance(request, dict) or not required <= set(request)
+            or set(request) - required - {'market_data_url'}):
         raise ValueError('INVALID_MANUAL_REQUEST')
+    market_url = validate_market_url(request.get('market_data_url', OFFICIAL_URL))
     cached = request['public_cache']
     if cached is None:
-        data = core.prepare(fetch_closed(now, transport), now)
+        data = core.prepare(fetch_closed(now, transport, url=market_url), now)
         public = core.snapshot(data, len(data['times']) - 1)
     else:
         public = copy.deepcopy(cached)
