@@ -1,0 +1,13 @@
+{
+  "approved_commit": "1875f91e0c8515c267129c6e9cf8ccc6bc4306fa",
+  "source_sha256": "f0cd37aa3ff80c049f12215e3243fcc4af6300e43caccd006c8ab3a3c0f40e21",
+  "combinations": 900,
+  "status_counts": {
+    "WAIT": 780,
+    "WATCH_LONG": 59,
+    "READY_LONG": 1,
+    "WATCH_SHORT": 59,
+    "READY_SHORT": 1
+  },
+  "normalized_results_sha256": "1ffcf53c6b056e7bdf3b780f1fc4ebce49616363a66467e573c5c1a2ef71f014"
+}

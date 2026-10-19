@@ -1,6 +1,7 @@
-"""Compact adaptation of the frozen research renderer; no transport or decisions."""
+"""Compact manual panel and a separate snapshot-only operability display."""
 from datetime import datetime, timezone
 import math
+from .readiness import evaluate
 
 ICONS = {'UP': '🟢', 'DOWN': '🔴', 'TRANSITION': '🟡', 'UNCLEAR': '⚪', 'CONFLICT': '🛑',
          'UNKNOWN': '⚪', 'NEUTRAL': '⚪', 'GREEN': '🟢', 'RED': '🔴'}
@@ -25,7 +26,50 @@ def slope(value):
 
 
 def unavailable():
-    return '⚪ BITMAN: DATA TEMPORARILY UNAVAILABLE\n\n' + FOOTER
+    return '⚪ BITMAN: DATA TEMPORARILY UNAVAILABLE\n\n🎯 OPERATIVA BITMAN: NO OPERAR\n⏳ WAIT\n\n' + FOOTER
+
+
+def operability_lines(snapshot):
+    source = snapshot if isinstance(snapshot, dict) else {}
+    result = evaluate(source)
+    if result['gates_ready']:
+        return ['🎯 OPERATIVA BITMAN: SETUP READY — CANDIDATO ' + result['side'], '✅ ' + result['status'], '',
+                'Confluencia:', '• Direction: ' + source['state'], '• Strength: STRONG',
+                '• Timing 1H: ' + source['timing_state'] + ' (alineado)',
+                '• Evidence: A', '• ML RSI 4H: SUPPORTING', '',
+                '⚠️ SETUP READY = gates técnicos alineados.',
+                'No garantiza rentabilidad y no es una orden automática.']
+    lines = ['🎯 OPERATIVA BITMAN: NO OPERAR', ('⏳ ' if result['status'] == 'WAIT' else '👀 ') + result['status'], '',
+             'Motivos:' if result['status'] == 'WAIT' else 'Falta:']
+    labels = {'state': 'Direction', 'strength': 'Strength', 'evidence_grade': 'Evidence',
+              'timing_state': 'Timing 1H', 'mlrsi_confirmation': 'ML RSI 4H'}
+    for condition in result['missing_conditions']:
+        required = condition['required']
+        if required == 'ALIGNED_WITH_CONFIRMED_DIRECTION':
+            required = 'dirección confirmada e impulso alineado'
+        lines.append('• ' + labels[condition['field']] + ': ' + condition['actual'] + ' → necesita ' + required)
+    lines += ['', '👀 QUÉ TIENE QUE PASAR']
+    for condition in result['missing_conditions']:
+        field = condition['field']
+        if field == 'state':
+            parts = source.get('components')
+            swing = parts.get('4H') if isinstance(parts, dict) else None
+            bias = source.get('swing_bias')
+            swing_bias = swing.get('bias') if isinstance(swing, dict) else None
+            transition = (type(bias) is str and bias == 'TRANSITION'
+                          or type(swing_bias) is str and swing_bias == 'TRANSITION')
+            message = 'Confirmación 4H de la dirección' if transition else 'Confirmar dirección 1D/4H: UP o DOWN'
+        elif field == 'strength':
+            message = 'Strength debe pasar a STRONG'
+        elif field == 'evidence_grade':
+            message = 'Evidence debe ser A (etiqueta técnica del motor)'
+        elif field == 'timing_state':
+            message = 'Esperar impulso 1H alineado con la dirección confirmada'
+        else:
+            message = ('Resolver oposición ML RSI 4H; necesita SUPPORTING' if condition['actual'] == 'OPPOSING'
+                       else 'Esperar confirmación ML RSI 4H: SUPPORTING')
+        lines.append('• ' + message)
+    return lines
 
 
 def render(snapshot):
@@ -80,6 +124,8 @@ def render(snapshot):
         closed = datetime.fromtimestamp(stamp / 1000, timezone.utc).strftime('%Y-%m-%d %H:%M UTC')
     except (KeyError, ValueError, OverflowError, OSError):
         closed = 'UNKNOWN'
-    lines += ['Public USD-M · closed 1H reference: ' + closed, '', FOOTER]
+    lines += ['Public USD-M · closed 1H reference: ' + closed, '']
+    lines += operability_lines(snapshot)
+    lines += ['', FOOTER]
     text = '\n'.join(lines)
     return text if len(text.encode('utf-16-le')) // 2 < 3900 else unavailable()
