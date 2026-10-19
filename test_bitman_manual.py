@@ -332,7 +332,8 @@ class HostTests(unittest.TestCase):
         self.assertTrue(set(kwargs['env']) <= {'PATH', 'SYSTEMROOT', 'WINDIR', 'TEMP', 'TMP', 'PYTHONIOENCODING', 'PYTHONDONTWRITEBYTECODE'})
         self.assertNotIn('sensitive', json.dumps(kwargs['env']))
         request = json.loads(self.process.communicate.call_args.args[0])
-        self.assertEqual(set(request), {'mlrsi_state_path', 'public_cache'})
+        self.assertEqual(set(request), {'mlrsi_state_path', 'public_cache', 'market_data_url'})
+        self.assertEqual(request['market_data_url'], public.URL)
         self.assertIsNone(request['public_cache'])
         self.assertEqual(self.process.communicate.call_args.kwargs['timeout'], 25)
 

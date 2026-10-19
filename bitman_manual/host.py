@@ -8,6 +8,7 @@ import sys
 import threading
 import time
 from .render import render, unavailable
+from .transport import MARKET_DATA_ENV, OFFICIAL_URL, validate_market_url
 
 TIMEOUT_SECONDS = 25
 CACHE_SECONDS = 30
@@ -59,7 +60,8 @@ class BitmanHost:
             with self._lock:
                 cached = copy.deepcopy(self._cache) if (self._cache is not None and 0 <= now - self._cache_at < CACHE_SECONDS
                     and self._cache['timestamp'] == int(self._wall()) // 3600 * 3600000) else None
-            request = dict(mlrsi_state_path=str(self._resolve_state()), public_cache=cached)
+            market_url = validate_market_url(os.environ.get(MARKET_DATA_ENV, OFFICIAL_URL))
+            request = dict(mlrsi_state_path=str(self._resolve_state()), public_cache=cached, market_data_url=market_url)
             # The child inherits only runtime/OS paths, never the parent's credentials.
             env = {key: os.environ[key] for key in ('PATH', 'SYSTEMROOT', 'WINDIR', 'TEMP', 'TMP') if key in os.environ}
             env.update(PYTHONIOENCODING='utf-8', PYTHONDONTWRITEBYTECODE='1')
