@@ -1,0 +1,24 @@
+name: Bitman operability gate
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  readiness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install existing runtime dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Compile pure gates and display
+        run: python -m compileall -q bitman_manual/readiness.py bitman_manual/render.py test_bitman_readiness.py
+      - name: Gate matrix, protected sources, manual commands and transport equivalence
+        run: python -m unittest test_bitman_readiness test_bitman_manual test_bitman_market_data test_guardian_commands test_live_levels_canary -v
+      - name: Existing Guardian, ML RSI and V8 safety audit
+        run: python mlrsi_safety_audit.py
+      - name: Patch whitespace
+        run: git diff --check HEAD^ HEAD
