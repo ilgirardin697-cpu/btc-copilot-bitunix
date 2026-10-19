@@ -1,5 +1,6 @@
 """Snapshot-only gates and manual display. Synthetic fixtures, no market research."""
 import ast
+from collections import Counter
 import copy
 import hashlib
 import inspect
@@ -40,7 +41,8 @@ class ReadinessTests(unittest.TestCase):
 
     def assert_status(self, result, status):
         self.assertEqual(result['status'], status)
-        self.assertIs(result['operate'], status.startswith('READY_'))
+        self.assertIs(result['gates_ready'], status.startswith('READY_'))
+        self.assertNotIn('operate', result)
         self.assertEqual(result['side'], status.split('_')[1] if status != 'WAIT' else None)
 
     def test_transition_always_wait(self):
@@ -119,11 +121,11 @@ class ReadinessTests(unittest.TestCase):
                 with self.subTest(state=state, field=field):
                     snapshot = ready_snapshot(state)
                     snapshot[field] = value
-                    self.assertFalse(readiness.evaluate(snapshot)['operate'])
+                    self.assertFalse(readiness.evaluate(snapshot)['gates_ready'])
 
     def test_exact_failed_gates_and_codes_no_passed_gate_listed(self):
         result = self.changed('DOWN', strength='BUILDING', mlrsi_confirmation='NEUTRAL')
-        self.assertEqual(result, dict(operate=False, status='WATCH_SHORT', side='SHORT',
+        self.assertEqual(result, dict(gates_ready=False, status='WATCH_SHORT', side='SHORT',
             reason_codes=['STRENGTH_BUILDING', 'MLRSI_NEUTRAL'], missing_conditions=[
                 dict(field='strength', actual='BUILDING', required='STRONG'),
                 dict(field='mlrsi_confirmation', actual='NEUTRAL', required='SUPPORTING')]))
@@ -150,12 +152,12 @@ class ReadinessTests(unittest.TestCase):
         for state in ('UP', 'DOWN'):
             snapshot = ready_snapshot(state)
             expected = readiness.evaluate(snapshot)
-            snapshot.update(operate=False, status='WAIT', side='OTHER', reason_codes=['fake'], readiness={'operate': True},
+            snapshot.update(gates_ready=False, status='WAIT', side='OTHER', reason_codes=['fake'], readiness={'gates_ready': True},
                 order={'execute': True}, direction=0, strength_score=999, evidence_probability=1,
                 macro_bias='DOWN', swing_bias='UP', components=object(), confirmed_mlrsi=object(),
                 display_mlrsi={'4H': {'color': 'UNKNOWN'}}, provisional='RED', approaching='GREEN')
             self.assertEqual(readiness.evaluate(snapshot), expected)
-        self.assert_status(self.changed(strength='WEAK', operate=True, status='READY_LONG'), 'WAIT')
+        self.assert_status(self.changed(strength='WEAK', gates_ready=True, status='READY_LONG'), 'WAIT')
 
     def test_missing_unknown_and_malformed_gate_values_fail_closed(self):
         for field in readiness.VALUES:
@@ -205,28 +207,51 @@ class ReadinessTests(unittest.TestCase):
             expected = 'WAIT' if blocked else ('READY_' if ready else 'WATCH_') + side
             result = readiness.evaluate(snapshot)
             self.assert_status(result, expected)
-            self.assertIs(result['operate'], ready)
+            self.assertIs(result['gates_ready'], ready)
             count += 1
         self.assertEqual(count, 900)
+
+    def test_all_900_complete_results_identical_to_externally_approved_commit(self):
+        baseline = json.loads((ROOT / 'tests/fixtures/bitman_readiness_approved.json').read_text('utf-8'))
+        self.assertEqual(baseline['approved_commit'], '1875f91e0c8515c267129c6e9cf8ccc6bc4306fa')
+        results = [readiness.evaluate(dict(zip(readiness.VALUES, values)))
+                   for values in itertools.product(*readiness.VALUES.values())]
+        self.assertEqual(len(results), baseline['combinations'])
+        self.assertEqual(dict(Counter(r['status'] for r in results)), baseline['status_counts'])
+        encoded = json.dumps(results, sort_keys=True, separators=(',', ':')).encode()
+        self.assertEqual(hashlib.sha256(encoded).hexdigest(), baseline['normalized_results_sha256'])
+
+    def test_approved_gate_source_has_only_three_boolean_keyword_renames(self):
+        baseline = json.loads((ROOT / 'tests/fixtures/bitman_readiness_approved.json').read_text('utf-8'))
+        source = Path(readiness.__file__).read_bytes().replace(b'\r\n', b'\n')
+        self.assertEqual(source.count(b'gates_ready='), 3)
+        restored = source.replace(b'gates_ready=', b'operate=')
+        self.assertEqual(hashlib.sha256(restored).hexdigest(), baseline['source_sha256'])
+
+    def test_no_old_runtime_field_or_alias(self):
+        for module in (readiness, render):
+            self.assertNotIn('operate', Path(module.__file__).read_text('utf-8'))
+        self.assertEqual(set(readiness.evaluate(ready_snapshot())),
+                         {'gates_ready', 'status', 'side', 'reason_codes', 'missing_conditions'})
 
 
 class RenderReadinessTests(unittest.TestCase):
     def test_ready_long_exact_headline_and_no_what_to_watch_when_no_gate_failed(self):
         text = render.render(ready_snapshot())
-        self.assertIn('🎯 ¿OPERAR AHORA? SÍ — CANDIDATO LONG\n✅ READY_LONG', text)
+        self.assertIn('🎯 OPERATIVA BITMAN: SETUP READY — CANDIDATO LONG\n✅ READY_LONG', text)
         self.assertNotIn('👀 QUÉ TIENE QUE PASAR', text)
-        self.assertIn('no garantiza resultados', text)
-        self.assertIn('No es una señal validada', text)
+        self.assertIn('⚠️ SETUP READY = gates técnicos alineados.', text)
+        self.assertIn('No garantiza rentabilidad y no es una orden automática.', text)
 
     def test_ready_short_exact_headline(self):
         text = render.render(ready_snapshot('DOWN'))
-        self.assertIn('🎯 ¿OPERAR AHORA? SÍ — CANDIDATO SHORT\n✅ READY_SHORT', text)
+        self.assertIn('🎯 OPERATIVA BITMAN: SETUP READY — CANDIDATO SHORT\n✅ READY_SHORT', text)
         self.assertIn('• Timing 1H: impulse_down (alineado)', text)
         self.assertIn('• ML RSI 4H: SUPPORTING', text)
 
     def test_current_real_example_no_wait_and_4h_confirmation(self):
         text = render.render(current_example())
-        self.assertIn('🎯 ¿OPERAR AHORA? NO\n⏳ WAIT', text)
+        self.assertIn('🎯 OPERATIVA BITMAN: NO OPERAR\n⏳ WAIT', text)
         self.assertIn('4H 🟡 TRANSITION', text)
         self.assertIn('Direction: TRANSITION → necesita UP / DOWN', text)
         self.assertIn('Strength: WEAK → necesita STRONG', text)
@@ -238,7 +263,7 @@ class RenderReadinessTests(unittest.TestCase):
         snapshot = dict(ready_snapshot('DOWN'), strength='BUILDING', mlrsi_confirmation='NEUTRAL')
         lines = render.operability_lines(snapshot)
         text = '\n'.join(lines)
-        self.assertIn('🎯 ¿OPERAR AHORA? NO\n👀 WATCH_SHORT', text)
+        self.assertIn('🎯 OPERATIVA BITMAN: NO OPERAR\n👀 WATCH_SHORT', text)
         self.assertIn('• Strength: BUILDING → necesita STRONG', text)
         self.assertIn('• ML RSI 4H: NEUTRAL → necesita SUPPORTING', text)
         watch = text.split('👀 QUÉ TIENE QUE PASAR\n')[1].splitlines()
@@ -258,7 +283,7 @@ class RenderReadinessTests(unittest.TestCase):
     def test_existing_panel_order_and_unmodified_footer(self):
         text = render.render(ready_snapshot())
         sections = ['Direction: UP', 'Strength: STRONG', '1D ', '4H ', '1H ', 'AO:', 'ADX/DI', 'Konkorde',
-                    'BBWP', 'ML RSI confirmed', 'Support:', 'Resistance:', '¿OPERAR AHORA?', 'Confluencia:', render.FOOTER]
+                    'BBWP', 'ML RSI confirmed', 'Support:', 'Resistance:', 'OPERATIVA BITMAN:', 'Confluencia:', render.FOOTER]
         offsets = [text.index(section) for section in sections]
         self.assertEqual(offsets, sorted(offsets))
         self.assertTrue(text.endswith(render.FOOTER))
@@ -275,7 +300,22 @@ class RenderReadinessTests(unittest.TestCase):
                 self.assertIn(token, text)
             self.assertLess(len(text.encode('utf-16-le')) // 2, 3900)
         self.assertEqual(render.render(None), render.unavailable())
-        self.assertIn('🎯 ¿OPERAR AHORA? NO\n⏳ WAIT', render.unavailable())
+        self.assertTrue(render.unavailable().startswith('⚪ BITMAN: DATA TEMPORARILY UNAVAILABLE\n\n'
+                        '🎯 OPERATIVA BITMAN: NO OPERAR\n⏳ WAIT\n\n'))
+
+    def test_all_900_panels_use_manual_semantics_and_preserve_footer_and_limit(self):
+        for values in itertools.product(*readiness.VALUES.values()):
+            snapshot = dict(ready_snapshot(), **dict(zip(readiness.VALUES, values)))
+            result = readiness.evaluate(snapshot)
+            text = render.render(snapshot)
+            self.assertNotEqual(text, render.unavailable())
+            expected = ('SETUP READY — CANDIDATO ' + result['side']) if result['gates_ready'] else 'NO OPERAR'
+            self.assertIn('🎯 OPERATIVA BITMAN: ' + expected, text)
+            self.assertNotIn('¿OPERAR AHORA?', text)
+            self.assertNotIn('SÍ', text)
+            self.assertTrue(text.endswith(render.FOOTER))
+            self.assertLess(len(text.encode('utf-16-le')) // 2, 3900)
+        self.assertNotIn('¿OPERAR AHORA?', render.unavailable())
 
     def test_secret_or_huge_gate_payload_not_echoed(self):
         snapshot = dict(ready_snapshot(), evidence_grade='secret-canary' * 10000)
@@ -286,7 +326,7 @@ class RenderReadinessTests(unittest.TestCase):
 
     def test_operability_helper_handles_missing_snapshot(self):
         text = '\n'.join(render.operability_lines(None))
-        self.assertIn('¿OPERAR AHORA? NO\n⏳ WAIT', text)
+        self.assertIn('OPERATIVA BITMAN: NO OPERAR\n⏳ WAIT', text)
 
     def test_gate_evaluation_and_render_make_no_io_and_do_not_mutate(self):
         for snapshot in (ready_snapshot(), ready_snapshot('DOWN'), current_example()):

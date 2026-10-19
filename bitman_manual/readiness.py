@@ -45,7 +45,7 @@ def evaluate(snapshot):
     blocked = (side is None or strength == 'WEAK' or grade == 'C' or ml == 'OPPOSING'
                or 'UNKNOWN' in values.values())
     if blocked:
-        return dict(operate=False, status='WAIT', side=None, reason_codes=codes, missing_conditions=missing)
+        return dict(gates_ready=False, status='WAIT', side=None, reason_codes=codes, missing_conditions=missing)
     if missing:
-        return dict(operate=False, status='WATCH_' + side, side=side, reason_codes=codes, missing_conditions=missing)
-    return dict(operate=True, status='READY_' + side, side=side, reason_codes=[], missing_conditions=[])
+        return dict(gates_ready=False, status='WATCH_' + side, side=side, reason_codes=codes, missing_conditions=missing)
+    return dict(gates_ready=True, status='READY_' + side, side=side, reason_codes=[], missing_conditions=[])

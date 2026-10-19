@@ -26,20 +26,20 @@ def slope(value):
 
 
 def unavailable():
-    return '⚪ BITMAN: DATA TEMPORARILY UNAVAILABLE\n\n🎯 ¿OPERAR AHORA? NO\n⏳ WAIT\n\n' + FOOTER
+    return '⚪ BITMAN: DATA TEMPORARILY UNAVAILABLE\n\n🎯 OPERATIVA BITMAN: NO OPERAR\n⏳ WAIT\n\n' + FOOTER
 
 
 def operability_lines(snapshot):
     source = snapshot if isinstance(snapshot, dict) else {}
     result = evaluate(source)
-    if result['operate']:
-        return ['🎯 ¿OPERAR AHORA? SÍ — CANDIDATO ' + result['side'], '✅ ' + result['status'], '',
+    if result['gates_ready']:
+        return ['🎯 OPERATIVA BITMAN: SETUP READY — CANDIDATO ' + result['side'], '✅ ' + result['status'], '',
                 'Confluencia:', '• Direction: ' + source['state'], '• Strength: STRONG',
                 '• Timing 1H: ' + source['timing_state'] + ' (alineado)',
                 '• Evidence: A', '• ML RSI 4H: SUPPORTING', '',
-                '⚠️ SÍ = solo gates técnicos alineados; no garantiza resultados.',
-                'No es una señal validada ni una orden automática.']
-    lines = ['🎯 ¿OPERAR AHORA? NO', ('⏳ ' if result['status'] == 'WAIT' else '👀 ') + result['status'], '',
+                '⚠️ SETUP READY = gates técnicos alineados.',
+                'No garantiza rentabilidad y no es una orden automática.']
+    lines = ['🎯 OPERATIVA BITMAN: NO OPERAR', ('⏳ ' if result['status'] == 'WAIT' else '👀 ') + result['status'], '',
              'Motivos:' if result['status'] == 'WAIT' else 'Falta:']
     labels = {'state': 'Direction', 'strength': 'Strength', 'evidence_grade': 'Evidence',
               'timing_state': 'Timing 1H', 'mlrsi_confirmation': 'ML RSI 4H'}
