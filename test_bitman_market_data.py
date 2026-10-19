@@ -17,7 +17,10 @@ from unittest.mock import Mock, patch
 from urllib.error import HTTPError
 from urllib.parse import parse_qs, urlencode, urlsplit
 
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    raise unittest.SkipTest('Gateway/engine dependencies are installed by the dedicated Bitman workflows') from None
 
 import bitman_market_data_service as gateway
 from bitman_manual import host, public, render, transport, worker
