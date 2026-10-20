@@ -1,0 +1,29 @@
+{
+  "primary_video": "https://www.youtube.com/watch?v=v8d3OxE1-_c",
+  "title_verified_from_public_player": "CUANDO SALDRÁ de ese RANGO BITCOIN..??? 👉ANÁLISIS TÉCNICO de BTC solo para ADULTOS👈",
+  "public_watch_http_status": 200,
+  "public_oembed_http_status": 200,
+  "public_player_playability": "OK",
+  "caption_languages_advertised": ["ar", "es", "en", "pt"],
+  "spanish_track_request_http_status": 200,
+  "spanish_track_response_bytes": 0,
+  "plain_timedtext_http_status": 200,
+  "plain_timedtext_response_bytes": 0,
+  "independent_transcript_recovered": false,
+  "independent_visual_chart_dates_verified": false,
+  "source_rule_basis": "Owner's supplied interpretation of weekly discussion from about minute 20; not an independently verified transcript.",
+  "modified_volatility_claim_basis": "Owner's review; exact formula/settings not publicly recovered in this audit.",
+  "existing_cached_transcript_video_ids": ["tDnUVybgL20", "GtRimUXhMG4", "H-oPU2snPJQ", "chmnhyuJUic"],
+  "existing_cache_is_target_video": false,
+  "new_vidiq_credits_used": 0,
+  "oscillator_label": "OSCILLATOR_PROXY",
+  "volatility_label": "BITMAN_VOLATILITY_PROXY",
+  "oscillator_parity": "EXACT BITMAN OSCILLATOR PARITY: NOT PROVEN",
+  "volatility_parity": "EXACT BITMAN VOLATILITY PARITY: NOT PROVEN",
+  "post_hoc_visual_consistency_check": "NOT ASSESSABLE: chart dates/visible parameters unavailable; retrospective dataset episodes are not asserted to be the video's examples.",
+  "proxy_mismatch_demonstrated": false,
+  "technical_sources": [
+    "https://developers.binance.com/en/docs/products/derivatives-trading-usds-futures/market-data/rest-api/Kline-Candlestick-Data",
+    "https://github.com/binance/binance-public-data"
+  ]
+}
