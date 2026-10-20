@@ -1,0 +1,13 @@
+{
+  "normalization": "CRLF to LF only",
+  "sha256": {
+    "analysis.json": "26870026388b2bfccf7d1c382b0e95e1408f30c351c3d3eda8edefb21f8d961e",
+    "contrasts.csv": "d3dbb42c406e29c71ffb712e65c7a1ad9c76877e3cda9e09ed08b16f365d7f1d",
+    "data_manifest.json": "30d81220e377d022badcdaf005db30116741998265a5dbbcdd93af249f5c486e",
+    "observations.csv": "771e549532bee32c004ad1b654ae231e6757d8e411f56114e175549f4f93abbe",
+    "summaries.csv": "4c0c6fa58c5f1f282d707ecb73207849f529fd011fe4267326b5fb150834cbb6",
+    "temporal.csv": "51f3c99c206786be39eb87a9779be92c8afaa17e850d79ab419b5c33bd515c6b",
+    "weekly_bars.csv": "1f542daea1af9fe43a83994d0dc4f282bd770f54b0c00de99258e2c8db9cbdc6",
+    "weekly_features.csv": "2dc954d530520007f74f2f1510d3a151e614f218ae42c11e3bd0917e82b99b44"
+  }
+}
