@@ -15,7 +15,10 @@ jobs:
       - name: Existing dependencies
         run: python -m pip install -r requirements.txt
       - name: Offline sequences, ranges, blocked inference and source isolation
-        run: python -m unittest test_bitman_state_machine test_bitman_state_boundary test_bitman_readiness_boundary -v
+        run: |
+          git cat-file -e 9c660035f912be4640f09cf6e2d4c48583c20b04^{commit}
+          git cat-file -e 60ddd9ac1ac2c14784195e6b2ce0230dfb4103aa^{commit}
+          python -m unittest test_bitman_state_machine test_bitman_state_boundary test_bitman_readiness_boundary -v
       - name: Existing Guardian and V8 protection audit
         run: python mlrsi_safety_audit.py
       - name: Patch whitespace

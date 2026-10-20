@@ -6,9 +6,23 @@ import re
 from pathlib import Path
 import subprocess
 import unittest
+from unittest.mock import Mock, patch
 
 ROOT = Path(__file__).resolve().parent
 MODULES = ('bitman_state_data', 'bitman_weekly_state_machine', 'bitman_state_analysis', 'bitman_state_reporting')
+BASE = '9c660035f912be4640f09cf6e2d4c48583c20b04'
+PROTOCOL = '60ddd9ac1ac2c14784195e6b2ce0230dfb4103aa'
+
+
+def require_history(case, commit):
+    present = subprocess.run(['git', 'cat-file', '-e', commit+'^{commit}'], cwd=ROOT,
+                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
+    if present:
+        return
+    shallow = subprocess.check_output(['git', 'rev-parse', '--is-shallow-repository'], cwd=ROOT).decode().strip()
+    if shallow == 'true':
+        case.skipTest('Shallow checkout; dedicated research CI requires exact base and protocol commits')
+    case.fail('Required audited commit missing from a full-history checkout: '+commit)
 
 
 def forbidden(source):
@@ -75,16 +89,39 @@ class ResearchBoundaryTests(unittest.TestCase):
         self.assertIn('NO VIRGIN HOLDOUT', protocol)
         self.assertIn('EXACT BITMAN VOLATILITY PARITY: NOT PROVEN', protocol)
         self.assertIn('EXACT BITMAN OSCILLATOR PARITY: NOT PROVEN', protocol)
+        require_history(self, BASE)
+        require_history(self, PROTOCOL)
         commit = subprocess.check_output(['git', 'log', '--format=%H', '--', path], cwd=ROOT).decode().splitlines()[-1]
+        self.assertEqual(commit, PROTOCOL)
         files = subprocess.check_output(['git', 'diff-tree', '--no-commit-id', '--name-only', '-r', commit], cwd=ROOT).decode().splitlines()
         self.assertEqual(files, [path])
 
     def test_no_existing_base_files_modified(self):
+        require_history(self, BASE)
         names = subprocess.check_output(['git', 'diff', '--name-status', '9c660035f912be4640f09cf6e2d4c48583c20b04'], cwd=ROOT).decode().splitlines()
         for row in names:
             status, name = row.split('\t', 1)
             self.assertEqual(status, 'A')
             self.assertTrue(name.startswith('research/') or name.startswith('test_bitman_state_') or name == '.github/workflows/bitman-state-machine-research.yml')
+
+    def test_only_shallow_missing_history_skips_not_a_full_checkout(self):
+        with patch.object(subprocess, 'run', return_value=Mock(returncode=1)):
+            with patch.object(subprocess, 'check_output', return_value=b'true\n'):
+                with self.assertRaises(unittest.SkipTest):
+                    require_history(unittest.TestCase(), BASE)
+            with patch.object(subprocess, 'check_output', return_value=b'false\n'):
+                with self.assertRaises(AssertionError):
+                    require_history(unittest.TestCase(), BASE)
+
+    def test_present_history_never_skips_and_dedicated_workflow_requires_both_commits(self):
+        with patch.object(subprocess, 'run', return_value=Mock(returncode=0)):
+            with patch.object(subprocess, 'check_output') as unnecessary:
+                require_history(unittest.TestCase(), BASE)
+                unnecessary.assert_not_called()
+        workflow = (ROOT/'.github/workflows/bitman-state-machine-research.yml').read_text('utf-8')
+        self.assertIn('fetch-depth: 0', workflow)
+        self.assertIn('git cat-file -e '+BASE+'^{commit}', workflow)
+        self.assertIn('git cat-file -e '+PROTOCOL+'^{commit}', workflow)
 
     def test_source_audit_does_not_claim_unverified_parity_or_visual_examples(self):
         source = json.loads((ROOT/'research/results/bitman_weekly_state_machine/source_audit.json').read_text('utf-8'))
