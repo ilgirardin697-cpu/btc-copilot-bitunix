@@ -23,6 +23,8 @@ def violations(sources):
     for name,source in sources.items():
         if name.startswith('research/') or name in ALLOWED:
             continue
+        if name.startswith('bitman_weekly_forward/'):
+            errors.append((name,'UNAPPROVED_PACKAGE_SURFACE'));continue
         if name in ADDITIONS:
             try:source=normalize_source(name,source)
             except AssertionError:errors.append((name,'PASSIVE_FRAGMENT_CHANGED'));continue
@@ -37,7 +39,7 @@ def violations(sources):
             elif isinstance(node,(ast.FunctionDef,ast.ClassDef,ast.AsyncFunctionDef)):values=[node.name]
             elif isinstance(node,ast.Constant) and isinstance(node.value,str):values=[node.value]
             words=[w for value in values for w in re.split(r'[^a-zA-Z0-9_]+',value)]
-            if any(w in TOKENS or 'bitman_weekly_forward' in w or w.startswith(('REACCELERATION_','ZERO_CROSS_')) for w in words):
+            if any(w in TOKENS or 'bitman_weekly_forward' in w or w.startswith(('REACCELERATION','ZERO_CROSS')) for w in words):
                 errors.append((name,'WEEKLY_OUTSIDE_PASSIVE_BOUNDARY'))
     return errors
 
@@ -69,6 +71,8 @@ class WeeklyBoundary(unittest.TestCase):
     def test_indirect_reexports_and_new_package_helpers_rejected(self):
         for path in ('new_module/helper.py','bitman_weekly_forward/order_adapter.py'):
             self.assertTrue(violations({path:'from bitman_weekly_forward import models as decision'}))
+        self.assertTrue(violations({'bitman_weekly_forward/order_adapter.py':'from .models import calculate_models as decision'}))
+        self.assertTrue(violations({'new_module/helper.py':'if event.startswith("REACCELERATION"): send_order()'}))
 
     def test_exact_old_source_baselines_preserved_after_passive_removal(self):
         baseline=json.loads((ROOT/'tests/fixtures/weekly_forward_base.json').read_text())
