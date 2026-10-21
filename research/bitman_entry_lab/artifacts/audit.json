@@ -1,0 +1,19 @@
+{
+  "code_hashes_match": true,
+  "control_rows": 7084,
+  "distinct_anchor_ids": 5529,
+  "financial_replay_hash": "4e426cacb8e3844117ba08d7b832360f319ae5c7396cc2d635c6f01ec52c4a0f",
+  "financial_replay_identical": true,
+  "mae_diagnostic_erratum_only": true,
+  "no_runtime_changes": true,
+  "result_lock_hash_matches": true,
+  "reused_cache_parity": {
+    "candle_field_differences": 0,
+    "funding_field_differences": 0,
+    "funding_rows": 7305,
+    "reference_file_sha256": "6a6f472fcd87a74c7d6aa4e7b67638b53997b17016b61b3fd260e814f8cfd76c",
+    "rows_5m": 701280
+  },
+  "simulation_rows": 9861,
+  "trade_authority": "NONE"
+}

@@ -168,6 +168,12 @@ class EntryFillTests(unittest.TestCase):
         r,e=simulation.simulate(b[:-1],f,d,0,1,'ATR_2R')
         self.assertIsNone(r);self.assertEqual(e,'INCOMPLETE_PATH')
 
+    def test_target_exit_mae_retains_adverse_candle_bound(self):
+        def change(b,f,d):b[0,2]=104;b[0,3]=99
+        r,e=self.run_trade(mutate=change)
+        self.assertEqual(r['gross_R'],2)
+        self.assertAlmostEqual(r['mae_R'],-1/1.5)
+
     def test_internal_gap_fails_closed(self):
         b,f,d=trade_fixture()
         r,e=simulation.simulate(np.delete(b,100,axis=0),f,d,0,1,'ATR_2R')
@@ -238,7 +244,7 @@ class EntryIntegrityTests(unittest.TestCase):
                     module=node.module or ''
                     self.assertFalse(any(x in module for x in ('guardian_bitunix','guardian_risk','trade_guardian','readiness','v8_executor','telegram')),p.name)
                 if isinstance(node,ast.Attribute):
-                    self.assertNotIn(node.attr,('place_order','cancel_order','create_order','set_leverage','send_message'))
+                    self.assertNotIn(node.attr,('place_order','cancel_order','create_order','set_leverage','send_message','post','put','patch','delete'))
 
     def test_all_tracked_production_sources_unchanged(self):
         paths=subprocess.check_output(['git','ls-tree','-r','--name-only',BASE],cwd=ROOT).decode().splitlines()
@@ -269,6 +275,16 @@ class EntryIntegrityTests(unittest.TestCase):
             self.assertLessEqual(r['context']['h4_available_at'],r['signal_time'])
             self.assertLessEqual(r['context']['d1_available_at'],r['signal_time'])
             self.assertEqual(r['context']['mlrsi'],'UNAVAILABLE')
+
+    def test_financial_replay_identity_and_control_artifact(self):
+        p=ROOT/'research/bitman_entry_lab/artifacts'
+        if not (p/'audit.json').exists():self.skipTest('Independent audit is produced after the fixed evaluation')
+        from research.bitman_entry_lab.audit import financial_hash
+        audit=json.loads((p/'audit.json').read_text('utf-8'))
+        rows=[json.loads(x) for x in gzip.decompress((p/'simulated_trades.jsonl.gz').read_bytes()).splitlines()]
+        self.assertTrue(audit['financial_replay_identical'])
+        self.assertEqual(financial_hash(rows),audit['financial_replay_hash'])
+        self.assertTrue((p/'matched_controls.csv').is_file())
 
 if __name__=='__main__':unittest.main()
 

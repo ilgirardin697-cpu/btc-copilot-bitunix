@@ -41,7 +41,8 @@ def simulate(base,funding,data,i,side,kind):
             exit_at=int(t if gap_stop else t+M5);break
         if hit_target:
             exit_price=float(target);reason='TARGET';mfe=max(mfe,2*risk)
-            # Favorable fill may be first: do not assume unseen adverse excursion on exit bar.
+            # Ordering is unknown: retain the adverse bound of this no-stop candle.
+            mae=min(mae,adverse)
             exit_at=int(t+M5);break
         mae=min(mae,adverse);mfe=max(mfe,favorable)
     selected=funding[(funding[:,0]>=entry_time)&(funding[:,0]<exit_at)]
