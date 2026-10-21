@@ -1,0 +1,45 @@
+{
+  "protocol_version": "BITMAN_WEEKLY_FORWARD_V1",
+  "schema_version": 1,
+  "venue": "BINANCE_USDM_PERPETUAL",
+  "symbol": "BTCUSDT",
+  "source": "https://fapi.binance.com/fapi/v1/klines",
+  "source_pr31_commit": "772446da2b7e045483c2e1d9a5c0acc185c47fe4",
+  "source_weekly_csv_sha256": "1f542daea1af9fe43a83994d0dc4f282bd770f54b0c00de99258e2c8db9cbdc6",
+  "source_caveat": "Closed 1W aggregation of audited 4H USD-M; inherited native 1W/4H discrepancies are outside the chosen 120-week OHLC window.",
+  "first_week": 1719792000000,
+  "last_week": 1791763200000,
+  "available_at": 1792368000000,
+  "rows": 120,
+  "sha256": "b1b0757caffdaf306620d9446d2e8ef785cf6a19fd9d1a1f36c9eb78d587a1cf",
+  "previous_close": 62766.0,
+  "atr_seed_before_first_week": 5714.228663826332,
+  "atr_seed_reason": "Causal Wilder14 checkpoint from the audited prefix, preserving the research ATR without importing full history.",
+  "golden": {
+    "ao": 10698.622352941165,
+    "ao_slope": 348.99441176469554,
+    "bbwp": 30.0,
+    "prior_bbwp": 41.0,
+    "bbwp_slope": -11.0,
+    "atr": 6175.9111711882015,
+    "available_at": 1792368000000,
+    "ao_sign": "ABOVE",
+    "ao_color": "GREEN",
+    "volatility": "COOLING",
+    "turn_up": false,
+    "models": {
+      "STRICT_SAME_WEEK": {
+        "state": "OTHER",
+        "pending": null
+      },
+      "SOURCE_ALIGNED_LAG_LE1": {
+        "state": "OTHER",
+        "pending": null
+      },
+      "SOURCE_ALIGNED_LAG_LE2": {
+        "state": "OTHER",
+        "pending": null
+      }
+    }
+  }
+}

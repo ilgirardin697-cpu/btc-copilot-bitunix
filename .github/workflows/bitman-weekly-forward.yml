@@ -1,0 +1,32 @@
+name: Bitman weekly forward observer
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  weekly_forward:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install existing runtime dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Compile isolated observer and tests
+        run: python -m compileall -q bitman_weekly_forward test_bitman_weekly_forward.py test_bitman_weekly_host.py test_bitman_weekly_boundary.py
+      - name: Immutable protocol, bootstrap golden, models, journal and recovery
+        run: python -m unittest test_bitman_weekly_forward test_bitman_weekly_host -v
+      - name: Require observer boundary and separately pinned V8 reference
+        run: python test_bitman_weekly_boundary.py --require-v8 -v
+      - name: Preserve all 900 approved readiness results and existing manual transport
+        run: python -m unittest test_bitman_readiness test_bitman_readiness_boundary test_bitman_manual test_bitman_market_data test_guardian_commands test_live_levels_canary -v
+      - name: Guardian and ML RSI safety audit
+        run: python mlrsi_safety_audit.py
+      - name: Require original readiness boundary and V8 frozen hashes
+        run: python test_bitman_readiness_boundary.py --require-v8 -v
+      - name: Complete regression suite
+        run: python -m unittest discover -v
+      - name: Patch whitespace
+        run: git diff --check HEAD^ HEAD

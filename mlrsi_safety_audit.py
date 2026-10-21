@@ -29,6 +29,9 @@ def _remove(body, source):
 
 def guardian_baseline_tree(path):
     tree = ast.parse(Path(path).read_text('utf-8'))
+    if path == 'trade_guardian.py':
+        from bitman_weekly_forward.safety import normalize_source
+        tree = ast.parse(normalize_source(path, Path(path).read_text('utf-8')))
     if path == 'guardian_commands.py':
         from bitman_manual.safety import strip_commands
         tree = strip_commands(tree)
@@ -119,6 +122,12 @@ def verify_protected_sources():
         assert Path(path).read_bytes().replace(b'\r\n', b'\n') == old.replace(b'\r\n', b'\n'), path + ' V4 mathematics/presentation changed'
     for group in ('main_files', 'validated_core', 'integration_files'):
         for path, record in manifest[group].items():
+            if path == 'trade_guardian.py':
+                from bitman_weekly_forward.safety import normalize_source
+                normalized = normalize_source(path, Path(path).read_text('utf-8')).encode('utf-8')
+                current = subprocess.check_output(['git', 'hash-object', '--stdin'], input=normalized).decode().strip()
+                assert current == record['git_blob'], 'Guardian outside passive extension changed'
+                continue
             if group == 'integration_files' and path == 'guardian_commands.py':
                 from bitman_manual.safety import PRODUCTION_BASE, verify_command_extension
                 assert verify_command_extension()

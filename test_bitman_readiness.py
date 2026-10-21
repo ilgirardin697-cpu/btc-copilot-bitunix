@@ -349,6 +349,9 @@ class SafetyTests(unittest.TestCase):
         for name in paths:
             with self.subTest(path=name):
                 data = (ROOT / name).read_bytes().replace(b'\r\n', b'\n')
+                if name in ('trade_guardian.py', 'bitman_manual/host.py', 'mlrsi_safety_audit.py'):
+                    from bitman_weekly_forward.safety import normalize_source
+                    data = normalize_source(name, data.decode('utf-8')).encode('utf-8')
                 self.assertEqual(hashlib.sha256(data).hexdigest(), baseline['sha256'][name])
 
     def test_entire_frozen_engine_unchanged_from_production(self):

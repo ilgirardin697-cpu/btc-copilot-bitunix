@@ -1,0 +1,60 @@
+{
+  "protocol_version": "BITMAN_WEEKLY_FORWARD_V1",
+  "schema_version": 1,
+  "reference_pr31": "772446da2b7e045483c2e1d9a5c0acc185c47fe4",
+  "models": [
+    "STRICT_SAME_WEEK",
+    "SOURCE_ALIGNED_LAG_LE1",
+    "SOURCE_ALIGNED_LAG_LE2"
+  ],
+  "lags": [
+    0,
+    1,
+    2
+  ],
+  "ranges": [
+    4
+  ],
+  "horizons": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "percent_thresholds": [
+    5,
+    10,
+    15,
+    20
+  ],
+  "atr_thresholds": [
+    1,
+    1.5,
+    2
+  ],
+  "week": "MONDAY_00_UTC",
+  "candle_acquisition": "EXACT_168_CLOSED_1H",
+  "after_close_margin_ms": 300000,
+  "forward_evidence": "HYPOTHESIS FOR FORWARD OBSERVATION",
+  "late_recovery": "EXCLUDED_FROM_PROSPECTIVE_COUNTS",
+  "primary_label": "WEEKLY_CLOSE_BREAKOUT_AND_10_PERCENT_SAME_SIDE_EXCURSION",
+  "sources": {
+    "__init__.py": "c3744c2f389fea9a960fc9a592b3c826c713007a79dbfda3fb030f2404ddb0e8",
+    "protocol.py": "e83cbbec5ec22254e247cdac5742b95e8345b13adbed2ab777c7ca4777c96a56",
+    "features.py": "ab5a9fe3da20c1c1729890e2d00af73a6c736284e739d67c10f67574391ebff7",
+    "models.py": "8bb42525e3e6f9df56e68e58e1a672321729b11a17ec3bb1f7d73a3c2477ec0b",
+    "outcomes.py": "b9ea5c3171b386b5584bada22d75b2eda14b3611cbe9f69c90c87f4fbe493a72",
+    "market.py": "68b584ef61b7c101ecbd8962b4250bfbdc0e15a3eca166049515c52e6fcb438b",
+    "journal.py": "56b45971bb0f2e2c77a352eede4a598ec954f5a6a310bc077a9265e465cace6e",
+    "observer.py": "4b1fef7299c175f703688cfe2f27378011456973ef96d33bf4feb3ff42e6bb3c",
+    "host.py": "3c83cbeb8a42d20739f951380f140a079ccf9edc9f00e90a73687c1732157961",
+    "worker.py": "636358752af09b31ed3030da72cef12391e756339f609e677a16ebc88529cc71",
+    "render.py": "ee6c9d3c8befcbee55699e8fac1feb5f98996e744ed78d2ab4624d74bd6a0a22",
+    "safety.py": "25e93b9d975dc462b6fe714948c0a575a0c0fcf6d5d340a92cb9d7fce697ab9d",
+    "bootstrap_v1.csv": "b1b0757caffdaf306620d9446d2e8ef785cf6a19fd9d1a1f36c9eb78d587a1cf",
+    "bootstrap_manifest.json": "7dd2fda345aaea97dfed141f115b351e758e7385de8f03687d1e359bdec899dc"
+  },
+  "dependencies": {
+    "bitman_manual/frozen/indicators.py": "5a0c37e737375d7278f84490d8b4f8e1779189ead5f7e77bda6d468d86e037b5"
+  }
+}

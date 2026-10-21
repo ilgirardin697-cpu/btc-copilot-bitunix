@@ -263,7 +263,11 @@ class ProviderRecoveryTests(unittest.TestCase):
                 current = strip_commands(ast.parse(Path(path).read_text('utf-8')))
                 self.assertEqual(fingerprint(current), fingerprint(ast.parse(old.decode('utf-8'))), path)
                 continue
-            self.assertEqual(Path(path).read_bytes().replace(b'\r\n', b'\n'), old.replace(b'\r\n', b'\n'), path)
+            current = Path(path).read_bytes().replace(b'\r\n', b'\n')
+            if path == 'trade_guardian.py':
+                from bitman_weekly_forward.safety import normalize_source
+                current = normalize_source(path, current.decode('utf-8')).encode('utf-8')
+            self.assertEqual(current, old.replace(b'\r\n', b'\n'), path)
         self.assertEqual(CONFIG_VERSION, 'CAPTURE_LOW29_EMA4_PINE_PARITY_V4')
         self.assertEqual(CAPTURED_CONFIG['rsi_length'], 29)
         self.assertFalse(self.http.post.called)
