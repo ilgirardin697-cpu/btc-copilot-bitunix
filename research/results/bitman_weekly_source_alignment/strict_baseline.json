@@ -1,0 +1,20 @@
+{
+  "reviewed_head": "06b58f013137f3af10619eafccb8f5a6dcc3ce4c",
+  "normalization": "CRLF to LF only",
+  "sha256": {
+    "research/bitman_state_analysis.py": "9e34a0d9c16bfb13063d42407dcb0369e12840f4b1e52369c614067dc9ec66bf",
+    "research/bitman_state_data.py": "c94abedafe4ae88ab16aca18bf08b2d615eacf2e2710d6ca4e9b712922d9e872",
+    "research/bitman_weekly_state_machine.py": "54f616f1bf507f98d7548ad1366e552c24c188e8b0f52655d6db7a0c29a89265",
+    "research/results/bitman_weekly_state_machine/analysis.json": "0c979d4f069333e2ca831a96b186b21f2c663e5e0b976c0171291461799dc9d6",
+    "research/results/bitman_weekly_state_machine/comparisons.csv": "a12f7761308abbcf4e20b6dd461f1343f76b61ef10cd59c4e8266381d70e1b7b",
+    "research/results/bitman_weekly_state_machine/data_manifest.json": "30d81220e377d022badcdaf005db30116741998265a5dbbcdd93af249f5c486e",
+    "research/results/bitman_weekly_state_machine/falsification.csv": "08369b7471f5546487bd8a3f0f63df6c7ce88f98caed10e4a495fc8303b0743e",
+    "research/results/bitman_weekly_state_machine/input_features.csv": "2dc954d530520007f74f2f1510d3a151e614f218ae42c11e3bd0917e82b99b44",
+    "research/results/bitman_weekly_state_machine/observations.csv": "612ef67d1b8f61eb34d675bddd5313042285ed8f77e4d0529643bc2c5aab0d88",
+    "research/results/bitman_weekly_state_machine/states.csv": "9c340e0cd8e97a316e9aa20cfc37fb9c5d5a5e1d254ddbd8cb14c11363cbf581",
+    "research/results/bitman_weekly_state_machine/summaries.csv": "22a62ab9aeba1b51139545da3a2fbf8aee70e7386dce1e49d6eac1c72071f7bb",
+    "research/results/bitman_weekly_state_machine/temporal_controls.csv": "eeec7fe3583db33082f65244ad5517bc04fc09e8da2b0e3be06b9ee94a1c0245",
+    "research/results/bitman_weekly_state_machine/weekly_bars.csv": "1f542daea1af9fe43a83994d0dc4f282bd770f54b0c00de99258e2c8db9cbdc6",
+    "research/results/BITMAN_WEEKLY_STATE_MACHINE_PROTOCOL.md": "c564324efb967736dfb5e1681d0dc92f582cefe5ed21f4d7bb7858e973039048"
+  }
+}

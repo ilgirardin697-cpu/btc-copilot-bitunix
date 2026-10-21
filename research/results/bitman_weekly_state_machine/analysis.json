@@ -1,0 +1,2032 @@
+{
+  "state_counts": {
+    "IMPULSE_UP": 28,
+    "OTHER": 140,
+    "PULLBACK_UP": 35,
+    "IMPULSE_DOWN": 21,
+    "PULLBACK_DOWN": 32,
+    "REACCELERATION_DOWN": 2,
+    "REACCELERATION_UP": 2,
+    "ZERO_CROSS_UP_EXPANSION": 2,
+    "ZERO_CROSS_DOWN_EXPANSION": 1
+  },
+  "valid_weeks": 263,
+  "first_eligible": "2021-10-11T00:00:00+00:00",
+  "episode_count": 7,
+  "episodes": [
+    {
+      "episode_id": "W1662940800000",
+      "index": 157,
+      "start_at": "2022-09-12T00:00:00+00:00",
+      "end_at": "2022-09-19T00:00:00+00:00",
+      "signal_open": "2022-09-12T00:00:00+00:00",
+      "state": "REACCELERATION_DOWN",
+      "side": -1,
+      "pullback_weeks": 1,
+      "preceding_state": "OTHER",
+      "immediate_prior_impulse": false,
+      "last_same_side_impulse_at": "2022-07-04T00:00:00+00:00",
+      "turn_up": true,
+      "sustained_turn": false,
+      "era": "2020-2022",
+      "regime": "BEAR",
+      "range_high": 22850.0,
+      "range_low": 18500.0,
+      "range_width_atr": 1.0920987375451852,
+      "sequence": [
+        {
+          "open_time": 1662336000000,
+          "available_at": "2022-09-12T00:00:00+00:00",
+          "state": "PULLBACK_DOWN",
+          "sign": "BELOW",
+          "color": "GREEN",
+          "oscillator": -10194.546617647058,
+          "oscillator_slope": 77.8588235294119,
+          "volatility": 30.0,
+          "volatility_slope": -1.0
+        },
+        {
+          "open_time": 1662940800000,
+          "available_at": "2022-09-19T00:00:00+00:00",
+          "state": "REACCELERATION_DOWN",
+          "sign": "BELOW",
+          "color": "RED",
+          "oscillator": -10227.802499999998,
+          "oscillator_slope": -33.25588235293981,
+          "volatility": 36.0,
+          "volatility_slope": 6.0
+        }
+      ],
+      "mature_4w": true,
+      "outcome": {
+        "forward": -0.7864155221726898,
+        "absolute": 0.7864155221726898,
+        "up": 5.645597670643408,
+        "down": 7.661624880826615,
+        "max_move": 7.661624880826615,
+        "max_atr": 0.37324671105940865,
+        "breakout": 0.0,
+        "wick_breakout": 1.0,
+        "first_side": 0.0,
+        "first_week": null,
+        "wick_side": -1.0,
+        "beyond_up": 0.0,
+        "beyond_down": 3.0003349738462766,
+        "beyond_atr": 0.1461654908043236,
+        "reentered": null,
+        "end_outside": null,
+        "sustained": null,
+        "persistence_followup": 0.0,
+        "range_atr": 1.0920987375451852,
+        "congestion": 1.0,
+        "large_5": 0.0,
+        "large_10": 0.0,
+        "large_15": 0.0,
+        "large_20": 0.0,
+        "move_5": 1.0,
+        "move_10": 0.0,
+        "move_15": 0.0,
+        "move_20": 0.0,
+        "atr_1": 0.0,
+        "atr_1.5": 0.0,
+        "atr_2": 0.0
+      }
+    },
+    {
+      "episode_id": "W1687132800000",
+      "index": 197,
+      "start_at": "2023-06-19T00:00:00+00:00",
+      "end_at": "2023-06-26T00:00:00+00:00",
+      "signal_open": "2023-06-19T00:00:00+00:00",
+      "state": "REACCELERATION_UP",
+      "side": 1,
+      "pullback_weeks": 1,
+      "preceding_state": "OTHER",
+      "immediate_prior_impulse": false,
+      "last_same_side_impulse_at": "2023-04-17T00:00:00+00:00",
+      "turn_up": true,
+      "sustained_turn": false,
+      "era": "2023-2024",
+      "regime": "BULL",
+      "range_high": 31500.0,
+      "range_low": 24777.0,
+      "range_width_atr": 2.488921581223389,
+      "sequence": [
+        {
+          "open_time": 1686528000000,
+          "available_at": "2023-06-19T00:00:00+00:00",
+          "state": "PULLBACK_UP",
+          "sign": "ABOVE",
+          "color": "RED",
+          "oscillator": 3805.2423529411753,
+          "oscillator_slope": -466.4864705882392,
+          "volatility": 7.0,
+          "volatility_slope": -4.0
+        },
+        {
+          "open_time": 1687132800000,
+          "available_at": "2023-06-26T00:00:00+00:00",
+          "state": "REACCELERATION_UP",
+          "sign": "ABOVE",
+          "color": "GREEN",
+          "oscillator": 3923.373529411765,
+          "oscillator_slope": 118.13117647058971,
+          "volatility": 23.0,
+          "volatility_slope": 16.0
+        }
+      ],
+      "mature_4w": true,
+      "outcome": {
+        "forward": -1.2712587825858601,
+        "absolute": 1.2712587825858601,
+        "up": 4.570227854750804,
+        "down": 3.4736358263838727,
+        "max_move": 4.570227854750804,
+        "max_atr": 0.5153322684906971,
+        "breakout": 0.0,
+        "wick_breakout": 1.0,
+        "first_side": 0.0,
+        "first_week": null,
+        "wick_side": 1.0,
+        "beyond_up": 1.1491233830192396,
+        "beyond_down": 0.0,
+        "beyond_atr": 0.12957348704866667,
+        "reentered": null,
+        "end_outside": null,
+        "sustained": null,
+        "persistence_followup": 0.0,
+        "range_atr": 2.488921581223389,
+        "congestion": 0.0,
+        "large_5": 0.0,
+        "large_10": 0.0,
+        "large_15": 0.0,
+        "large_20": 0.0,
+        "move_5": 0.0,
+        "move_10": 0.0,
+        "move_15": 0.0,
+        "move_20": 0.0,
+        "atr_1": 0.0,
+        "atr_1.5": 0.0,
+        "atr_2": 0.0
+      }
+    },
+    {
+      "episode_id": "W1697414400000",
+      "index": 214,
+      "start_at": "2023-10-16T00:00:00+00:00",
+      "end_at": "2023-10-23T00:00:00+00:00",
+      "signal_open": "2023-10-16T00:00:00+00:00",
+      "state": "ZERO_CROSS_UP_EXPANSION",
+      "side": 1,
+      "pullback_weeks": 1,
+      "preceding_state": "OTHER",
+      "immediate_prior_impulse": false,
+      "last_same_side_impulse_at": "2023-07-17T00:00:00+00:00",
+      "turn_up": true,
+      "sustained_turn": false,
+      "era": "2023-2024",
+      "regime": "BULL",
+      "range_high": 30720.0,
+      "range_low": 25965.0,
+      "range_width_atr": 2.1194645268485597,
+      "sequence": [
+        {
+          "open_time": 1696809600000,
+          "available_at": "2023-10-16T00:00:00+00:00",
+          "state": "PULLBACK_DOWN",
+          "sign": "BELOW",
+          "color": "GREEN",
+          "oscillator": -445.9682352941127,
+          "oscillator_slope": 156.70588235294417,
+          "volatility": 11.0,
+          "volatility_slope": 0.0
+        },
+        {
+          "open_time": 1697414400000,
+          "available_at": "2023-10-23T00:00:00+00:00",
+          "state": "ZERO_CROSS_UP_EXPANSION",
+          "sign": "ABOVE",
+          "color": "GREEN",
+          "oscillator": 14.12764705882364,
+          "oscillator_slope": 460.0958823529363,
+          "volatility": 26.0,
+          "volatility_slope": 15.0
+        }
+      ],
+      "mature_4w": true,
+      "outcome": {
+        "forward": 24.66320897887031,
+        "absolute": 24.66320897887031,
+        "up": 28.412187515634646,
+        "down": 0.37389723662924984,
+        "max_move": 28.412187515634646,
+        "max_atr": 3.79693935341888,
+        "breakout": 1.0,
+        "wick_breakout": 1.0,
+        "first_side": 1.0,
+        "first_week": 1.0,
+        "wick_side": 1.0,
+        "beyond_up": 25.94900188449544,
+        "beyond_down": 0.0,
+        "beyond_atr": 3.4677648943068586,
+        "reentered": 0.0,
+        "end_outside": 1.0,
+        "sustained": 1.0,
+        "persistence_followup": 3.0,
+        "range_atr": 2.1194645268485597,
+        "congestion": 0.0,
+        "large_5": 1.0,
+        "large_10": 1.0,
+        "large_15": 1.0,
+        "large_20": 1.0,
+        "move_5": 1.0,
+        "move_10": 1.0,
+        "move_15": 1.0,
+        "move_20": 1.0,
+        "atr_1": 1.0,
+        "atr_1.5": 1.0,
+        "atr_2": 1.0
+      }
+    },
+    {
+      "episode_id": "W1759104000000",
+      "index": 316,
+      "start_at": "2025-09-29T00:00:00+00:00",
+      "end_at": "2025-10-06T00:00:00+00:00",
+      "signal_open": "2025-09-29T00:00:00+00:00",
+      "state": "REACCELERATION_UP",
+      "side": 1,
+      "pullback_weeks": 1,
+      "preceding_state": "OTHER",
+      "immediate_prior_impulse": false,
+      "last_same_side_impulse_at": "2025-07-28T00:00:00+00:00",
+      "turn_up": true,
+      "sustained_turn": false,
+      "era": "2025-2026",
+      "regime": "BULL",
+      "range_high": 125877.3,
+      "range_low": 108566.0,
+      "range_width_atr": 2.1607036550265026,
+      "sequence": [
+        {
+          "open_time": 1758499200000,
+          "available_at": "2025-09-29T00:00:00+00:00",
+          "state": "PULLBACK_UP",
+          "sign": "ABOVE",
+          "color": "RED",
+          "oscillator": 10435.080588235302,
+          "oscillator_slope": -722.4417647058581,
+          "volatility": 6.0,
+          "volatility_slope": -7.0
+        },
+        {
+          "open_time": 1759104000000,
+          "available_at": "2025-10-06T00:00:00+00:00",
+          "state": "REACCELERATION_UP",
+          "sign": "ABOVE",
+          "color": "GREEN",
+          "oscillator": 11438.680588235278,
+          "oscillator_slope": 1003.5999999999767,
+          "volatility": 30.0,
+          "volatility_slope": 24.0
+        }
+      ],
+      "mature_4w": true,
+      "outcome": {
+        "forward": -10.477311635164844,
+        "absolute": 10.477311635164844,
+        "up": 2.253807320458218,
+        "down": 17.75158859468818,
+        "max_move": 17.75158859468818,
+        "max_atr": 2.734713696970283,
+        "breakout": 0.0,
+        "wick_breakout": 1.0,
+        "first_side": 0.0,
+        "first_week": null,
+        "wick_side": 2.0,
+        "beyond_up": 0.26833740187495664,
+        "beyond_down": 5.711487060741314,
+        "beyond_atr": 0.879880795556043,
+        "reentered": null,
+        "end_outside": null,
+        "sustained": null,
+        "persistence_followup": 0.0,
+        "range_atr": 2.1607036550265026,
+        "congestion": 0.0,
+        "large_5": 0.0,
+        "large_10": 0.0,
+        "large_15": 0.0,
+        "large_20": 0.0,
+        "move_5": 1.0,
+        "move_10": 1.0,
+        "move_15": 1.0,
+        "move_20": 0.0,
+        "atr_1": 1.0,
+        "atr_1.5": 1.0,
+        "atr_2": 1.0
+      }
+    },
+    {
+      "episode_id": "W1763337600000",
+      "index": 323,
+      "start_at": "2025-11-17T00:00:00+00:00",
+      "end_at": "2025-11-24T00:00:00+00:00",
+      "signal_open": "2025-11-17T00:00:00+00:00",
+      "state": "ZERO_CROSS_DOWN_EXPANSION",
+      "side": -1,
+      "pullback_weeks": 0,
+      "preceding_state": "OTHER",
+      "immediate_prior_impulse": false,
+      "last_same_side_impulse_at": "2024-09-30T00:00:00+00:00",
+      "turn_up": false,
+      "sustained_turn": false,
+      "era": "2025-2026",
+      "regime": "BEAR",
+      "range_high": 116380.2,
+      "range_low": 80600.0,
+      "range_width_atr": 3.448316376678699,
+      "sequence": [
+        {
+          "open_time": 1762732800000,
+          "available_at": "2025-11-17T00:00:00+00:00",
+          "state": "OTHER",
+          "sign": "ABOVE",
+          "color": "RED",
+          "oscillator": 1220.3323529411864,
+          "oscillator_slope": -3200.2470588235155,
+          "volatility": 81.0,
+          "volatility_slope": 35.0
+        },
+        {
+          "open_time": 1763337600000,
+          "available_at": "2025-11-24T00:00:00+00:00",
+          "state": "ZERO_CROSS_DOWN_EXPANSION",
+          "sign": "BELOW",
+          "color": "RED",
+          "oscillator": -3150.1594117647182,
+          "oscillator_slope": -4370.491764705905,
+          "volatility": 86.0,
+          "volatility_slope": 5.0
+        }
+      ],
+      "mature_4w": true,
+      "outcome": {
+        "forward": 2.089215588018112,
+        "absolute": 2.089215588018112,
+        "up": 8.92466912497394,
+        "down": 3.480912407539881,
+        "max_move": 8.92466912497394,
+        "max_atr": 0.7466459512535676,
+        "breakout": 0.0,
+        "wick_breakout": 0.0,
+        "first_side": 0.0,
+        "first_week": null,
+        "wick_side": 0.0,
+        "beyond_up": 0.0,
+        "beyond_down": 0.0,
+        "beyond_atr": 0.0,
+        "reentered": null,
+        "end_outside": null,
+        "sustained": null,
+        "persistence_followup": 0.0,
+        "range_atr": 3.448316376678699,
+        "congestion": 0.0,
+        "large_5": 0.0,
+        "large_10": 0.0,
+        "large_15": 0.0,
+        "large_20": 0.0,
+        "move_5": 1.0,
+        "move_10": 0.0,
+        "move_15": 0.0,
+        "move_20": 0.0,
+        "atr_1": 0.0,
+        "atr_1.5": 0.0,
+        "atr_2": 0.0
+      }
+    },
+    {
+      "episode_id": "W1780272000000",
+      "index": 351,
+      "start_at": "2026-05-18T00:00:00+00:00",
+      "end_at": "2026-06-08T00:00:00+00:00",
+      "signal_open": "2026-06-01T00:00:00+00:00",
+      "state": "REACCELERATION_DOWN",
+      "side": -1,
+      "pullback_weeks": 3,
+      "preceding_state": "OTHER",
+      "immediate_prior_impulse": false,
+      "last_same_side_impulse_at": "2026-03-02T00:00:00+00:00",
+      "turn_up": true,
+      "sustained_turn": true,
+      "era": "2025-2026",
+      "regime": "BEAR",
+      "range_high": 82350.0,
+      "range_low": 59080.0,
+      "range_width_atr": 3.032088673481937,
+      "sequence": [
+        {
+          "open_time": 1778457600000,
+          "available_at": "2026-05-18T00:00:00+00:00",
+          "state": "PULLBACK_DOWN",
+          "sign": "BELOW",
+          "color": "GREEN",
+          "oscillator": -8867.739117647056,
+          "oscillator_slope": 2829.596764705886,
+          "volatility": 55.0,
+          "volatility_slope": -22.0
+        },
+        {
+          "open_time": 1779062400000,
+          "available_at": "2026-05-25T00:00:00+00:00",
+          "state": "PULLBACK_DOWN",
+          "sign": "BELOW",
+          "color": "GREEN",
+          "oscillator": -7459.24147058824,
+          "oscillator_slope": 1408.4976470588153,
+          "volatility": 41.0,
+          "volatility_slope": -14.0
+        },
+        {
+          "open_time": 1779667200000,
+          "available_at": "2026-06-01T00:00:00+00:00",
+          "state": "PULLBACK_DOWN",
+          "sign": "BELOW",
+          "color": "GREEN",
+          "oscillator": -6441.802058823538,
+          "oscillator_slope": 1017.4394117647025,
+          "volatility": 25.0,
+          "volatility_slope": -16.0
+        },
+        {
+          "open_time": 1780272000000,
+          "available_at": "2026-06-08T00:00:00+00:00",
+          "state": "REACCELERATION_DOWN",
+          "sign": "BELOW",
+          "color": "RED",
+          "oscillator": -7168.2505882353,
+          "oscillator_slope": -726.4485294117621,
+          "volatility": 77.0,
+          "volatility_slope": 52.0
+        }
+      ],
+      "mature_4w": true,
+      "outcome": {
+        "forward": 0.5033294627834861,
+        "absolute": 0.5033294627834861,
+        "up": 6.251174988348846,
+        "down": 8.752024139592567,
+        "max_move": 8.752024139592567,
+        "max_atr": 0.7218507968295053,
+        "breakout": 0.0,
+        "wick_breakout": 1.0,
+        "first_side": 0.0,
+        "first_week": null,
+        "wick_side": -1.0,
+        "beyond_up": 0.0,
+        "beyond_down": 2.0875692157002166,
+        "beyond_atr": 0.1721788557429753,
+        "reentered": null,
+        "end_outside": null,
+        "sustained": null,
+        "persistence_followup": 0.0,
+        "range_atr": 3.032088673481937,
+        "congestion": 0.0,
+        "large_5": 0.0,
+        "large_10": 0.0,
+        "large_15": 0.0,
+        "large_20": 0.0,
+        "move_5": 1.0,
+        "move_10": 0.0,
+        "move_15": 0.0,
+        "move_20": 0.0,
+        "atr_1": 0.0,
+        "atr_1.5": 0.0,
+        "atr_2": 0.0
+      }
+    },
+    {
+      "episode_id": "W1788134400000",
+      "index": 364,
+      "start_at": "2026-08-31T00:00:00+00:00",
+      "end_at": "2026-09-07T00:00:00+00:00",
+      "signal_open": "2026-08-31T00:00:00+00:00",
+      "state": "ZERO_CROSS_UP_EXPANSION",
+      "side": 1,
+      "pullback_weeks": 0,
+      "preceding_state": "OTHER",
+      "immediate_prior_impulse": false,
+      "last_same_side_impulse_at": "2025-07-28T00:00:00+00:00",
+      "turn_up": false,
+      "sustained_turn": false,
+      "era": "2025-2026",
+      "regime": "BULL",
+      "range_high": 82282.8,
+      "range_low": 62484.2,
+      "range_width_atr": 3.0594561676280927,
+      "sequence": [
+        {
+          "open_time": 1787529600000,
+          "available_at": "2026-08-31T00:00:00+00:00",
+          "state": "OTHER",
+          "sign": "BELOW",
+          "color": "GREEN",
+          "oscillator": -3345.5350000000035,
+          "oscillator_slope": 3055.75323529412,
+          "volatility": 82.0,
+          "volatility_slope": 11.0
+        },
+        {
+          "open_time": 1788134400000,
+          "available_at": "2026-09-07T00:00:00+00:00",
+          "state": "ZERO_CROSS_UP_EXPANSION",
+          "sign": "ABOVE",
+          "color": "GREEN",
+          "oscillator": 78.79911764706776,
+          "oscillator_slope": 3424.3341176470713,
+          "volatility": 90.0,
+          "volatility_slope": 8.0
+        }
+      ],
+      "mature_4w": true,
+      "outcome": {
+        "forward": 7.698151083858118,
+        "absolute": 7.698151083858118,
+        "up": 8.821796961685456,
+        "down": 6.7143538506944624,
+        "max_move": 8.821796961685456,
+        "max_atr": 1.0946828306788057,
+        "breakout": 1.0,
+        "wick_breakout": 1.0,
+        "first_side": 1.0,
+        "first_week": 3.0,
+        "wick_side": 1.0,
+        "beyond_up": 6.353960281988669,
+        "beyond_down": 0.0,
+        "beyond_atr": 0.7884528807132233,
+        "reentered": 0.0,
+        "end_outside": 1.0,
+        "sustained": 1.0,
+        "persistence_followup": 1.0,
+        "range_atr": 3.0594561676280927,
+        "congestion": 0.0,
+        "large_5": 1.0,
+        "large_10": 0.0,
+        "large_15": 0.0,
+        "large_20": 0.0,
+        "move_5": 1.0,
+        "move_10": 0.0,
+        "move_15": 0.0,
+        "move_20": 0.0,
+        "atr_1": 1.0,
+        "atr_1.5": 0.0,
+        "atr_2": 0.0
+      }
+    }
+  ],
+  "runs": [
+    {
+      "state": "IMPULSE_UP",
+      "start_index": 108,
+      "end_index": 110,
+      "start_at": "2021-10-11T00:00:00+00:00",
+      "end_at": "2021-10-25T00:00:00+00:00",
+      "weeks": 3,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 111,
+      "end_index": 114,
+      "start_at": "2021-11-01T00:00:00+00:00",
+      "end_at": "2021-11-22T00:00:00+00:00",
+      "weeks": 4,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 115,
+      "end_index": 115,
+      "start_at": "2021-11-29T00:00:00+00:00",
+      "end_at": "2021-11-29T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 116,
+      "end_index": 118,
+      "start_at": "2021-12-06T00:00:00+00:00",
+      "end_at": "2021-12-20T00:00:00+00:00",
+      "weeks": 3,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 119,
+      "end_index": 120,
+      "start_at": "2021-12-27T00:00:00+00:00",
+      "end_at": "2022-01-03T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 121,
+      "end_index": 122,
+      "start_at": "2022-01-10T00:00:00+00:00",
+      "end_at": "2022-01-17T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_DOWN",
+      "start_index": 123,
+      "end_index": 124,
+      "start_at": "2022-01-24T00:00:00+00:00",
+      "end_at": "2022-01-31T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 125,
+      "end_index": 127,
+      "start_at": "2022-02-07T00:00:00+00:00",
+      "end_at": "2022-02-21T00:00:00+00:00",
+      "weeks": 3,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_DOWN",
+      "start_index": 128,
+      "end_index": 128,
+      "start_at": "2022-02-28T00:00:00+00:00",
+      "end_at": "2022-02-28T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_DOWN",
+      "start_index": 129,
+      "end_index": 129,
+      "start_at": "2022-03-07T00:00:00+00:00",
+      "end_at": "2022-03-07T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 130,
+      "end_index": 130,
+      "start_at": "2022-03-14T00:00:00+00:00",
+      "end_at": "2022-03-14T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_DOWN",
+      "start_index": 131,
+      "end_index": 131,
+      "start_at": "2022-03-21T00:00:00+00:00",
+      "end_at": "2022-03-21T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 132,
+      "end_index": 133,
+      "start_at": "2022-03-28T00:00:00+00:00",
+      "end_at": "2022-04-04T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_DOWN",
+      "start_index": 134,
+      "end_index": 136,
+      "start_at": "2022-04-11T00:00:00+00:00",
+      "end_at": "2022-04-25T00:00:00+00:00",
+      "weeks": 3,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 137,
+      "end_index": 137,
+      "start_at": "2022-05-02T00:00:00+00:00",
+      "end_at": "2022-05-02T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_DOWN",
+      "start_index": 138,
+      "end_index": 139,
+      "start_at": "2022-05-09T00:00:00+00:00",
+      "end_at": "2022-05-16T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 140,
+      "end_index": 140,
+      "start_at": "2022-05-23T00:00:00+00:00",
+      "end_at": "2022-05-23T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_DOWN",
+      "start_index": 141,
+      "end_index": 141,
+      "start_at": "2022-05-30T00:00:00+00:00",
+      "end_at": "2022-05-30T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 142,
+      "end_index": 143,
+      "start_at": "2022-06-06T00:00:00+00:00",
+      "end_at": "2022-06-13T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_DOWN",
+      "start_index": 144,
+      "end_index": 146,
+      "start_at": "2022-06-20T00:00:00+00:00",
+      "end_at": "2022-07-04T00:00:00+00:00",
+      "weeks": 3,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 147,
+      "end_index": 148,
+      "start_at": "2022-07-11T00:00:00+00:00",
+      "end_at": "2022-07-18T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_DOWN",
+      "start_index": 149,
+      "end_index": 150,
+      "start_at": "2022-07-25T00:00:00+00:00",
+      "end_at": "2022-08-01T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 151,
+      "end_index": 152,
+      "start_at": "2022-08-08T00:00:00+00:00",
+      "end_at": "2022-08-15T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_DOWN",
+      "start_index": 153,
+      "end_index": 153,
+      "start_at": "2022-08-22T00:00:00+00:00",
+      "end_at": "2022-08-22T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 154,
+      "end_index": 155,
+      "start_at": "2022-08-29T00:00:00+00:00",
+      "end_at": "2022-09-05T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_DOWN",
+      "start_index": 156,
+      "end_index": 156,
+      "start_at": "2022-09-12T00:00:00+00:00",
+      "end_at": "2022-09-12T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "REACCELERATION_DOWN",
+      "start_index": 157,
+      "end_index": 157,
+      "start_at": "2022-09-19T00:00:00+00:00",
+      "end_at": "2022-09-19T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_DOWN",
+      "start_index": 158,
+      "end_index": 158,
+      "start_at": "2022-09-26T00:00:00+00:00",
+      "end_at": "2022-09-26T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_DOWN",
+      "start_index": 159,
+      "end_index": 160,
+      "start_at": "2022-10-03T00:00:00+00:00",
+      "end_at": "2022-10-10T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 161,
+      "end_index": 161,
+      "start_at": "2022-10-17T00:00:00+00:00",
+      "end_at": "2022-10-17T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_DOWN",
+      "start_index": 162,
+      "end_index": 163,
+      "start_at": "2022-10-24T00:00:00+00:00",
+      "end_at": "2022-10-31T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 164,
+      "end_index": 169,
+      "start_at": "2022-11-07T00:00:00+00:00",
+      "end_at": "2022-12-12T00:00:00+00:00",
+      "weeks": 6,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_DOWN",
+      "start_index": 170,
+      "end_index": 173,
+      "start_at": "2022-12-19T00:00:00+00:00",
+      "end_at": "2023-01-09T00:00:00+00:00",
+      "weeks": 4,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 174,
+      "end_index": 180,
+      "start_at": "2023-01-16T00:00:00+00:00",
+      "end_at": "2023-02-27T00:00:00+00:00",
+      "weeks": 7,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 181,
+      "end_index": 181,
+      "start_at": "2023-03-06T00:00:00+00:00",
+      "end_at": "2023-03-06T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 182,
+      "end_index": 182,
+      "start_at": "2023-03-13T00:00:00+00:00",
+      "end_at": "2023-03-13T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_UP",
+      "start_index": 183,
+      "end_index": 184,
+      "start_at": "2023-03-20T00:00:00+00:00",
+      "end_at": "2023-03-27T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 185,
+      "end_index": 185,
+      "start_at": "2023-04-03T00:00:00+00:00",
+      "end_at": "2023-04-03T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_UP",
+      "start_index": 186,
+      "end_index": 187,
+      "start_at": "2023-04-10T00:00:00+00:00",
+      "end_at": "2023-04-17T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 188,
+      "end_index": 188,
+      "start_at": "2023-04-24T00:00:00+00:00",
+      "end_at": "2023-04-24T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 189,
+      "end_index": 190,
+      "start_at": "2023-05-01T00:00:00+00:00",
+      "end_at": "2023-05-08T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 191,
+      "end_index": 193,
+      "start_at": "2023-05-15T00:00:00+00:00",
+      "end_at": "2023-05-29T00:00:00+00:00",
+      "weeks": 3,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 194,
+      "end_index": 194,
+      "start_at": "2023-06-05T00:00:00+00:00",
+      "end_at": "2023-06-05T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 195,
+      "end_index": 195,
+      "start_at": "2023-06-12T00:00:00+00:00",
+      "end_at": "2023-06-12T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 196,
+      "end_index": 196,
+      "start_at": "2023-06-19T00:00:00+00:00",
+      "end_at": "2023-06-19T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "REACCELERATION_UP",
+      "start_index": 197,
+      "end_index": 197,
+      "start_at": "2023-06-26T00:00:00+00:00",
+      "end_at": "2023-06-26T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_UP",
+      "start_index": 198,
+      "end_index": 198,
+      "start_at": "2023-07-03T00:00:00+00:00",
+      "end_at": "2023-07-03T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 199,
+      "end_index": 199,
+      "start_at": "2023-07-10T00:00:00+00:00",
+      "end_at": "2023-07-10T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_UP",
+      "start_index": 200,
+      "end_index": 200,
+      "start_at": "2023-07-17T00:00:00+00:00",
+      "end_at": "2023-07-17T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 201,
+      "end_index": 201,
+      "start_at": "2023-07-24T00:00:00+00:00",
+      "end_at": "2023-07-24T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 202,
+      "end_index": 203,
+      "start_at": "2023-07-31T00:00:00+00:00",
+      "end_at": "2023-08-07T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 204,
+      "end_index": 207,
+      "start_at": "2023-08-14T00:00:00+00:00",
+      "end_at": "2023-09-04T00:00:00+00:00",
+      "weeks": 4,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 208,
+      "end_index": 208,
+      "start_at": "2023-09-11T00:00:00+00:00",
+      "end_at": "2023-09-11T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 209,
+      "end_index": 210,
+      "start_at": "2023-09-18T00:00:00+00:00",
+      "end_at": "2023-09-25T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_DOWN",
+      "start_index": 211,
+      "end_index": 211,
+      "start_at": "2023-10-02T00:00:00+00:00",
+      "end_at": "2023-10-02T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 212,
+      "end_index": 212,
+      "start_at": "2023-10-09T00:00:00+00:00",
+      "end_at": "2023-10-09T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_DOWN",
+      "start_index": 213,
+      "end_index": 213,
+      "start_at": "2023-10-16T00:00:00+00:00",
+      "end_at": "2023-10-16T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "ZERO_CROSS_UP_EXPANSION",
+      "start_index": 214,
+      "end_index": 214,
+      "start_at": "2023-10-23T00:00:00+00:00",
+      "end_at": "2023-10-23T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_UP",
+      "start_index": 215,
+      "end_index": 218,
+      "start_at": "2023-10-30T00:00:00+00:00",
+      "end_at": "2023-11-20T00:00:00+00:00",
+      "weeks": 4,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 219,
+      "end_index": 226,
+      "start_at": "2023-11-27T00:00:00+00:00",
+      "end_at": "2024-01-15T00:00:00+00:00",
+      "weeks": 8,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 227,
+      "end_index": 229,
+      "start_at": "2024-01-22T00:00:00+00:00",
+      "end_at": "2024-02-05T00:00:00+00:00",
+      "weeks": 3,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 230,
+      "end_index": 230,
+      "start_at": "2024-02-12T00:00:00+00:00",
+      "end_at": "2024-02-12T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_UP",
+      "start_index": 231,
+      "end_index": 234,
+      "start_at": "2024-02-19T00:00:00+00:00",
+      "end_at": "2024-03-11T00:00:00+00:00",
+      "weeks": 4,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 235,
+      "end_index": 238,
+      "start_at": "2024-03-18T00:00:00+00:00",
+      "end_at": "2024-04-08T00:00:00+00:00",
+      "weeks": 4,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 239,
+      "end_index": 240,
+      "start_at": "2024-04-15T00:00:00+00:00",
+      "end_at": "2024-04-22T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 241,
+      "end_index": 243,
+      "start_at": "2024-04-29T00:00:00+00:00",
+      "end_at": "2024-05-13T00:00:00+00:00",
+      "weeks": 3,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 244,
+      "end_index": 245,
+      "start_at": "2024-05-20T00:00:00+00:00",
+      "end_at": "2024-05-27T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 246,
+      "end_index": 246,
+      "start_at": "2024-06-03T00:00:00+00:00",
+      "end_at": "2024-06-03T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_UP",
+      "start_index": 247,
+      "end_index": 247,
+      "start_at": "2024-06-10T00:00:00+00:00",
+      "end_at": "2024-06-10T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 248,
+      "end_index": 248,
+      "start_at": "2024-06-17T00:00:00+00:00",
+      "end_at": "2024-06-17T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 249,
+      "end_index": 249,
+      "start_at": "2024-06-24T00:00:00+00:00",
+      "end_at": "2024-06-24T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 250,
+      "end_index": 250,
+      "start_at": "2024-07-01T00:00:00+00:00",
+      "end_at": "2024-07-01T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 251,
+      "end_index": 251,
+      "start_at": "2024-07-08T00:00:00+00:00",
+      "end_at": "2024-07-08T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 252,
+      "end_index": 252,
+      "start_at": "2024-07-15T00:00:00+00:00",
+      "end_at": "2024-07-15T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 253,
+      "end_index": 253,
+      "start_at": "2024-07-22T00:00:00+00:00",
+      "end_at": "2024-07-22T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 254,
+      "end_index": 254,
+      "start_at": "2024-07-29T00:00:00+00:00",
+      "end_at": "2024-07-29T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 255,
+      "end_index": 257,
+      "start_at": "2024-08-05T00:00:00+00:00",
+      "end_at": "2024-08-19T00:00:00+00:00",
+      "weeks": 3,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 258,
+      "end_index": 258,
+      "start_at": "2024-08-26T00:00:00+00:00",
+      "end_at": "2024-08-26T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 259,
+      "end_index": 261,
+      "start_at": "2024-09-02T00:00:00+00:00",
+      "end_at": "2024-09-16T00:00:00+00:00",
+      "weeks": 3,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_DOWN",
+      "start_index": 262,
+      "end_index": 263,
+      "start_at": "2024-09-23T00:00:00+00:00",
+      "end_at": "2024-09-30T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 264,
+      "end_index": 264,
+      "start_at": "2024-10-07T00:00:00+00:00",
+      "end_at": "2024-10-07T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_DOWN",
+      "start_index": 265,
+      "end_index": 265,
+      "start_at": "2024-10-14T00:00:00+00:00",
+      "end_at": "2024-10-14T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 266,
+      "end_index": 268,
+      "start_at": "2024-10-21T00:00:00+00:00",
+      "end_at": "2024-11-04T00:00:00+00:00",
+      "weeks": 3,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_UP",
+      "start_index": 269,
+      "end_index": 271,
+      "start_at": "2024-11-11T00:00:00+00:00",
+      "end_at": "2024-11-25T00:00:00+00:00",
+      "weeks": 3,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 272,
+      "end_index": 275,
+      "start_at": "2024-12-02T00:00:00+00:00",
+      "end_at": "2024-12-23T00:00:00+00:00",
+      "weeks": 4,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 276,
+      "end_index": 277,
+      "start_at": "2024-12-30T00:00:00+00:00",
+      "end_at": "2025-01-06T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 278,
+      "end_index": 281,
+      "start_at": "2025-01-13T00:00:00+00:00",
+      "end_at": "2025-02-03T00:00:00+00:00",
+      "weeks": 4,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 282,
+      "end_index": 283,
+      "start_at": "2025-02-10T00:00:00+00:00",
+      "end_at": "2025-02-17T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 284,
+      "end_index": 287,
+      "start_at": "2025-02-24T00:00:00+00:00",
+      "end_at": "2025-03-17T00:00:00+00:00",
+      "weeks": 4,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 288,
+      "end_index": 288,
+      "start_at": "2025-03-24T00:00:00+00:00",
+      "end_at": "2025-03-24T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 289,
+      "end_index": 290,
+      "start_at": "2025-03-31T00:00:00+00:00",
+      "end_at": "2025-04-07T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 291,
+      "end_index": 291,
+      "start_at": "2025-04-14T00:00:00+00:00",
+      "end_at": "2025-04-14T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 292,
+      "end_index": 292,
+      "start_at": "2025-04-21T00:00:00+00:00",
+      "end_at": "2025-04-21T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_UP",
+      "start_index": 293,
+      "end_index": 296,
+      "start_at": "2025-04-28T00:00:00+00:00",
+      "end_at": "2025-05-19T00:00:00+00:00",
+      "weeks": 4,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 297,
+      "end_index": 300,
+      "start_at": "2025-05-26T00:00:00+00:00",
+      "end_at": "2025-06-16T00:00:00+00:00",
+      "weeks": 4,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 301,
+      "end_index": 301,
+      "start_at": "2025-06-23T00:00:00+00:00",
+      "end_at": "2025-06-23T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 302,
+      "end_index": 303,
+      "start_at": "2025-06-30T00:00:00+00:00",
+      "end_at": "2025-07-07T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_UP",
+      "start_index": 304,
+      "end_index": 306,
+      "start_at": "2025-07-14T00:00:00+00:00",
+      "end_at": "2025-07-28T00:00:00+00:00",
+      "weeks": 3,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 307,
+      "end_index": 309,
+      "start_at": "2025-08-04T00:00:00+00:00",
+      "end_at": "2025-08-18T00:00:00+00:00",
+      "weeks": 3,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 310,
+      "end_index": 310,
+      "start_at": "2025-08-25T00:00:00+00:00",
+      "end_at": "2025-08-25T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 311,
+      "end_index": 312,
+      "start_at": "2025-09-01T00:00:00+00:00",
+      "end_at": "2025-09-08T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 313,
+      "end_index": 313,
+      "start_at": "2025-09-15T00:00:00+00:00",
+      "end_at": "2025-09-15T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 314,
+      "end_index": 314,
+      "start_at": "2025-09-22T00:00:00+00:00",
+      "end_at": "2025-09-22T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 315,
+      "end_index": 315,
+      "start_at": "2025-09-29T00:00:00+00:00",
+      "end_at": "2025-09-29T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "REACCELERATION_UP",
+      "start_index": 316,
+      "end_index": 316,
+      "start_at": "2025-10-06T00:00:00+00:00",
+      "end_at": "2025-10-06T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 317,
+      "end_index": 317,
+      "start_at": "2025-10-13T00:00:00+00:00",
+      "end_at": "2025-10-13T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_UP",
+      "start_index": 318,
+      "end_index": 319,
+      "start_at": "2025-10-20T00:00:00+00:00",
+      "end_at": "2025-10-27T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 320,
+      "end_index": 322,
+      "start_at": "2025-11-03T00:00:00+00:00",
+      "end_at": "2025-11-17T00:00:00+00:00",
+      "weeks": 3,
+      "unresolved": false
+    },
+    {
+      "state": "ZERO_CROSS_DOWN_EXPANSION",
+      "start_index": 323,
+      "end_index": 323,
+      "start_at": "2025-11-24T00:00:00+00:00",
+      "end_at": "2025-11-24T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_DOWN",
+      "start_index": 324,
+      "end_index": 324,
+      "start_at": "2025-12-01T00:00:00+00:00",
+      "end_at": "2025-12-01T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 325,
+      "end_index": 327,
+      "start_at": "2025-12-08T00:00:00+00:00",
+      "end_at": "2025-12-22T00:00:00+00:00",
+      "weeks": 3,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_DOWN",
+      "start_index": 328,
+      "end_index": 330,
+      "start_at": "2025-12-29T00:00:00+00:00",
+      "end_at": "2026-01-12T00:00:00+00:00",
+      "weeks": 3,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 331,
+      "end_index": 332,
+      "start_at": "2026-01-19T00:00:00+00:00",
+      "end_at": "2026-01-26T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_DOWN",
+      "start_index": 333,
+      "end_index": 337,
+      "start_at": "2026-02-02T00:00:00+00:00",
+      "end_at": "2026-03-02T00:00:00+00:00",
+      "weeks": 5,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 338,
+      "end_index": 338,
+      "start_at": "2026-03-09T00:00:00+00:00",
+      "end_at": "2026-03-09T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_DOWN",
+      "start_index": 339,
+      "end_index": 341,
+      "start_at": "2026-03-16T00:00:00+00:00",
+      "end_at": "2026-03-30T00:00:00+00:00",
+      "weeks": 3,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 342,
+      "end_index": 347,
+      "start_at": "2026-04-06T00:00:00+00:00",
+      "end_at": "2026-05-11T00:00:00+00:00",
+      "weeks": 6,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_DOWN",
+      "start_index": 348,
+      "end_index": 350,
+      "start_at": "2026-05-18T00:00:00+00:00",
+      "end_at": "2026-06-01T00:00:00+00:00",
+      "weeks": 3,
+      "unresolved": false
+    },
+    {
+      "state": "REACCELERATION_DOWN",
+      "start_index": 351,
+      "end_index": 351,
+      "start_at": "2026-06-08T00:00:00+00:00",
+      "end_at": "2026-06-08T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "IMPULSE_DOWN",
+      "start_index": 352,
+      "end_index": 353,
+      "start_at": "2026-06-15T00:00:00+00:00",
+      "end_at": "2026-06-22T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 354,
+      "end_index": 355,
+      "start_at": "2026-06-29T00:00:00+00:00",
+      "end_at": "2026-07-06T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_DOWN",
+      "start_index": 356,
+      "end_index": 357,
+      "start_at": "2026-07-13T00:00:00+00:00",
+      "end_at": "2026-07-20T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 358,
+      "end_index": 358,
+      "start_at": "2026-07-27T00:00:00+00:00",
+      "end_at": "2026-07-27T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_DOWN",
+      "start_index": 359,
+      "end_index": 359,
+      "start_at": "2026-08-03T00:00:00+00:00",
+      "end_at": "2026-08-03T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 360,
+      "end_index": 360,
+      "start_at": "2026-08-10T00:00:00+00:00",
+      "end_at": "2026-08-10T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "PULLBACK_DOWN",
+      "start_index": 361,
+      "end_index": 361,
+      "start_at": "2026-08-17T00:00:00+00:00",
+      "end_at": "2026-08-17T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 362,
+      "end_index": 363,
+      "start_at": "2026-08-24T00:00:00+00:00",
+      "end_at": "2026-08-31T00:00:00+00:00",
+      "weeks": 2,
+      "unresolved": false
+    },
+    {
+      "state": "ZERO_CROSS_UP_EXPANSION",
+      "start_index": 364,
+      "end_index": 364,
+      "start_at": "2026-09-07T00:00:00+00:00",
+      "end_at": "2026-09-07T00:00:00+00:00",
+      "weeks": 1,
+      "unresolved": false
+    },
+    {
+      "state": "OTHER",
+      "start_index": 365,
+      "end_index": 370,
+      "start_at": "2026-09-14T00:00:00+00:00",
+      "end_at": "2026-10-19T00:00:00+00:00",
+      "weeks": 6,
+      "unresolved": false
+    }
+  ],
+  "bootstrap_sensitivity": [
+    {
+      "block_weeks": 4,
+      "metric": "large_10",
+      "n_event": 7,
+      "n_reference": 259,
+      "difference": -0.35135135135135137,
+      "ci_low": null,
+      "ci_high": null,
+      "ex_best1_difference": -0.4942084942084942,
+      "ex_best3_difference": -0.4942084942084942
+    },
+    {
+      "block_weeks": 8,
+      "metric": "large_10",
+      "n_event": 7,
+      "n_reference": 259,
+      "difference": -0.35135135135135137,
+      "ci_low": null,
+      "ci_high": null,
+      "ex_best1_difference": -0.4942084942084942,
+      "ex_best3_difference": -0.4942084942084942
+    },
+    {
+      "block_weeks": 12,
+      "metric": "large_10",
+      "n_event": 7,
+      "n_reference": 259,
+      "difference": -0.35135135135135137,
+      "ci_low": null,
+      "ci_high": null,
+      "ex_best1_difference": -0.4942084942084942,
+      "ex_best3_difference": -0.4942084942084942
+    }
+  ],
+  "influence": [
+    {
+      "criterion": "max_move",
+      "excluded": 0,
+      "n": 7,
+      "removed": [],
+      "max_move": 12.127731296021746,
+      "signed": 2.6866657309069732,
+      "precision": 0.14285714285714285,
+      "base_rate": 0.4942084942084942,
+      "magnitude_difference": -5.635319062312735
+    },
+    {
+      "criterion": "max_move",
+      "excluded": 1,
+      "n": 6,
+      "removed": [
+        "2023-10-23T00:00:00+00:00"
+      ],
+      "max_move": 9.413655259419594,
+      "signed": -0.9760914770869157,
+      "precision": 0.0,
+      "base_rate": 0.4942084942084942,
+      "magnitude_difference": -8.349395098914888
+    },
+    {
+      "criterion": "max_move",
+      "excluded": 3,
+      "n": 4,
+      "removed": [
+        "2023-10-23T00:00:00+00:00",
+        "2025-10-06T00:00:00+00:00",
+        "2025-11-24T00:00:00+00:00"
+      ],
+      "max_move": 7.45141845921386,
+      "signed": 1.6774945901653653,
+      "precision": 0.0,
+      "base_rate": 0.4942084942084942,
+      "magnitude_difference": -10.311631899120622
+    },
+    {
+      "criterion": "signed",
+      "excluded": 0,
+      "n": 7,
+      "removed": [],
+      "max_move": 12.127731296021741,
+      "signed": 2.686665730906973,
+      "precision": 0.14285714285714285,
+      "base_rate": 0.4942084942084942,
+      "magnitude_difference": -5.635319062312741
+    },
+    {
+      "criterion": "signed",
+      "excluded": 1,
+      "n": 6,
+      "removed": [
+        "2023-10-23T00:00:00+00:00"
+      ],
+      "max_move": 9.413655259419594,
+      "signed": -0.9760914770869157,
+      "precision": 0.0,
+      "base_rate": 0.4942084942084942,
+      "magnitude_difference": -8.349395098914888
+    },
+    {
+      "criterion": "signed",
+      "excluded": 3,
+      "n": 4,
+      "removed": [
+        "2023-10-23T00:00:00+00:00",
+        "2026-09-07T00:00:00+00:00",
+        "2022-09-19T00:00:00+00:00"
+      ],
+      "max_move": 9.999627428501373,
+      "signed": -3.5852788671380753,
+      "precision": 0.0,
+      "base_rate": 0.4942084942084942,
+      "magnitude_difference": -7.7634229298331086
+    }
+  ],
+  "falsification_counts": {
+    "VOL_TURN_NO_LARGE": 23,
+    "VOL_TURN_NO_MOVE10": 11,
+    "REACC_UP_NEGATIVE": 2,
+    "REACC_DOWN_POSITIVE": 1,
+    "REACC_UP_OPPOSITE": 0,
+    "REACC_DOWN_OPPOSITE": 0,
+    "LARGE_WHILE_VOL_FALLING": 64,
+    "MOVE10_WHILE_VOL_FALLING": 101,
+    "LARGE_WITHOUT_SETUP": 127,
+    "SETUP_FALSE_POSITIVE": 6
+  },
+  "overlap": [
+    {
+      "index": 157,
+      "at": "2022-09-19T00:00:00+00:00",
+      "cluster": 1,
+      "overlaps_previous": false
+    },
+    {
+      "index": 197,
+      "at": "2023-06-26T00:00:00+00:00",
+      "cluster": 2,
+      "overlaps_previous": false
+    },
+    {
+      "index": 214,
+      "at": "2023-10-23T00:00:00+00:00",
+      "cluster": 3,
+      "overlaps_previous": false
+    },
+    {
+      "index": 316,
+      "at": "2025-10-06T00:00:00+00:00",
+      "cluster": 4,
+      "overlaps_previous": false
+    },
+    {
+      "index": 323,
+      "at": "2025-11-24T00:00:00+00:00",
+      "cluster": 5,
+      "overlaps_previous": false
+    },
+    {
+      "index": 351,
+      "at": "2026-06-08T00:00:00+00:00",
+      "cluster": 6,
+      "overlaps_previous": false
+    },
+    {
+      "index": 364,
+      "at": "2026-09-07T00:00:00+00:00",
+      "cluster": 7,
+      "overlaps_previous": false
+    }
+  ],
+  "current": {
+    "available_at": "2026-10-19T00:00:00+00:00",
+    "open_time": "2026-10-12T00:00:00+00:00",
+    "oscillator": 10698.622352941165,
+    "oscillator_slope": 348.99441176469554,
+    "sign": "ABOVE",
+    "color": "GREEN",
+    "volatility_previous": 41.0,
+    "volatility": 30.0,
+    "volatility_slope": -11.0,
+    "volatility_state": "COOLING",
+    "turn_up": false,
+    "sustained_turn": false,
+    "state": "OTHER",
+    "ranges": {
+      "4": {
+        "high": 87385.1,
+        "low": 79732.3
+      },
+      "2": {
+        "high": 86976.1,
+        "low": 79732.3
+      },
+      "8": {
+        "high": 87385.1,
+        "low": 74909.4
+      }
+    },
+    "sequence": [
+      {
+        "open_time": 1788739200000,
+        "available_at": "2026-09-14T00:00:00+00:00",
+        "state": "OTHER",
+        "sign": "ABOVE",
+        "color": "GREEN",
+        "oscillator": 3409.333823529407,
+        "oscillator_slope": 3330.534705882339,
+        "volatility": 89.0,
+        "volatility_slope": -1.0
+      },
+      {
+        "open_time": 1789344000000,
+        "available_at": "2026-09-21T00:00:00+00:00",
+        "state": "OTHER",
+        "sign": "ABOVE",
+        "color": "GREEN",
+        "oscillator": 6643.067647058837,
+        "oscillator_slope": 3233.73382352943,
+        "volatility": 80.0,
+        "volatility_slope": -9.0
+      },
+      {
+        "open_time": 1789948800000,
+        "available_at": "2026-09-28T00:00:00+00:00",
+        "state": "OTHER",
+        "sign": "ABOVE",
+        "color": "GREEN",
+        "oscillator": 9204.521764705903,
+        "oscillator_slope": 2561.4541176470666,
+        "volatility": 75.0,
+        "volatility_slope": -5.0
+      },
+      {
+        "open_time": 1790553600000,
+        "available_at": "2026-10-05T00:00:00+00:00",
+        "state": "OTHER",
+        "sign": "ABOVE",
+        "color": "GREEN",
+        "oscillator": 9914.022647058824,
+        "oscillator_slope": 709.5008823529206,
+        "volatility": 44.0,
+        "volatility_slope": -31.0
+      },
+      {
+        "open_time": 1791158400000,
+        "available_at": "2026-10-12T00:00:00+00:00",
+        "state": "OTHER",
+        "sign": "ABOVE",
+        "color": "GREEN",
+        "oscillator": 10349.62794117647,
+        "oscillator_slope": 435.6052941176458,
+        "volatility": 41.0,
+        "volatility_slope": -3.0
+      },
+      {
+        "open_time": 1791763200000,
+        "available_at": "2026-10-19T00:00:00+00:00",
+        "state": "OTHER",
+        "sign": "ABOVE",
+        "color": "GREEN",
+        "oscillator": 10698.622352941165,
+        "oscillator_slope": 348.99441176469554,
+        "volatility": 30.0,
+        "volatility_slope": -11.0
+      }
+    ],
+    "large_move_watch": "NOT VALIDATED",
+    "disclaimer": "CURRENT OBSERVATION \u2014 NOT PART OF VALIDATION"
+  },
+  "no_virgin_holdout": true,
+  "method": {
+    "seed": 20261020,
+    "replicates": 2000,
+    "block_weeks": 8,
+    "protocol_sha256": "c564324efb967736dfb5e1681d0dc92f582cefe5ed21f4d7bb7858e973039048",
+    "reused_commit": "c1c56bd1c4c87ad0f279616970ec9f13ae373302",
+    "input_sha256": {
+      "weekly_bars.csv": "1f542daea1af9fe43a83994d0dc4f282bd770f54b0c00de99258e2c8db9cbdc6",
+      "input_features.csv": "2dc954d530520007f74f2f1510d3a151e614f218ae42c11e3bd0917e82b99b44",
+      "data_manifest.json": "30d81220e377d022badcdaf005db30116741998265a5dbbcdd93af249f5c486e"
+    }
+  }
+}

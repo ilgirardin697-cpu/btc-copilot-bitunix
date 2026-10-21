@@ -1,0 +1,16 @@
+{
+  "normalization": "CRLF to LF only",
+  "sha256": {
+    "analysis.json": "0c979d4f069333e2ca831a96b186b21f2c663e5e0b976c0171291461799dc9d6",
+    "comparisons.csv": "a12f7761308abbcf4e20b6dd461f1343f76b61ef10cd59c4e8266381d70e1b7b",
+    "data_manifest.json": "30d81220e377d022badcdaf005db30116741998265a5dbbcdd93af249f5c486e",
+    "falsification.csv": "08369b7471f5546487bd8a3f0f63df6c7ce88f98caed10e4a495fc8303b0743e",
+    "input_features.csv": "2dc954d530520007f74f2f1510d3a151e614f218ae42c11e3bd0917e82b99b44",
+    "observations.csv": "612ef67d1b8f61eb34d675bddd5313042285ed8f77e4d0529643bc2c5aab0d88",
+    "source_audit.json": "01cde6368eb14b4ce2b568d8f657ca698c82eb77648bbcf452b6e0f8399e427f",
+    "states.csv": "9c340e0cd8e97a316e9aa20cfc37fb9c5d5a5e1d254ddbd8cb14c11363cbf581",
+    "summaries.csv": "22a62ab9aeba1b51139545da3a2fbf8aee70e7386dce1e49d6eac1c72071f7bb",
+    "temporal_controls.csv": "eeec7fe3583db33082f65244ad5517bc04fc09e8da2b0e3be06b9ee94a1c0245",
+    "weekly_bars.csv": "1f542daea1af9fe43a83994d0dc4f282bd770f54b0c00de99258e2c8db9cbdc6"
+  }
+}
