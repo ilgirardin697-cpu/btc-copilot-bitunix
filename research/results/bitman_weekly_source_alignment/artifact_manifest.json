@@ -1,0 +1,11 @@
+{
+  "normalization": "CRLF to LF only",
+  "sha256": {
+    "analysis.json": "87c2691417bda898f15078300b4b3afedf9fcfa6e22498ebc03224748c71f466",
+    "influence.csv": "dd5cba7200ca6fe302f55e74e26d43605af004bf0bab2e94fdd2e5df862d28b9",
+    "metrics.csv": "9b788e9a19b7c291c16851332d33a13bff9b8b5f5c7196f69cd35bb87c34c359",
+    "observations.csv": "7d98c7e1c57ca130ea4c37cf987afa2b86ea7943c978d01e34476dbd74f97c53",
+    "strict_baseline.json": "a0c1f2711221e375e4b8e16bde7d15ae3600e07f3f7c8d59f0c7033bbca7b8da"
+  },
+  "report_sha256": "e9f248a531af48f9f67c49d45ec8a425751c94e6504e84da102cf2e56d2373fd"
+}

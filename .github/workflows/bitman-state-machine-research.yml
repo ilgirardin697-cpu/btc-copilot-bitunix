@@ -18,7 +18,7 @@ jobs:
         run: |
           git cat-file -e 9c660035f912be4640f09cf6e2d4c48583c20b04^{commit}
           git cat-file -e 60ddd9ac1ac2c14784195e6b2ce0230dfb4103aa^{commit}
-          python -m unittest test_bitman_state_machine test_bitman_state_boundary test_bitman_readiness_boundary -v
+          python -m unittest test_bitman_state_machine test_bitman_state_boundary test_bitman_state_source_alignment test_bitman_readiness_boundary -v
       - name: Existing Guardian and V8 protection audit
         run: python mlrsi_safety_audit.py
       - name: Patch whitespace

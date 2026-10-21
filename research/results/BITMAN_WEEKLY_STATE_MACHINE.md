@@ -1,5 +1,9 @@
 # BITMAN weekly state-machine research
 
+**PREDECLARED STRICT SAME-WEEK MODEL — numerical analysis and principal conclusion unchanged.**
+
+Source-audit update (2026-10-21): **INDEPENDENT TRANSCRIPT REVIEWED EXTERNALLY AFTER PREDECLARED ANALYSIS**. See the separate [POST-HOC SOURCE ALIGNMENT addendum](BITMAN_WEEKLY_SOURCE_ALIGNMENT_ADDENDUM.md). It does not alter this model or restore a virgin holdout.
+
 **INCONCLUSIVE — NO RUNTIME INTEGRATION.**
 
 The predeclared sequential proxy rules produce **7 episodes**, not 263 independent signals. The main large-breakout label occurs in 1/7 episodes (14.29%), versus 128/259 weekly opportunities (49.42%). Anchor-level recall 0.78%; lift 0.289. **INSUFFICIENT FOR CONCLUSION.** These historical results do not establish or refute the creator's private indicators.
@@ -14,11 +18,11 @@ The predeclared sequential proxy rules produce **7 episodes**, not 263 independe
 
 [Primary video](https://www.youtube.com/watch?v=v8d3OxE1-_c), approximately minute20 onward. The owner reports a weekly sequence: same-side oscillator corrections with contracting volatility, followed by renewed momentum/expansion, or a zero crossing and expansion in the new direction. This report formalizes that supplied account. It does not treat the relationship as a rule for lower timeframes.
 
-The public YouTube watch and oEmbed endpoints returned200; the player title is “CUANDO SALDRÁ de ese RANGO BITCOIN..???” and playability is OK. Spanish captions were advertised, but both the advertised track request and plain timedtext returned200 with **zero bytes**. Web retrieval also failed. The four previously cached transcripts are different videos. No new vidIQ credits, login, hidden formula retrieval or paid service was used. An independent transcript of this segment and visual chart dates were **not recovered**. See [source audit](bitman_weekly_state_machine/source_audit.json).
+The public YouTube watch and oEmbed endpoints returned200; the player title is “CUANDO SALDRÁ de ese RANGO BITCOIN..???” and playability is OK. Spanish captions were advertised, but both the advertised track request and plain timedtext returned200 with **zero bytes**. Web retrieval also failed during the original audit. The four previously cached transcripts are different videos. After the predeclared analysis, the owner reported an independent external transcript review. **INDEPENDENT TRANSCRIPT REVIEWED EXTERNALLY AFTER PREDECLARED ANALYSIS**. This agent has no direct access to that transcript and relies only on the supplied review paraphrases; no quotations or full transcript are stored. That review confirms the reported weekly oscillator/volatility logic, sets ADX aside in this explanation, and reports approximately 1–2 weeks of timing tolerance. It was not part of the original protocol and cannot turn historical results into validation. No new vidIQ credits, login, hidden formula retrieval or paid service was used. Independently identifiable visual chart dates remain **not recovered**. See [source audit](bitman_weekly_state_machine/source_audit.json).
 
 ## 2. What is approximated, and unknown modified indicators
 
-AO is **OSCILLATOR_PROXY**. The production frozen BBWP formula is **BITMAN_VOLATILITY_PROXY**. The owner reports that Bitman describes his volatility indicator as modified. Exact settings/formula are unknown. Neither visual similarity, the public video title, nor another video naming AO proves parity for this chart. No values or parameters were adjusted to fit examples. Statistical conclusions below concern these proxies only.
+AO is **OSCILLATOR_PROXY**. The production frozen BBWP formula is **BITMAN_VOLATILITY_PROXY**. The owner-attested external transcript review reports that Bitman describes his volatility indicator as modified. Exact settings/formula are unknown. Neither visual similarity, the public video title, nor another video naming AO proves parity for this chart. No values or parameters were adjusted to fit examples. Statistical conclusions below concern these proxies only.
 
 ## 3. Dataset provenance and independence from PR #30
 
@@ -241,7 +245,7 @@ Temporal controls use only trailing52weekly anchors whose complete forward horiz
 
 ## 14. POST-HOC VISUAL CONSISTENCY CHECK
 
-**NOT ASSESSABLE.** No independently verified on-screen dates or indicator settings were recovered from the supplied video. The episodes in section7 are auditable proxy sequences but are **not asserted to be Bitman's shown examples**. Exact-video dates/screenshots plus reproducible public settings are missing. Source access limitations do not demonstrate PROXY MISMATCH, and no visual parity claim is made. Future dated comparisons must stay post-hoc and cannot calibrate these parameters.
+**NOT ASSESSABLE.** The subsequent external transcript review improves verbal alignment, but no independently verified on-screen dates or indicator settings were recovered from the supplied video. The episodes in section7 are auditable proxy sequences but are **not asserted to be Bitman's shown examples**. Exact-video dates/screenshots plus reproducible public settings are missing. Source access limitations do not demonstrate PROXY MISMATCH, and no visual parity claim is made. Future dated comparisons must stay post-hoc and cannot calibrate these parameters.
 
 ## 15. Comparison with PR #30
 
@@ -249,7 +253,7 @@ PR #30 tested AO color×BBWP rising/falling snapshots and concluded **EXPANSION 
 
 ## 16. Proxy and statistical limitations
 
-Unknown private oscillator/modified-volatility settings; unavailable independent target-video captions/visual dates; only seven episodes; no adequate era/side/duration sample; long BBWP warmup; strict simultaneous cross/expansion definition; signal-week range inclusion can absorb the large move already occurring on a weekly signal candle; historical API revisions; OHLC cannot resolve intrabar order; overlapping target opportunities; unadjusted multiple comparisons; no untouched test set. A range-close endpoint differs from a discretionary chart reading. Neither insufficient evidence nor proxy failures establish that the creator's undisclosed rule is false.
+Unknown private oscillator/modified-volatility settings; later independent transcript reviewed externally but not directly accessible to this agent; unavailable verified visual dates; only seven episodes; no adequate era/side/duration sample; long BBWP warmup; strict simultaneous cross/expansion definition; signal-week range inclusion can absorb the large move already occurring on a weekly signal candle; historical API revisions; OHLC cannot resolve intrabar order; overlapping target opportunities; unadjusted multiple comparisons; no untouched test set. A range-close endpoint differs from a discretionary chart reading. Neither insufficient evidence nor proxy failures establish that the creator's undisclosed rule is false.
 
 ## 17. CURRENT WEEKLY STATE — CURRENT OBSERVATION — NOT PART OF VALIDATION
 

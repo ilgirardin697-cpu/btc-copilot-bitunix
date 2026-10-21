@@ -9,7 +9,8 @@ import unittest
 from unittest.mock import Mock, patch
 
 ROOT = Path(__file__).resolve().parent
-MODULES = ('bitman_state_data', 'bitman_weekly_state_machine', 'bitman_state_analysis', 'bitman_state_reporting')
+MODULES = ('bitman_state_data', 'bitman_weekly_state_machine', 'bitman_state_analysis', 'bitman_state_reporting',
+           'bitman_state_source_alignment', 'bitman_source_alignment_reporting')
 BASE = '9c660035f912be4640f09cf6e2d4c48583c20b04'
 PROTOCOL = '60ddd9ac1ac2c14784195e6b2ce0230dfb4103aa'
 
@@ -126,7 +127,12 @@ class ResearchBoundaryTests(unittest.TestCase):
     def test_source_audit_does_not_claim_unverified_parity_or_visual_examples(self):
         source = json.loads((ROOT/'research/results/bitman_weekly_state_machine/source_audit.json').read_text('utf-8'))
         self.assertEqual(source['new_vidiq_credits_used'], 0)
-        self.assertFalse(source['independent_transcript_recovered'])
+        self.assertTrue(source['independent_transcript_recovered'])
+        self.assertFalse(source['agent_direct_transcript_access'])
+        self.assertFalse(source['part_of_predeclared_protocol'])
+        self.assertFalse(source['predeclared_audit_state']['independent_transcript_recovered'])
+        self.assertEqual(source['independent_transcript_review_status'],
+                         'INDEPENDENT TRANSCRIPT REVIEWED EXTERNALLY AFTER PREDECLARED ANALYSIS')
         self.assertFalse(source['independent_visual_chart_dates_verified'])
         self.assertIn('NOT ASSESSABLE', source['post_hoc_visual_consistency_check'])
         self.assertIn('NOT PROVEN', source['oscillator_parity'])
@@ -137,6 +143,32 @@ class ResearchBoundaryTests(unittest.TestCase):
         manifest = json.loads((directory/'artifact_manifest.json').read_text('utf-8'))
         for name, checksum in manifest['sha256'].items():
             self.assertEqual(hashlib.sha256((directory/name).read_bytes().replace(b'\r\n', b'\n')).hexdigest(), checksum)
+
+    def test_original_strict_code_protocol_and_fourteen_artifacts_remain_frozen(self):
+        baseline=json.loads((ROOT/'research/results/bitman_weekly_source_alignment/strict_baseline.json').read_text('utf-8'))
+        self.assertEqual(baseline['reviewed_head'],'06b58f013137f3af10619eafccb8f5a6dcc3ce4c')
+        self.assertEqual(len(baseline['sha256']),14)
+        for name,checksum in baseline['sha256'].items():
+            with self.subTest(path=name):
+                self.assertEqual(hashlib.sha256((ROOT/name).read_bytes().replace(b'\r\n',b'\n')).hexdigest(),checksum)
+
+    def test_strict_baseline_hashes_match_the_externally_reviewed_head(self):
+        head='06b58f013137f3af10619eafccb8f5a6dcc3ce4c'
+        require_history(self,head)
+        baseline=json.loads((ROOT/'research/results/bitman_weekly_source_alignment/strict_baseline.json').read_text('utf-8'))
+        for name,checksum in baseline['sha256'].items():
+            original=subprocess.check_output(['git','show',head+':'+name],cwd=ROOT)
+            self.assertEqual(hashlib.sha256(original.replace(b'\r\n',b'\n')).hexdigest(),checksum)
+
+    def test_addendum_artifact_hashes_report_and_sanitized_content(self):
+        directory=ROOT/'research/results/bitman_weekly_source_alignment'
+        manifest=json.loads((directory/'artifact_manifest.json').read_text('utf-8'))
+        for name,checksum in manifest['sha256'].items():
+            self.assertEqual(hashlib.sha256((directory/name).read_bytes().replace(b'\r\n',b'\n')).hexdigest(),checksum)
+        report=ROOT/'research/results/BITMAN_WEEKLY_SOURCE_ALIGNMENT_ADDENDUM.md'
+        self.assertEqual(hashlib.sha256(report.read_bytes().replace(b'\r\n',b'\n')).hexdigest(),manifest['report_sha256'])
+        for path in directory.iterdir():
+            self.assertIsNone(re.search(r'(?i)(?:bot_token|api_key|api_secret|chat_id|account_id|password)\s*[\"\x27]?\s*[:=]',path.read_text('utf-8')))
 
     def test_public_artifacts_have_no_credentials_or_private_account_fields(self):
         directory = ROOT/'research/results/bitman_weekly_state_machine'
