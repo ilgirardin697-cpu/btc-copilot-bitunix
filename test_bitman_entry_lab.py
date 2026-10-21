@@ -9,9 +9,14 @@ import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
-import numpy as np
-from bitman_manual.frozen import indicators
-from research.bitman_entry_lab import data,features,simulation,statistics,study
+try:
+    import numpy as np
+    from bitman_manual.frozen import indicators
+    from research.bitman_entry_lab import data,features,simulation,statistics,study
+except ModuleNotFoundError as error:
+    if error.name in ('numpy','requests'):
+        raise unittest.SkipTest('Dedicated entry research workflow installs runtime dependencies') from error
+    raise
 
 ROOT=Path(__file__).resolve().parent
 BASE='fc211d8e36c6db55185efa8309eb8f980beab2ea'
