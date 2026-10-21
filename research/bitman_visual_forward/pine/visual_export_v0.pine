@@ -1,0 +1,68 @@
+//@version=6
+indicator("BITMAN visual export V0 - RESEARCH ONLY", overlay=false, precision=10)
+// Fixed public definitions; original screenshot parameters remain UNKNOWN.
+// Export all plots including metadata. This is not the original indicator.
+f_rma(float src, int length) =>
+    var float previous = na
+    var float seedSum = 0.0
+    var int count = 0
+    if na(src)
+        previous := na
+        seedSum := 0.0
+        count := 0
+    else if na(previous)
+        seedSum := seedSum + src
+        count := count + 1
+        if count == length
+            previous := seedSum / length
+    else
+        previous := (previous * (length - 1) + src) / length
+    previous
+
+float medianPrice = (high + low) / 2
+float ao = ta.sma(medianPrice, 5) - ta.sma(medianPrice, 34)
+float tr = na(close[1]) ? high - low : math.max(high - low, math.max(math.abs(high - close[1]), math.abs(low - close[1])))
+float atr = f_rma(tr, 14)
+float up = high - high[1]
+float down = low[1] - low
+float plus = na(high[1]) ? na : (up > down and up > 0 ? up : 0)
+float minus = na(low[1]) ? na : (down > up and down > 0 ? down : 0)
+float plusMean = f_rma(plus, 14)
+float minusMean = f_rma(minus, 14)
+float diPlus = atr > 0 ? 100 * plusMean / atr : na
+float diMinus = atr > 0 ? 100 * minusMean / atr : na
+float total = diPlus + diMinus
+float dx = not na(total) ? (total == 0 ? 0 : 100 * math.abs(diPlus - diMinus) / total) : na
+float adx = f_rma(dx, 14)
+float rawTr = na(close[1]) ? na : math.max(high, close[1]) - math.min(low, close[1])
+float sumTr = 0.0
+bool validFe = true
+for j = 0 to 12
+    if na(rawTr[j])
+        validFe := false
+    else
+        sumTr := sumTr + rawTr[j]
+float span = ta.highest(high, 13) - ta.lowest(low, 13)
+float fe = validFe and span > 0 and sumTr > 0 ? math.log(sumTr / span) / math.log(13) : na
+[nativePlus, nativeMinus, nativeAdx] = ta.dmi(14, 14)
+float nativeAtr = ta.atr(14)
+var int seedStart = time
+
+plot(ao, "FROZEN_AO", color=ao > ao[1] ? color.green : color.red, style=plot.style_histogram)
+plot(ao - ao[1], "FROZEN_AO_SLOPE")
+plot(atr, "FROZEN_ATR")
+plot(diPlus, "FROZEN_DI_PLUS")
+plot(diMinus, "FROZEN_DI_MINUS")
+plot(adx, "FROZEN_ADX", color=color.red)
+plot(adx - adx[1], "FROZEN_ADX_SLOPE")
+plot(fe, "FE13")
+plot(fe - fe[1], "FE13_SLOPE")
+plot(nativePlus, "NATIVE_DI_PLUS")
+plot(nativeMinus, "NATIVE_DI_MINUS")
+plot(nativeAdx, "NATIVE_ADX")
+plot(nativeAtr, "NATIVE_ATR")
+plot(time, "OPEN_MS")
+plot(time_close, "CLOSE_MS")
+plot(barstate.isconfirmed ? 1 : 0, "IS_CLOSED")
+plot(seedStart, "SEED_START_MS")
+// No strategy, orders, alert or remote timeframe requests.

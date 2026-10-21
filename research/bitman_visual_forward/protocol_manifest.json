@@ -1,0 +1,40 @@
+{
+  "activation_at": null,
+  "base": "fc211d8e36c6db55185efa8309eb8f980beab2ea",
+  "blocking_requirements": [
+    "ACTUAL_TRADINGVIEW_EXPORT_AND_CONFIGURATION",
+    "PINE_COMPILE_AND_EXECUTION_VERIFICATION",
+    "APPROVED_USDM_5M_AND_FUNDING_CONTRACT",
+    "INDEPENDENT_LATENCY_AND_DURABILITY_REVIEW"
+  ],
+  "candidate_selection": "POST_HOC_FROM_PR33_NOT_INDEPENDENT",
+  "candidates": [
+    "A:AO_ONLY:STRUCTURE_2R",
+    "A:AO_CONTEXT:STRUCTURE_2R",
+    "A:AO_FE:STRUCTURE_2R"
+  ],
+  "control_seed": "BITMAN_VISUAL_FORWARD_CONTROL_V0",
+  "inherited_math": {
+    "bitman_manual/frozen/indicators.py": "5a0c37e737375d7278f84490d8b4f8e1779189ead5f7e77bda6d468d86e037b5"
+  },
+  "pr33_head": "f71947224d4afc8f97ed72b34d8fe15be2770167",
+  "protocol_version": "BITMAN_ENTRY_FORWARD_RESEARCH_V0_DESIGN",
+  "real_forward_records_created_by_this_pr": 0,
+  "schema_version": 1,
+  "shadow_only": true,
+  "source_venue": "BINANCE_USDM_PERPETUAL",
+  "sources": {
+    "FORWARD_PROTOCOL.md": "07fa6686cdaac7a42787c6fc3e92701c8cec1125afe5f18d2df73e0b61c2b2bb",
+    "__init__.py": "b57fadaceb4e633b2071a004fe8b7bbd6886195db368b7a0a3bf33bd7c1fae6d",
+    "compare.py": "b199ad95d4aebb6d7da3c80d5907d5e9a3473deac86dc3f39d0b16727762daae",
+    "design.py": "8b897c5ba771aaeb19bd4f6bd9643cff7ea483d7b802d25e62058cb2d9bca95c",
+    "formulas.py": "1c6b55730dcd595175991d86a4fb51068c2fc038be537bc12479fb4bf0fa4cc2",
+    "ledger_contract.py": "0951553bce2d6f57d9e9888949c033421c81fb2a2bda7a6333da157cb30d3311",
+    "pine/visual_export_v0.pine": "9aeb5ba5c7098c9bb48a4ab8bf3eb5870dcd4a2c5790f686a08e4c7540b44e0d",
+    "protocol.py": "3de2274b0a166e56216ed58c83564af06b772b8f89231782e86d4665efbdd289",
+    "reference.py": "9bd267866927b83f9bbe3389fc934c6b649f62d3bf837be5e525178e47911fec",
+    "snapshot.py": "965f8fba6c9e19e696bf159970b49e8edf29f47553312739711a4a7c01b90932"
+  },
+  "status": "DRAFT_RESEARCH_NOT_AUTHORIZED",
+  "trade_authority": "NONE"
+}

@@ -1,0 +1,135 @@
+{
+  "base": "fc211d8e36c6db55185efa8309eb8f980beab2ea",
+  "calendar_rate_denominator": "2024-01-01 through 2026-09-01: 32 calendar months, not active-span metric from PR33",
+  "candidate_selection": "POST_HOC_NOT_INDEPENDENT",
+  "candidates": [
+    {
+      "annual_counts": {
+        "2024": 135,
+        "2025": 127,
+        "2026": 89
+      },
+      "annual_counts_all_periods": {
+        "2020": 127,
+        "2021": 137,
+        "2022": 132,
+        "2023": 129,
+        "2024": 135,
+        "2025": 127,
+        "2026": 89
+      },
+      "calendar_months": 32,
+      "calendar_months_for_100_at_same_rate": 9.116809116809117,
+      "candidate": "AO_ONLY",
+      "ci95_net_R": [
+        -0.24390830256372767,
+        0.06354612177603912
+      ],
+      "classification": "NO EDGE",
+      "exit": "STRUCTURE_2R",
+      "long": 177,
+      "mean_net_R": -0.08760257495396633,
+      "per_calendar_month": 10.96875,
+      "per_calendar_year": 131.625,
+      "reused_evaluation_n": 351,
+      "selection_status": "POST_HOC_FROM_PR33",
+      "short": 174,
+      "side_counts": {
+        "-1": 174,
+        "1": 177
+      }
+    },
+    {
+      "annual_counts": {
+        "2024": 22,
+        "2025": 13,
+        "2026": 17
+      },
+      "annual_counts_all_periods": {
+        "2020": 27,
+        "2021": 26,
+        "2022": 19,
+        "2023": 14,
+        "2024": 22,
+        "2025": 13,
+        "2026": 17
+      },
+      "calendar_months": 32,
+      "calendar_months_for_100_at_same_rate": 61.53846153846154,
+      "candidate": "AO_CONTEXT",
+      "ci95_net_R": [
+        -0.20653083982984788,
+        0.5257737812355632
+      ],
+      "classification": "INCONCLUSIVE",
+      "exit": "STRUCTURE_2R",
+      "long": 27,
+      "mean_net_R": 0.18950916287133837,
+      "per_calendar_month": 1.625,
+      "per_calendar_year": 19.5,
+      "reused_evaluation_n": 52,
+      "selection_status": "POST_HOC_FROM_PR33",
+      "short": 25,
+      "side_counts": {
+        "-1": 25,
+        "1": 27
+      }
+    },
+    {
+      "annual_counts": {
+        "2024": 18,
+        "2025": 7,
+        "2026": 10
+      },
+      "annual_counts_all_periods": {
+        "2020": 15,
+        "2021": 14,
+        "2022": 13,
+        "2023": 7,
+        "2024": 18,
+        "2025": 7,
+        "2026": 10
+      },
+      "calendar_months": 32,
+      "calendar_months_for_100_at_same_rate": 91.42857142857143,
+      "candidate": "AO_FE",
+      "ci95_net_R": [
+        -0.2195448854968538,
+        0.7745166800128215
+      ],
+      "classification": "INCONCLUSIVE",
+      "exit": "STRUCTURE_2R",
+      "long": 20,
+      "mean_net_R": 0.32618920048150946,
+      "per_calendar_month": 1.09375,
+      "per_calendar_year": 13.125,
+      "reused_evaluation_n": 35,
+      "selection_status": "POST_HOC_FROM_PR33",
+      "short": 15,
+      "side_counts": {
+        "-1": 15,
+        "1": 20
+      }
+    }
+  ],
+  "historical_cutoff": "2026-09-01T00:00:00+00:00",
+  "new_backtest": false,
+  "new_parameter_selection": false,
+  "original_classifications": {
+    "INCONCLUSIVE": 7,
+    "NO EDGE": 28
+  },
+  "original_comparisons": 35,
+  "reference_head": "f71947224d4afc8f97ed72b34d8fe15be2770167",
+  "reference_pr": 33,
+  "source_sha256": {
+    "artifacts/audit.json": "6065e211100aaca5451ee90515a7c078f753f3e42dc0d59ab205a2b60ef605d5",
+    "artifacts/data_manifest.json": "7bd1a8c10794abf27afa3f0780b91734128429043c04bed5258584d6bd0096f4",
+    "artifacts/protocol_lock.json": "1d14f9dda45334ea64fc834e3e1042f21a3c120464d0ce64f4fca6ed78c05ac0",
+    "artifacts/results.json": "972bd0e95748930c2c0a8650c2add1d50d988f26ec548a0cd7b0b0f9a4459a4f",
+    "features.py": "22e6b01834226728e33e9e853c59099a6f51cd2f0ee2f1e58e90dc88b8f7d21a",
+    "simulation.py": "3c186c3106ffce6694a19edeb144a5c509dd62ac2e1e25652dc810b69fd845ee",
+    "specification.md": "a78e5e1dd80ff88847cc5eff10d9a7aa882b09c72f8275db611abbfc3b527166",
+    "statistics.py": "31f7e0f61b3e92afd1ec6fa09765310d9b1a53d526622e111f9cd55fe89a4ca0"
+  }
+}
