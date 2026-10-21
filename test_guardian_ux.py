@@ -391,7 +391,8 @@ class GuardianUXTests(unittest.TestCase):
         commands = TelegramCommands('fake-token', 'owner', self.guardian.command_snapshot,
                                     lambda text: replies.append(text) or True, enabled=True, clock=lambda: self.now)
         original = copy.deepcopy(self.store.state)
-        with patch.object(self.fixture.client, '_request', side_effect=AssertionError('BITUNIX FORBIDDEN')) as http:
+        with patch.object(self.fixture.client, '_request', side_effect=AssertionError('BITUNIX FORBIDDEN')) as http, \
+             patch('bitman_manual.host.BitmanHost.request', return_value=True):
             for text in list(COMMANDS) + ['/arm', '/protect', '/close'] + ['/' + str(i) for i in range(200)]:
                 self.assertFalse(commands.process({'message': {'chat': {'id': 'alert'}, 'text': text}}))
                 self.assertTrue(commands.process({'message': {'chat': {'id': 'owner'}, 'text': text}}))

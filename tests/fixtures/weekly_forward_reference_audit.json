@@ -1,0 +1,18 @@
+{
+  "reference_commit": "772446da2b7e045483c2e1d9a5c0acc185c47fe4",
+  "weeks": 371,
+  "ast_sha256": {
+    "classify": "374d60f275d806302088c3adcae355fef3926469e12bf7002423d8aaa691c79e",
+    "causal_range": "b9ccb3124c24f0bf2ce6855907bd681d69e29063f19f8c4ca33154e13358becd",
+    "outcomes": "cc1717cb24cc56cbc708da3b6e9c057300eb84b0bea337cb28c3b2a832eeb3d0",
+    "resolve": "9fd768cf81e07397bfebf3dd70e08fa137c2bcb28872394c38e16f4f40690d64"
+  },
+  "reference_event_counts": {
+    "STRICT_SAME_WEEK": 7,
+    "SOURCE_ALIGNED_LAG_LE1": 11,
+    "SOURCE_ALIGNED_LAG_LE2": 13
+  },
+  "models_exact": true,
+  "outcomes_exact": true,
+  "observer_journal_created": false
+}

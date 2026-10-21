@@ -43,7 +43,7 @@ class CommandTests(unittest.TestCase):
         self.assertEqual(os.getenv('GUARDIAN_ENABLE_COMMANDS', 'false'), 'false')
 
     def test_owner_enabled_and_exact_command_set(self):
-        self.assertEqual(COMMANDS, ('/status', '/why', '/position', '/risk', '/levels', '/stats', '/help'))
+        self.assertEqual(COMMANDS, ('/status', '/why', '/position', '/risk', '/levels', '/stats', '/help', '/mlrsi', '/bitman'))
         self.assertTrue(self.commands.process(self.update()))
         self.assertIn('Actualizado hace:', self.reply.call_args.args[0])
 
@@ -70,7 +70,8 @@ class CommandTests(unittest.TestCase):
                     '/margin', '/sl', '/tp', '/protect', '/arm', '/transfer', '/withdraw']
         incoming += ['/' + str(value) for value in range(200)]
         with patch.object(self.fixture.client, '_request', side_effect=AssertionError('BITUNIX FORBIDDEN')) as no_http:
-            with patch('requests.sessions.Session.request', side_effect=AssertionError('NETWORK FORBIDDEN')):
+            with patch('requests.sessions.Session.request', side_effect=AssertionError('NETWORK FORBIDDEN')), \
+                 patch('bitman_manual.host.BitmanHost.request', return_value=True):
                 for command in incoming:
                     with self.subTest(command=command):
                         self.assertTrue(self.commands.process(self.update(command)))

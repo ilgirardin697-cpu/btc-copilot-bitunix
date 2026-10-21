@@ -1,0 +1,12 @@
+"""Original runtime constants; no calibration or rule changes."""
+
+VERSION='BITMAN_BTC_DIRECTION_ENGINE_0_1'
+
+
+HOUR=3600000
+
+
+TIMEFRAMES={'1H':HOUR,'4H':4*HOUR,'1D':24*HOUR}
+
+
+MLRSI_CONFIG='CAPTURE_LOW29_EMA4_PINE_PARITY_V4'
