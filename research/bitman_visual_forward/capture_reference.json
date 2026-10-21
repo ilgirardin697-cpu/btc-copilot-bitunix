@@ -1,0 +1,46 @@
+{
+  "status": "PENDING_ACTUAL_TRADINGVIEW_EXPORT_AND_CONFIGURATION",
+  "reference_kind": "OWNER_DESCRIPTION_OF_EXPLORATORY_SCREENSHOT",
+  "platform": "TradingView",
+  "displayed_symbol": "BTCUSDT · BINANCE",
+  "probable_ticker_id": "BINANCE:BTCUSDT",
+  "ticker_id_confirmed": false,
+  "venue": "UNKNOWN",
+  "timeframe_minutes": 60,
+  "timeframe_source": "OWNER_CONFIRMED",
+  "red_line_label": "Average directional index (ADX)",
+  "histogram_label": "Awesome oscillator (AO)",
+  "indicator_author": null,
+  "indicator_version": null,
+  "indicator_parameters": null,
+  "chart_timezone": null,
+  "visible_calendar_dates": [
+    "2026-10-13",
+    "2026-10-21"
+  ],
+  "markers": [
+    {
+      "color": "YELLOW",
+      "count": 1,
+      "approximate_chart_date_range": ["2026-10-15", "2026-10-15"],
+      "exact_utc": null
+    },
+    {
+      "color": "YELLOW",
+      "count": 2,
+      "approximate_chart_date_range": ["2026-10-17", "2026-10-18"],
+      "exact_utc": null
+    },
+    {
+      "color": "BLUE",
+      "count": 1,
+      "approximate_chart_date_range": ["2026-10-19", "2026-10-19"],
+      "exact_utc": null
+    }
+  ],
+  "raw_screenshot_available_to_agent": false,
+  "actual_csv_available": false,
+  "independent_pine_execution": false,
+  "selection": "POST_HOC_VISUAL_EXAMPLE_NOT_PROFITABILITY_EVIDENCE",
+  "exact_bitman_parity": "NOT_PROVEN"
+}
