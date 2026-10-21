@@ -287,4 +287,3 @@ class EntryIntegrityTests(unittest.TestCase):
         self.assertTrue((p/'matched_controls.csv').is_file())
 
 if __name__=='__main__':unittest.main()
-

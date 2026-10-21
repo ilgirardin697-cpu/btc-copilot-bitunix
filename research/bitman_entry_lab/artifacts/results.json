@@ -28223,7 +28223,7 @@
   },
   "historical_only": true,
   "no_virgin_holdout": true,
-  "protocol_lock_sha256": "977736fb991565371572f6b9c35dadea5fce027d8923f33ff901948a4fa92433",
+  "protocol_lock_sha256": "1d14f9dda45334ea64fc834e3e1042f21a3c120464d0ce64f4fca6ed78c05ac0",
   "quality_15m": {
     "B": {
       "anchors": 3438,

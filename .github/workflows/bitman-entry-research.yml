@@ -25,4 +25,3 @@ jobs:
       - name: Entire offline regression suite
         run: python -m unittest discover -q
       - run: git diff --check origin/mlrsi-mtf-observer...HEAD
-

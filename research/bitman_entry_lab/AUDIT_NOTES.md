@@ -69,4 +69,3 @@ No observer or integration is authorized or implemented.
 Any future prospective study needs a new approval and append-only protocol.
 
 SHADOW ONLY. TRADE AUTHORITY: NONE.
-

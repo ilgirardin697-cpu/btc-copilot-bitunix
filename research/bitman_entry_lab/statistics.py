@@ -70,4 +70,3 @@ def classify(base,conservative,validation,control,annual,incremental):
         bool(annual) and all(positive(x.get('mean_R')) for x in annual.values()),
         positive(incremental.get('mean_delta_R')),positive(incremental.get('ci95_delta_R',[None])[0])]
     return 'PROMISING FOR FORWARD VALIDATION' if all(checks) else 'INCONCLUSIVE'
-

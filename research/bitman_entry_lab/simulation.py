@@ -66,4 +66,3 @@ def simulate(base,funding,data,i,side,kind):
         mae_R=float(mae/risk),mfe_R=float(mfe/risk),duration_hours=float((exit_at-entry_time)/HOUR),
         entry_drift_bps=float(side*(entry/b[i,4]-1)*10000),
         first_5m_adverse=bool(side*(path[0,4]-entry)<0),costs=costs),None
-

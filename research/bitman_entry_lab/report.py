@@ -114,4 +114,3 @@ def report(results,rows,manifest,path):
     fields=sorted({k for row in flat for k in row})
     with (path.parent/'artifacts/metrics.csv').open('w',encoding='utf-8',newline='') as stream:
         w=csv.DictWriter(stream,fieldnames=fields);w.writeheader();w.writerows(flat)
-

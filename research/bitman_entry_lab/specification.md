@@ -128,4 +128,3 @@ Include exclusion counts, raw/checksum/data hashes, costs known vs estimated,
 deterministic fixtures, prefix/future perturbation, HTF closed alignment, stop-first,
 funding sign, gaps, split embargo, no execution imports, protected source hashes.
 No production dependency on this package. Research workflow only.
-

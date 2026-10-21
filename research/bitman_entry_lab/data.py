@@ -97,4 +97,3 @@ if __name__=='__main__':
     args=p.parse_args()
     if args.download: download(args.cache)
     _,_,m=load(args.cache);print(json.dumps({k:v for k,v in m.items() if k!='archives'}))
-

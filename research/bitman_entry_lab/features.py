@@ -91,4 +91,3 @@ def gates(data,i,side,family):
     fe=f['fe_slope'][i]<0
     return dict(AO_ONLY=True,AO_CONTEXT=bool(context),AO_DMI=bool(context and dmi),
         AO_FE=bool(context and fe),AO_DMI_FE=bool(context and dmi and fe))
-

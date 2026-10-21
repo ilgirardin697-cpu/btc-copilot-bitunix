@@ -65,4 +65,3 @@ def audit(cache,reference=None):
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--cache',required=True);p.add_argument('--reference-npz')
     args=p.parse_args();audit(args.cache,args.reference_npz)
-
