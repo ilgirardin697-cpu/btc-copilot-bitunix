@@ -104,6 +104,12 @@ class BitmanHost:
                 self._process = None
             if not self._closed.is_set():
                 try:
+                    try:
+                        from bitman_weekly_forward.host import manual_context
+                        from bitman_weekly_forward.render import append_context
+                        text = append_context(text, manual_context())
+                    except Exception:
+                        pass
                     reply(text)  # exactly one response to this authorized manual request
                 except Exception:
                     pass

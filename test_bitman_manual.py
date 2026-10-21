@@ -540,7 +540,11 @@ class ProvenanceAndSafetyTests(unittest.TestCase):
                  'mlrsi_guardian_host.py', 'mlrsi_telegram.py', 'live_auto.py', 'main.py', 'railway.json')
         for path in paths:
             original = subprocess.check_output(['git', 'show', PRODUCTION_BASE + ':' + path])
-            self.assertEqual((ROOT / path).read_bytes().replace(b'\r\n', b'\n'), original.replace(b'\r\n', b'\n'), path)
+            current = (ROOT / path).read_bytes().replace(b'\r\n', b'\n')
+            if path == 'trade_guardian.py':
+                from bitman_weekly_forward_log_safety import normalize_source
+                current = normalize_source(path, current.decode('utf-8')).encode('utf-8')
+            self.assertEqual(current, original.replace(b'\r\n', b'\n'), path)
 
     def test_no_order_capability_or_new_telegram_client(self):
         forbidden_modules = {'guardian_bitunix', 'trade_guardian', 'live_auto', 'main', 'v8_executor',

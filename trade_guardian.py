@@ -339,6 +339,11 @@ def main():
         while True:
             started = time.monotonic()
             guardian.cycle()
+            try:
+                from bitman_weekly_forward_logging import after_cycle
+                after_cycle()
+            except Exception:
+                pass
             time.sleep(max(0, 10 - (time.monotonic() - started)))
     except KeyboardInterrupt:
         pass
@@ -346,6 +351,11 @@ def main():
         print('GUARDIAN STOPPED — SAFE FAILURE; NO NEW MUTATION', flush=True)
         raise SystemExit(1) from None
     finally:
+        try:
+            from bitman_weekly_forward.host import shutdown
+            shutdown()
+        except Exception:
+            pass
         if mlrsi is not None:
             try:
                 mlrsi.stop()
