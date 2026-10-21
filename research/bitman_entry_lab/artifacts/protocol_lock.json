@@ -1,0 +1,28 @@
+{
+  "base": "fc211d8e36c6db55185efa8309eb8f980beab2ea",
+  "code": {
+    "data.py": "c9fed2d577aff7e6f7a70d7547332446386c5b257a1d74be01930161349e728a",
+    "features.py": "a49a39d6c58f3de86588b7cc3c4cf8a6a01ab076fcc39f6af71c5c68b10d7825",
+    "report.py": "7110a58020ee69006b8a9b43e9a5cdb7a9a11f84c5848fc5754e11c50dbd05e2",
+    "simulation.py": "c562fa13e7d06229266fec643d04a818223938e193f802c612e5454389059f72",
+    "specification.md": "41bd144946adc1d03d3f60ecb05733a887f979cbe411b01a493e772162139815",
+    "statistics.py": "61997e347d9689ad931518db2b916f795678239db0225b8b886b7d5f846f7a9d",
+    "study.py": "ef6dc9ad4074ccba8fbdaee791c7ca0c7ea424aaa30b5141a88437c3462d96fc"
+  },
+  "hypothesis_families": 3,
+  "locked_at": "2026-10-21T15:59:29.805304+00:00",
+  "manifest_sha256": "7bd1a8c10794abf27afa3f0780b91734128429043c04bed5258584d6bd0096f4",
+  "no_virgin_holdout": true,
+  "pre_outcome_nonsemantic_amendments": [
+    {
+      "after": "7110a58020ee69006b8a9b43e9a5cdb7a9a11f84c5848fc5754e11c50dbd05e2",
+      "before": "450e61d3bb6240fc2ea78ecbeeec948db0e0bd4bb166ca49372ae4486fa4e570",
+      "file": "report.py",
+      "reason": "Replace reserved gate token in report prose; existing architectural canary unchanged; no rules or outcomes changed"
+    }
+  ],
+  "primary_comparisons": 30,
+  "secondary_comparisons": 5,
+  "specification_commit": "6eaf1dd638ddaa4e22771a924ee12548b1fb9bc2",
+  "version": "BITMAN_ENTRY_RESEARCH_V0"
+}
