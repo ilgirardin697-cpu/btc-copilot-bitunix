@@ -340,7 +340,7 @@ def main():
             started = time.monotonic()
             guardian.cycle()
             try:
-                from bitman_weekly_forward.host import after_cycle
+                from bitman_weekly_forward_logging import after_cycle
                 after_cycle()
             except Exception:
                 pass

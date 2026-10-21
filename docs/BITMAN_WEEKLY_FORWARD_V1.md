@@ -283,3 +283,73 @@ class/protections/execution and Telegram routing/sender remain unchanged.
 
 No Railway operation, deployment, flag change, production volume write,
 Telegram message or runtime activation is part of this change.
+
+## Sanitized deployment-log verification
+
+The logging addendum preserves every protocol-bound source **byte-for-byte**
+against reviewed HEAD `3127ec40742feaf77c2b19d7150057c290c85c0e`.
+The V1 hash remains
+`d4fe75fce89e8f248123409c293b1114f9af2eb16b8aee5572b40802a54aefe8`.
+Host, worker and market transport were already protocol-bound; none is edited
+or refrozen to add diagnostics. Models, journal format/durability, outcomes,
+bootstrap and readiness remain unchanged.
+
+The separate `bitman_weekly_forward_logging.py` adapter selects a logging host
+at the existing post-cycle hook. It inherits the original scheduling, cache,
+read and shutdown behavior. Its child IO method retains the original AST except
+for the external worker entrypoint, strict diagnostic-marker decoding and the
+asynchronous status sink. CI proves this exact normalization. The shared
+original host instance remains the source for manual display and shutdown.
+
+`bitman_weekly_forward_log_worker.py` installs a worker-local Python audit hook,
+then invokes the **original worker main**. It never replaces computation,
+request validation, market acquisition, recovery or persistence. The hook sees
+`urllib.Request` immediately before the original opener handles its GET. It
+emits only `BITMAN_WEEKLY_FORWARD_FETCH=<week_open>` for the exact private
+BTCUSDT/1h/168-row weekly request. Bootstrap/replay without a GET emits no marker.
+A failed GET is still an attempt and is logged. No extra market request is made.
+
+Worker markers are emitted before the GET into the existing stderr
+pipe. The parent validates and relays them when that bounded worker completes;
+Railway visibility can therefore lag the attempt by the worker lifetime, up to
+the existing 60-second timeout and bounded cleanup. Complete markers are also
+recovered from timeout output and drained crash output, with per-attempt dedupe.
+Raw stderr and unrecognized output are
+never relayed. This is an attempt marker, not a successful-download claim.
+The worker's stdout remains the original single JSON result, untouched by
+logging. A malformed/partial diagnostic line cannot corrupt that result.
+
+On the first worker result, and only when status, **full** journal tip or record
+count changes, the host queues one compact line:
+`BITMAN_WEEKLY_FORWARD_STATUS=<json>`. The diagnostic queue is bounded to 32
+entries and never blocks observation or the Guardian thread. A separate daemon
+writes to stdout FD 1 without holding Python's shared TextIO lock. Sink errors,
+queue saturation and logger startup failure cannot change the observer result.
+Diagnostics may be dropped on failure; they are not authoritative evidence in
+place of the journal and do not prove that a missing line was never attempted.
+
+Allowed fields only: status, protocol_version, schema_version, journal_records,
+journal_tip_prefix (12 hex characters maximum), week_open, available_at,
+strict_state, lag1_state, lag2_state, strict_pending, lag1_pending, lag2_pending,
+forward_events, active, matured, h1, h2, h3, h4, evidence and next_due.
+Enums, integers, booleans and the hash prefix are allowlisted; malformed/missing
+values become null. No full hash, source SHA, path, exception text, raw candles,
+event payload, account, Telegram, credentials or environment is logged.
+
+The JSON status is `HEALTHY`, or one of the static diagnostic codes
+`BITMAN_WEEKLY_FORWARD_DEGRADED` and `BITMAN_WEEKLY_FORWARD_JOURNAL_INVALID`.
+These telemetry labels do not alter the original internal status used by
+manual display. Unknown errors use only the static degraded code.
+
+Before the first new closed week, the expected successful startup diagnostic
+has journal_records=2, all three states OTHER, no pending, zero events and
+zero H1/H2/H3/H4, evidence INSUFFICIENT, and next_due at the following Monday
+00:05 UTC. It has no FETCH marker. This describes a future rollout check;
+no activation or production observation has occurred during this addendum.
+
+The feature flag still defaults to false. Disabled means no logging host,
+diagnostic thread, worker, network, writes or diagnostic output. Existing
+Guardian safety baselines are retained: CI reverses only the exact logging
+import substitution before applying the original frozen passive-hook guard.
+The new adapters are the only extra allowlisted passive consumers and are
+included in the no-execution/no-trading/no-Telegram source audit.

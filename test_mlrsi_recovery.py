@@ -265,7 +265,7 @@ class ProviderRecoveryTests(unittest.TestCase):
                 continue
             current = Path(path).read_bytes().replace(b'\r\n', b'\n')
             if path == 'trade_guardian.py':
-                from bitman_weekly_forward.safety import normalize_source
+                from bitman_weekly_forward_log_safety import normalize_source
                 current = normalize_source(path, current.decode('utf-8')).encode('utf-8')
             self.assertEqual(current, old.replace(b'\r\n', b'\n'), path)
         self.assertEqual(CONFIG_VERSION, 'CAPTURE_LOW29_EMA4_PINE_PARITY_V4')

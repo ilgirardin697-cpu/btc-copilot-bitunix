@@ -8,11 +8,12 @@ import subprocess
 import sys
 import unittest
 
-from bitman_weekly_forward.safety import ADDITIONS,normalize_source
+from bitman_weekly_forward_log_safety import ADDITIONS,normalize_source
 
 ROOT=Path(__file__).resolve().parent
 PACKAGE={'__init__','protocol','features','models','outcomes','market','journal','observer','host','worker','render','safety'}
 ALLOWED={'bitman_weekly_forward/'+name+'.py' for name in PACKAGE}
+ALLOWED.update(('bitman_weekly_forward_logging.py','bitman_weekly_forward_log_worker.py','bitman_weekly_forward_log_safety.py'))
 TOKENS={'weekly_forward','weekly_state','weekly_event','large_move_watch'}
 REQUIRE_V8='--require-v8' in sys.argv
 
@@ -102,7 +103,9 @@ class WeeklyBoundary(unittest.TestCase):
 
     def test_observer_has_no_research_trading_telegram_or_gate_imports(self):
         prohibited=('research','guardian','mlrsi','live_auto','main','v8','ccxt','requests','telegram')
-        for file in (ROOT/'bitman_weekly_forward').glob('*.py'):
+        files=list((ROOT/'bitman_weekly_forward').glob('*.py'))
+        files.extend(ROOT/name for name in ('bitman_weekly_forward_logging.py','bitman_weekly_forward_log_worker.py'))
+        for file in files:
             if file.name=='safety.py':continue
             tree=ast.parse(file.read_text('utf-8'))
             for node in ast.walk(tree):

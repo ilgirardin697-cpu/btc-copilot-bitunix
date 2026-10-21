@@ -15,9 +15,9 @@ jobs:
       - name: Install existing runtime dependencies
         run: python -m pip install -r requirements.txt
       - name: Compile isolated observer and tests
-        run: python -m compileall -q bitman_weekly_forward test_bitman_weekly_forward.py test_bitman_weekly_host.py test_bitman_weekly_boundary.py
+        run: python -m compileall -q bitman_weekly_forward bitman_weekly_forward_logging.py bitman_weekly_forward_log_worker.py bitman_weekly_forward_log_safety.py test_bitman_weekly_forward.py test_bitman_weekly_host.py test_bitman_weekly_boundary.py test_bitman_weekly_logging.py
       - name: Immutable protocol, bootstrap golden, models, journal and recovery
-        run: python -m unittest test_bitman_weekly_forward test_bitman_weekly_host -v
+        run: python -m unittest test_bitman_weekly_forward test_bitman_weekly_host test_bitman_weekly_logging -v
       - name: Require observer boundary and separately pinned V8 reference
         run: python test_bitman_weekly_boundary.py --require-v8 -v
       - name: Preserve all 900 approved readiness results and existing manual transport

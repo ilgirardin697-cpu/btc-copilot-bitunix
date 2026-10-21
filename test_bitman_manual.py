@@ -542,7 +542,7 @@ class ProvenanceAndSafetyTests(unittest.TestCase):
             original = subprocess.check_output(['git', 'show', PRODUCTION_BASE + ':' + path])
             current = (ROOT / path).read_bytes().replace(b'\r\n', b'\n')
             if path == 'trade_guardian.py':
-                from bitman_weekly_forward.safety import normalize_source
+                from bitman_weekly_forward_log_safety import normalize_source
                 current = normalize_source(path, current.decode('utf-8')).encode('utf-8')
             self.assertEqual(current, original.replace(b'\r\n', b'\n'), path)
 
