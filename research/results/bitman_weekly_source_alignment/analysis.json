@@ -1,0 +1,2177 @@
+{
+  "label": "POST_HOC_SOURCE_ALIGNED_LAG_SENSITIVITY",
+  "strict_label": "PREDECLARED STRICT SAME-WEEK MODEL",
+  "transcript_review": "INDEPENDENT TRANSCRIPT REVIEWED EXTERNALLY AFTER PREDECLARED ANALYSIS",
+  "no_virgin_holdout": true,
+  "strict_conclusion": "INCONCLUSIVE",
+  "conclusion": "SOURCE-ALIGNED SENSITIVITY STILL INCONCLUSIVE",
+  "models": [
+    {
+      "name": "STRICT_SAME_WEEK",
+      "max_lag": 0,
+      "episode_count": 7,
+      "family_counts": {
+        "REACCELERATION_UP": 2,
+        "REACCELERATION_DOWN": 2,
+        "ZERO_CROSS_UP_EXPANSION": 2,
+        "ZERO_CROSS_DOWN_EXPANSION": 1
+      },
+      "actual_lag_counts": {
+        "0": 7
+      },
+      "new_resolutions": [],
+      "absent_strict_resolutions": [],
+      "nonoverlap_count": 7,
+      "events": [
+        {
+          "kind": "REACCELERATION_DOWN",
+          "side": -1,
+          "activation_index": 157,
+          "pullback_weeks": 1,
+          "start_index": 156,
+          "index": 157,
+          "lag": 0,
+          "episode_id": "O1662940800000_REACCELERATION_DOWN",
+          "activation_at": "2022-09-19T00:00:00+00:00",
+          "confirmed_at": "2022-09-19T00:00:00+00:00",
+          "resolution_color": "RED",
+          "sequence": [
+            {
+              "open_time": 1662336000000,
+              "available_at": "2022-09-12T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -10194.546617647058,
+              "oscillator_slope": 77.8588235294119,
+              "volatility": 30.0,
+              "volatility_slope": -1.0
+            },
+            {
+              "open_time": 1662940800000,
+              "available_at": "2022-09-19T00:00:00+00:00",
+              "state": "REACCELERATION_DOWN",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -10227.802499999998,
+              "oscillator_slope": -33.25588235293981,
+              "volatility": 36.0,
+              "volatility_slope": 6.0
+            }
+          ]
+        },
+        {
+          "kind": "REACCELERATION_UP",
+          "side": 1,
+          "activation_index": 197,
+          "pullback_weeks": 1,
+          "start_index": 196,
+          "index": 197,
+          "lag": 0,
+          "episode_id": "O1687132800000_REACCELERATION_UP",
+          "activation_at": "2023-06-26T00:00:00+00:00",
+          "confirmed_at": "2023-06-26T00:00:00+00:00",
+          "resolution_color": "GREEN",
+          "sequence": [
+            {
+              "open_time": 1686528000000,
+              "available_at": "2023-06-19T00:00:00+00:00",
+              "state": "PULLBACK_UP",
+              "sign": "ABOVE",
+              "color": "RED",
+              "oscillator": 3805.2423529411753,
+              "oscillator_slope": -466.4864705882392,
+              "volatility": 7.0,
+              "volatility_slope": -4.0
+            },
+            {
+              "open_time": 1687132800000,
+              "available_at": "2023-06-26T00:00:00+00:00",
+              "state": "REACCELERATION_UP",
+              "sign": "ABOVE",
+              "color": "GREEN",
+              "oscillator": 3923.373529411765,
+              "oscillator_slope": 118.13117647058971,
+              "volatility": 23.0,
+              "volatility_slope": 16.0
+            }
+          ]
+        },
+        {
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "side": 1,
+          "activation_index": 214,
+          "pullback_weeks": 1,
+          "start_index": 213,
+          "index": 214,
+          "lag": 0,
+          "episode_id": "O1697414400000_ZERO_CROSS_UP_EXPANSION",
+          "activation_at": "2023-10-23T00:00:00+00:00",
+          "confirmed_at": "2023-10-23T00:00:00+00:00",
+          "resolution_color": "GREEN",
+          "sequence": [
+            {
+              "open_time": 1696809600000,
+              "available_at": "2023-10-16T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -445.9682352941127,
+              "oscillator_slope": 156.70588235294417,
+              "volatility": 11.0,
+              "volatility_slope": 0.0
+            },
+            {
+              "open_time": 1697414400000,
+              "available_at": "2023-10-23T00:00:00+00:00",
+              "state": "ZERO_CROSS_UP_EXPANSION",
+              "sign": "ABOVE",
+              "color": "GREEN",
+              "oscillator": 14.12764705882364,
+              "oscillator_slope": 460.0958823529363,
+              "volatility": 26.0,
+              "volatility_slope": 15.0
+            }
+          ]
+        },
+        {
+          "kind": "REACCELERATION_UP",
+          "side": 1,
+          "activation_index": 316,
+          "pullback_weeks": 1,
+          "start_index": 315,
+          "index": 316,
+          "lag": 0,
+          "episode_id": "O1759104000000_REACCELERATION_UP",
+          "activation_at": "2025-10-06T00:00:00+00:00",
+          "confirmed_at": "2025-10-06T00:00:00+00:00",
+          "resolution_color": "GREEN",
+          "sequence": [
+            {
+              "open_time": 1758499200000,
+              "available_at": "2025-09-29T00:00:00+00:00",
+              "state": "PULLBACK_UP",
+              "sign": "ABOVE",
+              "color": "RED",
+              "oscillator": 10435.080588235302,
+              "oscillator_slope": -722.4417647058581,
+              "volatility": 6.0,
+              "volatility_slope": -7.0
+            },
+            {
+              "open_time": 1759104000000,
+              "available_at": "2025-10-06T00:00:00+00:00",
+              "state": "REACCELERATION_UP",
+              "sign": "ABOVE",
+              "color": "GREEN",
+              "oscillator": 11438.680588235278,
+              "oscillator_slope": 1003.5999999999767,
+              "volatility": 30.0,
+              "volatility_slope": 24.0
+            }
+          ]
+        },
+        {
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "side": -1,
+          "activation_index": 323,
+          "pullback_weeks": 0,
+          "start_index": 322,
+          "index": 323,
+          "lag": 0,
+          "episode_id": "O1763337600000_ZERO_CROSS_DOWN_EXPANSION",
+          "activation_at": "2025-11-24T00:00:00+00:00",
+          "confirmed_at": "2025-11-24T00:00:00+00:00",
+          "resolution_color": "RED",
+          "sequence": [
+            {
+              "open_time": 1762732800000,
+              "available_at": "2025-11-17T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "ABOVE",
+              "color": "RED",
+              "oscillator": 1220.3323529411864,
+              "oscillator_slope": -3200.2470588235155,
+              "volatility": 81.0,
+              "volatility_slope": 35.0
+            },
+            {
+              "open_time": 1763337600000,
+              "available_at": "2025-11-24T00:00:00+00:00",
+              "state": "ZERO_CROSS_DOWN_EXPANSION",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -3150.1594117647182,
+              "oscillator_slope": -4370.491764705905,
+              "volatility": 86.0,
+              "volatility_slope": 5.0
+            }
+          ]
+        },
+        {
+          "kind": "REACCELERATION_DOWN",
+          "side": -1,
+          "activation_index": 351,
+          "pullback_weeks": 3,
+          "start_index": 348,
+          "index": 351,
+          "lag": 0,
+          "episode_id": "O1780272000000_REACCELERATION_DOWN",
+          "activation_at": "2026-06-08T00:00:00+00:00",
+          "confirmed_at": "2026-06-08T00:00:00+00:00",
+          "resolution_color": "RED",
+          "sequence": [
+            {
+              "open_time": 1778457600000,
+              "available_at": "2026-05-18T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -8867.739117647056,
+              "oscillator_slope": 2829.596764705886,
+              "volatility": 55.0,
+              "volatility_slope": -22.0
+            },
+            {
+              "open_time": 1779062400000,
+              "available_at": "2026-05-25T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -7459.24147058824,
+              "oscillator_slope": 1408.4976470588153,
+              "volatility": 41.0,
+              "volatility_slope": -14.0
+            },
+            {
+              "open_time": 1779667200000,
+              "available_at": "2026-06-01T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -6441.802058823538,
+              "oscillator_slope": 1017.4394117647025,
+              "volatility": 25.0,
+              "volatility_slope": -16.0
+            },
+            {
+              "open_time": 1780272000000,
+              "available_at": "2026-06-08T00:00:00+00:00",
+              "state": "REACCELERATION_DOWN",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -7168.2505882353,
+              "oscillator_slope": -726.4485294117621,
+              "volatility": 77.0,
+              "volatility_slope": 52.0
+            }
+          ]
+        },
+        {
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "side": 1,
+          "activation_index": 364,
+          "pullback_weeks": 0,
+          "start_index": 363,
+          "index": 364,
+          "lag": 0,
+          "episode_id": "O1788134400000_ZERO_CROSS_UP_EXPANSION",
+          "activation_at": "2026-09-07T00:00:00+00:00",
+          "confirmed_at": "2026-09-07T00:00:00+00:00",
+          "resolution_color": "GREEN",
+          "sequence": [
+            {
+              "open_time": 1787529600000,
+              "available_at": "2026-08-31T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -3345.5350000000035,
+              "oscillator_slope": 3055.75323529412,
+              "volatility": 82.0,
+              "volatility_slope": 11.0
+            },
+            {
+              "open_time": 1788134400000,
+              "available_at": "2026-09-07T00:00:00+00:00",
+              "state": "ZERO_CROSS_UP_EXPANSION",
+              "sign": "ABOVE",
+              "color": "GREEN",
+              "oscillator": 78.79911764706776,
+              "oscillator_slope": 3424.3341176470713,
+              "volatility": 90.0,
+              "volatility_slope": 8.0
+            }
+          ]
+        }
+      ],
+      "audit": [
+        {
+          "action": "ACTIVATED",
+          "index": 122,
+          "activation_index": 122,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "EXPIRED",
+          "index": 122,
+          "activation_index": 122,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "DEADLINE_WITHOUT_VOLATILITY_CONFIRMATION"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 130,
+          "activation_index": 130,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "EXPIRED",
+          "index": 130,
+          "activation_index": 130,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "DEADLINE_WITHOUT_VOLATILITY_CONFIRMATION"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 137,
+          "activation_index": 137,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "EXPIRED",
+          "index": 137,
+          "activation_index": 137,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "DEADLINE_WITHOUT_VOLATILITY_CONFIRMATION"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 157,
+          "activation_index": 157,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 157,
+          "activation_index": 157,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "IMMEDIATE_RISING"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 177,
+          "activation_index": 177,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "EXPIRED",
+          "index": 177,
+          "activation_index": 177,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "DEADLINE_WITHOUT_VOLATILITY_CONFIRMATION"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 197,
+          "activation_index": 197,
+          "kind": "REACCELERATION_UP",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 197,
+          "activation_index": 197,
+          "kind": "REACCELERATION_UP",
+          "reason": "IMMEDIATE_RISING"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 209,
+          "activation_index": 209,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "EXPIRED",
+          "index": 209,
+          "activation_index": 209,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "DEADLINE_WITHOUT_VOLATILITY_CONFIRMATION"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 214,
+          "activation_index": 214,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 214,
+          "activation_index": 214,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "IMMEDIATE_RISING"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 260,
+          "activation_index": 260,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "EXPIRED",
+          "index": 260,
+          "activation_index": 260,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "DEADLINE_WITHOUT_VOLATILITY_CONFIRMATION"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 267,
+          "activation_index": 267,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "EXPIRED",
+          "index": 267,
+          "activation_index": 267,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "DEADLINE_WITHOUT_VOLATILITY_CONFIRMATION"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 292,
+          "activation_index": 292,
+          "kind": "REACCELERATION_UP",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "EXPIRED",
+          "index": 292,
+          "activation_index": 292,
+          "kind": "REACCELERATION_UP",
+          "reason": "DEADLINE_WITHOUT_VOLATILITY_CONFIRMATION"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 316,
+          "activation_index": 316,
+          "kind": "REACCELERATION_UP",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 316,
+          "activation_index": 316,
+          "kind": "REACCELERATION_UP",
+          "reason": "IMMEDIATE_RISING"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 323,
+          "activation_index": 323,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 323,
+          "activation_index": 323,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "IMMEDIATE_RISING"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 351,
+          "activation_index": 351,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 351,
+          "activation_index": 351,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "IMMEDIATE_RISING"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 364,
+          "activation_index": 364,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 364,
+          "activation_index": 364,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "IMMEDIATE_RISING"
+        }
+      ],
+      "current": {
+        "available_at": "2026-10-19T00:00:00+00:00",
+        "state": "OTHER",
+        "pending": null,
+        "signal": false,
+        "note": "CURRENT OBSERVATION \u2014 NOT PART OF VALIDATION",
+        "large_move_watch": "NOT VALIDATED"
+      }
+    },
+    {
+      "name": "LAG_LE1",
+      "max_lag": 1,
+      "episode_count": 11,
+      "family_counts": {
+        "REACCELERATION_UP": 3,
+        "REACCELERATION_DOWN": 4,
+        "ZERO_CROSS_UP_EXPANSION": 2,
+        "ZERO_CROSS_DOWN_EXPANSION": 2
+      },
+      "actual_lag_counts": {
+        "0": 7,
+        "1": 4
+      },
+      "new_resolutions": [
+        {
+          "confirmed_at": "2022-01-24T00:00:00+00:00",
+          "kind": "ZERO_CROSS_DOWN_EXPANSION"
+        },
+        {
+          "confirmed_at": "2022-03-21T00:00:00+00:00",
+          "kind": "REACCELERATION_DOWN"
+        },
+        {
+          "confirmed_at": "2022-05-09T00:00:00+00:00",
+          "kind": "REACCELERATION_DOWN"
+        },
+        {
+          "confirmed_at": "2025-04-28T00:00:00+00:00",
+          "kind": "REACCELERATION_UP"
+        }
+      ],
+      "absent_strict_resolutions": [],
+      "nonoverlap_count": 11,
+      "events": [
+        {
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "side": -1,
+          "activation_index": 122,
+          "pullback_weeks": 0,
+          "start_index": 121,
+          "index": 123,
+          "lag": 1,
+          "episode_id": "O1641772800000_ZERO_CROSS_DOWN_EXPANSION",
+          "activation_at": "2022-01-17T00:00:00+00:00",
+          "confirmed_at": "2022-01-24T00:00:00+00:00",
+          "resolution_color": "RED",
+          "sequence": [
+            {
+              "open_time": 1641168000000,
+              "available_at": "2022-01-10T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "ABOVE",
+              "color": "RED",
+              "oscillator": 1454.7699705882478,
+              "oscillator_slope": -980.4420588235225,
+              "volatility": 41.0,
+              "volatility_slope": 4.0
+            },
+            {
+              "open_time": 1641772800000,
+              "available_at": "2022-01-17T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -137.30408823529433,
+              "oscillator_slope": -1592.0740588235421,
+              "volatility": 28.0,
+              "volatility_slope": -13.0
+            },
+            {
+              "open_time": 1642377600000,
+              "available_at": "2022-01-24T00:00:00+00:00",
+              "state": "IMPULSE_DOWN",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -1995.0121470588274,
+              "oscillator_slope": -1857.708058823533,
+              "volatility": 53.0,
+              "volatility_slope": 25.0
+            }
+          ]
+        },
+        {
+          "kind": "REACCELERATION_DOWN",
+          "side": -1,
+          "activation_index": 130,
+          "pullback_weeks": 1,
+          "start_index": 129,
+          "index": 131,
+          "lag": 1,
+          "episode_id": "O1646611200000_REACCELERATION_DOWN",
+          "activation_at": "2022-03-14T00:00:00+00:00",
+          "confirmed_at": "2022-03-21T00:00:00+00:00",
+          "resolution_color": "RED",
+          "sequence": [
+            {
+              "open_time": 1646006400000,
+              "available_at": "2022-03-07T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -6669.038529411759,
+              "oscillator_slope": 875.6806176470709,
+              "volatility": 18.0,
+              "volatility_slope": -10.0
+            },
+            {
+              "open_time": 1646611200000,
+              "available_at": "2022-03-14T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -6784.354117647061,
+              "oscillator_slope": -115.31558823530213,
+              "volatility": 13.0,
+              "volatility_slope": -5.0
+            },
+            {
+              "open_time": 1647216000000,
+              "available_at": "2022-03-21T00:00:00+00:00",
+              "state": "IMPULSE_DOWN",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -7751.623235294122,
+              "oscillator_slope": -967.2691176470616,
+              "volatility": 14.0,
+              "volatility_slope": 1.0
+            }
+          ]
+        },
+        {
+          "kind": "REACCELERATION_DOWN",
+          "side": -1,
+          "activation_index": 137,
+          "pullback_weeks": 3,
+          "start_index": 134,
+          "index": 138,
+          "lag": 1,
+          "episode_id": "O1650844800000_REACCELERATION_DOWN",
+          "activation_at": "2022-05-02T00:00:00+00:00",
+          "confirmed_at": "2022-05-09T00:00:00+00:00",
+          "resolution_color": "RED",
+          "sequence": [
+            {
+              "open_time": 1649030400000,
+              "available_at": "2022-04-11T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -5053.780735294116,
+              "oscillator_slope": 656.4394117647098,
+              "volatility": 45.0,
+              "volatility_slope": -4.0
+            },
+            {
+              "open_time": 1649635200000,
+              "available_at": "2022-04-18T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -4698.347500000011,
+              "oscillator_slope": 355.43323529410554,
+              "volatility": 41.0,
+              "volatility_slope": -4.0
+            },
+            {
+              "open_time": 1650240000000,
+              "available_at": "2022-04-25T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -4324.866617647051,
+              "oscillator_slope": 373.4808823529602,
+              "volatility": 39.0,
+              "volatility_slope": -2.0
+            },
+            {
+              "open_time": 1650844800000,
+              "available_at": "2022-05-02T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -4958.287352941181,
+              "oscillator_slope": -633.4207352941303,
+              "volatility": 38.0,
+              "volatility_slope": -1.0
+            },
+            {
+              "open_time": 1651449600000,
+              "available_at": "2022-05-09T00:00:00+00:00",
+              "state": "IMPULSE_DOWN",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -6511.98294117648,
+              "oscillator_slope": -1553.6955882352995,
+              "volatility": 59.0,
+              "volatility_slope": 21.0
+            }
+          ]
+        },
+        {
+          "kind": "REACCELERATION_DOWN",
+          "side": -1,
+          "activation_index": 157,
+          "pullback_weeks": 1,
+          "start_index": 156,
+          "index": 157,
+          "lag": 0,
+          "episode_id": "O1662940800000_REACCELERATION_DOWN",
+          "activation_at": "2022-09-19T00:00:00+00:00",
+          "confirmed_at": "2022-09-19T00:00:00+00:00",
+          "resolution_color": "RED",
+          "sequence": [
+            {
+              "open_time": 1662336000000,
+              "available_at": "2022-09-12T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -10194.546617647058,
+              "oscillator_slope": 77.8588235294119,
+              "volatility": 30.0,
+              "volatility_slope": -1.0
+            },
+            {
+              "open_time": 1662940800000,
+              "available_at": "2022-09-19T00:00:00+00:00",
+              "state": "REACCELERATION_DOWN",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -10227.802499999998,
+              "oscillator_slope": -33.25588235293981,
+              "volatility": 36.0,
+              "volatility_slope": 6.0
+            }
+          ]
+        },
+        {
+          "kind": "REACCELERATION_UP",
+          "side": 1,
+          "activation_index": 197,
+          "pullback_weeks": 1,
+          "start_index": 196,
+          "index": 197,
+          "lag": 0,
+          "episode_id": "O1687132800000_REACCELERATION_UP",
+          "activation_at": "2023-06-26T00:00:00+00:00",
+          "confirmed_at": "2023-06-26T00:00:00+00:00",
+          "resolution_color": "GREEN",
+          "sequence": [
+            {
+              "open_time": 1686528000000,
+              "available_at": "2023-06-19T00:00:00+00:00",
+              "state": "PULLBACK_UP",
+              "sign": "ABOVE",
+              "color": "RED",
+              "oscillator": 3805.2423529411753,
+              "oscillator_slope": -466.4864705882392,
+              "volatility": 7.0,
+              "volatility_slope": -4.0
+            },
+            {
+              "open_time": 1687132800000,
+              "available_at": "2023-06-26T00:00:00+00:00",
+              "state": "REACCELERATION_UP",
+              "sign": "ABOVE",
+              "color": "GREEN",
+              "oscillator": 3923.373529411765,
+              "oscillator_slope": 118.13117647058971,
+              "volatility": 23.0,
+              "volatility_slope": 16.0
+            }
+          ]
+        },
+        {
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "side": 1,
+          "activation_index": 214,
+          "pullback_weeks": 1,
+          "start_index": 213,
+          "index": 214,
+          "lag": 0,
+          "episode_id": "O1697414400000_ZERO_CROSS_UP_EXPANSION",
+          "activation_at": "2023-10-23T00:00:00+00:00",
+          "confirmed_at": "2023-10-23T00:00:00+00:00",
+          "resolution_color": "GREEN",
+          "sequence": [
+            {
+              "open_time": 1696809600000,
+              "available_at": "2023-10-16T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -445.9682352941127,
+              "oscillator_slope": 156.70588235294417,
+              "volatility": 11.0,
+              "volatility_slope": 0.0
+            },
+            {
+              "open_time": 1697414400000,
+              "available_at": "2023-10-23T00:00:00+00:00",
+              "state": "ZERO_CROSS_UP_EXPANSION",
+              "sign": "ABOVE",
+              "color": "GREEN",
+              "oscillator": 14.12764705882364,
+              "oscillator_slope": 460.0958823529363,
+              "volatility": 26.0,
+              "volatility_slope": 15.0
+            }
+          ]
+        },
+        {
+          "kind": "REACCELERATION_UP",
+          "side": 1,
+          "activation_index": 292,
+          "pullback_weeks": 1,
+          "start_index": 291,
+          "index": 293,
+          "lag": 1,
+          "episode_id": "O1744588800000_REACCELERATION_UP",
+          "activation_at": "2025-04-21T00:00:00+00:00",
+          "confirmed_at": "2025-04-28T00:00:00+00:00",
+          "resolution_color": "GREEN",
+          "sequence": [
+            {
+              "open_time": 1743984000000,
+              "available_at": "2025-04-14T00:00:00+00:00",
+              "state": "PULLBACK_UP",
+              "sign": "ABOVE",
+              "color": "RED",
+              "oscillator": 127.07029411764233,
+              "oscillator_slope": -2003.6314705882396,
+              "volatility": 49.0,
+              "volatility_slope": -28.0
+            },
+            {
+              "open_time": 1744588800000,
+              "available_at": "2025-04-21T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "ABOVE",
+              "color": "GREEN",
+              "oscillator": 209.7182352941163,
+              "oscillator_slope": 82.64794117647398,
+              "volatility": 9.0,
+              "volatility_slope": -40.0
+            },
+            {
+              "open_time": 1745193600000,
+              "available_at": "2025-04-28T00:00:00+00:00",
+              "state": "IMPULSE_UP",
+              "sign": "ABOVE",
+              "color": "GREEN",
+              "oscillator": 563.404705882378,
+              "oscillator_slope": 353.6864705882617,
+              "volatility": 45.0,
+              "volatility_slope": 36.0
+            }
+          ]
+        },
+        {
+          "kind": "REACCELERATION_UP",
+          "side": 1,
+          "activation_index": 316,
+          "pullback_weeks": 1,
+          "start_index": 315,
+          "index": 316,
+          "lag": 0,
+          "episode_id": "O1759104000000_REACCELERATION_UP",
+          "activation_at": "2025-10-06T00:00:00+00:00",
+          "confirmed_at": "2025-10-06T00:00:00+00:00",
+          "resolution_color": "GREEN",
+          "sequence": [
+            {
+              "open_time": 1758499200000,
+              "available_at": "2025-09-29T00:00:00+00:00",
+              "state": "PULLBACK_UP",
+              "sign": "ABOVE",
+              "color": "RED",
+              "oscillator": 10435.080588235302,
+              "oscillator_slope": -722.4417647058581,
+              "volatility": 6.0,
+              "volatility_slope": -7.0
+            },
+            {
+              "open_time": 1759104000000,
+              "available_at": "2025-10-06T00:00:00+00:00",
+              "state": "REACCELERATION_UP",
+              "sign": "ABOVE",
+              "color": "GREEN",
+              "oscillator": 11438.680588235278,
+              "oscillator_slope": 1003.5999999999767,
+              "volatility": 30.0,
+              "volatility_slope": 24.0
+            }
+          ]
+        },
+        {
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "side": -1,
+          "activation_index": 323,
+          "pullback_weeks": 0,
+          "start_index": 322,
+          "index": 323,
+          "lag": 0,
+          "episode_id": "O1763337600000_ZERO_CROSS_DOWN_EXPANSION",
+          "activation_at": "2025-11-24T00:00:00+00:00",
+          "confirmed_at": "2025-11-24T00:00:00+00:00",
+          "resolution_color": "RED",
+          "sequence": [
+            {
+              "open_time": 1762732800000,
+              "available_at": "2025-11-17T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "ABOVE",
+              "color": "RED",
+              "oscillator": 1220.3323529411864,
+              "oscillator_slope": -3200.2470588235155,
+              "volatility": 81.0,
+              "volatility_slope": 35.0
+            },
+            {
+              "open_time": 1763337600000,
+              "available_at": "2025-11-24T00:00:00+00:00",
+              "state": "ZERO_CROSS_DOWN_EXPANSION",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -3150.1594117647182,
+              "oscillator_slope": -4370.491764705905,
+              "volatility": 86.0,
+              "volatility_slope": 5.0
+            }
+          ]
+        },
+        {
+          "kind": "REACCELERATION_DOWN",
+          "side": -1,
+          "activation_index": 351,
+          "pullback_weeks": 3,
+          "start_index": 348,
+          "index": 351,
+          "lag": 0,
+          "episode_id": "O1780272000000_REACCELERATION_DOWN",
+          "activation_at": "2026-06-08T00:00:00+00:00",
+          "confirmed_at": "2026-06-08T00:00:00+00:00",
+          "resolution_color": "RED",
+          "sequence": [
+            {
+              "open_time": 1778457600000,
+              "available_at": "2026-05-18T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -8867.739117647056,
+              "oscillator_slope": 2829.596764705886,
+              "volatility": 55.0,
+              "volatility_slope": -22.0
+            },
+            {
+              "open_time": 1779062400000,
+              "available_at": "2026-05-25T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -7459.24147058824,
+              "oscillator_slope": 1408.4976470588153,
+              "volatility": 41.0,
+              "volatility_slope": -14.0
+            },
+            {
+              "open_time": 1779667200000,
+              "available_at": "2026-06-01T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -6441.802058823538,
+              "oscillator_slope": 1017.4394117647025,
+              "volatility": 25.0,
+              "volatility_slope": -16.0
+            },
+            {
+              "open_time": 1780272000000,
+              "available_at": "2026-06-08T00:00:00+00:00",
+              "state": "REACCELERATION_DOWN",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -7168.2505882353,
+              "oscillator_slope": -726.4485294117621,
+              "volatility": 77.0,
+              "volatility_slope": 52.0
+            }
+          ]
+        },
+        {
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "side": 1,
+          "activation_index": 364,
+          "pullback_weeks": 0,
+          "start_index": 363,
+          "index": 364,
+          "lag": 0,
+          "episode_id": "O1788134400000_ZERO_CROSS_UP_EXPANSION",
+          "activation_at": "2026-09-07T00:00:00+00:00",
+          "confirmed_at": "2026-09-07T00:00:00+00:00",
+          "resolution_color": "GREEN",
+          "sequence": [
+            {
+              "open_time": 1787529600000,
+              "available_at": "2026-08-31T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -3345.5350000000035,
+              "oscillator_slope": 3055.75323529412,
+              "volatility": 82.0,
+              "volatility_slope": 11.0
+            },
+            {
+              "open_time": 1788134400000,
+              "available_at": "2026-09-07T00:00:00+00:00",
+              "state": "ZERO_CROSS_UP_EXPANSION",
+              "sign": "ABOVE",
+              "color": "GREEN",
+              "oscillator": 78.79911764706776,
+              "oscillator_slope": 3424.3341176470713,
+              "volatility": 90.0,
+              "volatility_slope": 8.0
+            }
+          ]
+        }
+      ],
+      "audit": [
+        {
+          "action": "ACTIVATED",
+          "index": 122,
+          "activation_index": 122,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 123,
+          "activation_index": 122,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "DELAYED_TURN_UP"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 130,
+          "activation_index": 130,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 131,
+          "activation_index": 130,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "DELAYED_TURN_UP"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 137,
+          "activation_index": 137,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 138,
+          "activation_index": 137,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "DELAYED_TURN_UP"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 157,
+          "activation_index": 157,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 157,
+          "activation_index": 157,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "IMMEDIATE_RISING"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 177,
+          "activation_index": 177,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "EXPIRED",
+          "index": 178,
+          "activation_index": 177,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "DEADLINE_WITHOUT_VOLATILITY_CONFIRMATION"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 197,
+          "activation_index": 197,
+          "kind": "REACCELERATION_UP",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 197,
+          "activation_index": 197,
+          "kind": "REACCELERATION_UP",
+          "reason": "IMMEDIATE_RISING"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 209,
+          "activation_index": 209,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "EXPIRED",
+          "index": 210,
+          "activation_index": 209,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "DEADLINE_WITHOUT_VOLATILITY_CONFIRMATION"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 214,
+          "activation_index": 214,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 214,
+          "activation_index": 214,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "IMMEDIATE_RISING"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 260,
+          "activation_index": 260,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "EXPIRED",
+          "index": 261,
+          "activation_index": 260,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "DEADLINE_WITHOUT_VOLATILITY_CONFIRMATION"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 267,
+          "activation_index": 267,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "EXPIRED",
+          "index": 268,
+          "activation_index": 267,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "DEADLINE_WITHOUT_VOLATILITY_CONFIRMATION"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 292,
+          "activation_index": 292,
+          "kind": "REACCELERATION_UP",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 293,
+          "activation_index": 292,
+          "kind": "REACCELERATION_UP",
+          "reason": "DELAYED_TURN_UP"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 316,
+          "activation_index": 316,
+          "kind": "REACCELERATION_UP",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 316,
+          "activation_index": 316,
+          "kind": "REACCELERATION_UP",
+          "reason": "IMMEDIATE_RISING"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 323,
+          "activation_index": 323,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 323,
+          "activation_index": 323,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "IMMEDIATE_RISING"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 351,
+          "activation_index": 351,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 351,
+          "activation_index": 351,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "IMMEDIATE_RISING"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 364,
+          "activation_index": 364,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 364,
+          "activation_index": 364,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "IMMEDIATE_RISING"
+        }
+      ],
+      "current": {
+        "available_at": "2026-10-19T00:00:00+00:00",
+        "state": "OTHER",
+        "pending": null,
+        "signal": false,
+        "note": "CURRENT OBSERVATION \u2014 NOT PART OF VALIDATION",
+        "large_move_watch": "NOT VALIDATED"
+      }
+    },
+    {
+      "name": "LAG_LE2",
+      "max_lag": 2,
+      "episode_count": 13,
+      "family_counts": {
+        "REACCELERATION_UP": 3,
+        "REACCELERATION_DOWN": 4,
+        "ZERO_CROSS_UP_EXPANSION": 3,
+        "ZERO_CROSS_DOWN_EXPANSION": 3
+      },
+      "actual_lag_counts": {
+        "0": 7,
+        "1": 4,
+        "2": 2
+      },
+      "new_resolutions": [
+        {
+          "confirmed_at": "2022-01-24T00:00:00+00:00",
+          "kind": "ZERO_CROSS_DOWN_EXPANSION"
+        },
+        {
+          "confirmed_at": "2022-03-21T00:00:00+00:00",
+          "kind": "REACCELERATION_DOWN"
+        },
+        {
+          "confirmed_at": "2022-05-09T00:00:00+00:00",
+          "kind": "REACCELERATION_DOWN"
+        },
+        {
+          "confirmed_at": "2024-09-23T00:00:00+00:00",
+          "kind": "ZERO_CROSS_DOWN_EXPANSION"
+        },
+        {
+          "confirmed_at": "2024-11-11T00:00:00+00:00",
+          "kind": "ZERO_CROSS_UP_EXPANSION"
+        },
+        {
+          "confirmed_at": "2025-04-28T00:00:00+00:00",
+          "kind": "REACCELERATION_UP"
+        }
+      ],
+      "absent_strict_resolutions": [],
+      "nonoverlap_count": 13,
+      "events": [
+        {
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "side": -1,
+          "activation_index": 122,
+          "pullback_weeks": 0,
+          "start_index": 121,
+          "index": 123,
+          "lag": 1,
+          "episode_id": "O1641772800000_ZERO_CROSS_DOWN_EXPANSION",
+          "activation_at": "2022-01-17T00:00:00+00:00",
+          "confirmed_at": "2022-01-24T00:00:00+00:00",
+          "resolution_color": "RED",
+          "sequence": [
+            {
+              "open_time": 1641168000000,
+              "available_at": "2022-01-10T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "ABOVE",
+              "color": "RED",
+              "oscillator": 1454.7699705882478,
+              "oscillator_slope": -980.4420588235225,
+              "volatility": 41.0,
+              "volatility_slope": 4.0
+            },
+            {
+              "open_time": 1641772800000,
+              "available_at": "2022-01-17T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -137.30408823529433,
+              "oscillator_slope": -1592.0740588235421,
+              "volatility": 28.0,
+              "volatility_slope": -13.0
+            },
+            {
+              "open_time": 1642377600000,
+              "available_at": "2022-01-24T00:00:00+00:00",
+              "state": "IMPULSE_DOWN",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -1995.0121470588274,
+              "oscillator_slope": -1857.708058823533,
+              "volatility": 53.0,
+              "volatility_slope": 25.0
+            }
+          ]
+        },
+        {
+          "kind": "REACCELERATION_DOWN",
+          "side": -1,
+          "activation_index": 130,
+          "pullback_weeks": 1,
+          "start_index": 129,
+          "index": 131,
+          "lag": 1,
+          "episode_id": "O1646611200000_REACCELERATION_DOWN",
+          "activation_at": "2022-03-14T00:00:00+00:00",
+          "confirmed_at": "2022-03-21T00:00:00+00:00",
+          "resolution_color": "RED",
+          "sequence": [
+            {
+              "open_time": 1646006400000,
+              "available_at": "2022-03-07T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -6669.038529411759,
+              "oscillator_slope": 875.6806176470709,
+              "volatility": 18.0,
+              "volatility_slope": -10.0
+            },
+            {
+              "open_time": 1646611200000,
+              "available_at": "2022-03-14T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -6784.354117647061,
+              "oscillator_slope": -115.31558823530213,
+              "volatility": 13.0,
+              "volatility_slope": -5.0
+            },
+            {
+              "open_time": 1647216000000,
+              "available_at": "2022-03-21T00:00:00+00:00",
+              "state": "IMPULSE_DOWN",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -7751.623235294122,
+              "oscillator_slope": -967.2691176470616,
+              "volatility": 14.0,
+              "volatility_slope": 1.0
+            }
+          ]
+        },
+        {
+          "kind": "REACCELERATION_DOWN",
+          "side": -1,
+          "activation_index": 137,
+          "pullback_weeks": 3,
+          "start_index": 134,
+          "index": 138,
+          "lag": 1,
+          "episode_id": "O1650844800000_REACCELERATION_DOWN",
+          "activation_at": "2022-05-02T00:00:00+00:00",
+          "confirmed_at": "2022-05-09T00:00:00+00:00",
+          "resolution_color": "RED",
+          "sequence": [
+            {
+              "open_time": 1649030400000,
+              "available_at": "2022-04-11T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -5053.780735294116,
+              "oscillator_slope": 656.4394117647098,
+              "volatility": 45.0,
+              "volatility_slope": -4.0
+            },
+            {
+              "open_time": 1649635200000,
+              "available_at": "2022-04-18T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -4698.347500000011,
+              "oscillator_slope": 355.43323529410554,
+              "volatility": 41.0,
+              "volatility_slope": -4.0
+            },
+            {
+              "open_time": 1650240000000,
+              "available_at": "2022-04-25T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -4324.866617647051,
+              "oscillator_slope": 373.4808823529602,
+              "volatility": 39.0,
+              "volatility_slope": -2.0
+            },
+            {
+              "open_time": 1650844800000,
+              "available_at": "2022-05-02T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -4958.287352941181,
+              "oscillator_slope": -633.4207352941303,
+              "volatility": 38.0,
+              "volatility_slope": -1.0
+            },
+            {
+              "open_time": 1651449600000,
+              "available_at": "2022-05-09T00:00:00+00:00",
+              "state": "IMPULSE_DOWN",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -6511.98294117648,
+              "oscillator_slope": -1553.6955882352995,
+              "volatility": 59.0,
+              "volatility_slope": 21.0
+            }
+          ]
+        },
+        {
+          "kind": "REACCELERATION_DOWN",
+          "side": -1,
+          "activation_index": 157,
+          "pullback_weeks": 1,
+          "start_index": 156,
+          "index": 157,
+          "lag": 0,
+          "episode_id": "O1662940800000_REACCELERATION_DOWN",
+          "activation_at": "2022-09-19T00:00:00+00:00",
+          "confirmed_at": "2022-09-19T00:00:00+00:00",
+          "resolution_color": "RED",
+          "sequence": [
+            {
+              "open_time": 1662336000000,
+              "available_at": "2022-09-12T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -10194.546617647058,
+              "oscillator_slope": 77.8588235294119,
+              "volatility": 30.0,
+              "volatility_slope": -1.0
+            },
+            {
+              "open_time": 1662940800000,
+              "available_at": "2022-09-19T00:00:00+00:00",
+              "state": "REACCELERATION_DOWN",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -10227.802499999998,
+              "oscillator_slope": -33.25588235293981,
+              "volatility": 36.0,
+              "volatility_slope": 6.0
+            }
+          ]
+        },
+        {
+          "kind": "REACCELERATION_UP",
+          "side": 1,
+          "activation_index": 197,
+          "pullback_weeks": 1,
+          "start_index": 196,
+          "index": 197,
+          "lag": 0,
+          "episode_id": "O1687132800000_REACCELERATION_UP",
+          "activation_at": "2023-06-26T00:00:00+00:00",
+          "confirmed_at": "2023-06-26T00:00:00+00:00",
+          "resolution_color": "GREEN",
+          "sequence": [
+            {
+              "open_time": 1686528000000,
+              "available_at": "2023-06-19T00:00:00+00:00",
+              "state": "PULLBACK_UP",
+              "sign": "ABOVE",
+              "color": "RED",
+              "oscillator": 3805.2423529411753,
+              "oscillator_slope": -466.4864705882392,
+              "volatility": 7.0,
+              "volatility_slope": -4.0
+            },
+            {
+              "open_time": 1687132800000,
+              "available_at": "2023-06-26T00:00:00+00:00",
+              "state": "REACCELERATION_UP",
+              "sign": "ABOVE",
+              "color": "GREEN",
+              "oscillator": 3923.373529411765,
+              "oscillator_slope": 118.13117647058971,
+              "volatility": 23.0,
+              "volatility_slope": 16.0
+            }
+          ]
+        },
+        {
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "side": 1,
+          "activation_index": 214,
+          "pullback_weeks": 1,
+          "start_index": 213,
+          "index": 214,
+          "lag": 0,
+          "episode_id": "O1697414400000_ZERO_CROSS_UP_EXPANSION",
+          "activation_at": "2023-10-23T00:00:00+00:00",
+          "confirmed_at": "2023-10-23T00:00:00+00:00",
+          "resolution_color": "GREEN",
+          "sequence": [
+            {
+              "open_time": 1696809600000,
+              "available_at": "2023-10-16T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -445.9682352941127,
+              "oscillator_slope": 156.70588235294417,
+              "volatility": 11.0,
+              "volatility_slope": 0.0
+            },
+            {
+              "open_time": 1697414400000,
+              "available_at": "2023-10-23T00:00:00+00:00",
+              "state": "ZERO_CROSS_UP_EXPANSION",
+              "sign": "ABOVE",
+              "color": "GREEN",
+              "oscillator": 14.12764705882364,
+              "oscillator_slope": 460.0958823529363,
+              "volatility": 26.0,
+              "volatility_slope": 15.0
+            }
+          ]
+        },
+        {
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "side": -1,
+          "activation_index": 260,
+          "pullback_weeks": 0,
+          "start_index": 259,
+          "index": 262,
+          "lag": 2,
+          "episode_id": "O1725235200000_ZERO_CROSS_DOWN_EXPANSION",
+          "activation_at": "2024-09-09T00:00:00+00:00",
+          "confirmed_at": "2024-09-23T00:00:00+00:00",
+          "resolution_color": "RED",
+          "sequence": [
+            {
+              "open_time": 1724630400000,
+              "available_at": "2024-09-02T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "ABOVE",
+              "color": "RED",
+              "oscillator": 22.079117647073872,
+              "oscillator_slope": -1645.01588235292,
+              "volatility": 66.0,
+              "volatility_slope": 8.0
+            },
+            {
+              "open_time": 1725235200000,
+              "available_at": "2024-09-09T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -1782.048235294118,
+              "oscillator_slope": -1804.127352941192,
+              "volatility": 63.0,
+              "volatility_slope": -3.0
+            },
+            {
+              "open_time": 1725840000000,
+              "available_at": "2024-09-16T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -1888.947647058827,
+              "oscillator_slope": -106.89941176470893,
+              "volatility": 36.0,
+              "volatility_slope": -27.0
+            },
+            {
+              "open_time": 1726444800000,
+              "available_at": "2024-09-23T00:00:00+00:00",
+              "state": "IMPULSE_DOWN",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -2103.576470588232,
+              "oscillator_slope": -214.62882352940505,
+              "volatility": 47.0,
+              "volatility_slope": 11.0
+            }
+          ]
+        },
+        {
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "side": 1,
+          "activation_index": 267,
+          "pullback_weeks": 0,
+          "start_index": 266,
+          "index": 269,
+          "lag": 2,
+          "episode_id": "O1729468800000_ZERO_CROSS_UP_EXPANSION",
+          "activation_at": "2024-10-28T00:00:00+00:00",
+          "confirmed_at": "2024-11-11T00:00:00+00:00",
+          "resolution_color": "GREEN",
+          "sequence": [
+            {
+              "open_time": 1728864000000,
+              "available_at": "2024-10-21T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -237.2300000000032,
+              "oscillator_slope": 1253.8535294117537,
+              "volatility": 58.0,
+              "volatility_slope": 11.0
+            },
+            {
+              "open_time": 1729468800000,
+              "available_at": "2024-10-28T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "ABOVE",
+              "color": "GREEN",
+              "oscillator": 796.5676470588296,
+              "oscillator_slope": 1033.7976470588328,
+              "volatility": 39.0,
+              "volatility_slope": -19.0
+            },
+            {
+              "open_time": 1730073600000,
+              "available_at": "2024-11-04T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "ABOVE",
+              "color": "GREEN",
+              "oscillator": 1837.2611764705798,
+              "oscillator_slope": 1040.6935294117502,
+              "volatility": 28.0,
+              "volatility_slope": -11.0
+            },
+            {
+              "open_time": 1730678400000,
+              "available_at": "2024-11-11T00:00:00+00:00",
+              "state": "IMPULSE_UP",
+              "sign": "ABOVE",
+              "color": "GREEN",
+              "oscillator": 3999.7935294117706,
+              "oscillator_slope": 2162.5323529411908,
+              "volatility": 73.0,
+              "volatility_slope": 45.0
+            }
+          ]
+        },
+        {
+          "kind": "REACCELERATION_UP",
+          "side": 1,
+          "activation_index": 292,
+          "pullback_weeks": 1,
+          "start_index": 291,
+          "index": 293,
+          "lag": 1,
+          "episode_id": "O1744588800000_REACCELERATION_UP",
+          "activation_at": "2025-04-21T00:00:00+00:00",
+          "confirmed_at": "2025-04-28T00:00:00+00:00",
+          "resolution_color": "GREEN",
+          "sequence": [
+            {
+              "open_time": 1743984000000,
+              "available_at": "2025-04-14T00:00:00+00:00",
+              "state": "PULLBACK_UP",
+              "sign": "ABOVE",
+              "color": "RED",
+              "oscillator": 127.07029411764233,
+              "oscillator_slope": -2003.6314705882396,
+              "volatility": 49.0,
+              "volatility_slope": -28.0
+            },
+            {
+              "open_time": 1744588800000,
+              "available_at": "2025-04-21T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "ABOVE",
+              "color": "GREEN",
+              "oscillator": 209.7182352941163,
+              "oscillator_slope": 82.64794117647398,
+              "volatility": 9.0,
+              "volatility_slope": -40.0
+            },
+            {
+              "open_time": 1745193600000,
+              "available_at": "2025-04-28T00:00:00+00:00",
+              "state": "IMPULSE_UP",
+              "sign": "ABOVE",
+              "color": "GREEN",
+              "oscillator": 563.404705882378,
+              "oscillator_slope": 353.6864705882617,
+              "volatility": 45.0,
+              "volatility_slope": 36.0
+            }
+          ]
+        },
+        {
+          "kind": "REACCELERATION_UP",
+          "side": 1,
+          "activation_index": 316,
+          "pullback_weeks": 1,
+          "start_index": 315,
+          "index": 316,
+          "lag": 0,
+          "episode_id": "O1759104000000_REACCELERATION_UP",
+          "activation_at": "2025-10-06T00:00:00+00:00",
+          "confirmed_at": "2025-10-06T00:00:00+00:00",
+          "resolution_color": "GREEN",
+          "sequence": [
+            {
+              "open_time": 1758499200000,
+              "available_at": "2025-09-29T00:00:00+00:00",
+              "state": "PULLBACK_UP",
+              "sign": "ABOVE",
+              "color": "RED",
+              "oscillator": 10435.080588235302,
+              "oscillator_slope": -722.4417647058581,
+              "volatility": 6.0,
+              "volatility_slope": -7.0
+            },
+            {
+              "open_time": 1759104000000,
+              "available_at": "2025-10-06T00:00:00+00:00",
+              "state": "REACCELERATION_UP",
+              "sign": "ABOVE",
+              "color": "GREEN",
+              "oscillator": 11438.680588235278,
+              "oscillator_slope": 1003.5999999999767,
+              "volatility": 30.0,
+              "volatility_slope": 24.0
+            }
+          ]
+        },
+        {
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "side": -1,
+          "activation_index": 323,
+          "pullback_weeks": 0,
+          "start_index": 322,
+          "index": 323,
+          "lag": 0,
+          "episode_id": "O1763337600000_ZERO_CROSS_DOWN_EXPANSION",
+          "activation_at": "2025-11-24T00:00:00+00:00",
+          "confirmed_at": "2025-11-24T00:00:00+00:00",
+          "resolution_color": "RED",
+          "sequence": [
+            {
+              "open_time": 1762732800000,
+              "available_at": "2025-11-17T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "ABOVE",
+              "color": "RED",
+              "oscillator": 1220.3323529411864,
+              "oscillator_slope": -3200.2470588235155,
+              "volatility": 81.0,
+              "volatility_slope": 35.0
+            },
+            {
+              "open_time": 1763337600000,
+              "available_at": "2025-11-24T00:00:00+00:00",
+              "state": "ZERO_CROSS_DOWN_EXPANSION",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -3150.1594117647182,
+              "oscillator_slope": -4370.491764705905,
+              "volatility": 86.0,
+              "volatility_slope": 5.0
+            }
+          ]
+        },
+        {
+          "kind": "REACCELERATION_DOWN",
+          "side": -1,
+          "activation_index": 351,
+          "pullback_weeks": 3,
+          "start_index": 348,
+          "index": 351,
+          "lag": 0,
+          "episode_id": "O1780272000000_REACCELERATION_DOWN",
+          "activation_at": "2026-06-08T00:00:00+00:00",
+          "confirmed_at": "2026-06-08T00:00:00+00:00",
+          "resolution_color": "RED",
+          "sequence": [
+            {
+              "open_time": 1778457600000,
+              "available_at": "2026-05-18T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -8867.739117647056,
+              "oscillator_slope": 2829.596764705886,
+              "volatility": 55.0,
+              "volatility_slope": -22.0
+            },
+            {
+              "open_time": 1779062400000,
+              "available_at": "2026-05-25T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -7459.24147058824,
+              "oscillator_slope": 1408.4976470588153,
+              "volatility": 41.0,
+              "volatility_slope": -14.0
+            },
+            {
+              "open_time": 1779667200000,
+              "available_at": "2026-06-01T00:00:00+00:00",
+              "state": "PULLBACK_DOWN",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -6441.802058823538,
+              "oscillator_slope": 1017.4394117647025,
+              "volatility": 25.0,
+              "volatility_slope": -16.0
+            },
+            {
+              "open_time": 1780272000000,
+              "available_at": "2026-06-08T00:00:00+00:00",
+              "state": "REACCELERATION_DOWN",
+              "sign": "BELOW",
+              "color": "RED",
+              "oscillator": -7168.2505882353,
+              "oscillator_slope": -726.4485294117621,
+              "volatility": 77.0,
+              "volatility_slope": 52.0
+            }
+          ]
+        },
+        {
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "side": 1,
+          "activation_index": 364,
+          "pullback_weeks": 0,
+          "start_index": 363,
+          "index": 364,
+          "lag": 0,
+          "episode_id": "O1788134400000_ZERO_CROSS_UP_EXPANSION",
+          "activation_at": "2026-09-07T00:00:00+00:00",
+          "confirmed_at": "2026-09-07T00:00:00+00:00",
+          "resolution_color": "GREEN",
+          "sequence": [
+            {
+              "open_time": 1787529600000,
+              "available_at": "2026-08-31T00:00:00+00:00",
+              "state": "OTHER",
+              "sign": "BELOW",
+              "color": "GREEN",
+              "oscillator": -3345.5350000000035,
+              "oscillator_slope": 3055.75323529412,
+              "volatility": 82.0,
+              "volatility_slope": 11.0
+            },
+            {
+              "open_time": 1788134400000,
+              "available_at": "2026-09-07T00:00:00+00:00",
+              "state": "ZERO_CROSS_UP_EXPANSION",
+              "sign": "ABOVE",
+              "color": "GREEN",
+              "oscillator": 78.79911764706776,
+              "oscillator_slope": 3424.3341176470713,
+              "volatility": 90.0,
+              "volatility_slope": 8.0
+            }
+          ]
+        }
+      ],
+      "audit": [
+        {
+          "action": "ACTIVATED",
+          "index": 122,
+          "activation_index": 122,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 123,
+          "activation_index": 122,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "DELAYED_TURN_UP"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 130,
+          "activation_index": 130,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 131,
+          "activation_index": 130,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "DELAYED_TURN_UP"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 137,
+          "activation_index": 137,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 138,
+          "activation_index": 137,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "DELAYED_TURN_UP"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 157,
+          "activation_index": 157,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 157,
+          "activation_index": 157,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "IMMEDIATE_RISING"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 177,
+          "activation_index": 177,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "EXPIRED",
+          "index": 179,
+          "activation_index": 177,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "DEADLINE_WITHOUT_VOLATILITY_CONFIRMATION"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 197,
+          "activation_index": 197,
+          "kind": "REACCELERATION_UP",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 197,
+          "activation_index": 197,
+          "kind": "REACCELERATION_UP",
+          "reason": "IMMEDIATE_RISING"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 209,
+          "activation_index": 209,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "EXPIRED",
+          "index": 211,
+          "activation_index": 209,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "DEADLINE_WITHOUT_VOLATILITY_CONFIRMATION"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 214,
+          "activation_index": 214,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 214,
+          "activation_index": 214,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "IMMEDIATE_RISING"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 260,
+          "activation_index": 260,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 262,
+          "activation_index": 260,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "DELAYED_TURN_UP"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 267,
+          "activation_index": 267,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 269,
+          "activation_index": 267,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "DELAYED_TURN_UP"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 292,
+          "activation_index": 292,
+          "kind": "REACCELERATION_UP",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 293,
+          "activation_index": 292,
+          "kind": "REACCELERATION_UP",
+          "reason": "DELAYED_TURN_UP"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 316,
+          "activation_index": 316,
+          "kind": "REACCELERATION_UP",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 316,
+          "activation_index": 316,
+          "kind": "REACCELERATION_UP",
+          "reason": "IMMEDIATE_RISING"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 323,
+          "activation_index": 323,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 323,
+          "activation_index": 323,
+          "kind": "ZERO_CROSS_DOWN_EXPANSION",
+          "reason": "IMMEDIATE_RISING"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 351,
+          "activation_index": 351,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 351,
+          "activation_index": 351,
+          "kind": "REACCELERATION_DOWN",
+          "reason": "IMMEDIATE_RISING"
+        },
+        {
+          "action": "ACTIVATED",
+          "index": 364,
+          "activation_index": 364,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "OSCILLATOR_CHANGE_OBSERVED"
+        },
+        {
+          "action": "CONFIRMED",
+          "index": 364,
+          "activation_index": 364,
+          "kind": "ZERO_CROSS_UP_EXPANSION",
+          "reason": "IMMEDIATE_RISING"
+        }
+      ],
+      "current": {
+        "available_at": "2026-10-19T00:00:00+00:00",
+        "state": "OTHER",
+        "pending": null,
+        "signal": false,
+        "note": "CURRENT OBSERVATION \u2014 NOT PART OF VALIDATION",
+        "large_move_watch": "NOT VALIDATED"
+      }
+    }
+  ],
+  "cutoff": 1792368000000,
+  "data_reused": true,
+  "source_reported_by_owner": true,
+  "agent_direct_transcript_access": false,
+  "bootstrap": {
+    "replicates": 2000,
+    "block": 8,
+    "root_seed": 20261020,
+    "seed_by_horizon": {
+      "1": 20261021,
+      "2": 20261022,
+      "3": 20261023,
+      "4": 20261024
+    }
+  },
+  "protocol_sha256": "62cdb8f5047ac6df4eac8370b8c2fc8038d455b3bb53599cdb494d1e66eb1fa2"
+}

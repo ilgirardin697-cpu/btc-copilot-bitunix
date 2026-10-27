@@ -1,0 +1,48 @@
+{
+  "primary_video": "https://www.youtube.com/watch?v=v8d3OxE1-_c",
+  "title_verified_from_public_player": "CUANDO SALDRÁ de ese RANGO BITCOIN..??? 👉ANÁLISIS TÉCNICO de BTC solo para ADULTOS👈",
+  "public_watch_http_status": 200,
+  "public_oembed_http_status": 200,
+  "public_player_playability": "OK",
+  "caption_languages_advertised": ["ar", "es", "en", "pt"],
+  "spanish_track_request_http_status": 200,
+  "spanish_track_response_bytes": 0,
+  "plain_timedtext_http_status": 200,
+  "plain_timedtext_response_bytes": 0,
+  "independent_transcript_recovered": true,
+  "independent_transcript_review_status": "INDEPENDENT TRANSCRIPT REVIEWED EXTERNALLY AFTER PREDECLARED ANALYSIS",
+  "transcript_recovery_scope": "EXTERNAL REVIEW ONLY — owner reported on 2026-10-21",
+  "agent_direct_transcript_access": false,
+  "transcript_stored_in_repository": false,
+  "part_of_predeclared_protocol": false,
+  "predeclared_audit_state": {
+    "independent_transcript_recovered": false,
+    "reviewed_head": "06b58f013137f3af10619eafccb8f5a6dcc3ce4c",
+    "note": "Accurate for the original local audit; superseded only by the later owner-attested external review. Original numerical analysis is unchanged."
+  },
+  "independent_visual_chart_dates_verified": false,
+  "source_rule_basis": "Owner reports that a subsequently recovered independent transcript confirms the weekly verbal logic. Agent has not directly inspected that transcript; supplied paraphrases only, no invented quotes.",
+  "external_review_confirmed_paraphrases": [
+    "Relationship specifically concerns WEEKLY oscillator plus volatility.",
+    "ADX is set aside for this explanation; volatility may help anticipate an ADX turn.",
+    "Above zero: GREEN plus rising volatility is impulse context; RED plus falling volatility is correction.",
+    "Below zero: RED plus rising volatility is bearish impulse context; GREEN plus falling volatility is correction.",
+    "After corrective weeks, impulse color can return without crossing zero and volatility can recover; alternatively zero can be crossed before expansion in the new direction.",
+    "Approximately one to two weeks can separate oscillator change and volatility recovery; this motivates only the post-hoc lag sensitivity."
+  ],
+  "review_limit": "Verbal alignment assessment only; not private formula/settings parity, statistical validation or a virgin holdout.",
+  "modified_volatility_claim_basis": "Owner-attested external transcript review; exact formula/settings remain unknown and are not inferred.",
+  "existing_cached_transcript_video_ids": ["tDnUVybgL20", "GtRimUXhMG4", "H-oPU2snPJQ", "chmnhyuJUic"],
+  "existing_cache_is_target_video": false,
+  "new_vidiq_credits_used": 0,
+  "oscillator_label": "OSCILLATOR_PROXY",
+  "volatility_label": "BITMAN_VOLATILITY_PROXY",
+  "oscillator_parity": "EXACT BITMAN OSCILLATOR PARITY: NOT PROVEN",
+  "volatility_parity": "EXACT BITMAN VOLATILITY PARITY: NOT PROVEN",
+  "post_hoc_visual_consistency_check": "NOT ASSESSABLE: chart dates/visible parameters unavailable; retrospective dataset episodes are not asserted to be the video's examples.",
+  "proxy_mismatch_demonstrated": false,
+  "technical_sources": [
+    "https://developers.binance.com/en/docs/products/derivatives-trading-usds-futures/market-data/rest-api/Kline-Candlestick-Data",
+    "https://github.com/binance/binance-public-data"
+  ]
+}

@@ -1,0 +1,515 @@
+{
+  "venue": "BINANCE_USDM_PERPETUAL",
+  "symbol": "BTCUSDT",
+  "source": "https://fapi.binance.com/fapi/v1/klines",
+  "historical_not_forward_observed": true,
+  "acquired_at": "2026-10-20T10:28:43.290321+00:00",
+  "cutoff": 1792368000000,
+  "first_4h_open": 1567958400000,
+  "last_4h_close": 1792367999999,
+  "rows_4h": 15584,
+  "first_week_open": 1567987200000,
+  "last_week_close": 1792367999999,
+  "weeks": 371,
+  "excluded_weeks": [
+    {
+      "open_time": 1567382400000,
+      "bars": 2,
+      "reason": "INCOMPLETE_WEEK"
+    }
+  ],
+  "weekly_rest_comparison": {
+    "rows": 371,
+    "differences": [
+      {
+        "open_time": 1569196800000,
+        "field": "open",
+        "reference": "8061.98",
+        "actual": "10027.69",
+        "delta": "1965.71"
+      },
+      {
+        "open_time": 1569196800000,
+        "field": "base_volume",
+        "reference": "279795.272",
+        "actual": "299768.962",
+        "delta": "19973.690"
+      },
+      {
+        "open_time": 1569196800000,
+        "field": "taker_buy_base_volume",
+        "reference": "142526.02999999997",
+        "actual": "152711.649",
+        "delta": "10185.61900000003"
+      },
+      {
+        "open_time": 1613952000000,
+        "field": "base_volume",
+        "reference": "2979807.695",
+        "actual": "2979812.103",
+        "delta": "4.408"
+      },
+      {
+        "open_time": 1613952000000,
+        "field": "taker_buy_base_volume",
+        "reference": "1462213.054",
+        "actual": "1462213.518",
+        "delta": "0.464"
+      },
+      {
+        "open_time": 1691971200000,
+        "field": "base_volume",
+        "reference": "2492540.998",
+        "actual": "2501060.833",
+        "delta": "8519.835"
+      },
+      {
+        "open_time": 1691971200000,
+        "field": "taker_buy_base_volume",
+        "reference": "1195390.551",
+        "actual": "1199671.763",
+        "delta": "4281.212"
+      },
+      {
+        "open_time": 1693785600000,
+        "field": "base_volume",
+        "reference": "1346665.121",
+        "actual": "1348412.364",
+        "delta": "1747.243"
+      },
+      {
+        "open_time": 1693785600000,
+        "field": "taker_buy_base_volume",
+        "reference": "671783.399",
+        "actual": "672613.004",
+        "delta": "829.605"
+      },
+      {
+        "open_time": 1699228800000,
+        "field": "base_volume",
+        "reference": "2236913.772",
+        "actual": "2224860.477",
+        "delta": "-12053.295"
+      },
+      {
+        "open_time": 1699228800000,
+        "field": "taker_buy_base_volume",
+        "reference": "1120434.656",
+        "actual": "1114426.765",
+        "delta": "-6007.891"
+      }
+    ]
+  },
+  "vision_comparisons": [
+    {
+      "month": "2019-09",
+      "status": "NOT_AVAILABLE"
+    },
+    {
+      "month": "2020-03",
+      "status": "COMPARED",
+      "rows": 186,
+      "checksum_verified": true,
+      "differences": []
+    },
+    {
+      "month": "2021-11",
+      "status": "COMPARED",
+      "rows": 180,
+      "checksum_verified": true,
+      "differences": []
+    },
+    {
+      "month": "2022-11",
+      "status": "COMPARED",
+      "rows": 180,
+      "checksum_verified": true,
+      "differences": []
+    },
+    {
+      "month": "2023-06",
+      "status": "COMPARED",
+      "rows": 180,
+      "checksum_verified": true,
+      "differences": []
+    },
+    {
+      "month": "2024-03",
+      "status": "COMPARED",
+      "rows": 186,
+      "checksum_verified": true,
+      "differences": [
+        {
+          "open_time": 1711540800000,
+          "field": "base_volume",
+          "reference": "202602.158",
+          "actual": "203073.372",
+          "delta": "471.214"
+        },
+        {
+          "open_time": 1711540800000,
+          "field": "taker_buy_base_volume",
+          "reference": "99382.392",
+          "actual": "99614.973",
+          "delta": "232.581"
+        },
+        {
+          "open_time": 1711612800000,
+          "field": "base_volume",
+          "reference": "42713.479",
+          "actual": "42941.799",
+          "delta": "228.320"
+        },
+        {
+          "open_time": 1711612800000,
+          "field": "taker_buy_base_volume",
+          "reference": "20933.661",
+          "actual": "21113.585",
+          "delta": "179.924"
+        },
+        {
+          "open_time": 1711627200000,
+          "field": "base_volume",
+          "reference": "78369.544",
+          "actual": "78369.627",
+          "delta": "0.083"
+        },
+        {
+          "open_time": 1711627200000,
+          "field": "taker_buy_base_volume",
+          "reference": "40093.098",
+          "actual": "40093.103",
+          "delta": "0.005"
+        }
+      ]
+    },
+    {
+      "month": "2025-01",
+      "status": "COMPARED",
+      "rows": 186,
+      "checksum_verified": true,
+      "differences": [
+        {
+          "open_time": 1736856000000,
+          "field": "base_volume",
+          "reference": "59887.331",
+          "actual": "57290.835",
+          "delta": "-2596.496"
+        },
+        {
+          "open_time": 1736856000000,
+          "field": "taker_buy_base_volume",
+          "reference": "29963.170",
+          "actual": "28728.111",
+          "delta": "-1235.059"
+        }
+      ]
+    },
+    {
+      "month": "2026-09",
+      "status": "COMPARED",
+      "rows": 180,
+      "checksum_verified": true,
+      "differences": []
+    }
+  ],
+  "requests": [
+    {
+      "url": "https://fapi.binance.com/fapi/v1/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "4h",
+        "startTime": 0,
+        "endTime": 1792367999999,
+        "limit": 1500
+      },
+      "http_status": 200,
+      "size": 206876,
+      "sha256": "b2a4f11078244e08c5bf2569bd8c29d1b91096d3057b3ccb87f3ebc442e0a040",
+      "file": "4h-0.json"
+    },
+    {
+      "url": "https://fapi.binance.com/fapi/v1/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "4h",
+        "startTime": 1589558400000,
+        "endTime": 1792367999999,
+        "limit": 1500
+      },
+      "http_status": 200,
+      "size": 215222,
+      "sha256": "bdafa73c1c056285ed08cd7253f3a3be902b459f25040715276aa018034a0d3c",
+      "file": "4h-1500.json"
+    },
+    {
+      "url": "https://fapi.binance.com/fapi/v1/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "4h",
+        "startTime": 1611158400000,
+        "endTime": 1792367999999,
+        "limit": 1500
+      },
+      "http_status": 200,
+      "size": 220656,
+      "sha256": "db2e7793b4ca1320052acbb815f8a49fa1e20273a9682408d0ff5bb739e58e1c",
+      "file": "4h-3000.json"
+    },
+    {
+      "url": "https://fapi.binance.com/fapi/v1/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "4h",
+        "startTime": 1632758400000,
+        "endTime": 1792367999999,
+        "limit": 1500
+      },
+      "http_status": 200,
+      "size": 219801,
+      "sha256": "806f64468e86b45b92ef6317168ec7a1e555fab765c8e12ee3d1ac048f865d63",
+      "file": "4h-4500.json"
+    },
+    {
+      "url": "https://fapi.binance.com/fapi/v1/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "4h",
+        "startTime": 1654358400000,
+        "endTime": 1792367999999,
+        "limit": 1500
+      },
+      "http_status": 200,
+      "size": 219897,
+      "sha256": "bcaad0052c28e31f263113b7e61b9f63156b7a5a26cf937f372e9836a63e601b",
+      "file": "4h-6000.json"
+    },
+    {
+      "url": "https://fapi.binance.com/fapi/v1/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "4h",
+        "startTime": 1675958400000,
+        "endTime": 1792367999999,
+        "limit": 1500
+      },
+      "http_status": 200,
+      "size": 218857,
+      "sha256": "11f40b34256f007b0c6c4cb836cfd16444908ece734d6bd07eefa1aa48b35ea6",
+      "file": "4h-7500.json"
+    },
+    {
+      "url": "https://fapi.binance.com/fapi/v1/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "4h",
+        "startTime": 1697558400000,
+        "endTime": 1792367999999,
+        "limit": 1500
+      },
+      "http_status": 200,
+      "size": 218208,
+      "sha256": "da9566ee2a47403556419316ed5a154dd100247539f5040397086a3378df020f",
+      "file": "4h-9000.json"
+    },
+    {
+      "url": "https://fapi.binance.com/fapi/v1/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "4h",
+        "startTime": 1719158400000,
+        "endTime": 1792367999999,
+        "limit": 1500
+      },
+      "http_status": 200,
+      "size": 220166,
+      "sha256": "d786f61f90cfee17345e24908211a9280b1a001e18d57157cf88880feb5f5348",
+      "file": "4h-10500.json"
+    },
+    {
+      "url": "https://fapi.binance.com/fapi/v1/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "4h",
+        "startTime": 1740758400000,
+        "endTime": 1792367999999,
+        "limit": 1500
+      },
+      "http_status": 200,
+      "size": 223204,
+      "sha256": "7ca605914095a84ab8e1eb0cb5202b233bcd68be449acdde78edaa1ddb860170",
+      "file": "4h-12000.json"
+    },
+    {
+      "url": "https://fapi.binance.com/fapi/v1/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "4h",
+        "startTime": 1762358400000,
+        "endTime": 1792367999999,
+        "limit": 1500
+      },
+      "http_status": 200,
+      "size": 218813,
+      "sha256": "03bb9fa4c425108a8a2e0d518312cb1f436d12c163cf6b7c2786df695a6d3057",
+      "file": "4h-13500.json"
+    },
+    {
+      "url": "https://fapi.binance.com/fapi/v1/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "4h",
+        "startTime": 1783958400000,
+        "endTime": 1792367999999,
+        "limit": 1500
+      },
+      "http_status": 200,
+      "size": 84769,
+      "sha256": "c990c2658ca8aa964fa7c15f4ce33e69c45a6dda301582e629949d1dd93b4fd8",
+      "file": "4h-15000.json"
+    },
+    {
+      "url": "https://fapi.binance.com/fapi/v1/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "1w",
+        "startTime": 0,
+        "endTime": 1792367999999,
+        "limit": 1500
+      },
+      "http_status": 200,
+      "size": 57236,
+      "sha256": "5202af1b5a7937b37b85f10e29285cf6bfe7093944d6b074b894685cbb17150c",
+      "file": "1w-0.json"
+    },
+    {
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/4h/BTCUSDT-4h-2019-09.zip",
+      "params": null,
+      "http_status": 404,
+      "size": 335,
+      "sha256": "226849e32f278ff22f249478cccb07e16bc6f6bcdd7876a4e02b75710f91898d",
+      "file": "BTCUSDT-4h-2019-09.zip"
+    },
+    {
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/4h/BTCUSDT-4h-2020-03.zip",
+      "params": null,
+      "http_status": 200,
+      "size": 10420,
+      "sha256": "78ee62b77557cac23f765653a901e5f12a01231e96f1f31cff84d1771465ec46",
+      "file": "BTCUSDT-4h-2020-03.zip"
+    },
+    {
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/4h/BTCUSDT-4h-2020-03.zip.CHECKSUM",
+      "params": null,
+      "http_status": 200,
+      "size": 89,
+      "sha256": "a44da91065626a4a56fe9cdda7c3cf88089f75170417741434aa9ea7a745b195",
+      "file": "BTCUSDT-4h-2020-03.zip.CHECKSUM"
+    },
+    {
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/4h/BTCUSDT-4h-2021-11.zip",
+      "params": null,
+      "http_status": 200,
+      "size": 10480,
+      "sha256": "06ff7fbaf5edf3d77e9a070bca341e2a7781d9e30bb199051d1442df1a79fc0b",
+      "file": "BTCUSDT-4h-2021-11.zip"
+    },
+    {
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/4h/BTCUSDT-4h-2021-11.zip.CHECKSUM",
+      "params": null,
+      "http_status": 200,
+      "size": 89,
+      "sha256": "76e08a75997de3610efc65d394e4077650cea70f2e6af6dff5aa3d16ca534c57",
+      "file": "BTCUSDT-4h-2021-11.zip.CHECKSUM"
+    },
+    {
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/4h/BTCUSDT-4h-2022-11.zip",
+      "params": null,
+      "http_status": 200,
+      "size": 10155,
+      "sha256": "155d3052a60386e20f8dda75bbf814098c0174f7f9e59c2b1022aacd563d5dc6",
+      "file": "BTCUSDT-4h-2022-11.zip"
+    },
+    {
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/4h/BTCUSDT-4h-2022-11.zip.CHECKSUM",
+      "params": null,
+      "http_status": 200,
+      "size": 89,
+      "sha256": "1bb637a7146410062537da280fcc1e2a0bb525529a42c2012bde5d883176b255",
+      "file": "BTCUSDT-4h-2022-11.zip.CHECKSUM"
+    },
+    {
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/4h/BTCUSDT-4h-2023-06.zip",
+      "params": null,
+      "http_status": 200,
+      "size": 10269,
+      "sha256": "9620b1bae1d2964a3365d70df0c6dcb7322efeaa8336fb91c456a446b02e7ec0",
+      "file": "BTCUSDT-4h-2023-06.zip"
+    },
+    {
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/4h/BTCUSDT-4h-2023-06.zip.CHECKSUM",
+      "params": null,
+      "http_status": 200,
+      "size": 89,
+      "sha256": "7401f461444954aa90553be0c62d63349c7661e5152e3d81b342e5552688c740",
+      "file": "BTCUSDT-4h-2023-06.zip.CHECKSUM"
+    },
+    {
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/4h/BTCUSDT-4h-2024-03.zip",
+      "params": null,
+      "http_status": 200,
+      "size": 10812,
+      "sha256": "2979a6fe55b2fff6c6c5a851d6f047110f1f304ff884b1cc3dd750aff851f2cc",
+      "file": "BTCUSDT-4h-2024-03.zip"
+    },
+    {
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/4h/BTCUSDT-4h-2024-03.zip.CHECKSUM",
+      "params": null,
+      "http_status": 200,
+      "size": 89,
+      "sha256": "bf6ed65c8ff33c641874685f0be339d6530a65d73f0155e5bb212346fe929bef",
+      "file": "BTCUSDT-4h-2024-03.zip.CHECKSUM"
+    },
+    {
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/4h/BTCUSDT-4h-2025-01.zip",
+      "params": null,
+      "http_status": 200,
+      "size": 10695,
+      "sha256": "083b54f2b4d9aeece598eaa98a90ee7a6338492dac9703243ff76e3ca2855d1e",
+      "file": "BTCUSDT-4h-2025-01.zip"
+    },
+    {
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/4h/BTCUSDT-4h-2025-01.zip.CHECKSUM",
+      "params": null,
+      "http_status": 200,
+      "size": 89,
+      "sha256": "d1ebb878e5983a267ea0d7231ca20385d2d8b8a42a1aa80e6487081d2561073e",
+      "file": "BTCUSDT-4h-2025-01.zip.CHECKSUM"
+    },
+    {
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/4h/BTCUSDT-4h-2026-09.zip",
+      "params": null,
+      "http_status": 200,
+      "size": 10146,
+      "sha256": "0c34fc07983af9550f4e630c30aac040b288fea22e0572ed06fb44b114cb52e4",
+      "file": "BTCUSDT-4h-2026-09.zip"
+    },
+    {
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/4h/BTCUSDT-4h-2026-09.zip.CHECKSUM",
+      "params": null,
+      "http_status": 200,
+      "size": 89,
+      "sha256": "1e97d2f38edd938b6e6a318a7e1b10b9d235c9877e58a0e4e372a83198e70cfc",
+      "file": "BTCUSDT-4h-2026-09.zip.CHECKSUM"
+    }
+  ],
+  "protocol_sha256": "5513195a7b1cdc99ee5f8502f9f2da9b342f79f378d581f28956e2b4d19cf954",
+  "four_hour.json": {
+    "rows": 15584,
+    "sha256": "ea8954f95f15f67eff041e506fc9e0539d5adb7422632b5f7d8246e88704e050"
+  },
+  "weekly.json": {
+    "rows": 371,
+    "sha256": "8278c1f44c250c7073c0bb912533a335325cd7109a2a10af59227f2d68a811bc"
+  }
+}
