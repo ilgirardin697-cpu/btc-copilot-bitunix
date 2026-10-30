@@ -88,5 +88,10 @@
     "tests/fixtures/weekly_forward_reference.py": "66d13a5b331bbfa44c6ef06ea615a34a12e2d8d4a5458f86c4eee3dc182ac4ab",
     "trade_guardian.py": "cb57a7e7f9ed12ac99f0bfeb107117ec79415e5902f40834c3ef88ecf02d2323",
     "trend_v8.py": "e5e26f93bca7c6c15cef2d98165c38e8806cc67762840b619ab0f5308af5bf31"
+  },
+  "reference_blobs_sha256_lf": {
+    "bitman_weekly_forward/protocol_v1.json": "2be9d6710668b8ec4deddb6e6b32ad4bd59d37addefdd840a493205d4b9fa09a",
+    "bitman_manual/readiness.py": "f2d29add2867b73d0c27a25cd8c39528bdf6cba44dc8a9d8837bfd3cd76076ba",
+    "tests/fixtures/weekly_forward_protocol.sha256": "59d38efb4784ff52b680f4e6d58488457d8efa8107b81c2452d37388130bd41c"
   }
 }

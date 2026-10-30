@@ -10,7 +10,13 @@ from unittest.mock import Mock, patch
 from urllib.request import urlopen
 from urllib.error import HTTPError
 
-import numpy as np
+try:
+    import numpy as np
+    import requests
+except ImportError as error:
+    # The original V8 job intentionally runs without third-party packages.
+    # This suite is mandatory in its dedicated dependency-installed workflow.
+    raise unittest.SkipTest('Paper integration requires numpy/requests; covered by I-GOD isolated paper simulation') from error
 
 from igod_paper.engine import Engine, STEP, MAX_HOLD_BARS
 from igod_paper.journal import Journal, JournalError

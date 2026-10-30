@@ -71,11 +71,10 @@ class IsolationTests(unittest.TestCase):
 
     def test_protocol_V1_and_readiness_golden_are_untouched(self):
         # Existing suites assert the frozen V1 hash and all 900 original states.
-        manifest = json.loads((ROOT / 'igod_paper/protected_sources.json').read_text())['sha256_lf']
+        manifest = json.loads((ROOT / 'igod_paper/protected_sources.json').read_text())['reference_blobs_sha256_lf']
         for name in ('bitman_weekly_forward/protocol_v1.json', 'bitman_manual/readiness.py',
                      'tests/fixtures/weekly_forward_protocol.sha256'):
-            original = subprocess.check_output(['git', 'show', 'fc211d8e36c6db55185efa8309eb8f980beab2ea:' + name], cwd=ROOT)
-            self.assertEqual((ROOT / name).read_bytes().replace(b'\r\n', b'\n'), original.replace(b'\r\n', b'\n'))
+            self.assertEqual(hashlib.sha256((ROOT / name).read_bytes().replace(b'\r\n', b'\n')).hexdigest(), manifest[name])
 
 
 if __name__ == '__main__':
