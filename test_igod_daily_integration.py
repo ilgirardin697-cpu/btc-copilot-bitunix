@@ -33,6 +33,111 @@ def plan(now=ASOF, bias='WAIT'):
                 source='BINANCE_USDM_PERPETUAL',entries=[],targets=[],risk=None)
 
 
+class PlanAgeRegressionTests(unittest.TestCase):
+    """Software fixtures, not independent market or TradingView evidence."""
+    def setUp(self):
+        indicators=dict(closed_at=plan()['asof_utc'],ao=10,ao_previous=9,
+                        adx=22,adx_previous=21,plus_di=30,minus_di=10,
+                        bbwp_previous=20,bbwp=25)
+        self.value=dict(plan(),indicators={'weekly':indicators,'daily':indicators},
+                        structural_levels={'supports':[{'price':100}],
+                                           'resistances':[{'price':120}]},
+                        reference_closed_at_utc=plan(ASOF-60_000)['asof_utc'])
+
+    def assert_fresh(self, elapsed_ms, minutes):
+        for mode in ('full','summary','levels'):
+            with self.subTest(mode=mode):
+                text=render(self.value,mode,ASOF+elapsed_ms)
+                self.assertNotIn('desactualizado',text)
+                self.assertIn(f'cálculo hace {minutes} min',text)
+                self.assertIn('BINANCE_USDM_PERPETUAL',text)
+                self.assertTrue(text.endswith(FOOTER))
+                if mode=='full':
+                    for label in ('AO 10.00','ADX 22.00','+DI 30.00','BBWP proxy'):
+                        self.assertIn(label,text)
+                if mode!='summary':
+                    self.assertIn('SOPORTES: 100.00',text)
+                    self.assertIn('RESISTENCIAS: 120.00',text)
+
+    def test_plan_30_seconds_old_is_fresh_and_displays_zero_minutes(self):
+        self.assert_fresh(30_000,0)
+
+    def test_plan_one_minute_old_is_fresh(self):
+        self.assert_fresh(60_000,1)
+
+    def test_plan_19_minutes_old_is_fresh(self):
+        self.assert_fresh(19*60_000,19)
+
+    def test_plan_21_minutes_old_is_stale_and_hides_prices(self):
+        for mode in ('full','summary','levels'):
+            with self.subTest(mode=mode):
+                text=render(self.value,mode,ASOF+21*60_000)
+                self.assertIn('Plan desactualizado',text)
+                self.assertIn('ESPERAR',text)
+                for field in ('AO 10.00','100.00','120.00'):
+                    self.assertNotIn(field,text)
+                self.assertTrue(text.endswith(FOOTER))
+
+    def test_reference_candle_age_is_also_in_minutes(self):
+        text=render(self.value,now_ms=ASOF+60_000)
+        self.assertIn('· hace 2 min',text)
+
+    def test_future_plan_still_fails_closed(self):
+        self.assertIn('Plan desactualizado',render(self.value,now_ms=ASOF-1))
+
+    def test_unavailable_hides_even_injected_indicators_and_levels(self):
+        for mode in ('full','summary','levels'):
+            text=render(dict(self.value,bias='UNKNOWN'),mode,ASOF+30_000)
+            self.assertIn('ESPERAR',text)
+            for field in ('AO 10.00','100.00','120.00'):
+                self.assertNotIn(field,text)
+
+    def test_all_four_commands_with_realistic_calculation_latency(self):
+        with tempfile.TemporaryDirectory() as directory:
+            clock=[ASOF]
+            def calculate(now):
+                clock[0]+=30_000  # Fetch/compute takes time after asof is recorded.
+                return dict(self.value,asof_utc=plan(now)['asof_utc'])
+            p=Planner(directory,clock=lambda:clock[0]/1000,calculator=calculate)
+            try:
+                for identifier,command in enumerate(('/diario','/resumen','/niveles','/alertas'),1):
+                    response=p.command(command,identifier)
+                    self.assertTrue(response['deliver'])
+                    self.assertNotIn('desactualizado',response['text'])
+                    if command=='/alertas':
+                        self.assertIn('AVISOS DEL PLAN DIARIO',response['text'])
+                    else:
+                        self.assertIn('cálculo hace 0 min',response['text'])
+                self.assertFalse(p.command('/diario',1)['deliver'])
+            finally:
+                p.state.close()
+
+    def test_cache_uses_15_minutes_not_15_seconds(self):
+        with tempfile.TemporaryDirectory() as directory:
+            clock=[ASOF]
+            calculator=Mock(side_effect=lambda now:plan(now))
+            p=Planner(directory,clock=lambda:clock[0]/1000,calculator=calculator)
+            try:
+                p.plan()
+                clock[0]=ASOF+15*60_000-1
+                p.plan()
+                self.assertEqual(calculator.call_count,1)
+                clock[0]+=1
+                p.plan()
+                self.assertEqual(calculator.call_count,2)
+            finally:
+                p.state.close()
+
+    def test_silence_duration_is_stored_in_milliseconds(self):
+        with tempfile.TemporaryDirectory() as directory:
+            state=State(directory,ASOF)
+            try:
+                state.settings('/silencio 2',ASOF)
+                self.assertEqual(state.get('preferences')['silent_until'],ASOF+120_000)
+            finally:
+                state.close()
+
+
 class StateTests(unittest.TestCase):
     def setUp(self):
         self.tmp=tempfile.TemporaryDirectory()
