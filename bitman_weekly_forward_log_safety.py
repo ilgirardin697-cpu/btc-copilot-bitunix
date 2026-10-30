@@ -1,8 +1,14 @@
 """CI only: restore the exact external logging imports before old V1 guards."""
-from bitman_weekly_forward.safety import ADDITIONS,normalize_source as original_normalize
+from bitman_weekly_forward.safety import ADDITIONS as ORIGINAL_ADDITIONS,normalize_source as original_normalize
+from daily_plan_safety import FRAGMENTS,normalize_router
+
+ADDITIONS = dict(ORIGINAL_ADDITIONS)
+ADDITIONS['guardian_commands.py'] = tuple(FRAGMENTS)
 
 
 def normalize_source(path,source):
+    if path=='guardian_commands.py':
+        return normalize_router(source)
     if path=='trade_guardian.py':
         new='                from bitman_weekly_forward_logging import after_cycle\n'
         old='                from bitman_weekly_forward.host import after_cycle\n'

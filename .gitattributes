@@ -1,0 +1,3 @@
+# Owner-supplied formula and source provenance retain their original bytes.
+igod_daily_plan/core.py -text
+igod_daily_plan/vendor/* -text

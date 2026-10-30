@@ -1,0 +1,9 @@
+[
+  "from daily_plan_guardian import COMMANDS as DAILY_COMMANDS, HELP as DAILY_HELP\n",
+  "        self._daily = None\n",
+  "            if command in DAILY_COMMANDS:\n                return self._request_daily(text, update.get('update_id'))\n",
+  "            self._start_daily()\n",
+  "        if self._daily is not None:\n            self._daily.stop()\n",
+  "\nCOMMANDS += DAILY_COMMANDS\nHELP += '\\n' + DAILY_HELP\n\n",
+  "    def _start_daily(self):\n        try:\n            if self._daily is None:\n                from daily_plan_guardian import DailyPlanBridge\n                self._daily = DailyPlanBridge(self._reply)\n            self._daily.start()\n        except Exception:\n            pass\n\n    def _request_daily(self, text, identifier):\n        self._start_daily()\n        try:\n            return self._daily.request(text, identifier)\n        except Exception:\n            from daily_plan_guardian import UNAVAILABLE\n            return bool(self._reply(UNAVAILABLE))\n\n"
+]

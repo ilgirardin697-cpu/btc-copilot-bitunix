@@ -19,6 +19,8 @@ def remove(body, source):
 
 
 def strip_commands(tree):
+    from daily_plan_safety import strip_router
+    tree = strip_router(tree)
     remove(tree.body, 'from bitman_manual.render import unavailable as bitman_unavailable')
     commands = next(n for n in tree.body if isinstance(n, ast.Assign) and n.targets[0].id == 'COMMANDS')
     assert commands.value.elts[-1].value == '/bitman'

@@ -390,12 +390,13 @@ class CommandIntegrationTests(unittest.TestCase):
         self.assertNotIn('RSI: Wilder 27', self.reply.call_args.args[0])
 
     def test_help_preserves_all_previous_text_and_commands(self):
+        from daily_plan_guardian import COMMANDS as DAILY_COMMANDS, HELP as DAILY_HELP
         from bitman_manual.safety import HELP_LINE as BITMAN_HELP_LINE
         old_help = next(n for n in ast.parse(baseline('guardian_commands.py')).body
                         if isinstance(n, ast.Assign) and n.targets[0].id == 'HELP').value.value
         self.assertEqual(HELP.count(BITMAN_HELP_LINE), 1)
-        self.assertEqual(HELP.replace(BITMAN_HELP_LINE, '').replace(HELP_LINE, ''), old_help)
-        self.assertEqual(COMMANDS, ('/status', '/why', '/position', '/risk', '/levels', '/stats', '/help', '/mlrsi', '/bitman'))
+        self.assertEqual(HELP.replace('\n' + DAILY_HELP, '').replace(BITMAN_HELP_LINE, '').replace(HELP_LINE, ''), old_help)
+        self.assertEqual(COMMANDS, ('/status', '/why', '/position', '/risk', '/levels', '/stats', '/help', '/mlrsi', '/bitman') + DAILY_COMMANDS)
         self.commands.process(self.update('/help'))
         self.assertEqual(self.reply.call_args.args[0], HELP)
         self.assertNotIn('/mlrsi_help', HELP)

@@ -349,6 +349,13 @@ class SafetyTests(unittest.TestCase):
         for name in paths:
             with self.subTest(path=name):
                 data = (ROOT / name).read_bytes().replace(b'\r\n', b'\n')
+                if name == 'guardian_commands.py':
+                    from daily_plan_safety import normalize_router
+                    data = normalize_router(data.decode('utf-8')).encode('utf-8')
+                elif name == 'bitman_manual/safety.py':
+                    extension = '    from daily_plan_safety import strip_router\n    tree = strip_router(tree)\n'
+                    self.assertEqual(data.count(extension.encode()), 1)
+                    data = data.replace(extension.encode(), b'', 1)
                 if name in ('trade_guardian.py', 'bitman_manual/host.py', 'mlrsi_safety_audit.py'):
                     from bitman_weekly_forward_log_safety import normalize_source
                     data = normalize_source(name, data.decode('utf-8')).encode('utf-8')
