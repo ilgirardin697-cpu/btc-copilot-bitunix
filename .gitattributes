@@ -1,0 +1,2 @@
+# Preserve owner-supplied originals byte for byte on every checkout/platform.
+igod_paper/vendor/* -text
