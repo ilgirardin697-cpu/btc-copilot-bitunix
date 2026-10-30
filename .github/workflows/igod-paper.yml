@@ -1,0 +1,29 @@
+name: I-GOD isolated paper simulation
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  paper:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install existing dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Compile standalone simulation
+        run: python -m compileall -q igod_paper test_igod_paper.py test_igod_paper_safety.py test_igod_paper_vendor.py
+      - name: Timing, costs, persistence, recovery, original V0 and isolation
+        run: python -m unittest test_igod_paper test_igod_paper_vendor test_igod_paper_safety -v
+      - name: Guardian, ML RSI, V8 and immutable weekly protocol
+        run: |
+          python mlrsi_safety_audit.py
+          python test_bitman_weekly_boundary.py --require-v8 -v
+          python test_bitman_readiness_boundary.py --require-v8 -v
+      - name: Entire regression suite, including the unchanged 900-state matrix
+        run: python -m unittest discover -v
+      - name: Patch whitespace
+        run: git diff --check HEAD^ HEAD
