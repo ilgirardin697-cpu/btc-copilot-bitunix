@@ -9,6 +9,7 @@ import requests
 from guardian_telegram import _price, _number, render_risk, direction_label, position_relationship
 from copilot_audit import render_stats
 from bitman_manual.render import unavailable as bitman_unavailable
+from daily_plan_guardian import COMMANDS as DAILY_COMMANDS, HELP as DAILY_HELP
 
 COMMANDS = ('/status', '/why', '/position', '/risk', '/levels', '/stats', '/help', '/mlrsi', '/bitman')
 NO_DATA = '⚫❓ SIN DATOS SUFICIENTES — NO OPERAR'
@@ -21,6 +22,10 @@ HELP = ('🤖 I-GOD MANUAL COPILOT\n\n/status\n→ resumen de qué ve ahora\n\n'
         '/bitman\n→ contexto direccional BTC, manual y SHADOW ONLY\n\n'
         '/stats [30d|90d|all]\n→ resultados posteriores de señales, no de tu cuenta\n\n/help\n→ ayuda\n\n'
         '🔒 Estos comandos son solo consulta.\nNunca abren ni cierran operaciones.')
+
+
+COMMANDS += DAILY_COMMANDS
+HELP += '\n' + DAILY_HELP
 
 
 class SnapshotCache:
@@ -319,6 +324,24 @@ class TelegramCommands:
         self._stats_cache = stats_cache
         self._mlrsi_status = mlrsi_status  # read-only text cache callback; no observer/client
         self._bitman = None  # created only after an authorized manual /bitman
+        self._daily = None
+
+    def _start_daily(self):
+        try:
+            if self._daily is None:
+                from daily_plan_guardian import DailyPlanBridge
+                self._daily = DailyPlanBridge(self._reply)
+            self._daily.start()
+        except Exception:
+            pass
+
+    def _request_daily(self, text, identifier):
+        self._start_daily()
+        try:
+            return self._daily.request(text, identifier)
+        except Exception:
+            from daily_plan_guardian import UNAVAILABLE
+            return bool(self._reply(UNAVAILABLE))
 
     def _request_bitman(self):
         try:
@@ -351,6 +374,8 @@ class TelegramCommands:
             return False
         command = text.split(maxsplit=1)[0].split('@')[0]
         try:
+            if command in DAILY_COMMANDS:
+                return self._request_daily(text, update.get('update_id'))
             if command == '/bitman':
                 return self._request_bitman()
             if command == '/mlrsi':
@@ -401,6 +426,7 @@ class TelegramCommands:
         try:
             self._worker = threading.Thread(target=self._run, daemon=True, name='guardian-readonly-commands')
             self._worker.start()
+            self._start_daily()
             return True
         except Exception:
             self._worker = None
@@ -408,6 +434,8 @@ class TelegramCommands:
 
     def stop(self):
         self._stop.set()
+        if self._daily is not None:
+            self._daily.stop()
         if self._bitman is not None:
             try:
                 self._bitman.stop()

@@ -43,7 +43,8 @@ class CommandTests(unittest.TestCase):
         self.assertEqual(os.getenv('GUARDIAN_ENABLE_COMMANDS', 'false'), 'false')
 
     def test_owner_enabled_and_exact_command_set(self):
-        self.assertEqual(COMMANDS, ('/status', '/why', '/position', '/risk', '/levels', '/stats', '/help', '/mlrsi', '/bitman'))
+        from daily_plan_guardian import COMMANDS as DAILY_COMMANDS
+        self.assertEqual(COMMANDS, ('/status', '/why', '/position', '/risk', '/levels', '/stats', '/help', '/mlrsi', '/bitman') + DAILY_COMMANDS)
         self.assertTrue(self.commands.process(self.update()))
         self.assertIn('Actualizado hace:', self.reply.call_args.args[0])
 
