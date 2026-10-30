@@ -13,7 +13,7 @@ def render(plan, mode='full', now_ms=None):
     if not plan or plan.get('bias') == 'UNKNOWN':
         return '📊 I-GOD | PLAN DIARIO BTCUSDT\n🟡 ESPERAR\n⚠️ Datos fiables no disponibles; sin entradas ni niveles verificados.' + FOOTER
     stamp = datetime.fromisoformat(plan['asof_utc']).timestamp() * 1000
-    age = max(0, int((now_ms - stamp) / 60))
+    age = max(0, int((now_ms - stamp) / 60_000))
     if now_ms < stamp or age > 20:
         return '📊 I-GOD | PLAN DIARIO BTCUSDT\n🟡 ESPERAR\n⚠️ Plan desactualizado; vuelve a consultar /diario.' + FOOTER
     bias = plan['bias']
