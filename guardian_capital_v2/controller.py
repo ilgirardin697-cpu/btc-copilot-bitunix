@@ -57,7 +57,7 @@ class Controller:
         if total is not None and total!=len(data):raise ValueError('CAPITAL_POSITION_LIST_INCOMPLETE')
         parsed=parse_positions(data)
         if parsed is None:return None
-        row=dict(data[0]);row['_observed_ms']=int(self.clock()*1000)
+        row=dict(data[0]);row['side']=parsed.side;row['_observed_ms']=int(self.clock()*1000)
         if row['positionMode']!='ONE_WAY':raise ValueError('CAPITAL_HEDGE_UNSUPPORTED_NO_GUESSED_SIDE')
         return row
 

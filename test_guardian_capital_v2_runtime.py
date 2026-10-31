@@ -100,6 +100,19 @@ class RuntimeTests(unittest.TestCase):
         self.j.append('OWN:'+identifier,'STOP_OWNED',dict(order_id=identifier,position_id='123'))
     def test_healthy_structure_keeps_position(self):
         self.assertEqual(self.c.step()['status'],'RESIDUAL_PROTECTED');self.assertFalse(self.client.mutations)
+    def test_real_bitunix_buy_sell_position_aliases_use_audited_normalization(self):
+        for api_side,expected in (('BUY','LONG'),('SELL','SHORT'),('LONG','LONG'),('SHORT','SHORT')):
+            self.client.p['side']=api_side
+            self.assertEqual(self.c.position()['side'],expected)
+    def test_raw_buy_position_can_only_propose_sell_and_raw_sell_only_buy(self):
+        for api_side,liq,close_side in (('BUY','99','SELL'),('SELL','101','BUY')):
+            self.client.p.update(side=api_side,liqPrice=liq)
+            with patch.object(self.c,'act',return_value={'status':'SHADOW_PROPOSAL'}) as action:
+                self.c.step()
+                body=action.call_args.args[2]
+                self.assertEqual(body['side'],close_side)
+                self.assertIs(body['reduceOnly'],True)
+                self.assertEqual(body['qty'],'1')
     def test_price_oscillations_alone_never_trim(self):
         for value in ('99.8','100.1','99.9'):
             self.client.mark=value;self.c.step()
