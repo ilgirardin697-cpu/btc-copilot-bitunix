@@ -26,8 +26,8 @@ class Stop:
                     and self.active and positive(self.qty) and positive(self.price)
                     and self.qty == snapshot.qty and self.trigger == 'MARK_PRICE'
                     and self.order_type == 'MARKET' and (
-                        snapshot.liquidation < self.price < snapshot.mark if snapshot.side == 'LONG'
-                        else snapshot.mark < self.price < snapshot.liquidation))
+                        (snapshot.liquidation<=ZERO or snapshot.liquidation<self.price) and self.price<snapshot.mark if snapshot.side=='LONG'
+                        else snapshot.mark<self.price and (snapshot.liquidation<=ZERO or self.price<snapshot.liquidation)))
 
 
 @dataclass(frozen=True)
@@ -48,7 +48,7 @@ class Snapshot:
     def fresh(self, now_ms, max_age_ms):
         return (self.source == 'BITUNIX_GET' and self.side in ('LONG', 'SHORT')
                 and isinstance(self.qty, D) and self.qty.is_finite() and self.qty >= ZERO
-                and positive(self.mark) and (positive(self.liquidation) if self.qty>ZERO else self.liquidation==ZERO)
+                and positive(self.mark) and isinstance(self.liquidation,D) and self.liquidation.is_finite()
                 and isinstance(self.equity, D) and self.equity.is_finite()
                 and isinstance(self.margin, D) and self.margin.is_finite() and self.margin >= ZERO
                 and type(self.observed_ms) is int and 0 <= now_ms-self.observed_ms <= max_age_ms)
@@ -129,16 +129,16 @@ def decide(snapshot, policy, progress, evidence, now_ms):
     if not snapshot.fresh(now_ms,policy.max_snapshot_age_ms):
         return Decision('DATA_UNAVAILABLE',reason='NO_ACTION_WITHOUT_FRESH_EXCHANGE_STATE')
     if snapshot.position_id != policy.position_id or snapshot.side != policy.side:
-        return Decision('SUSPENDED',reason='POSITION_CHANGED_NEW_AUTHORIZATION_REQUIRED')
+        return Decision('SUSPENDED',reason='POSITION_CHANGED_AUTOMATIC_CAMPAIGN_RECONCILIATION_REQUIRED')
     if snapshot.qty == ZERO:
         return Decision('EXPOSURE_CLOSED')
     # Quantity changes are adopted from a fresh GET under global authorization.
     # The caller must recompute aggregate loss, equity and coverage; no budget reset.
     absolute_distance=(snapshot.mark-snapshot.liquidation if snapshot.side=='LONG'
                        else snapshot.liquidation-snapshot.mark)
-    near=absolute_distance/snapshot.mark <= policy.minimum_liquidation_distance
+    near=snapshot.liquidation>ZERO and absolute_distance/snapshot.mark <= policy.minimum_liquidation_distance
     if policy.minimum_liquidation_atr is not None and positive(snapshot.atr_1h):
-        near=near or absolute_distance/snapshot.atr_1h <= policy.minimum_liquidation_atr
+        near=near or (snapshot.liquidation>ZERO and absolute_distance/snapshot.atr_1h <= policy.minimum_liquidation_atr)
     if near or (policy.account_equity_floor is not None and snapshot.equity<=policy.account_equity_floor):
         return Decision('PROPOSE_CLOSE_REMAINING',snapshot.qty,'CAPITAL_OVERRIDES_STRUCTURE',3)
     loss=snapshot.total_loss_usdt

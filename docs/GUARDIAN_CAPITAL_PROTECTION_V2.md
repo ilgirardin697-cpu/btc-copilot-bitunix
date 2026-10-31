@@ -31,8 +31,8 @@ level. No future pivots, AO tuning, new directional signals or readiness changes
 Capital overrides (NOT ordinary floating-loss percentage trim triggers):
 
 * Lock actual account reference equity at first adoption; never silently reset it.
-* Campaign aggregate loss limit: **1% of locked reference equity**.
-* Account safety floor: **95% of locked reference equity**.
+* Individual campaign loss limit: **1% of its locked admissible equity**.
+* Independent global account floor: **95% of the original global reference equity**.
 * Final liquidation guard: actual reported distance <= **2% of mark** OR **2 current
   causal 1H ATR**. A rebound hypothesis never overrides this guard.
 * Cost reserve: published base taker fee **0.06%** plus assumed **0.05% slippage**
@@ -41,25 +41,88 @@ Capital overrides (NOT ordinary floating-loss percentage trim triggers):
 
 Equity is read as available + frozen + position margin + cross unrealized PnL +
 isolated unrealized PnL, requiring bonus=0. This is current equity, not an invented
-pre-trade wallet balance. Cumulative loss uses actual fill realized PnL, actual
-fill fees, signed position funding and current unrealized PnL. It deliberately
-does not add position.realizedPNL again: the observed position response already
-includes fees/funding there. Closed positions remain in the same campaign ledger.
-New deposits, new position IDs or manual additions do not reset the budget.
-Profits offset losses within that same net campaign accounting.
+pre-trade wallet balance. Campaign accounting uses actual fill gross realized PnL,
+actual fill fees and signed funding, each once. It never adds position.realizedPNL
+again: observed responses can include fees/funding there. Signed floating profits
+are preserved through the stop projection, rather than clamped to zero first.
 
-For structural risk sizing let L=current cumulative net loss, Q=current quantity,
-P=mark, S=verified SL, c=fee+slippage reserve, B=locked limit and d=abs(P-S).
-Projected loss is L+Q*(d+c*S). If it exceeds B, proposed close quantity is
-ceil_to_step((projected-B)/(d+c*(S-P))), bounded by Q and exchange minimum size.
-If no valid sizing/protection interval exists, the proposal is a full close.
+For structural risk sizing let K=gross realized PnL - paid fees + signed funding,
+Q=current quantity, E=average entry, P=mark, S=verified SL, c=fee+slippage reserve
+and d=+1 for LONG / -1 for SHORT. Net result at stop is:
+
+`N = K + d*Q*(S-E) - Q*S*c`
+
+Do not clamp K or mark-to-market PnL before this sum. A profitable stop can satisfy
+the loss cap even after a substantial return of floating profit. Independently,
+the projected global equity after the stop must remain above the global floor.
+For an excess projected loss, close quantity is
+`ceil_to_step((-N-effective_loss_ceiling)/(abs(P-S)+c*(S-P)))`, bounded by Q and
+exchange minimum size. The effective ceiling combines the individual limit and
+global headroom; it can require retaining profit without creating a negative
+individual budget. If no valid sizing/protection interval exists, close the rest.
 This is a capital exception; structural stage reductions remain independent.
+
+## Automatic campaigns; permanent global history
+
+No manual campaign request or per-entry/per-trim confirmation exists. A new manual
+BTCUSDT position is observed automatically. The preceding position must have
+balanced entry/exit fills and closed-position history before any new allocation.
+Its final accounting is appended as CAMPAIGN_CLOSE. A changed exchange summary
+causes fresh fill reconciliation and a CAMPAIGN_ADJUSTMENT; old records are never
+edited and revisions are not summed twice. Stable closed summaries are checked
+on each cycle; bounded pagination or incoherent fees/fills fail closed.
+
+CAMPAIGN_REFERENCE freezes that operation's 1% cap. CAMPAIGN_ALLOCATED is appended
+once only after a native stop is verified and projected individual/global risk
+fits. An unprotected/oversized manual position can receive a protective SL or
+reduce-only correction before allocation; this never authorizes its opening.
+Same-position additions keep the same campaign/reference and all realized costs.
+A genuinely new position gets its own campaign while prior losses remain global.
+Exchange ID reuse, unexplained side changes or incomplete closing evidence do not
+generate a new budget.
+
+The global reference and floor are never reset by a campaign, process restart or
+deposit. Define wallet = available + frozen + margin. At first activation save
+wallet_anchor, global equity reference and the canonical settled-PnL anchor.
+
+`protected_wallet = wallet_anchor + total_verified_settled_PnL - settled_anchor`
+
+`admissible_equity = min(actual_equity, protected_wallet + account_unrealized_PnL)`
+
+Thus an external deposit cannot lift the accounting-backed capital or forgive
+trading losses. Withdrawals/insufficient actual collateral can reduce admissible
+equity. Verified profits or accounting corrections can restore trading-loss capacity
+under the same original floor; unverified wallet inflows cannot replenish consumed
+trading-loss capacity. Restoring withdrawn cash can remove a collateral shortfall
+only when the unchanged accounting-backed capacity was not exhausted. New operation caps
+use admissible equity and are additionally constrained by global stop-risk room.
+When global capacity is exhausted, new allocations stop; any manual exposure is
+handled only by the already approved protective reductions/closure. No counters
+are reset to admit it. This controls BTCUSDT; untracked other-asset settlements
+are not assumed to be verified trading credits.
+
+Initial positive-liquidation emergencies retain priority: capture the account
+reference without waiting for indicators/history, close under existing guards,
+then reconcile the initial settled-PnL anchor from timestamped fills and the
+captured fee/funding snapshot. Old floating loss is not counted twice. If the
+initial reference cannot be verified, later deposits/restarts cannot invent it.
+Existing older-policy journals require explicit review; a new code/policy hash
+never silently migrates, erases or re-bases an existing ledger.
+
+## Documented absence of liquidation price
+
+Bitunix documents finite `liqPrice <= 0` as low risk with no current liquidation
+price. It skips only the liquidation-distance guards. Individual/global monetary
+limits, verified native SL, structure and all other protection checks still apply.
+Null, missing, non-finite or malformed fields remain invalid. Positive prices keep
+the exact existing **2% / 2 ATR** critical guards, including the fresh preflight.
+Both native-SL creation and readback use this distinction, symmetrically by side.
 
 ## Manual additions and retaining a residual
 
 Each cycle reads current position ID, size, average entry, margin mode and actual
 liquidation. An addition is adopted under the global approval, without a new
-per-addition question, while preserving reference equity and accumulated costs.
+per-addition question, while preserving its campaign reference and accumulated costs.
 Coverage and aggregate risk are recomputed. The controller never adds exposure.
 After every protective fill it queries actual trades, remaining size, average,
 account equity, margin, **exchange-reported liquidation** and pending SL again.
@@ -81,8 +144,10 @@ Do not open a manual position without exchange protection while waiting for a po
 
 Storage: `/data/guardian/capital_protection_v2.jsonl`, private, append-only.
 Schema 1 records contain ID, kind, observation time, payload, previous hash and hash.
-Types include ACTIVATION, BASELINE, POSITION, STRUCTURE, INTENT, ACK, STOP_OWNED,
-STOP_FAILED and RECONCILED. Writes flush/fsync before any exchange POST.
+Types include ACTIVATION, BASELINE (global), GLOBAL_ANCHOR, CAMPAIGN_OBSERVED,
+CAMPAIGN_REFERENCE, CAMPAIGN_ACCOUNTING, CAMPAIGN_ALLOCATED, CAMPAIGN_CLOSE,
+CAMPAIGN_ADJUSTMENT, POSITION, STRUCTURE, INTENT, ACK, STOP_OWNED, STOP_FAILED and
+RECONCILED. Writes flush/fsync before any exchange POST.
 Hash-chain replay rejects changed, reordered or truncated history. It is an
 integrity check, not cryptographic authentication against an attacker rewriting
 the whole file. No silent truncation, repair or budget reset is implemented.

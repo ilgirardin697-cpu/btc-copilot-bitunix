@@ -12,15 +12,15 @@ from guardian_signals import closed_bars,confirmed_structure,atr14
 from .client import (POSITIONS,TPSL,TRADES,HISTORY_POSITIONS,ACCOUNT,TICKER,PAIRS,KLINES,
                      REDUCE,PLACE_STOP,MODIFY_STOP,PLACE_POSITION_STOP,MODIFY_POSITION_STOP,DETAIL,rows,Rejected)
 from .global_policy import POLICY_HASH,PROPOSAL
+from .accounting import number,projected_net,stop_interval,critical_liquidation,settle
+from .campaigns import CampaignBook,digest
 
 D=Decimal
 ZERO=D('0')
 
 
 def num(value):
-    result=D(str(value))
-    if not result.is_finite():raise ValueError('CAPITAL_NONFINITE')
-    return result
+    return number(value)
 
 
 def identity(*parts):
@@ -30,6 +30,7 @@ def identity(*parts):
 class Controller:
     def __init__(self,client,journal,*,notify=lambda text:None,clock=time.time):
         self.client,self.journal,self.notify,self.clock=client,journal,notify,clock
+        self.book=CampaignBook(journal)
         self.status='STARTING';self._last_notice=None
         activation=journal.latest('ACTIVATION')
         if activation and activation['policy_hash']!=POLICY_HASH:raise ValueError('CAPITAL_POLICY_CHANGED_NO_SILENT_RESET')
@@ -55,6 +56,7 @@ class Controller:
     def position(self):
         data,total=rows(self.client.get(POSITIONS,{'symbol':'BTCUSDT','includeSubAccounts':'false'}),'positionList')
         if total is not None and total!=len(data):raise ValueError('CAPITAL_POSITION_LIST_INCOMPLETE')
+        if data:num(data[0].get('liqPrice'))  # Missing/non-finite is not the documented <=0 sentinel.
         parsed=parse_positions(data)
         if parsed is None:return None
         row=dict(data[0]);row['side']=parsed.side;row['_observed_ms']=int(self.clock()*1000)
@@ -88,22 +90,52 @@ class Controller:
         return result
 
     def total_loss(self,position):
-        known={r['payload']['position_id']:r['payload'] for r in self.journal.rows if r['kind']=='POSITION'}
-        pid=position['positionId'];known[pid]=dict(position_id=pid,funding=position['funding'])
-        realized=fees=funding=ZERO
-        for prior_id,record in known.items():
-            trades=self.history(prior_id)
-            realized+=sum((num(r['realizedPNL']) for r in trades),ZERO)
-            fees+=sum((num(r['fee']) for r in trades),ZERO)  # actual GET uses positive fee paid
-            if prior_id==pid:
-                funding-=num(position['funding'])  # position GET uses negative funding paid
+        """Signed campaign loss at mark. Never clamp a floating profit before projection."""
+        values=self.book.accounting(position['positionId'])
+        if values is None:
+            values=settle(self.history(position['positionId']),position['side'],position['funding'],position['qty'])
+        return -num(values['net'])-num(position['unrealizedPNL'])
+
+    def sync_accounting(self,position):
+        active=position['positionId'] if position else None
+        others=[pid for pid in self.book.observed() if pid!=active]
+        summaries={}
+        if others:
+            rows=self.client.pages(HISTORY_POSITIONS,{'symbol':'BTCUSDT'},'positionList')
+            for row in rows:
+                pid=row.get('positionId')
+                if row.get('symbol')!='BTCUSDT' or pid in summaries:raise ValueError('CAPITAL_CLOSED_HISTORY_SCOPE')
+                summaries[pid]=row
+        for pid,campaign in self.book.observed().items():
+            if pid==active:
+                trades=self.history(pid)
+                values=settle(trades,campaign['side'],position['funding'],position['qty'])
+                if abs(num(values['fees']))!=abs(num(position['fee'])):raise ValueError('CAPITAL_POSITION_FEES_UNVERIFIED')
+                self.book.record_accounting(pid,values,closed=False)
             else:
-                closed=self.client.pages(HISTORY_POSITIONS,{'symbol':'BTCUSDT','positionId':prior_id},'positionList')
-                matching=[r for r in closed if r.get('positionId')==prior_id and r.get('symbol')=='BTCUSDT']
-                if len(matching)!=1:raise ValueError('CAPITAL_CLOSED_POSITION_ACCOUNTING_UNVERIFIED')
-                funding-=num(matching[0]['funding'])
-        # Never add position.realizedPNL again: production includes fee/funding there.
-        return max(ZERO,-realized+fees+funding-num(position['unrealizedPNL']))
+                if pid not in summaries:raise ValueError('CAPITAL_CLOSED_POSITION_ACCOUNTING_UNVERIFIED')
+                summary=summaries[pid]
+                fingerprint=digest({key:summary.get(key) for key in ('fee','funding','realizedPNL','maxQty','ctime','mtime')})
+                prior=self.book.accounting(pid)
+                baseline=self.journal.latest('BASELINE')
+                needs_anchor=bool(baseline and baseline.get('anchor_position_id')==pid
+                                  and baseline['settled_anchor'] is None and self.journal.latest('GLOBAL_ANCHOR') is None)
+                if prior and prior['closed'] and prior['history_fingerprint']==fingerprint and not needs_anchor:
+                    continue
+                trades=self.history(pid)
+                values=settle(trades,campaign['side'],summary['funding'],'0')
+                if abs(num(values['fees']))!=abs(num(summary['fee'])):raise ValueError('CAPITAL_CLOSED_FEES_UNVERIFIED')
+                self.book.record_accounting(pid,values,closed=True,history_fingerprint=fingerprint)
+            baseline=self.journal.latest('BASELINE')
+            if baseline and baseline.get('anchor_position_id')==pid:self.book.resolve_anchor(trades)
+
+    def capture_emergency_reference(self,position,account=None,equity=None):
+        if self.journal.latest('BASELINE') is not None or self.journal.latest('BASELINE_UNAVAILABLE') is not None:return
+        try:
+            if account is None:account,equity=self.account()
+            self.book.initialize(account,equity,position=position,deferred=True)
+        except Exception:
+            self.journal.append('BASELINE_UNAVAILABLE','BASELINE_UNAVAILABLE',dict(reason='NO_BUDGET_RESET_AFTER_EMERGENCY'))
 
     def structure(self,position,mark):
         raw=self.client.get(KLINES,{'symbol':'BTCUSDT','interval':'1h','limit':100,'type':'MARK_PRICE'})
@@ -150,7 +182,7 @@ class Controller:
             market=row.get('slOrderType')=='MARKET' or (dynamic and row.get('slOrderType') is None)
             price=num(row['slPrice'])
             if (row.get('id') and size_ok and row.get('slStopType')=='MARK_PRICE' and market
-                    and (liq<price<mark if long else mark<price<liq)):
+                    and stop_interval(position['side'],mark,liq,price)):
                 return row
         return None
 
@@ -221,7 +253,7 @@ class Controller:
             return self.report('RECALCULATING_MARK_CHANGE')
         fresh_liq=num(fresh['liqPrice'])
         fresh_distance=(fresh_mark-fresh_liq if fresh['side']=='LONG' else fresh_liq-fresh_mark)
-        critical=fresh_liq<=0 or fresh_distance/fresh_mark<=num(PROPOSAL['liquidation_distance_fraction'])
+        critical=critical_liquidation(fresh['side'],fresh_mark,fresh_liq,PROPOSAL['liquidation_distance_fraction'])
         if critical and (path!=REDUCE or num(body['qty'])<num(fresh['qty'])):
             return self.reduce(fresh,num(fresh['qty']),'CRITICAL_PREFLIGHT_OVERRIDES_PARTIAL_ACTION',3,0,fresh_mark)
         intent=dict(client_id=cid,position_id=position['positionId'],path=path,body=body,stage=stage,event_at=event_at,
@@ -259,41 +291,54 @@ class Controller:
     def step(self):
         if self.journal.pending() and not self.reconcile_pending():return self.report('RECONCILIATION_REQUIRED','NO_BLIND_RETRY')
         p=self.position()
-        if p is None:return self.report('NO_OPEN_BTCUSDT_POSITION')
-        mark=self.mark();qty=num(p['qty']);liq=num(p['liqPrice']);long=p['side']=='LONG'
-        previous=self.journal.latest('POSITION')
-        current=dict(position_id=p['positionId'],qty=str(qty),average_entry=str(p['avgOpenPrice']),funding=str(p['funding']))
-        if previous!=current:
-            self.journal.append('POSITION:'+identity(current,self.journal.tip),'POSITION',current)
-        distance=mark-liq if long else liq-mark
-        if liq<=0 or distance/mark<=num(PROPOSAL['liquidation_distance_fraction']):
-            if self.journal.latest('BASELINE') is None and self.journal.latest('BASELINE_UNAVAILABLE') is None:
-                try:
-                    _,equity=self.account()
-                    self.journal.append('BASELINE','BASELINE',dict(reference_equity=str(equity),created_ms=int(self.clock()*1000)))
-                except Exception:
-                    self.journal.append('BASELINE_UNAVAILABLE','BASELINE_UNAVAILABLE',dict(reason='NO_BUDGET_RESET_AFTER_EMERGENCY'))
-            return self.reduce(p,qty,'CRITICAL_LIQUIDATION_DISTANCE' if liq>0 else 'LIQUIDATION_UNVERIFIABLE',3,0,mark)
+        if p is not None:
+            mark=self.mark();qty=num(p['qty']);liq=num(p['liqPrice']);long=p['side']=='LONG'
+            previous=self.journal.latest('POSITION')
+            current=dict(position_id=p['positionId'],qty=str(qty),average_entry=str(p['avgOpenPrice']),funding=str(p['funding']))
+            if previous!=current:
+                self.journal.append('POSITION:'+identity(current,self.journal.tip),'POSITION',current)
+            distance=mark-liq if long else liq-mark
+            if critical_liquidation(p['side'],mark,liq,PROPOSAL['liquidation_distance_fraction']):
+                try:self.book.observe(p)
+                except ValueError:pass  # An identity/accounting issue must not delay a fresh critical close.
+                self.capture_emergency_reference(p)
+                return self.reduce(p,qty,'CRITICAL_LIQUIDATION_DISTANCE',3,0,mark)
+            self.book.observe(p)
         if self.journal.latest('BASELINE_UNAVAILABLE') is not None:
-            return self.reduce(p,qty,'LOCKED_REFERENCE_UNAVAILABLE_NO_SILENT_RESET',3,0,mark)
+            return (self.reduce(p,qty,'LOCKED_REFERENCE_UNAVAILABLE_NO_SILENT_RESET',3,0,mark) if p
+                    else self.report('GLOBAL_RISK_BLOCKED','LOCKED_REFERENCE_UNAVAILABLE_NO_SILENT_RESET'))
         account,equity=self.account()
-        baseline=self.journal.latest('BASELINE')
-        if baseline is None:
-            if equity<=0:return self.reduce(p,qty,'NONPOSITIVE_EQUITY',3,0,mark)
-            baseline=dict(reference_equity=str(equity),created_ms=int(self.clock()*1000))
-            self.journal.append('BASELINE','BASELINE',baseline)
-        ref=num(baseline['reference_equity'])
+        try:
+            self.sync_accounting(p)
+            self.book.initialize(account,equity)
+            global_state=self.book.global_state(account,equity)
+        except Exception:
+            if p:
+                self.capture_emergency_reference(p,account,equity)
+                return self.reduce(p,qty,'CUMULATIVE_LOSS_UNVERIFIABLE_FAILSAFE',3,0,mark)
+            return self.report('GLOBAL_RISK_BLOCKED','ACCOUNTING_RECONCILIATION_REQUIRED')
+        if p is None:
+            return self.report('GLOBAL_RISK_BLOCKED' if global_state['blocked'] else 'NO_OPEN_BTCUSDT_POSITION',
+                               'GLOBAL_ACCOUNT_FLOOR' if global_state['blocked'] else '')
         try:loss=self.total_loss(p)
         except Exception:return self.reduce(p,qty,'CUMULATIVE_LOSS_UNVERIFIABLE_FAILSAFE',3,0,mark)
-        if equity<=ref*(1-num(PROPOSAL['equity_drawdown_fraction'])) or loss>=ref*num(PROPOSAL['trade_loss_fraction']):
+        if global_state['blocked']:
+            return self.reduce(p,qty,'GLOBAL_ACCOUNT_FLOOR',3,0,mark)
+        limit=self.book.budget(p['positionId'],global_state,-loss)
+        if limit<=0:return self.reduce(p,qty,'GLOBAL_BUDGET_EXHAUSTED',3,0,mark)
+        # The global constraint can require retaining profit. It is not a new negative budget.
+        risk_ceiling=min(limit,global_state['headroom']+loss)
+        if loss>=limit:
             return self.reduce(p,qty,'TOTAL_BUDGET_OR_ACCOUNT_FLOOR',3,0,mark)
+        settled_net=num(self.book.accounting(p['positionId'])['net'])
+        cost=num(PROPOSAL['assumed_taker_fee'])+num(PROPOSAL['assumed_slippage'])
+        def at_stop(price):return projected_net(settled_net,p['side'],qty,p['avgOpenPrice'],price,cost)
         orders=self.orders(p['positionId']);stop=self.verified_stop(p,orders,mark)
         try:
             context=self.structure(p,mark)
         except Exception:
             if stop is not None:
-                adverse=(mark-num(stop['slPrice']) if long else num(stop['slPrice'])-mark)*qty
-                if loss+adverse+num(PROPOSAL['assumed_taker_fee'])*qty*mark <= ref*num(PROPOSAL['trade_loss_fraction']):
+                if -at_stop(stop['slPrice'])<=risk_ceiling:
                     return self.report('PROTECTED_STRUCTURE_DATA_DEGRADED','NO_NEW_STRUCTURAL_TRIM')
             return self.reduce(p,qty,'NO_VERIFIABLE_PROTECTION_CONTEXT',3,0,mark)
         if liq>0 and distance/context['atr']<=num(PROPOSAL['liquidation_distance_atr']):
@@ -305,11 +350,10 @@ class Controller:
         meta=pair[0];step=D('1').scaleb(-int(meta['basePrecision']));tick=D('1').scaleb(-int(meta['quotePrecision']))
         target=context['stop'].quantize(tick,rounding=ROUND_FLOOR if long else ROUND_CEILING)
         # Keep room for structure. Excess size is a capital override, not a noisy stop.
-        cost=num(PROPOSAL['assumed_taker_fee'])+num(PROPOSAL['assumed_slippage'])
-        limit=ref*num(PROPOSAL['trade_loss_fraction'])
         room=limit-loss-cost*qty*mark
         if room<=0:return self.reduce(p,qty,'COST_RESERVE_EXHAUSTS_BUDGET',3,0,mark)
-        if not (liq<target<mark if long else mark<target<liq):return self.reduce(p,qty,'NO_SAFE_STOP_INTERVAL',3,0,mark)
+        if global_state['headroom']<=cost*qty*mark:return self.reduce(p,qty,'GLOBAL_EXIT_COST_RESERVE',3,0,mark)
+        if not stop_interval(p['side'],mark,liq,target):return self.reduce(p,qty,'NO_SAFE_STOP_INTERVAL',3,0,mark)
         if context['invalidated']:
             return self.reduce(p,qty,'THESIS_INVALIDATED',3,context['closed_at'],mark)
         if stop is None:
@@ -329,13 +373,16 @@ class Controller:
         # Do not widen any manual stop. Resize only when actual aggregate risk exceeds budget.
         risk_stop=num(stop['slPrice'])
         adverse=abs(mark-risk_stop)
-        projected=loss+qty*(adverse+cost*risk_stop)
-        if projected>limit:
+        net_at_stop=at_stop(risk_stop)
+        projected=-net_at_stop
+        if projected>risk_ceiling:
             denominator=adverse+cost*(risk_stop-mark)
             if denominator<=0:return self.reduce(p,qty,'UNSIZABLE_STRUCTURAL_RISK',3,0,mark)
-            needed=((projected-limit)/denominator/step).to_integral_value(rounding=ROUND_CEILING)*step
+            needed=((projected-risk_ceiling)/denominator/step).to_integral_value(rounding=ROUND_CEILING)*step
             needed=min(qty,max(needed,num(meta['minTradeVolume'])))
             return self.reduce(p,needed,'EXPOSURE_EXCEEDS_AGGREGATE_STRUCTURAL_BUDGET',0,context['closed_at'],mark)
+        self.book.allocate(p['positionId'],limit,stop_id=stop['id'],net_at_stop=net_at_stop,
+                           global_state=global_state,risk_ceiling=risk_ceiling)
         completed=[r['payload'] for r in self.journal.rows if r['kind']=='RECONCILED'
                    and r['payload'].get('position_id')==p['positionId'] and r['payload'].get('stage') in (1,2,3)]
         stage=max((r['stage'] for r in completed),default=0)
@@ -348,4 +395,7 @@ class Controller:
         if next_stage is not None and amount>=num(meta['minTradeVolume']):
             return self.reduce(p,amount,'STRUCTURAL_DETERIORATION',next_stage,context['closed_at'],mark)
         return self.report('RESIDUAL_PROTECTED','STRUCTURE_AND_CAPITAL_WITHIN_POLICY',quantity=str(qty),
-                           actual_liquidation=str(liq),actual_equity=str(equity),verified_stop_id=str(stop['id']))
+                           actual_liquidation=str(liq),actual_equity=str(equity),verified_stop_id=str(stop['id']),
+                           campaign_id=self.book.campaign(p['positionId'])['campaign_id'],campaign_loss_limit=str(limit),
+                           projected_net_at_stop=str(net_at_stop),global_floor=str(global_state['floor']),
+                           global_protected_equity=str(global_state['effective_equity']),effective_loss_ceiling=str(risk_ceiling))
