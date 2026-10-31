@@ -1,0 +1,79 @@
+{
+  "diagnostic": {
+    "as_of": "2026-09-14T00:00:00Z",
+    "asia_high": "77321.00",
+    "asia_low": "77110.70",
+    "box_relation": "STRICTLY_ORDERED",
+    "confirmation": false,
+    "day": "2026-09-13",
+    "geometry_reason": null,
+    "geometry_valid": true,
+    "london_high": "77291.20",
+    "london_low": "76703.50",
+    "plan_status": null,
+    "rejection_partition": null,
+    "rejection_reasons": [],
+    "side": null,
+    "status": "NO_CONFIRMATION"
+  },
+  "observation": {
+    "as_of": 1789344000000,
+    "confirmation": null,
+    "mode": "PAPER_SHADOW_ONLY",
+    "plan": null,
+    "prototype": "KZ_SINGLE_SEGMENT_VISUAL_V1",
+    "setup": {
+      "asia": {
+        "end": 1789272000000,
+        "high": "77321.00",
+        "high_at": 1789261200000,
+        "low": "77110.70",
+        "low_at": 1789257600000,
+        "name": "ASIA",
+        "start": 1789257600000
+      },
+      "available_at": 1789290000000,
+      "day": "2026-09-13",
+      "expires_at": 1789344000000,
+      "london": {
+        "end": 1789290000000,
+        "high": "77291.20",
+        "high_at": 1789279200000,
+        "low": "76703.50",
+        "low_at": 1789286400000,
+        "name": "LONDON",
+        "start": 1789279200000
+      },
+      "lower": {
+        "end": 1789290000000,
+        "high": "77291.20",
+        "high_at": 1789279200000,
+        "low": "76703.50",
+        "low_at": 1789286400000,
+        "name": "LONDON",
+        "start": 1789279200000
+      },
+      "measurement": {
+        "a": {
+          "p": "76703.50",
+          "t": 1789286400000
+        },
+        "b": {
+          "p": "77321.00",
+          "t": 1789261200000
+        }
+      },
+      "upper": {
+        "end": 1789272000000,
+        "high": "77321.00",
+        "high_at": 1789261200000,
+        "low": "77110.70",
+        "low_at": 1789257600000,
+        "name": "ASIA",
+        "start": 1789257600000
+      }
+    },
+    "status": "NO_CONFIRMATION",
+    "trade_authority": "NONE"
+  }
+}

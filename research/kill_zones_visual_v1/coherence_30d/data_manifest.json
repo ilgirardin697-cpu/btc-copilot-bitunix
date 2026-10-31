@@ -1,0 +1,26 @@
+{
+  "aggregation": "Exact 12 closed contiguous 5m; O first / H max / L min / C last / Decimal base-volume sum",
+  "archive_sha256": "3a2d163a2bd28ca614fa0840a92ecbcde0d9c4962b278dd619d5bf81a9918e26",
+  "checksum_origin": "Saved official checksum, verified locally; not re-fetched",
+  "checksum_url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-09.zip.CHECKSUM",
+  "duplicates": 0,
+  "filled": 0,
+  "first_open": "2026-09-01T00:00:00Z",
+  "gaps": 0,
+  "hourly_csv_sha256": "1cdbf33d11d772ae3e469af66fc5c7f79a6bba809989800c7c38b07cce4d592f",
+  "interval": "1h",
+  "last_available": "2026-10-01T00:00:00Z",
+  "local_london_dates": [
+    "2026-09-01",
+    "2026-09-30"
+  ],
+  "no_performance_evaluation": true,
+  "no_virgin_holdout": true,
+  "rows_1h": 720,
+  "source_interval": "5m",
+  "source_rows": 8640,
+  "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-09.zip",
+  "symbol": "BTCUSDT",
+  "timezone": "UTC milliseconds; available at open + 3600000; model clock America/New_York unchanged",
+  "venue": "BINANCE_USDM_PERPETUAL"
+}

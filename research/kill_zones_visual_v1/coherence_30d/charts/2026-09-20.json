@@ -1,0 +1,51 @@
+{
+  "diagnostic": {
+    "as_of": "2026-09-21T00:00:00Z",
+    "asia_high": "81295.00",
+    "asia_low": "80095.90",
+    "box_relation": "ASIA_CONTAINS_LONDON",
+    "confirmation": false,
+    "day": "2026-09-20",
+    "geometry_reason": "BOX_ORDER_AMBIGUOUS",
+    "geometry_valid": false,
+    "london_high": "80580.00",
+    "london_low": "80127.60",
+    "plan_status": null,
+    "rejection_partition": null,
+    "rejection_reasons": [],
+    "side": null,
+    "status": "UNAVAILABLE"
+  },
+  "observation": {
+    "as_of": 1789948800000,
+    "confirmation": null,
+    "expires_at": 1789948800000,
+    "mode": "PAPER_SHADOW_ONLY",
+    "plan": null,
+    "prototype": "KZ_SINGLE_SEGMENT_VISUAL_V1",
+    "reason": "BOX_ORDER_AMBIGUOUS",
+    "session_boxes": [
+      {
+        "end": 1789876800000,
+        "high": "81295.00",
+        "high_at": 1789862400000,
+        "low": "80095.90",
+        "low_at": 1789873200000,
+        "name": "ASIA",
+        "start": 1789862400000
+      },
+      {
+        "end": 1789894800000,
+        "high": "80580.00",
+        "high_at": 1789884000000,
+        "low": "80127.60",
+        "low_at": 1789891200000,
+        "name": "LONDON",
+        "start": 1789884000000
+      }
+    ],
+    "setup": null,
+    "status": "UNAVAILABLE",
+    "trade_authority": "NONE"
+  }
+}

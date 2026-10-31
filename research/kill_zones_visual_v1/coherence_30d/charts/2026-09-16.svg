@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="830" viewBox="0 0 1400 830">
+<rect width="1400" height="830" fill="#101824"/>
+<style>text{fill:#edf1f7;font-family:Arial,sans-serif;font-size:14px}</style>
+<defs><clipPath id="plot"><rect x="95" y="170" width="1210" height="420"/></clipPath></defs>
+<text x="35.00" y="35.00" style="font-size:20px;fill:#edf1f7">BTCUSDT USD-M | 2026-09-16 | FROZEN V1 COHERENCE ONLY</text>
+<text x="35.00" y="62.00" style="font-size:14px;fill:#f8c15d">SINGLE MEASUREMENT + TRANSLATED COPY | LINE-BREAK HYPOTHESIS | NOT VIDEO PARITY</text>
+<text x="35.00" y="89.00" style="font-size:14px;fill:#edf1f7">Day 2026-09-16 | America/New_York | linear price | 1H closed only | as_of 2026-09-17T00:00:00Z</text>
+<text x="35.00" y="116.00" style="font-size:14px;fill:#edf1f7">Magenta: original segment | cyan: one clone | orange dashed: extension of SAME segment | yellow: sessions</text>
+<path d="M95 590.000 H1305" stroke="#273648"/>
+<text x="8.00" y="594.00" style="font-size:14px;fill:#edf1f7">74,768.79</text>
+<path d="M95 506.000 H1305" stroke="#273648"/>
+<text x="8.00" y="510.00" style="font-size:14px;fill:#edf1f7">75,237.29</text>
+<path d="M95 422.000 H1305" stroke="#273648"/>
+<text x="8.00" y="426.00" style="font-size:14px;fill:#edf1f7">75,705.80</text>
+<path d="M95 338.000 H1305" stroke="#273648"/>
+<text x="8.00" y="342.00" style="font-size:14px;fill:#edf1f7">76,174.30</text>
+<path d="M95 254.000 H1305" stroke="#273648"/>
+<text x="8.00" y="258.00" style="font-size:14px;fill:#edf1f7">76,642.81</text>
+<path d="M95 170.000 H1305" stroke="#273648"/>
+<text x="8.00" y="174.00" style="font-size:14px;fill:#edf1f7">77,111.31</text>
+<g clip-path="url(#plot)">
+<rect x="184.630" y="351.967" width="179.259" height="123.874" fill="#ead067" fill-opacity=".10" stroke="#ead067" stroke-width="2"/>
+<text x="187.63" y="345.97" style="font-size:14px;fill:#ead067">ASIA</text>
+<rect x="453.519" y="357.221" width="134.444" height="136.030" fill="#ead067" fill-opacity=".10" stroke="#ead067" stroke-width="2"/>
+<text x="456.52" y="351.22" style="font-size:14px;fill:#ead067">LONDON</text>
+<line x1="139.815" y1="453.519" x2="139.815" y2="384.384" stroke="#f37b79" stroke-width="1" stroke-dasharray=""/>
+<rect x="132.815" y="435.231" width="14.000" height="5.755" fill="#f37b79"/>
+<line x1="184.630" y1="451.924" x2="184.630" y2="391.107" stroke="#37cf91" stroke-width="1" stroke-dasharray=""/>
+<rect x="177.630" y="416.943" width="14.000" height="24.043" fill="#37cf91"/>
+<line x1="229.444" y1="475.841" x2="229.444" y2="380.009" stroke="#f37b79" stroke-width="1" stroke-dasharray=""/>
+<rect x="222.444" y="416.943" width="14.000" height="48.230" fill="#f37b79"/>
+<line x1="274.259" y1="467.863" x2="274.259" y2="351.967" stroke="#37cf91" stroke-width="1" stroke-dasharray=""/>
+<rect x="267.259" y="395.590" width="14.000" height="69.566" fill="#37cf91"/>
+<line x1="319.074" y1="417.374" x2="319.074" y2="359.605" stroke="#f37b79" stroke-width="1" stroke-dasharray=""/>
+<rect x="312.074" y="395.572" width="14.000" height="11.798" fill="#f37b79"/>
+<line x1="363.889" y1="411.152" x2="363.889" y2="371.062" stroke="#37cf91" stroke-width="1" stroke-dasharray=""/>
+<rect x="356.889" y="400.520" width="14.000" height="6.831" fill="#37cf91"/>
+<line x1="408.704" y1="434.927" x2="408.704" y2="377.140" stroke="#37cf91" stroke-width="1" stroke-dasharray=""/>
+<rect x="401.704" y="382.645" width="14.000" height="17.858" fill="#37cf91"/>
+<line x1="453.519" y1="408.535" x2="453.519" y2="369.072" stroke="#37cf91" stroke-width="1" stroke-dasharray=""/>
+<rect x="446.519" y="369.072" width="14.000" height="13.573" fill="#37cf91"/>
+<line x1="498.333" y1="424.635" x2="498.333" y2="357.221" stroke="#f37b79" stroke-width="1" stroke-dasharray=""/>
+<rect x="491.333" y="369.072" width="14.000" height="49.306" fill="#f37b79"/>
+<line x1="543.148" y1="493.251" x2="543.148" y2="418.360" stroke="#f37b79" stroke-width="1" stroke-dasharray=""/>
+<rect x="536.148" y="418.360" width="14.000" height="5.074" fill="#f37b79"/>
+<line x1="587.963" y1="425.119" x2="587.963" y2="375.688" stroke="#37cf91" stroke-width="1" stroke-dasharray=""/>
+<rect x="580.963" y="376.495" width="14.000" height="46.957" fill="#37cf91"/>
+<line x1="632.778" y1="393.277" x2="632.778" y2="366.365" stroke="#37cf91" stroke-width="1" stroke-dasharray=""/>
+<rect x="625.778" y="376.333" width="14.000" height="1.000" fill="#37cf91"/>
+<line x1="677.593" y1="399.946" x2="677.593" y2="320.125" stroke="#37cf91" stroke-width="1" stroke-dasharray=""/>
+<rect x="670.593" y="331.564" width="14.000" height="44.788" fill="#37cf91"/>
+<line x1="722.407" y1="413.878" x2="722.407" y2="319.874" stroke="#f37b79" stroke-width="1" stroke-dasharray=""/>
+<rect x="715.407" y="331.582" width="14.000" height="49.593" fill="#f37b79"/>
+<line x1="767.222" y1="452.175" x2="767.222" y2="381.156" stroke="#f37b79" stroke-width="1" stroke-dasharray=""/>
+<rect x="760.222" y="381.174" width="14.000" height="57.033" fill="#f37b79"/>
+<line x1="812.037" y1="479.338" x2="812.037" y2="404.716" stroke="#37cf91" stroke-width="1" stroke-dasharray=""/>
+<rect x="805.037" y="430.050" width="14.000" height="8.140" fill="#37cf91"/>
+<line x1="856.852" y1="456.711" x2="856.852" y2="381.909" stroke="#37cf91" stroke-width="1" stroke-dasharray=""/>
+<rect x="849.852" y="413.411" width="14.000" height="16.638" fill="#37cf91"/>
+<line x1="901.667" y1="437.670" x2="901.667" y2="394.532" stroke="#f37b79" stroke-width="1" stroke-dasharray=""/>
+<rect x="894.667" y="413.411" width="14.000" height="3.532" fill="#f37b79"/>
+<line x1="946.481" y1="492.587" x2="946.481" y2="387.234" stroke="#37cf91" stroke-width="1" stroke-dasharray=""/>
+<rect x="939.481" y="414.505" width="14.000" height="2.420" fill="#37cf91"/>
+<line x1="991.296" y1="544.062" x2="991.296" y2="272.433" stroke="#f37b79" stroke-width="1" stroke-dasharray=""/>
+<rect x="984.296" y="414.487" width="14.000" height="26.392" fill="#f37b79"/>
+<line x1="1036.111" y1="509.656" x2="1036.111" y2="341.694" stroke="#37cf91" stroke-width="1" stroke-dasharray=""/>
+<rect x="1029.111" y="361.452" width="14.000" height="79.409" fill="#37cf91"/>
+<line x1="1080.926" y1="372.156" x2="1080.926" y2="299.040" stroke="#37cf91" stroke-width="1" stroke-dasharray=""/>
+<rect x="1073.926" y="343.415" width="14.000" height="18.037" fill="#37cf91"/>
+<line x1="1125.741" y1="386.768" x2="1125.741" y2="335.903" stroke="#f37b79" stroke-width="1" stroke-dasharray=""/>
+<rect x="1118.741" y="343.415" width="14.000" height="36.917" fill="#f37b79"/>
+<line x1="1170.556" y1="439.176" x2="1170.556" y2="376.997" stroke="#f37b79" stroke-width="1" stroke-dasharray=""/>
+<rect x="1163.556" y="380.332" width="14.000" height="52.192" fill="#f37b79"/>
+<line x1="1215.370" y1="439.391" x2="1215.370" y2="325.271" stroke="#37cf91" stroke-width="1" stroke-dasharray=""/>
+<rect x="1208.370" y="337.947" width="14.000" height="94.577" fill="#37cf91"/>
+<line x1="95.000" y1="257.779" x2="1305.000" y2="893.553" stroke="#f8a54e" stroke-width="2" stroke-dasharray="7 5"/>
+<line x1="543.148" y1="493.251" x2="274.259" y2="351.967" stroke="#f061b1" stroke-width="4" stroke-dasharray=""/>
+<circle cx="543.148" cy="493.251" r="5" fill="#f061b1"/>
+<text x="551.15" y="485.25" style="font-size:14px;fill:#f061b1">A</text>
+<circle cx="274.259" cy="351.967" r="5" fill="#f061b1"/>
+<text x="282.26" y="343.97" style="font-size:14px;fill:#f061b1">B</text>
+<line x1="587.963" y1="357.221" x2="319.074" y2="215.938" stroke="#5ad8ec" stroke-width="4" stroke-dasharray=""/>
+<circle cx="587.963" cy="357.221" r="5" fill="#5ad8ec"/>
+<text x="595.96" y="349.22" style="font-size:14px;fill:#5ad8ec">A&#x27;</text>
+<circle cx="319.074" cy="215.938" r="5" fill="#5ad8ec"/>
+<text x="327.07" y="207.94" style="font-size:14px;fill:#5ad8ec">B&#x27;</text>
+<line x1="587.963" y1="215.938" x2="1305.000" y2="215.938" stroke="#5ad8ec" stroke-width="2" stroke-dasharray="4 4"/>
+</g>
+<text x="164.63" y="614.00" style="font-size:14px;fill:#edf1f7">00:00</text>
+<text x="299.07" y="614.00" style="font-size:14px;fill:#edf1f7">03:00</text>
+<text x="433.52" y="614.00" style="font-size:14px;fill:#edf1f7">06:00</text>
+<text x="567.96" y="614.00" style="font-size:14px;fill:#edf1f7">09:00</text>
+<text x="702.41" y="614.00" style="font-size:14px;fill:#edf1f7">12:00</text>
+<text x="836.85" y="614.00" style="font-size:14px;fill:#edf1f7">15:00</text>
+<text x="971.30" y="614.00" style="font-size:14px;fill:#edf1f7">18:00</text>
+<text x="1105.74" y="614.00" style="font-size:14px;fill:#edf1f7">21:00</text>
+<text x="1240.19" y="614.00" style="font-size:14px;fill:#edf1f7">00:00</text>
+<text x="95.00" y="642.00" style="font-size:14px;fill:#edf1f7">Horizontal axis: UTC bar OPEN; confirmation becomes available one hour later.</text>
+<text x="35.00" y="677.00" style="font-size:14px;fill:#edf1f7">NO_CONFIRMATION | copy UP | projected target 76855.10 | GEOMETRY PREVIEW, NO SIGNAL</text>
+<text x="35.00" y="706.00" style="font-size:14px;fill:#edf1f7">No qualifying closed-body line crossing. No confirmation or simulated entry invented.</text>
+<text x="35.00" y="745.00" style="font-size:14px;fill:#f8c15d">Target time component preserves the clone vector; it does NOT predict a time-to-target.</text>
+<text x="35.00" y="774.00" style="font-size:14px;fill:#f8c15d">NO PERFORMANCE EVALUATION | NO VIRGIN HOLDOUT | SHADOW ONLY | TRADE AUTHORITY: NONE</text>
+</svg>

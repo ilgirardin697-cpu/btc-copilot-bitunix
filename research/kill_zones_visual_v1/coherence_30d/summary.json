@@ -1,0 +1,37 @@
+{
+  "box_relations": {
+    "ASIA_CONTAINS_LONDON": 5,
+    "LONDON_CONTAINS_ASIA": 2,
+    "STRICTLY_ORDERED": 23
+  },
+  "closed_prefix_check": "PASS_FOR_EVERY_CONFIRMATION",
+  "confirmation_sides": {
+    "DOWN": 2,
+    "UP": 3
+  },
+  "confirmations": 5,
+  "data_interval": "2026-09-01/2026-10-01 UTC",
+  "days": 30,
+  "decision": "NO_GO_FOR_VIDEO_STRATEGY_FORWARD_PAPER",
+  "decision_basis": "Trigger identity and temporal anchors remain unverified; counts do not prove fidelity or edge",
+  "frozen_commit": "cc81cca28cf1b770ae8b9c22ad7c680821151e11",
+  "geometry_reasons": {
+    "BOX_ORDER_AMBIGUOUS": 7
+  },
+  "invalid_geometry": 7,
+  "model_sha256": "20a646c5cd5300b6cb478d578a1904d446fd28a72ebb94ff527679345df926e2",
+  "no_performance_evaluation": true,
+  "pending_entries": 0,
+  "plan_statuses": {
+    "REJECTED_STOP_TARGET_ORDER": 5
+  },
+  "reference_plans": 0,
+  "rejected_plans": 5,
+  "rejection_partition": {
+    "TARGET_ONLY": 5
+  },
+  "target_not_ahead_of_line": 3,
+  "target_not_ahead_of_signal_close": 5,
+  "valid_geometry": 23,
+  "valid_geometry_without_confirmation": 18
+}

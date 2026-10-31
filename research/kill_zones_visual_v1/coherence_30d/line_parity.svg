@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760">
+<rect width="1400" height="760" fill="#101824"/>
+<style>text{fill:#edf1f7;font:17px Arial}.small{font-size:14px}.warn{fill:#f8c15d}</style>
+<text x="35" y="40" style="font-size:25px">¿Es la misma línea? Identidad NO verificada</text>
+<text x="35" y="76" class="warn">Comparación conceptual: foto y datos de fechas distintas. Sin calibración común precio / tiempo.</text>
+<text x="40" y="123">Fuente 06:23: trazo finito seleccionado</text>
+<text x="40" y="149" class="small">Lectura manual de píxeles ya auditada; no coordenadas TradingView.</text>
+<rect x="45" y="210" width="170" height="325" fill="#ead067" fill-opacity=".08" stroke="#ead067"/>
+<rect x="280" y="200" width="170" height="125" fill="#ead067" fill-opacity=".08" stroke="#ead067"/>
+<text x="55" y="560" class="small">Caja inferior/superior: esquema contextual, no trazado exacto.</text>
+<line x1="248" y1="535" x2="237" y2="200" stroke="#f061b1" stroke-width="5"/>
+<circle cx="248" cy="535" r="7" fill="#f061b1"/><circle cx="237" cy="200" r="7" fill="#f061b1"/>
+<text x="255" y="520">A</text><text x="246" y="190">B</text>
+<text x="40" y="595" class="small">A/B casi alineados verticalmente en la foto.</text>
+<text x="40" y="620" class="small">La foto no demuestra una extensión infinita como disparador.</text>
+<text x="40" y="645" class="small">Clonar conserva geometría; eso no identifica la línea de ruptura.</text>
+<path d="M575 110 V660" stroke="#41536a"/>
+<text x="615" y="123">V1: tiempos de extremos + prolongación infinita</text>
+<text x="615" y="149" class="small">Ejemplo real 03/09/2026. Hipótesis añadida, no lectura del vídeo.</text>
+<path d="M630 550 H1340 M650 560 V195" stroke="#7b8799"/>
+<rect x="660" y="455" width="180" height="80" stroke="#ead067" fill="#ead067" fill-opacity=".08"/>
+<rect x="920" y="430" width="90" height="52" stroke="#ead067" fill="#ead067" fill-opacity=".08"/>
+<path d="M650 540 L1280 285" stroke="#f8a54e" stroke-width="3" stroke-dasharray="8 5"/>
+<line x1="690" y1="523" x2="950" y2="418" stroke="#f061b1" stroke-width="5"/>
+<circle cx="690" cy="523" r="6" fill="#f061b1"/><circle cx="950" cy="418" r="6" fill="#f061b1"/>
+<text x="675" y="585" class="small">A: 01:00 / 76,927.30</text>
+<text x="930" y="400" class="small">B: 07:00 / 78,144.70</text>
+<text x="1040" y="262" class="small" fill="#f8a54e">Prolongación = trigger elegido por V1</text>
+<text x="615" y="620" class="small">Los horarios de anclaje no se conocen exactamente en la fuente.</text>
+<text x="615" y="645" class="small">Estas ubicaciones son ilustrativas; usar el gráfico completo para precios.</text>
+<text x="35" y="705" class="warn">NO certificar paridad por parecido visual. NO cambiar V1 para obtener más señales.</text>
+<text x="35" y="736">SHADOW ONLY · TRADE AUTHORITY: NONE · Sin PnL ni órdenes</text>
+</svg>

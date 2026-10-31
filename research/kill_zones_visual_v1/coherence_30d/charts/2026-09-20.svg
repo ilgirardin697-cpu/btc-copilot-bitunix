@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="750" viewBox="0 0 1400 750">
+<rect width="1400" height="750" fill="#101824"/>
+<style>text{fill:#edf1f7;font:15px Arial}</style>
+<text x="35" y="40">BTCUSDT USD-M | 2026-09-20 | FROZEN V1 COHERENCE ONLY</text>
+<text x="35" y="75">UNAVAILABLE: BOX_ORDER_AMBIGUOUS</text>
+<text x="35" y="110">Boxes retained; no segment, clone, confirmation or entry forced.</text>
+<rect x="138.000" y="258.243" width="192.000" height="297.590" fill="#ead067" fill-opacity=".12" stroke="#ead067"/>
+<text x="138.000" y="248.243">ASIA</text>
+<rect x="426.000" y="435.690" width="144.000" height="112.276" fill="#ead067" fill-opacity=".12" stroke="#ead067"/>
+<text x="426.000" y="425.690">LONDON</text>
+<line x1="90.000" y1="246.728" x2="90.000" y2="286.138" stroke="#f37b79"/>
+<rect x="85.000" y="274.027" width="10" height="1.439" fill="#f37b79"/>
+<line x1="138.000" y1="258.243" x2="138.000" y2="288.000" stroke="#37cf91"/>
+<rect x="133.000" y="268.716" width="10" height="6.726" fill="#37cf91"/>
+<line x1="186.000" y1="265.490" x2="186.000" y2="331.456" stroke="#f37b79"/>
+<rect x="181.000" y="268.716" width="10" height="46.360" fill="#f37b79"/>
+<line x1="234.000" y1="297.430" x2="234.000" y2="522.404" stroke="#f37b79"/>
+<rect x="229.000" y="315.076" width="10" height="187.623" fill="#f37b79"/>
+<line x1="282.000" y1="452.517" x2="282.000" y2="555.833" stroke="#37cf91"/>
+<rect x="277.000" y="463.536" width="10" height="39.187" fill="#37cf91"/>
+<line x1="330.000" y1="451.971" x2="330.000" y2="508.158" stroke="#f37b79"/>
+<rect x="325.000" y="463.511" width="10" height="13.898" fill="#f37b79"/>
+<line x1="378.000" y1="426.260" x2="378.000" y2="484.284" stroke="#37cf91"/>
+<rect x="373.000" y="465.497" width="10" height="11.913" fill="#37cf91"/>
+<line x1="426.000" y1="435.690" x2="426.000" y2="532.976" stroke="#f37b79"/>
+<rect x="421.000" y="465.472" width="10" height="44.672" fill="#f37b79"/>
+<line x1="474.000" y1="480.263" x2="474.000" y2="516.596" stroke="#37cf91"/>
+<rect x="469.000" y="508.580" width="10" height="1.564" fill="#37cf91"/>
+<line x1="522.000" y1="472.297" x2="522.000" y2="547.966" stroke="#f37b79"/>
+<rect x="517.000" y="508.555" width="10" height="12.707" fill="#f37b79"/>
+<line x1="570.000" y1="441.895" x2="570.000" y2="524.513" stroke="#37cf91"/>
+<rect x="565.000" y="471.081" width="10" height="50.182" fill="#37cf91"/>
+<line x1="618.000" y1="458.101" x2="618.000" y2="508.655" stroke="#f37b79"/>
+<rect x="613.000" y="471.081" width="10" height="37.549" fill="#f37b79"/>
+<line x1="666.000" y1="455.545" x2="666.000" y2="518.185" stroke="#37cf91"/>
+<rect x="661.000" y="468.351" width="10" height="40.279" fill="#37cf91"/>
+<line x1="714.000" y1="455.545" x2="714.000" y2="508.233" stroke="#37cf91"/>
+<rect x="709.000" y="466.216" width="10" height="2.159" fill="#37cf91"/>
+<line x1="762.000" y1="420.676" x2="762.000" y2="483.092" stroke="#37cf91"/>
+<rect x="757.000" y="447.380" width="10" height="18.837" fill="#37cf91"/>
+<line x1="810.000" y1="390.472" x2="810.000" y2="486.046" stroke="#37cf91"/>
+<rect x="805.000" y="419.062" width="10" height="28.342" fill="#37cf91"/>
+<line x1="858.000" y1="347.091" x2="858.000" y2="424.994" stroke="#37cf91"/>
+<rect x="853.000" y="363.371" width="10" height="55.716" fill="#37cf91"/>
+<line x1="906.000" y1="214.167" x2="906.000" y2="389.107" stroke="#37cf91"/>
+<rect x="901.000" y="257.548" width="10" height="105.823" fill="#37cf91"/>
+<line x1="954.000" y1="227.717" x2="954.000" y2="325.152" stroke="#f37b79"/>
+<rect x="949.000" y="257.548" width="10" height="45.243" fill="#f37b79"/>
+<line x1="1002.000" y1="262.040" x2="1002.000" y2="337.933" stroke="#f37b79"/>
+<rect x="997.000" y="302.791" width="10" height="29.086" fill="#f37b79"/>
+<line x1="1050.000" y1="265.887" x2="1050.000" y2="331.877" stroke="#37cf91"/>
+<rect x="1045.000" y="295.718" width="10" height="36.135" fill="#37cf91"/>
+<line x1="1098.000" y1="282.912" x2="1098.000" y2="323.018" stroke="#f37b79"/>
+<rect x="1093.000" y="295.718" width="10" height="23.354" fill="#f37b79"/>
+<line x1="1146.000" y1="319.047" x2="1146.000" y2="447.206" stroke="#f37b79"/>
+<rect x="1141.000" y="319.047" width="10" height="37.872" fill="#f37b79"/>
+<line x1="1194.000" y1="267.897" x2="1194.000" y2="397.446" stroke="#37cf91"/>
+<rect x="1189.000" y="286.486" width="10" height="70.433" fill="#37cf91"/>
+<line x1="1242.000" y1="254.272" x2="1242.000" y2="309.120" stroke="#f37b79"/>
+<rect x="1237.000" y="286.461" width="10" height="9.282" fill="#f37b79"/>
+<text x="35" y="630">UTC: 2026-09-19T23:00:00Z to 2026-09-21T00:00:00Z | 1H closed candles | linear price</text>
+<text x="35" y="670">HISTORICAL GEOMETRY AUDIT ONLY | NO PERFORMANCE EVALUATION</text>
+<text x="35" y="705">SHADOW ONLY | TRADE AUTHORITY: NONE</text>
+</svg>

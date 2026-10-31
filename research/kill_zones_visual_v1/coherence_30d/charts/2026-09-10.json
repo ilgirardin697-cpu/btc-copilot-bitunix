@@ -1,0 +1,119 @@
+{
+  "diagnostic": {
+    "as_of": "2026-09-11T00:00:00Z",
+    "asia_high": "78543.90",
+    "asia_low": "77912.20",
+    "available_at": "2026-09-10T13:00:00Z",
+    "body_close": "76859.90",
+    "body_open": "77816.20",
+    "box_relation": "STRICTLY_ORDERED",
+    "candle_open": "2026-09-10T12:00:00Z",
+    "confirmation": true,
+    "day": "2026-09-10",
+    "entry_gap_from_signal_close": "0.00",
+    "geometry_reason": null,
+    "geometry_valid": true,
+    "line_value": "77022.00",
+    "london_high": "78510.00",
+    "london_low": "77867.50",
+    "plan_status": "REJECTED_STOP_TARGET_ORDER",
+    "reference_entry": "76859.90",
+    "rejection_partition": "TARGET_ONLY",
+    "rejection_reasons": [
+      "TARGET_NOT_AHEAD_OF_ENTRY"
+    ],
+    "side": "DOWN",
+    "status": "CONFIRMED_HYPOTHESIS",
+    "stop": "78543.90",
+    "target": "77235.80",
+    "target_not_ahead_of_line": true,
+    "target_not_ahead_of_signal_close": true
+  },
+  "observation": {
+    "as_of": 1789084800000,
+    "confirmation": {
+      "available_at": 1789045200000,
+      "candle_open": 1789041600000,
+      "copy": {
+        "a": {
+          "p": "77235.80",
+          "t": 1789045200000
+        },
+        "b": {
+          "p": "77912.20",
+          "t": 1789030800000
+        }
+      },
+      "line_value": "77022.00",
+      "side": "DOWN",
+      "signal_close": "76859.90",
+      "stop": "78543.90",
+      "target": "77235.80"
+    },
+    "mode": "PAPER_SHADOW_ONLY",
+    "plan": {
+      "cost_model": "NOT_ASSESSED",
+      "entry_at": 1789045200000,
+      "fill_model": "NEXT_OPEN_REFERENCE_ONLY_NOT_EXECUTED",
+      "reference_entry": "76859.90",
+      "side": "DOWN",
+      "status": "REJECTED_STOP_TARGET_ORDER",
+      "stop": "78543.90",
+      "target": "77235.80"
+    },
+    "prototype": "KZ_SINGLE_SEGMENT_VISUAL_V1",
+    "setup": {
+      "asia": {
+        "end": 1789012800000,
+        "high": "78543.90",
+        "high_at": 1789009200000,
+        "low": "77912.20",
+        "low_at": 1789002000000,
+        "name": "ASIA",
+        "start": 1788998400000
+      },
+      "available_at": 1789030800000,
+      "day": "2026-09-10",
+      "expires_at": 1789084800000,
+      "london": {
+        "end": 1789030800000,
+        "high": "78510.00",
+        "high_at": 1789020000000,
+        "low": "77867.50",
+        "low_at": 1789023600000,
+        "name": "LONDON",
+        "start": 1789020000000
+      },
+      "lower": {
+        "end": 1789030800000,
+        "high": "78510.00",
+        "high_at": 1789020000000,
+        "low": "77867.50",
+        "low_at": 1789023600000,
+        "name": "LONDON",
+        "start": 1789020000000
+      },
+      "measurement": {
+        "a": {
+          "p": "77867.50",
+          "t": 1789023600000
+        },
+        "b": {
+          "p": "78543.90",
+          "t": 1789009200000
+        }
+      },
+      "upper": {
+        "end": 1789012800000,
+        "high": "78543.90",
+        "high_at": 1789009200000,
+        "low": "77912.20",
+        "low_at": 1789002000000,
+        "name": "ASIA",
+        "start": 1788998400000
+      }
+    },
+    "status": "CONFIRMED_HYPOTHESIS",
+    "trade_authority": "NONE"
+  }
+}
