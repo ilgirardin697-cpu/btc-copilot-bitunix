@@ -1,6 +1,10 @@
 """Fixed offset causality and LONG/SHORT direction; no calibration."""
 import unittest
-import numpy as np
+try:
+    import numpy as np
+except ModuleNotFoundError as error:
+    if error.name!='numpy':raise
+    raise unittest.SkipTest('Dedicated Kill Zones CI installs scientific dependencies') from None
 from .tp_offsets import targets,OFFSETS,lock_payload
 class OffsetTests(unittest.TestCase):
     def row(self,side=1):

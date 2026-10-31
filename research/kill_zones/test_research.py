@@ -3,7 +3,11 @@ import ast,hashlib,json,tempfile,unittest
 from datetime import date
 from pathlib import Path
 from unittest.mock import patch
-import numpy as np
+try:
+    import numpy as np
+except ModuleNotFoundError as error:
+    if error.name!='numpy':raise
+    raise unittest.SkipTest('Dedicated Kill Zones CI installs scientific dependencies') from None
 from . import data,models,simulation,statistics
 from .data import HOUR,M5,stamp
 def bars(n=400,start=None,step=M5,price=100):

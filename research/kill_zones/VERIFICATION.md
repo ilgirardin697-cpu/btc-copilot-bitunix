@@ -44,6 +44,10 @@ weekly boundary 9 tests and manual-operability boundary 7 tests pass.
 The full suite includes the 900 approved operability combinations and protocol V1 checks.
 New isolated workflow runs compile, 64 research tests, both source locks and diff check.
 All existing workflows remain in place.
+The lean V8 job intentionally installs no scientific dependencies. The two new
+research test modules skip only when NumPy itself is absent, following the
+repository's existing isolation convention; the dedicated job installs dependencies
+and executes all 64 tests. No V8 test, source or workflow was modified.
 
 ## Runtime/source integrity
 protocol_lock.json binds LF-normalized hashes of every tracked production Python
