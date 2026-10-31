@@ -1,0 +1,22 @@
+name: Kill Zones offline research
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r research/kill_zones/requirements.txt
+      - run: python -m compileall -q research/kill_zones
+      - run: python -m unittest discover -s research/kill_zones -t . -v
+      - name: Immutable protocol, data hashes and production isolation
+        run: python -c "from research.kill_zones.study import verify; print(verify())"
+      - name: Separate post-hoc offset protocol
+        run: python -c "import json,hashlib; from research.kill_zones.tp_offsets import lock_payload,HERE; p=json.loads((HERE/'tp_offset_lock.json').read_text()); h=p.pop('hash'); assert h==hashlib.sha256(json.dumps(p,sort_keys=True,separators=(',',':')).encode()).hexdigest(); assert p==json.loads(json.dumps(lock_payload()))"
+      - run: git diff --check HEAD^ HEAD

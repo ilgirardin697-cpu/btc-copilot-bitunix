@@ -1,0 +1,28 @@
+{
+  "available_at": "2026-10-01T00:00:00+00:00",
+  "not_a_current_signal": true,
+  "confirmed_mlrsi": "UNAVAILABLE",
+  "components": {
+    "h1_ao": 46.86588235292584,
+    "h1_ao_slope": -34.54676470589766,
+    "h1_adx": 17.642930200198666,
+    "h1_adx_slope": -1.0123945631911369,
+    "h1_di_plus": 20.144117407874937,
+    "h1_di_minus": 18.41593274144997,
+    "h1_konkorde": "KONKORDE_BEARISH_CONTEXT",
+    "h4_ao": -114.81999999999243,
+    "h4_ao_slope": 57.76882352940447,
+    "h4_adx": 13.476313247963779,
+    "h4_adx_slope": 1.1551366469283426,
+    "h4_di_plus": 26.20785248601741,
+    "h4_di_minus": 14.58477310305703,
+    "h4_konkorde": "KONKORDE_BULLISH_INSIDE",
+    "d1_ao": 3912.0767647058965,
+    "d1_ao_slope": -116.81588235290837,
+    "d1_adx": 41.85834728169709,
+    "d1_adx_slope": -0.46671821786114975,
+    "d1_di_plus": 31.51683522109298,
+    "d1_di_minus": 14.90278433511241,
+    "d1_konkorde": "KONKORDE_REENTRY"
+  }
+}
