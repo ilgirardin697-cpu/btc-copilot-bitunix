@@ -83,7 +83,8 @@ class WeeklyBoundary(unittest.TestCase):
             self.assertEqual(hashlib.sha256(text.encode()).hexdigest(),expected,name)
 
     def test_guardian_hook_is_after_completed_cycle_never_in_cycle(self):
-        tree=ast.parse((ROOT/'trade_guardian.py').read_text('utf-8'))
+        from capital_v2_safety import normalize_capital
+        tree=ast.parse(normalize_capital((ROOT/'trade_guardian.py').read_text('utf-8')))
         guardian=next(n for n in tree.body if isinstance(n,ast.ClassDef) and n.name=='Guardian')
         self.assertFalse(any(isinstance(n,ast.ImportFrom) and 'weekly' in (n.module or '') for n in ast.walk(guardian)))
         main=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='main')

@@ -13,6 +13,7 @@ from koncorde_shadow import diagnostic
 from guardian_signals import volatility_state, current_entry_quality
 from guardian_commands import SnapshotCache, TelegramCommands
 from copilot_audit import ForwardAudit, runtime_git_sha
+from guardian_capital_v2.host import before_guardian_cycle, owner_reply as capital_owner_reply
 
 
 def _safe_order_number(value):
@@ -331,13 +332,14 @@ def main():
         except Exception:
             Telegram._diagnostic('MLRSI_HOST_UNAVAILABLE')
         commands = TelegramCommands(os.getenv('TELEGRAM_BOT_TOKEN', ''), os.getenv('TELEGRAM_CHAT_ID', ''),
-                                    guardian.command_snapshot, guardian.telegram.send_owner,
+                                    guardian.command_snapshot, capital_owner_reply(guardian),
                                     enabled=os.getenv('GUARDIAN_ENABLE_COMMANDS', 'false').lower() == 'true',
                                     stats_cache=audit.stats_cache if audit is not None else None,
                                     mlrsi_status=mlrsi.status_cache.read if mlrsi is not None else None)
         commands.start()
         while True:
             started = time.monotonic()
+            before_guardian_cycle(guardian)
             guardian.cycle()
             try:
                 from bitman_weekly_forward_logging import after_cycle
