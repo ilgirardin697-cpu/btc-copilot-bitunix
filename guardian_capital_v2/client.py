@@ -8,6 +8,7 @@ import secrets
 import time
 import requests
 from guardian_bitunix import signature
+from .accounting import stop_interval
 
 D=Decimal
 POSITIONS='/api/v1/futures/position/get_pending_positions'
@@ -152,7 +153,7 @@ class Client:
         else:raise ValueError('CAPITAL_MUTATION_PATH_BLOCKED')
         if path in (PLACE_STOP,MODIFY_STOP,PLACE_POSITION_STOP,MODIFY_POSITION_STOP):
             price=D(body['slPrice']);mark=D(str(pending['mark']));liq=D(str(position['liqPrice']))
-            if not (liq<price<mark if position['side']=='LONG' else mark<price<liq):raise ValueError('CAPITAL_STOP_INTERVAL')
+            if not stop_interval(position['side'],mark,liq,price):raise ValueError('CAPITAL_STOP_INTERVAL')
         if not 0<=int(self.clock()*1000)-position['_observed_ms']<=5000:raise ValueError('CAPITAL_PREFLIGHT_EXPIRED')
         self.used.add(intent_id)  # consumed before the one and only POST
         self._wire_permit=(path,json.dumps(body,sort_keys=True,separators=(',',':')))

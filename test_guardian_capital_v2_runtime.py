@@ -42,22 +42,38 @@ def stop(qty='1',identifier='900',pid='123'):
 class FakeClient:
     def __init__(self,clock,execution=True):
         self.clock,self.execution=clock,execution;self.p=position();self.s=[stop()]
-        self.closed={};self.trades={'123':[dict(tradeId='100',symbol='BTCUSDT',qty='1',fee='1',realizedPNL='0',clientId='manual')]}
+        self.wallet=D('10000')
+        self.closed={};self.trades={'123':[dict(tradeId='100',symbol='BTCUSDT',qty='1',fee='1',realizedPNL='0',
+            clientId='manual',side='BUY',ctime=int(clock()*1000)-3600000)]}
         self.mark='100';self.mutations=[];self.bad_stop=False;self.timeout=False;self.reject=False
     def get(self,path,params):
         if path==POSITIONS:return [copy.deepcopy(self.p)] if self.p else []
         if path==TICKER:return [dict(symbol='BTCUSDT',markPrice=self.mark,lastPrice=self.mark)]
         if path==ACCOUNT:
-            return dict(marginCoin='USDT',available='9990',frozen='0',margin='10',transfer='9990',
-                        crossUnrealizedPNL=self.p['unrealizedPNL'] if self.p else '0',isolationUnrealizedPNL='0',bonus='0')
+            margin=D(self.p['margin']) if self.p else D('0')
+            return dict(marginCoin='USDT',available=str(self.wallet-margin),frozen='0',margin=str(margin),transfer='0',
+                        crossUnrealizedPNL=self.p['unrealizedPNL'] if self.p and self.p['marginMode']=='CROSS' else '0',
+                        isolationUnrealizedPNL=self.p['unrealizedPNL'] if self.p and self.p['marginMode']=='ISOLATION' else '0',bonus='0')
         if path==PAIRS:return [dict(symbol='BTCUSDT',basePrecision=4,quotePrecision=1,minTradeVolume='.0001')]
         if path==DETAIL:return dict(symbol='BTCUSDT',clientId=params['clientId'],status='NEW',reduceOnly=True,tradeQty='0')
         raise ValueError('FAKE_UNEXPECTED_GET')
     def pages(self,path,params,key):
         if path==TPSL:return copy.deepcopy([r for r in self.s if r['positionId']==params['positionId']])
         if path==TRADES:return copy.deepcopy(self.trades.get(params['positionId'],[]))
-        if path==HISTORY_POSITIONS:return [copy.deepcopy(self.closed[params['positionId']])]
+        if path==HISTORY_POSITIONS:
+            return [copy.deepcopy(self.closed[params['positionId']])] if 'positionId' in params else copy.deepcopy(list(self.closed.values()))
         raise ValueError('FAKE_UNEXPECTED_PAGES')
+    def manual_qty(self,qty,average=None,fee='0'):
+        p=self.p;delta=D(qty)-D(p['qty']);long=p['side'] in ('LONG','BUY')
+        opening='BUY' if long else 'SELL'
+        gross=D('0') if delta>0 else (D(self.mark)-D(p['avgOpenPrice']))*abs(delta)*(1 if long else -1)
+        self.trades.setdefault(p['positionId'],[]).append(dict(tradeId='M'+str(len(self.trades[p['positionId']])),
+            symbol='BTCUSDT',qty=str(abs(delta)),fee=fee,realizedPNL=str(gross),clientId='manual',
+            side=opening if delta>0 else 'SELL' if long else 'BUY',ctime=int(self.clock()*1000)))
+        self.wallet+=gross-D(fee);p['qty']=str(qty)
+        if average is not None:p['avgOpenPrice']=str(average)
+        p['fee']=str(-sum((D(r['fee']) for r in self.trades[p['positionId']]),D('0')))
+        p['unrealizedPNL']=str((D(self.mark)-D(p['avgOpenPrice']))*D(qty)*(1 if long else -1))
     def mutate(self,path,body,**kwargs):
         self.mutations.append((path,copy.deepcopy(body)))
         if self.timeout:raise ValueError('CAPITAL_REQUEST_UNCERTAIN')
@@ -67,11 +83,14 @@ class FakeClient:
             gross=(D(self.mark)-D(p['avgOpenPrice']))*qty*(1 if p['side']=='LONG' else -1)
             self.trades.setdefault(p['positionId'],[]).append(dict(tradeId=str(1000+len(self.mutations)),
                 symbol='BTCUSDT',qty=str(qty),fee=str(qty*D(self.mark)*D('.0006')),
-                realizedPNL=str(gross),clientId=body['clientId']))
+                realizedPNL=str(gross),clientId=body['clientId'],side=body['side'],ctime=int(self.clock()*1000)))
+            self.wallet+=gross-qty*D(self.mark)*D('.0006')
+            p['fee']=str(-sum((D(r['fee']) for r in self.trades[p['positionId']]),D('0')))
             if remaining==0:
                 self.closed[p['positionId']]=copy.deepcopy(p);self.p=None
             else:
                 self.p['qty']=str(remaining)
+                self.p['margin']=str(D(self.p['margin'])*remaining/before)
                 self.p['unrealizedPNL']=str(D(self.p['unrealizedPNL'])*remaining/before)
             return dict(orderId=str(500+len(self.mutations)))
         if path in (PLACE_STOP,PLACE_POSITION_STOP):
@@ -106,7 +125,7 @@ class RuntimeTests(unittest.TestCase):
             self.assertEqual(self.c.position()['side'],expected)
     def test_raw_buy_position_can_only_propose_sell_and_raw_sell_only_buy(self):
         for api_side,liq,close_side in (('BUY','99','SELL'),('SELL','101','BUY')):
-            self.client.p.update(side=api_side,liqPrice=liq)
+            self.client.p.update(positionId='123' if api_side=='BUY' else '456',side=api_side,liqPrice=liq)
             with patch.object(self.c,'act',return_value={'status':'SHADOW_PROPOSAL'}) as action:
                 self.c.step()
                 body=action.call_args.args[2]
@@ -127,7 +146,7 @@ class RuntimeTests(unittest.TestCase):
         self.assertEqual(self.c.total_loss(self.client.p),D('3'))
     def test_manual_add_qty_and_average_are_automatically_adopted(self):
         self.own();self.c.step();ref=self.j.latest('BASELINE')['reference_equity']
-        self.client.p.update(qty='2',avgOpenPrice='100.5',unrealizedPNL='-1')
+        self.client.manual_qty('2','100.5')
         self.c.step()
         self.assertEqual(self.client.mutations[-1][0],PLACE_POSITION_STOP)
         self.assertNotIn('slQty',self.client.mutations[-1][1])
@@ -136,17 +155,22 @@ class RuntimeTests(unittest.TestCase):
         self.assertEqual(self.c.step()['status'],'RESIDUAL_PROTECTED')
     def test_manual_add_does_not_reset_realized_loss_budget(self):
         self.c.step()
-        self.client.trades['123'].append(dict(tradeId='200',symbol='BTCUSDT',qty='.1',fee='0',realizedPNL='-95',clientId='manual-close'))
-        self.client.p.update(qty='2',avgOpenPrice='100',unrealizedPNL='-10')
+        self.client.trades['123'].append(dict(tradeId='200',symbol='BTCUSDT',qty='.1',fee='0',realizedPNL='-95',clientId='manual-close',side='SELL',ctime=int(self.clock()*1000)))
+        self.client.p['qty']='.9';self.client.wallet-=D('95')
+        self.client.manual_qty('2','100');self.client.p['unrealizedPNL']='-10'
         self.c.step();self.assertEqual(self.client.mutations[-1][1]['qty'],'2')
         self.assertIsNone(self.client.p)
-    def test_new_position_after_close_keeps_campaign_spent_budget(self):
+    def test_new_position_after_close_has_own_budget_and_preserves_global_losses(self):
         self.c.step();baseline=self.j.latest('BASELINE')
-        self.client.p.update(unrealizedPNL='-200')
-        self.client.trades['123'].append(dict(tradeId='200',symbol='BTCUSDT',qty='.1',fee='0',realizedPNL='-110',clientId='manual-close'))
+        self.client.trades['123'].append(dict(tradeId='200',symbol='BTCUSDT',qty='.1',fee='0',realizedPNL='-110',clientId='manual-close',side='SELL',ctime=int(self.clock()*1000)))
+        self.client.p['qty']='.9';self.client.wallet-=D('110')
         self.c.step();self.assertIsNone(self.client.p)
         self.client.p=position('456');self.client.s=[stop(pid='456')]
-        self.c.step();self.assertIsNone(self.client.p)
+        self.client.trades['456']=[dict(self.client.trades['123'][0],tradeId='NEW')];self.client.wallet-=D('2')
+        self.assertEqual(self.c.step()['status'],'RESIDUAL_PROTECTED')
+        self.assertIsNotNone(self.client.p)
+        self.assertEqual(sum(r['kind']=='CAMPAIGN_ALLOCATED' for r in self.j.rows),2)
+        self.assertLess(D(self.c.book.accounting('123')['net']),D('-100'))
         self.assertEqual(self.j.latest('BASELINE'),baseline)
     def test_first_and_second_structural_trims_once_each(self):
         self.own();self.context['broken_closes']=1
@@ -202,7 +226,7 @@ class RuntimeTests(unittest.TestCase):
         self.assertIsNotNone(self.c.verified_stop(self.client.p,self.client.s,D('100')))
     def test_excess_size_reduced_to_budget_not_artificially_tight_stop(self):
         self.c.step()
-        self.client.p.update(qty='30',avgOpenPrice='100',unrealizedPNL='0')
+        self.client.manual_qty('30','100')
         self.client.s=[]
         self.c.step()  # register structural position SL, never tighten for an oversized trade
         self.assertEqual(D(self.client.s[-1]['slPrice']),D('90'))
@@ -217,6 +241,7 @@ class RuntimeTests(unittest.TestCase):
         self.c.step();self.assertIsNone(self.client.p)
     def test_short_structural_trim_is_buy_reduce_only_never_open_long(self):
         self.client.p=position(side='SHORT');self.client.s=[dict(stop(),slPrice='105')]
+        self.client.trades['123'][0]['side']='SELL'
         self.context.update(stop=D('110'),broken_closes=1)
         self.c.step()
         body=next(b for path,b in self.client.mutations if path==REDUCE)
@@ -224,8 +249,8 @@ class RuntimeTests(unittest.TestCase):
         self.assertGreater(D(self.client.p['qty']),D('0'))
     def test_same_material_manual_change_back_again_does_not_reset_budget(self):
         self.c.step();baseline=self.j.latest('BASELINE')
-        self.client.p['qty']='2';self.c.step()
-        self.client.p['qty']='1';self.c.step()
+        self.client.manual_qty('2');self.c.step()
+        self.client.manual_qty('1');self.c.step()
         self.assertEqual(self.j.latest('POSITION')['qty'],'1')
         self.assertEqual(self.j.latest('BASELINE'),baseline)
     def test_logger_failure_does_not_prevent_critical_close(self):
@@ -236,8 +261,10 @@ class RuntimeTests(unittest.TestCase):
     def test_critical_close_locks_equity_before_future_manual_position(self):
         self.client.p['liqPrice']='99';self.c.step()
         self.assertEqual(self.j.latest('BASELINE')['reference_equity'],'9999')
-    def test_zero_liquidation_is_unverifiable_not_a_safe_distance(self):
-        self.client.p['liqPrice']='0';self.c.step();self.assertIsNone(self.client.p)
+    def test_zero_liquidation_is_documented_and_still_requires_protection(self):
+        self.client.p['liqPrice']='0'
+        self.assertEqual(self.c.step()['status'],'RESIDUAL_PROTECTED')
+        self.assertFalse(self.client.mutations)
     def test_critical_fresh_preflight_supersedes_structural_partial_trim(self):
         self.context['broken_closes']=1
         original=self.c.position;count=[0]
@@ -389,6 +416,16 @@ class ClientTests(unittest.TestCase):
         self.assertEqual(self.http.request.call_args.args[1],'https://fapi.bitunix.com'+PLACE_POSITION_STOP)
         self.assertNotIn('tpPrice',json.loads(self.http.request.call_args.kwargs['data']))
         self.assertNotIn('slQty',json.loads(self.http.request.call_args.kwargs['data']))
+    def test_documented_nonpositive_liquidation_allows_a_protective_sl_post(self):
+        self.p['liqPrice']='0'
+        body=dict(symbol='BTCUSDT',positionId='123',slPrice='90',slStopType='MARK_PRICE')
+        self.intent(PLACE_POSITION_STOP,body);self.send(PLACE_POSITION_STOP,body)
+        self.assertEqual(self.http.request.call_count,1)
+    def test_short_documented_no_liquidation_has_no_guessed_upper_bound(self):
+        self.p.update(side='SHORT',liqPrice='-1')
+        body=dict(symbol='BTCUSDT',positionId='123',slPrice='110',slStopType='MARK_PRICE')
+        self.intent(PLACE_POSITION_STOP,body);self.send(PLACE_POSITION_STOP,body)
+        self.assertEqual(self.http.request.call_count,1)
     def test_position_stop_modify_requires_owned_live_order_without_manual_tp(self):
         body=dict(symbol='BTCUSDT',positionId='123',slPrice='90',slStopType='MARK_PRICE')
         self.intent(MODIFY_POSITION_STOP,body)

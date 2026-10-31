@@ -15,7 +15,7 @@ jobs:
       - run: python -m pip install -r requirements.txt tzdata
       - run: python -m compileall -q guardian_capital_v2 capital_v2_safety.py trade_guardian.py
       - name: Protection policy, exchange faults, restarts and manual additions
-        run: python -m unittest test_guardian_capital_v2 test_guardian_capital_v2_runtime -v
+        run: python -m unittest test_guardian_capital_v2 test_guardian_capital_v2_runtime test_guardian_capital_v2_campaigns -v
       - name: Preserve previous protections and frozen protocols
         run: |
           python mlrsi_safety_audit.py
