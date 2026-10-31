@@ -1,0 +1,26 @@
+{
+  "all_complete_session_pairs_in_fixed_excerpt_shown": true,
+  "input_sha256": "b8224074b45887bec8d91d4827e302c6322e4f93dcbddf6ef3d381a44ede1cdd",
+  "performance_evaluation": false,
+  "real_days": [
+    {
+      "day": "2026-09-01",
+      "plan_status": null,
+      "reason": "BOX_ORDER_AMBIGUOUS",
+      "status": "UNAVAILABLE"
+    },
+    {
+      "day": "2026-09-02",
+      "plan_status": null,
+      "reason": "BOX_ORDER_AMBIGUOUS",
+      "status": "UNAVAILABLE"
+    },
+    {
+      "day": "2026-09-03",
+      "plan_status": "REJECTED_STOP_TARGET_ORDER",
+      "reason": null,
+      "status": "CONFIRMED_HYPOTHESIS"
+    }
+  ],
+  "synthetic_not_independent_evidence": true
+}

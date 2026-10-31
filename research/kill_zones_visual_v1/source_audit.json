@@ -1,0 +1,26 @@
+{
+  "base": "9d40020d539033cefb8f01734db8c6a6fdbba2e3",
+  "evidence": "LOCAL_ORIGINAL_FRAMES_AND_OWNER_SUPPLIED_TRANSCRIPT_INTERPRETATION",
+  "exact_numeric_video_parity": "NOT_PROVEN",
+  "frozen_pr40_head": "a612c4200eeecc41952393d02ff371f9daea0b0b",
+  "full_transcript_independently_received": false,
+  "nearest_available_frame_to_0955": "10m11s_anclaje.jpg",
+  "no_performance_evaluation": true,
+  "original_frame_exact_prices_and_utc": "UNAVAILABLE",
+  "original_spec_sha256": "b0b83c2759fb9eb131c216413331df5c1fdeb05c633659280220744e79289aba",
+  "parity_limit": "Original venue, scale, exact anchors, trigger identity and stop not independently established",
+  "source_photo_sha256": {
+    "03m35s_rectangulos.jpg": "84bec3362a4498e8b4ea80328256507f0ea73fa6c17bfc0572168ea10148f4cf",
+    "04m10s_rectangulos.jpg": "0c2819338c84ce186e179f578845ee0cff4f8e4264629f5e9b6228e2e11f1613",
+    "04m43s_linea_y_confirmacion.jpg": "ed45b72be80f5e728c64926ddeecd39109a0dee503e04e3002bca9ef67b9487c",
+    "05m24s_proyeccion_alcista.jpg": "4c4c7206769ba8929d397b15721940b8b0121677786ea5c4ed1201c2e1526922",
+    "06m23s_segmento_rojo.jpg": "7cae1a70088fe85bbf77993f0afaf05633292750d3121dc81a3aa981d14464fe",
+    "07m03s_ejemplo_bajista.jpg": "c1d585ead8257a7939aee898b7966c24fe8f6131d3e1dee9b5846ff465c6d0fd",
+    "09m24s_dos_zonas.jpg": "2f158273a469242dccf69de18f54d38e5a805464f7f296c83d1299c7283e0438",
+    "10m11s_anclaje.jpg": "df96828d44fb744c8abbd22e1e9d90ce4db91a3dd583c899a4a066af2b77f258",
+    "10m54s_segmento_rojo.jpg": "afd635e9cde20fcf453ed80b181af8c9599de00f4779d13209870c7e4ba662c3",
+    "12m30s_ejemplo_cuerpo.jpg": "e292a2084c625af73996c9a6d386bfea9cb80022ce06d6e9ff5f214969024d99",
+    "13m07s_traslacion.jpg": "63390bc673d07454c3c8df277b72bb5dfd15acb48b9cfee220537181846c19e8"
+  },
+  "trigger_is_measurement_extension": "EXPLICIT_PROTOTYPE_HYPOTHESIS_NOT_VERIFIED"
+}

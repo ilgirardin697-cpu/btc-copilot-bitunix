@@ -1,0 +1,32 @@
+{
+  "as_of": 1788480000000,
+  "confirmation": null,
+  "expires_at": 1788393600000,
+  "mode": "PAPER_SHADOW_ONLY",
+  "plan": null,
+  "prototype": "KZ_SINGLE_SEGMENT_VISUAL_V1",
+  "reason": "BOX_ORDER_AMBIGUOUS",
+  "session_boxes": [
+    {
+      "end": 1788321600000,
+      "high": "77767.80",
+      "high_at": 1788318000000,
+      "low": "76682.30",
+      "low_at": 1788310800000,
+      "name": "ASIA",
+      "start": 1788307200000
+    },
+    {
+      "end": 1788339600000,
+      "high": "77731.70",
+      "high_at": 1788332400000,
+      "low": "76706.00",
+      "low_at": 1788336000000,
+      "name": "LONDON",
+      "start": 1788328800000
+    }
+  ],
+  "setup": null,
+  "status": "UNAVAILABLE",
+  "trade_authority": "NONE"
+}
