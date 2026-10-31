@@ -1,4 +1,8 @@
 {
+  "annual_reporting_amendment": {
+    "previous_lock": "ca90565ddf76fbc1f45c1d0621954826dcdb4ca971556761162d9b260bdc30ca",
+    "reason": "Annual descriptive exposure denominator uses its own calendar split; no signal/fill/return/classification change."
+  },
   "base": "9d40020d539033cefb8f01734db8c6a6fdbba2e3",
   "dataset": {
     "bars_sha256": "e62b7f7ef3ddf0a574d73b8f0630481b4e6a754a8990355c60c4be8403f4fa3e",
@@ -9,7 +13,7 @@
     "numpy": "2.5.4",
     "python": "3.13.7"
   },
-  "lock_hash": "44a6bd39e7e30a8a63c52c4ac1b8ea6a8ff89e015140b1760d0757c2e7f3f680",
+  "lock_hash": "bd0aa0b041a78ddfe318f6d05576bc731e9c707f66ace8d1bf8a25f12055249c",
   "predeclared_commit": "5ccea82",
   "production_hashes": {
     "bitman_manual/__init__.py": "5e7be2f2765984178e6354228e30e6c396f6695910903a1bb9b50d953b982754",
@@ -91,16 +95,23 @@
     "trend_v8.py": "e5e26f93bca7c6c15cef2d98165c38e8806cc67762840b619ab0f5308af5bf31"
   },
   "protocol": "KILL_ZONES_RESEARCH_V0",
+  "report_only_amendment": {
+    "changed": [
+      "report.py"
+    ],
+    "previous_lock": "44a6bd39e7e30a8a63c52c4ac1b8ea6a8ff89e015140b1760d0757c2e7f3f680",
+    "reason": "Reserved word removed from report prose; unchanged rules, indicators, simulator, data and statistics. Existing safety guard preserved."
+  },
   "source_hashes": {
     "__init__.py": "55f4ba138c1074976e6ec51ee2d3c641fa2cd3433ef0bdd27561ef05dbc83e3f",
     "data.py": "9ee2cd20d9ab11e21d1ac8c930466e18c32e1b125e21a2c7fef2721527ba525c",
     "models.py": "72743ee6fad32da290c60bb9c8a60e51f6e3ebee55152d5c55ed285b54711c63",
-    "report.py": "4edf371fae1bcb686b5042bf33e6a963891567c6f88a5b861d6cfa17cde73118",
+    "report.py": "0b9d404a59a46da53e2cf1f09b69d06816882d2ab0b32a3721b30b705e1fd584",
     "requirements.txt": "1f7fd1730e9fccfc2cf0e5c33b331dbc0c2281f12bd6df122ccc55fb78025504",
     "simulation.py": "537dcc69e00ebd6bc5a325bc7d2dc69b46cff2b37ee2277f9f8439727480908d",
     "source_audit.json": "b7320d17c2cce79f28ecbd648fdf299bc3c74622f3b1ba2da617010ee88975a2",
     "specification.md": "cad3fda11a944b49f0c697b3859e0f792f2258b28e6a672fa38a8d786b85a08d",
     "statistics.py": "8f1ae888347bea5bfe33aa8175fa80d67db1fea67144388cf9d46bc8d4bb0a12",
-    "study.py": "65f2910abd22730680f37c3357fe81288305d197781c509dd86ccf8f8ad0c218"
+    "study.py": "3a516497194671f61f8de3748eda77878e04d5182ab367e001afca12ab9e8a75"
   }
 }

@@ -163,7 +163,7 @@ def write(out,result,trades,hourly,portfolios):
       'adequate LONG/SHORT counts and corrected paired improvement vs RANGE. NO EDGE is a nonpositive net mean with PF≤1 or a nonpositive upper CI; '
       'otherwise INCONCLUSIVE (n<30 always insufficient). All cells are shown; no best geometry/clock/target is selected.',
       '', '**'+result['conclusion']+'**. The exact video rule remains untested until visual anchors/translation are available. '
-      'No runtime, Guardian V2, V8, ML RSI, readiness, weekly V1, Railway or Telegram changes. '
+      'No runtime, Guardian V2, V8, ML RSI, operability, weekly V1, Railway or Telegram changes. '
       'No strategy activation or orders. Any continuation requires a new forward research protocol and independent review.',
       '', 'Reproduce: install research/kill_zones/requirements.txt; '
       'python -m research.kill_zones.data --download --cache research/cache/kill_zones_public; '

@@ -58,7 +58,8 @@ def run(cache):
         ev=subset(trades,name,'EVALUATION')
         for year in (2024,2025,2026):
             ts=[t for t in trades if t['model']==name and t['date'].startswith(str(year))]
-            cell['stability'][str(year)]=statistics.metrics(ts,'EVALUATION',with_ci=False)
+            annual_split={2024:'DEVELOPMENT',2025:'VALIDATION',2026:'EVALUATION'}[year]
+            cell['stability'][str(year)]=statistics.metrics(ts,annual_split,with_ci=False)
         for label,chosen in (('LONG',[r for r in ev if r['side']==1]),('SHORT',[r for r in ev if r['side']==-1]),
                             ('WEEKDAY',[r for r in ev if not r['weekend']]),('WEEKEND',[r for r in ev if r['weekend']]),
                             ('2026_H1',[r for r in ev if r['date']<'2026-07-01']),('2026_H2',[r for r in ev if r['date']>='2026-07-01'])):

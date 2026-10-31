@@ -1,0 +1,32 @@
+{
+  "protocol": "POST_HOC_REQUESTED_TP_OFFSET_SENSITIVITY_V0",
+  "base_lock": "bd0aa0b041a78ddfe318f6d05576bc731e9c707f66ace8d1bf8a25f12055249c",
+  "files": {
+    "tp_offset_addendum_specification.md": "8d18d159fb00f34be0fc467448125a81eeed06491bc3ceb885fd1d5c443709cf",
+    "tp_offsets.py": "14a2ab36cf0b668c0d3900212b0b0ef691077d96e45ce3ea4c7946d66aa81e1b"
+  },
+  "offsets": [
+    [
+      "ATR010",
+      "ATR",
+      0.1
+    ],
+    [
+      "ATR025",
+      "ATR",
+      0.25
+    ],
+    [
+      "BPS5",
+      "BPS",
+      5.0
+    ],
+    [
+      "BPS10",
+      "BPS",
+      10.0
+    ]
+  ],
+  "no_independent_holdout": true,
+  "hash": "2f4341a3c642ac01c710bd9b615e40386a26687994c12369ff9089797444e86f"
+}
