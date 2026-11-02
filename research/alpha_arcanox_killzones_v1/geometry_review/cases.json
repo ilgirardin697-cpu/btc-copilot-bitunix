@@ -1,32 +1,293 @@
 {
-  "purpose": "Separate each incoming image from the old 78285/77517 reference. Never infer matching setups by price proximity.",
-  "new_images_available": false,
   "cases": [
     {
-      "case_id": "NEW_BLUE_CAPTURE_1",
-      "image": null,
-      "sha256": null,
-      "status": "AWAITING_ORIGINAL_IMAGE",
-      "original_upper": null,
-      "original_lower": null,
-      "upper_anchor_hypotheses": [],
-      "lower_anchor_hypotheses": [],
+      "case_id": "BLUE_SCENE_PAIR_A",
+      "confirmation_line_status": "HIGH_LOW_NOT_IDENTIFIED",
       "confirmation_lines": {},
-      "same_setup_as_old_levels": "UNVERIFIED"
+      "frame_id": "NEW_BLUE_CAPTURE_1",
+      "image": "01_linea_original_circulos.png",
+      "image_size": [
+        687,
+        561
+      ],
+      "lower_anchor_hypotheses": [
+        {
+          "derivation": "x=(observed box left+right)/2 for layout; y=top+7 or bottom-7 using observed circle radius; zero price/target fitting",
+          "feature": "HYPOTHESIS: upper circle inside TOP edge of upper box; radius 7px",
+          "horizontal_position": "BOX_MIDPOINT_FOR_DISPLAY_ONLY_NOT_OBSERVED_ANCHOR_OR_TIME",
+          "id": "D_TOP",
+          "point": [
+            164.5,
+            178
+          ]
+        },
+        {
+          "derivation": "x=(observed box left+right)/2 for layout; y=top+7 or bottom-7 using observed circle radius; zero price/target fitting",
+          "feature": "HYPOTHESIS: upper circle inside BOTTOM edge of upper box; radius 7px",
+          "horizontal_position": "BOX_MIDPOINT_FOR_DISPLAY_ONLY_NOT_OBSERVED_ANCHOR_OR_TIME",
+          "id": "D_BOTTOM",
+          "point": [
+            164.5,
+            292
+          ]
+        }
+      ],
+      "measurement_evidence": "OBSERVED",
+      "measurement_units": "IMAGE_PIXELS_ONLY_NOT_USDT",
+      "observed_lower_copy": null,
+      "observed_upper_copy": null,
+      "old_reference_values_not_used": true,
+      "original_lower": [
+        202,
+        325
+      ],
+      "original_upper": [
+        202,
+        167
+      ],
+      "pixel_uncertainty": "Circle centers/raster edges about +/-1 pixel; no exact price claim",
+      "price_calibration": "NONE; partial axis and no exact lower-endpoint price",
+      "price_height": null,
+      "rectangles": [
+        {
+          "bounds": [
+            127,
+            171,
+            202,
+            299
+          ],
+          "id": "upper_left",
+          "right_edge": "Partly covered by measurement; supported by frame registration"
+        },
+        {
+          "bounds": [
+            238,
+            249,
+            295,
+            329
+          ],
+          "edges": "Observed purple stroke outer coordinates",
+          "id": "lower_right"
+        }
+      ],
+      "registered_upper_copy": {
+        "evidence": "REGISTERED_FROM_FRAME_2_NOT_VISIBLE_CIRCLES_HERE",
+        "lower": [
+          276,
+          259
+        ],
+        "upper": [
+          276,
+          101
+        ]
+      },
+      "same_setup_as_old_levels": "UNVERIFIED",
+      "session_identity": "Left/right = Asia/London according to owner context; labels and UTC times are cropped",
+      "sha256": "8cb3f56448834682d5195f7812d58cddc2bd193fe1f2184aa6256a6c23d8869a",
+      "status": "SOURCE_ANNOTATED",
+      "upper_anchor_hypotheses": []
     },
     {
-      "case_id": "NEW_BLUE_CAPTURE_2",
-      "image": null,
-      "sha256": null,
-      "status": "AWAITING_ORIGINAL_IMAGE",
-      "original_upper": null,
-      "original_lower": null,
-      "upper_anchor_hypotheses": [],
-      "lower_anchor_hypotheses": [],
+      "case_id": "BLUE_SCENE_PAIR_A",
+      "confirmation_line_status": "HIGH_LOW_NOT_IDENTIFIED",
       "confirmation_lines": {},
-      "same_setup_as_old_levels": "UNVERIFIED"
+      "frame_id": "NEW_BLUE_CAPTURE_2",
+      "image": "02_linea_clonada_circulos.png",
+      "image_size": [
+        485,
+        436
+      ],
+      "lower_anchor_hypotheses": [
+        {
+          "derivation": "x=(observed box left+right)/2 for layout; y=top+7 or bottom-7 using observed circle radius; zero price/target fitting",
+          "feature": "HYPOTHESIS: upper circle inside TOP edge of upper box; radius 7px",
+          "horizontal_position": "BOX_MIDPOINT_FOR_DISPLAY_ONLY_NOT_OBSERVED_ANCHOR_OR_TIME",
+          "id": "D_TOP",
+          "point": [
+            221.5,
+            158
+          ]
+        },
+        {
+          "derivation": "x=(observed box left+right)/2 for layout; y=top+7 or bottom-7 using observed circle radius; zero price/target fitting",
+          "feature": "HYPOTHESIS: upper circle inside BOTTOM edge of upper box; radius 7px",
+          "horizontal_position": "BOX_MIDPOINT_FOR_DISPLAY_ONLY_NOT_OBSERVED_ANCHOR_OR_TIME",
+          "id": "D_BOTTOM",
+          "point": [
+            221.5,
+            272
+          ]
+        }
+      ],
+      "measurement_evidence": "REGISTERED_FROM_FRAME_1_NOT_VISIBLE_ORIGINAL_HERE",
+      "measurement_units": "IMAGE_PIXELS_ONLY_NOT_USDT",
+      "observed_lower_copy": null,
+      "observed_upper_copy": {
+        "evidence": "OBSERVED_BLUE_CIRCLES",
+        "lower": [
+          333,
+          239
+        ],
+        "upper": [
+          333,
+          81
+        ]
+      },
+      "old_reference_values_not_used": true,
+      "original_lower": [
+        259,
+        305
+      ],
+      "original_upper": [
+        259,
+        147
+      ],
+      "pixel_uncertainty": "Circle centers/raster edges about +/-1 pixel; no exact price claim",
+      "price_calibration": "NONE; partial axis and no exact lower-endpoint price",
+      "price_height": null,
+      "rectangles": [
+        {
+          "bounds": [
+            184,
+            151,
+            259,
+            279
+          ],
+          "edges": "Observed purple stroke outer coordinates",
+          "id": "upper_left"
+        },
+        {
+          "bounds": [
+            295,
+            229,
+            352,
+            309
+          ],
+          "edges": "Observed purple stroke outer coordinates",
+          "id": "lower_right"
+        }
+      ],
+      "registered_upper_copy": null,
+      "same_setup_as_old_levels": "UNVERIFIED",
+      "session_identity": "Left/right = Asia/London according to owner context; labels and UTC times are cropped",
+      "sha256": "15e018e4440e91187e2e8ef5fd97222b12880f95e07fe7ad4aa2ad19987af5ac",
+      "status": "SOURCE_ANNOTATED",
+      "upper_anchor_hypotheses": []
     }
   ],
+  "new_images_available": true,
   "old_label_reference_case_id": "ALPHA_LABEL_REFERENCE_78285_77517",
-  "old_reference_not_rebound_to_new_images": true
+  "old_reference_not_rebound_to_new_images": true,
+  "purpose": "Actual source-derived annotations; keep both frames separate and bind only their observed scene translation",
+  "registration": {
+    "clone_check": {
+      "copy_height_px": 158,
+      "copy_translation_from_lower_circle": [
+        74,
+        -66
+      ],
+      "free_endpoint_residual_px": 0,
+      "measurement_height_px": 158,
+      "observed_free_upper": [
+        333,
+        81
+      ],
+      "predicted_free_upper": [
+        333,
+        81
+      ],
+      "registered_original_lower": [
+        259,
+        305
+      ],
+      "registered_original_upper": [
+        259,
+        147
+      ],
+      "visible_circle_radius_px": 7
+    },
+    "edge_offsets": {
+      "copy_circle_top_minus_lower_box_top_px": 3,
+      "copy_lower_center_minus_lower_box_top_px": 10,
+      "original_lower_center_minus_lower_box_bottom_px": -4,
+      "original_upper_center_minus_upper_box_top_px": -4
+    },
+    "interpretation": "Same visible scene; does not establish market/UTC identity or binding to previous four labels",
+    "landmarks": [
+      {
+        "name": "upper_box_top_left",
+        "source": [
+          127,
+          171
+        ],
+        "target": [
+          184,
+          151
+        ]
+      },
+      {
+        "name": "upper_box_bottom_left",
+        "source": [
+          127,
+          299
+        ],
+        "target": [
+          184,
+          279
+        ]
+      },
+      {
+        "name": "lower_box_top_left",
+        "source": [
+          238,
+          249
+        ],
+        "target": [
+          295,
+          229
+        ]
+      },
+      {
+        "name": "lower_box_top_right",
+        "source": [
+          295,
+          249
+        ],
+        "target": [
+          352,
+          229
+        ]
+      },
+      {
+        "name": "lower_box_bottom_left",
+        "source": [
+          238,
+          329
+        ],
+        "target": [
+          295,
+          309
+        ]
+      },
+      {
+        "name": "lower_box_bottom_right",
+        "source": [
+          295,
+          329
+        ],
+        "target": [
+          352,
+          309
+        ]
+      }
+    ],
+    "max_landmark_residual_px": 0,
+    "method": "Translation derived ONLY from six matching purple rectangle corners, not from targets or copy circles",
+    "same_scene_binding": "VERIFIED_BY_RECTANGLES_AND_CANDLE_PATTERN",
+    "same_setup_as_old_four_labels": "UNVERIFIED",
+    "translation": [
+      57,
+      -20
+    ]
+  }
 }

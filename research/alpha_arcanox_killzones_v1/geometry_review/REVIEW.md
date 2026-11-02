@@ -1,4 +1,10 @@
-# Vertical geometry review — source images pending
+# Initial geometry review at 63a191b — historical context
+
+**UPDATE: both real PNGs are now available and reviewed.** Current observations,
+actual reconstructions, clone verification and remaining uncertainties are in
+[SOURCE_REVIEW.md](SOURCE_REVIEW.md) and [the actual-frame gallery](artifacts/index.html).
+The text below records the INITIAL state before the new files arrived; its
+missing-file statements are historical, not the current evidence status.
 
 Base: `6aa977782aa7d5e499dd765622350888176a8cfe`, existing Alpha owner-rule prototype.
 Separate branch: `alpha-arcanox-vertical-geometry-review`.

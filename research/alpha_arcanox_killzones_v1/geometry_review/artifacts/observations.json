@@ -1,0 +1,125 @@
+{
+  "geometry": {
+    "copy_fit_uses": "OBSERVED_LOWER_SUPPORT_CIRCLE_ONLY",
+    "copy_height_px": "158",
+    "copy_translation_px": [
+      "74",
+      "-66"
+    ],
+    "endpoint_residual_px": [
+      "0",
+      "0"
+    ],
+    "height_USDT": null,
+    "landmark_count": 6,
+    "max_absolute_landmark_residual_px": "0",
+    "measured_edge_offsets_px": {
+      "copy_circle_top_minus_lower_box_top_px": 3,
+      "copy_lower_center_minus_lower_box_top_px": 10,
+      "original_lower_center_minus_lower_box_bottom_px": -4,
+      "original_upper_center_minus_upper_box_top_px": -4
+    },
+    "observed_lower_projection": false,
+    "observed_upper_px": [
+      333,
+      81
+    ],
+    "old_four_level_setup_binding": "UNVERIFIED",
+    "operational_paper": "BLOCKED",
+    "original_height_px": "158",
+    "predicted_upper_px": [
+      "333",
+      "81"
+    ],
+    "price_calibration_verified": false,
+    "registered_original_lower_px": [
+      "259",
+      "305"
+    ],
+    "registered_original_upper_px": [
+      "259",
+      "147"
+    ],
+    "scene_fit_uses": "PURPLE_RECTANGLE_CORNERS_ONLY",
+    "scene_translation_px": [
+      "57",
+      "-20"
+    ]
+  },
+  "source_readings": [
+    {
+      "blue_rings": [
+        {
+          "bounds": [
+            195,
+            160,
+            209,
+            174
+          ],
+          "center": [
+            202.0,
+            167.0
+          ],
+          "pixels": 80
+        },
+        {
+          "bounds": [
+            195,
+            318,
+            209,
+            332
+          ],
+          "center": [
+            202.0,
+            325.0
+          ],
+          "pixels": 80
+        }
+      ],
+      "frame_id": "NEW_BLUE_CAPTURE_1",
+      "plot_mask_width": 620,
+      "sha256": "8cb3f56448834682d5195f7812d58cddc2bd193fe1f2184aa6256a6c23d8869a",
+      "source_size": [
+        687,
+        561
+      ]
+    },
+    {
+      "blue_rings": [
+        {
+          "bounds": [
+            326,
+            74,
+            340,
+            88
+          ],
+          "center": [
+            333.0,
+            81.0
+          ],
+          "pixels": 80
+        },
+        {
+          "bounds": [
+            326,
+            232,
+            340,
+            246
+          ],
+          "center": [
+            333.0,
+            239.0
+          ],
+          "pixels": 80
+        }
+      ],
+      "frame_id": "NEW_BLUE_CAPTURE_2",
+      "plot_mask_width": 485,
+      "sha256": "15e018e4440e91187e2e8ef5fd97222b12880f95e07fe7ad4aa2ad19987af5ac",
+      "source_size": [
+        485,
+        436
+      ]
+    }
+  ]
+}

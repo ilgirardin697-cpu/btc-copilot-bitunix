@@ -137,9 +137,10 @@ class EvidenceTests(unittest.TestCase):
         allowed={'dataclasses','decimal','base64','hashlib','html','pathlib','argparse','json'}
         for p in HERE.glob('*.py'):
             if p.name.startswith('test_'):continue
+            permitted=allowed|({'PIL'} if p.name=='source_review.py' else set())
             for n in ast.walk(ast.parse(p.read_text(encoding='utf-8'))):
-                if isinstance(n,ast.Import):self.assertTrue(all(a.name.split('.')[0] in allowed for a in n.names))
-                if isinstance(n,ast.ImportFrom) and not n.level:self.assertIn(n.module.split('.')[0],allowed)
+                if isinstance(n,ast.Import):self.assertTrue(all(a.name.split('.')[0] in permitted for a in n.names))
+                if isinstance(n,ast.ImportFrom) and not n.level:self.assertIn(n.module.split('.')[0],permitted)
 
 
 if __name__=='__main__':unittest.main()
