@@ -1,0 +1,32 @@
+{
+  "purpose": "Separate each incoming image from the old 78285/77517 reference. Never infer matching setups by price proximity.",
+  "new_images_available": false,
+  "cases": [
+    {
+      "case_id": "NEW_BLUE_CAPTURE_1",
+      "image": null,
+      "sha256": null,
+      "status": "AWAITING_ORIGINAL_IMAGE",
+      "original_upper": null,
+      "original_lower": null,
+      "upper_anchor_hypotheses": [],
+      "lower_anchor_hypotheses": [],
+      "confirmation_lines": {},
+      "same_setup_as_old_levels": "UNVERIFIED"
+    },
+    {
+      "case_id": "NEW_BLUE_CAPTURE_2",
+      "image": null,
+      "sha256": null,
+      "status": "AWAITING_ORIGINAL_IMAGE",
+      "original_upper": null,
+      "original_lower": null,
+      "upper_anchor_hypotheses": [],
+      "lower_anchor_hypotheses": [],
+      "confirmation_lines": {},
+      "same_setup_as_old_levels": "UNVERIFIED"
+    }
+  ],
+  "old_label_reference_case_id": "ALPHA_LABEL_REFERENCE_78285_77517",
+  "old_reference_not_rebound_to_new_images": true
+}

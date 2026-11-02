@@ -1,0 +1,28 @@
+{
+  "parent_commit": "6aa977782aa7d5e499dd765622350888176a8cfe",
+  "sha256": {
+    ".gitattributes": "a79691a93b46e49ce460c26ef22afcc03d6eca1e63bf2edbc20e96159510f6c9",
+    "README.md": "c749bf287406f6cdc776dbb28402c0b77d8c5e136139e897fdd68b408410c39e",
+    "REPORT.md": "169358f31c075a23fb3b944f359b0eb91afcbc73b2774a2900df8faefef2422a",
+    "__init__.py": "5870ff11f1e20c0cc3afe2e260e1c4992b4bb05546209e07d05912edb3f40180",
+    "__main__.py": "1287e10da23d1017578b398e76fbc8c943076a62caf50acf66ae1d93897c4d60",
+    "artifacts/index.html": "0d6cd67aeba5295f67530d3a4c6ef5df530527c43afb337afbc166111071b410",
+    "artifacts/killzone_OFFLINE_preview.txt": "882131f48136206f274ee11830dab06ecf2dd7cab69ade12f277927599be4b42",
+    "artifacts/observed_reference_levels.svg": "6b9ae6ceec69629b5edb62c1773e49a51125d6803e5f2ba75d53845a4418b1d5",
+    "artifacts/public_sessions_demo.svg": "1dd1f26b647294d91caa920e5cc1d7b8d1d62fb4fac45a326fa721e345bbb5f7",
+    "artifacts/public_sessions_snapshot.json": "650fb511abb5f266055a5c11bbcfa0077f346c2cca93eab57ca99e9bb8b20d05",
+    "artifacts/synthetic_risk_controls.json": "47cf42e99cd0d5ade47fd3994d644141b77d7e8b8680295ce3c79c76020d2f5c",
+    "build.py": "9c8d8a8a9e5d42943f9aad36dd6480dfa51a5e6ab7dd0dc25df512b230575f5a",
+    "compare_source.py": "aa93c34028107ef8be407608072449f5e903ac5a1d9a2c45559558e134d29afe",
+    "core.py": "ee7b3f978218cd3ba793dae1708ba8b1ae68e7da7b47fe63636bebc941f52ac8",
+    "data.py": "6a68ffed1345c954be4327707e24fc0fb0a455249a5fd0de886f396c96991fce",
+    "fixtures/illustrative_costs.json": "ca385ad7cc6425292488f3e5750b32dc017bdcb8fa32cea6f4b61c06d9382b20",
+    "fixtures/owner_reference.json": "e42a1f8ccacf78a78744a5f4ec37e4d619c213d2b009318226c8068389a91b68",
+    "fixtures/public_data_manifest.json": "b303dbc0313999002962210055a30def01b8e12956825009350ecb03e4e2f580",
+    "fixtures/public_sessions_demo.csv": "b8224074b45887bec8d91d4827e302c6322e4f93dcbddf6ef3d381a44ede1cdd",
+    "fixtures/source_audit.json": "6509f7d8c72b26834dd1bda6bee9b8edc539abace84231af3abc49bf94016f0d",
+    "render.py": "8b58240bc9aea95e8e6e1e1d7bd7b3b6db2e7e771e2a5c1ccd3e7238da7ab575",
+    "risk.py": "1111806cffe682ccd7bcec24b7cdb566062d88821f7501dba6e97fd0837e297b",
+    "test_alpha.py": "05d8f0582714cd9204d0322d0ab7e296b45b152c321fb27d749eeea1246abbb1"
+  }
+}

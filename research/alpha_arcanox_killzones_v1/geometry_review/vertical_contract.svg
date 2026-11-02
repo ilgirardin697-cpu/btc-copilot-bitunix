@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1050" viewBox="0 0 1500 1050">
+<rect width="1500" height="1050" fill="#101824"/>
+<style>text{font:18px Arial;fill:#edf1f7}.small{font-size:15px}.warn{fill:#f8c15d}</style>
+<text x="30" y="35" style="font-size:25px">Medición vertical y dos copias: objetos separados</text>
+<text x="30" y="72" class="warn">ESQUEMA SIMBÓLICO. NO ES RECONSTRUCCIÓN DE LAS DOS CAPTURAS NUEVAS: faltan los archivos.</text>
+<text x="30" y="105" class="small">Sin precios, fechas ni velas inventadas. Las ubicaciones dibujadas son ilustrativas, no anclajes verificados.</text>
+<rect x="350" y="540" width="220" height="210" fill="#ead067" fill-opacity=".10" stroke="#ead067"/>
+<rect x="700" y="300" width="220" height="190" fill="#ead067" fill-opacity=".10" stroke="#ead067"/>
+<text x="355" y="785">Recuadro más bajo</text><text x="705" y="275">Recuadro más alto</text>
+<line x1="180" y1="300" x2="180" y2="750" stroke="#4eabff" stroke-width="5"/>
+<circle cx="180" cy="300" r="10" fill="#101824" stroke="#4eabff" stroke-width="4"/>
+<circle cx="180" cy="750" r="10" fill="#101824" stroke="#4eabff" stroke-width="4"/>
+<text x="40" y="250" style="fill:#4eabff">A · ORIGINAL</text><text x="40" y="280">Círculo superior P+</text>
+<text x="35" y="795">Círculo inferior P−</text>
+<text x="35" y="530" style="fill:#4eabff">H = P+ − P−</text>
+<rect x="355" y="545" width="210" height="45" fill="#55dcef" fill-opacity=".18" stroke="#55dcef" stroke-dasharray="5 4"/>
+<line x1="460" y1="120" x2="460" y2="570" stroke="#55dcef" stroke-width="4" stroke-dasharray="7 5"/>
+<circle cx="460" cy="120" r="10" fill="#101824" stroke="#55dcef" stroke-width="3"/>
+<circle cx="460" cy="570" r="10" fill="#101824" stroke="#55dcef" stroke-width="3"/>
+<text x="360" y="150" style="fill:#55dcef">B · COPIA SUPERIOR</text>
+<text x="485" y="190">Libre superior: A↑ + H</text>
+<text x="365" y="625">Apoya el círculo INFERIOR en A↑</text>
+<text x="355" y="660" class="small">A↑: nivel interior por identificar</text>
+<rect x="705" y="440" width="210" height="45" fill="#ef6fb5" fill-opacity=".18" stroke="#ef6fb5" stroke-dasharray="5 4"/>
+<line x1="810" y1="465" x2="810" y2="915" stroke="#ef6fb5" stroke-width="4" stroke-dasharray="7 5"/>
+<circle cx="810" cy="465" r="10" fill="#101824" stroke="#ef6fb5" stroke-width="3"/>
+<circle cx="810" cy="915" r="10" fill="#101824" stroke="#ef6fb5" stroke-width="3"/>
+<text x="705" y="530" style="fill:#ef6fb5">C · COPIA INFERIOR</text>
+<text x="840" y="575">Apoya el círculo SUPERIOR</text>
+<text x="840" y="610">en A↓, por identificar</text>
+<text x="740" y="955">Libre inferior: A↓ − H</text>
+<path d="M1090 160 V880" stroke="#43546a" stroke-width="2"/>
+<text x="1120" y="220" style="fill:#ead067">D · CONFIRMACIÓN</text>
+<text x="1110" y="265" class="small">Escala independiente del esquema</text>
+<line x1="1130" y1="380" x2="1450" y2="380" stroke="#ead067" stroke-width="3" stroke-dasharray="8 5"/>
+<line x1="1130" y1="570" x2="1450" y2="570" stroke="#ead067" stroke-width="3" stroke-dasharray="8 5"/>
+<text x="1200" y="360">HIGH: por verificar</text><text x="1200" y="550">LOW: por verificar</text>
+<text x="1115" y="650" class="small">No son la medición ni sus copias.</text>
+<text x="1115" y="690" class="small">No se supone HIGH = A↑</text>
+<text x="1115" y="725" class="small">ni LOW = A↓.</text>
+<text x="1115" y="785" class="small">Libre ≠ etiqueta del indicador</text>
+<text x="1115" y="820" class="small">sin comprobar la alineación.</text>
+<text x="30" y="1010" class="warn">Sin mezcla con los cuatro niveles anteriores · Sin prolongación infinita · Sin señales · TRADE AUTHORITY: NONE</text>
+</svg>
