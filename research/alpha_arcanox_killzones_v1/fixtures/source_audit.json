@@ -1,0 +1,20 @@
+{
+  "descript_project": "https://web.descript.com/fa46b015-7440-4d90-af6d-de39f4b34a1a/9faf8",
+  "independent_public_indicator_formula_found": false,
+  "key_segments": {
+    "04:09-04:26": "Measurement between lower/upper extremes of the boxes",
+    "05:16-05:44": "Clone and placement by the lower box upper zone; exact offsets not numeric",
+    "08:19-08:39": "Circle placement inside the rectangle, no numerical offset definition",
+    "09:55-10:40": "Verbal high/low and breakout description; does not justify infinite extension",
+    "12:31-12:40": "Body confirmation distinction"
+  },
+  "original_screenshots_not_published": true,
+  "prior_work_not_rewritten": true,
+  "public_source_code_found": false,
+  "source": "Owner images + recovered existing Descript transcript",
+  "source_formula_status": "NOT_VERIFIED",
+  "source_search_note": "Exact name searches did not identify an attributable public source; unrelated Killzone scripts excluded",
+  "transcript_raw_local_only": true,
+  "transcript_recovered": true,
+  "transcript_sha256": "c083e6c1dfda983cc2ed6d0283a840b0ab2fd1bcde73759564f87e4b424bbbb3"
+}

@@ -1,0 +1,29 @@
+name: Alpha Arcanox Kill Zones offline V1
+on:
+  push:
+    paths:
+      - 'research/alpha_arcanox_killzones_v1/**'
+      - '.github/workflows/alpha-arcanox-killzones-v1.yml'
+  pull_request:
+    paths:
+      - 'research/alpha_arcanox_killzones_v1/**'
+      - '.github/workflows/alpha-arcanox-killzones-v1.yml'
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m compileall -q research/alpha_arcanox_killzones_v1
+      - run: python -m unittest research.alpha_arcanox_killzones_v1.test_alpha -v
+      - name: Reproduce only offline evidence and check deterministic artifacts
+        run: |
+          python -m research.alpha_arcanox_killzones_v1.build
+          git diff --exit-code -- research/alpha_arcanox_killzones_v1/artifacts
+      - run: git diff --check HEAD^ HEAD

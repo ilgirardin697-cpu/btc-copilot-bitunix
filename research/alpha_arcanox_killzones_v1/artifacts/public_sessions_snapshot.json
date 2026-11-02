@@ -1,0 +1,154 @@
+{
+  "data": {
+    "first_open": "2026-09-01T00:00:00Z",
+    "last_available": "2026-09-04T00:00:00Z",
+    "no_virgin_holdout": true,
+    "normalization": "12 exact contiguous 5m to closed 1H; UTC ms; Decimal OHLC, base volume sum",
+    "original_example_ticker": "UNKNOWN",
+    "original_example_timestamps": "UNKNOWN",
+    "role": "SESSION_ATR_MECHANICS_ONLY_NOT_ORIGINAL_ALPHA_EXAMPLE",
+    "rows": 72,
+    "sha256": "b8224074b45887bec8d91d4827e302c6322e4f93dcbddf6ef3d381a44ede1cdd",
+    "source_archive_sha256": "3a2d163a2bd28ca614fa0840a92ecbcde0d9c4962b278dd619d5bf81a9918e26",
+    "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-09.zip",
+    "symbol": "BTCUSDT",
+    "venue": "BINANCE_USDM_PERPETUAL"
+  },
+  "role": "NOT_ALPHA_EXAMPLE",
+  "snapshot": {
+    "as_of": 1788357600000,
+    "atr14_context": {
+      "available_at": 1788357600000,
+      "seed": "First 14 true ranges of supplied closed history; Wilder RMA",
+      "value": "500.064959614835823074471500566176303209"
+    },
+    "clock": "UTC-04:00_FIXED",
+    "confirmation": null,
+    "levels": {
+      "HIGH": null,
+      "INFERIOR": null,
+      "LOW": null,
+      "SUPERIOR": null,
+      "available_at": 1788339600000,
+      "evidence_id": null,
+      "formula_id": null,
+      "pair_day": "2026-09-02"
+    },
+    "levels_verified": false,
+    "pair": {
+      "asia": {
+        "candles": [
+          {
+            "close": "77179.50",
+            "high": "77485.00",
+            "low": "77093.40",
+            "open": "77400.20",
+            "open_time": 1788307200000,
+            "volume": "3330.762"
+          },
+          {
+            "close": "76983.00",
+            "high": "77343.40",
+            "low": "76682.30",
+            "open": "77179.50",
+            "open_time": 1788310800000,
+            "volume": "6433.319"
+          },
+          {
+            "close": "77299.90",
+            "high": "77320.30",
+            "low": "76913.40",
+            "open": "76983.00",
+            "open_time": 1788314400000,
+            "volume": "4801.314"
+          },
+          {
+            "close": "77534.30",
+            "high": "77767.80",
+            "low": "77280.60",
+            "open": "77299.90",
+            "open_time": 1788318000000,
+            "volume": "6626.342"
+          },
+          {
+            "close": "77526.00",
+            "high": "77578.50",
+            "low": "77265.60",
+            "open": "77534.30",
+            "open_time": 1788321600000,
+            "volume": "2767.678"
+          }
+        ],
+        "end": 1788325200000,
+        "high": "77767.80",
+        "low": "76682.30",
+        "name": "ASIA",
+        "start": 1788307200000
+      },
+      "available_at": 1788339600000,
+      "day": "2026-09-02",
+      "london": {
+        "candles": [
+          {
+            "close": "77618.50",
+            "high": "77735.00",
+            "low": "77394.60",
+            "open": "77526.00",
+            "open_time": 1788325200000,
+            "volume": "4092.709"
+          },
+          {
+            "close": "77578.20",
+            "high": "77689.10",
+            "low": "77416.00",
+            "open": "77618.60",
+            "open_time": 1788328800000,
+            "volume": "3424.906"
+          },
+          {
+            "close": "77444.90",
+            "high": "77731.70",
+            "low": "77435.40",
+            "open": "77578.20",
+            "open_time": 1788332400000,
+            "volume": "2378.462"
+          },
+          {
+            "close": "76819.70",
+            "high": "77518.20",
+            "low": "76706.00",
+            "open": "77444.80",
+            "open_time": 1788336000000,
+            "volume": "8841.883"
+          }
+        ],
+        "end": 1788339600000,
+        "high": "77735.00",
+        "low": "76706.00",
+        "name": "LONDON",
+        "start": 1788325200000
+      }
+    },
+    "paper_decision": "RECHAZADA",
+    "reason_codes": [
+      "HIGH_NO_VERIFICADO",
+      "LOW_NO_VERIFICADO",
+      "SUPERIOR_NO_VERIFICADO",
+      "INFERIOR_NO_VERIFICADO",
+      "FORMULA_ORIGINAL_NO_VERIFICADA"
+    ],
+    "risk": null,
+    "rules": "ALPHA_ARCANOX_OWNER_RULES_V1",
+    "session_statistics": {
+      "asia_high": "77767.80",
+      "asia_low": "76682.30",
+      "london_high": "77735.00",
+      "london_low": "76706.00",
+      "union_high": "77767.80",
+      "union_low": "76682.30",
+      "warning": "These are OHLC statistics, NOT verified Alpha HIGH/LOW formulas"
+    },
+    "shadow_only": true,
+    "trade_authority": "NONE"
+  }
+}

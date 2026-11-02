@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="870" viewBox="0 0 1400 870">
+<rect width="1400" height="870" fill="#101824"/>
+<style>text{font:15px Arial;fill:#edf1f7}</style>
+<text x="30" y="40">BTCUSDT USD-M 2026-09-02 — PUBLIC SESSION MECHANICS ONLY</text>
+<text x="30" y="77">DEMO DE SESIONES, NO ES EL EJEMPLO ALPHA · sin fórmula inferida ni señal inventada</text>
+<text x="30" y="112">UTC−4 fijo · Asia 5 velas · Londres 4 velas · as_of 2026-09-02T14:00:00Z</text>
+<path d="M90 590.000 H1270" stroke="#29394b"/>
+<text x="5" y="595.000">75,882.58</text>
+<path d="M90 510.000 H1270" stroke="#29394b"/>
+<text x="5" y="515.000">76,313.49</text>
+<path d="M90 430.000 H1270" stroke="#29394b"/>
+<text x="5" y="435.000">76,744.40</text>
+<path d="M90 350.000 H1270" stroke="#29394b"/>
+<text x="5" y="355.000">77,175.30</text>
+<path d="M90 270.000 H1270" stroke="#29394b"/>
+<text x="5" y="275.000">77,606.21</text>
+<path d="M90 190.000 H1270" stroke="#29394b"/>
+<text x="5" y="195.000">78,037.12</text>
+<rect x="90.000" y="240.000" width="393.333" height="201.529" fill="#ead067" fill-opacity=".12" stroke="#ead067"/>
+<text x="95.000" y="228.000">ASIA (5)</text>
+<rect x="483.333" y="246.089" width="314.667" height="191.039" fill="#66bde7" fill-opacity=".12" stroke="#66bde7"/>
+<text x="488.333" y="234.089">LONDON (4)</text>
+<line x1="90.000" y1="292.503" x2="90.000" y2="365.206" stroke="#f1787d"/>
+<rect x="84.000" y="308.247" width="12" height="40.974" fill="#f1787d"/>
+<line x1="168.667" y1="318.792" x2="168.667" y2="441.529" stroke="#f1787d"/>
+<rect x="162.667" y="349.221" width="12" height="36.481" fill="#f1787d"/>
+<line x1="247.333" y1="323.081" x2="247.333" y2="398.624" stroke="#40cf92"/>
+<rect x="241.333" y="326.868" width="12" height="58.834" fill="#40cf92"/>
+<line x1="326.000" y1="240.000" x2="326.000" y2="330.451" stroke="#40cf92"/>
+<rect x="320.000" y="283.350" width="12" height="43.518" fill="#40cf92"/>
+<line x1="404.667" y1="275.145" x2="404.667" y2="333.236" stroke="#f1787d"/>
+<rect x="398.667" y="283.350" width="12" height="1.541" fill="#f1787d"/>
+<line x1="483.333" y1="246.089" x2="483.333" y2="309.286" stroke="#40cf92"/>
+<rect x="477.333" y="267.718" width="12" height="17.173" fill="#40cf92"/>
+<line x1="562.000" y1="254.611" x2="562.000" y2="305.313" stroke="#f1787d"/>
+<rect x="556.000" y="267.700" width="12" height="7.500" fill="#f1787d"/>
+<line x1="640.667" y1="246.702" x2="640.667" y2="301.712" stroke="#f1787d"/>
+<rect x="634.667" y="275.200" width="12" height="24.748" fill="#f1787d"/>
+<line x1="719.333" y1="286.340" x2="719.333" y2="437.129" stroke="#f1787d"/>
+<rect x="713.333" y="299.967" width="12" height="116.053" fill="#f1787d"/>
+<line x1="798.000" y1="376.791" x2="798.000" y2="487.348" stroke="#f1787d"/>
+<rect x="792.000" y="416.038" width="12" height="19.122" fill="#f1787d"/>
+<line x1="876.667" y1="433.824" x2="876.667" y2="540.000" stroke="#f1787d"/>
+<rect x="870.667" y="435.142" width="12" height="14.388" fill="#f1787d"/>
+<line x1="955.333" y1="417.783" x2="955.333" y2="507.863" stroke="#40cf92"/>
+<rect x="949.333" y="421.793" width="12" height="27.755" fill="#40cf92"/>
+<line x1="1034.000" y1="377.125" x2="1034.000" y2="461.784" stroke="#f1787d"/>
+<rect x="1028.000" y="421.793" width="12" height="39.990" fill="#f1787d"/>
+<line x1="1112.667" y1="304.441" x2="1112.667" y2="461.784" stroke="#40cf92"/>
+<rect x="1106.667" y="361.196" width="12" height="100.569" fill="#40cf92"/>
+<text x="77.000" y="620">00:00</text>
+<text x="234.333" y="620">02:00</text>
+<text x="391.667" y="620">04:00</text>
+<text x="549.000" y="620">06:00</text>
+<text x="706.333" y="620">08:00</text>
+<text x="863.667" y="620">10:00</text>
+<text x="1021.000" y="620">12:00</text>
+<text x="1178.333" y="620">14:00</text>
+<text x="90" y="650">Eje UTC. La vela de apertura 00:00 local pertenece a ASIA, no a LONDRES.</text>
+<text x="30" y="700">HIGH / LOW / SUPERIOR / INFERIOR: NO VERIFICADOS para este día.</text>
+<text x="30" y="780">PAPER: RECHAZADA — HIGH_NO_VERIFICADO, LOW_NO_VERIFICADO, SUPERIOR_NO_VERIFICADO, INFERIOR_NO_VERIFICADO, FORMULA_ORIGINAL_NO_VERIFICADA</text>
+<text x="30" y="830">SHADOW ONLY · NO TELEGRAM · NO ORDERS · TRADE AUTHORITY: NONE</text>
+</svg>

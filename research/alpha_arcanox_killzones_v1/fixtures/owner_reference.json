@@ -1,0 +1,51 @@
+{
+  "bar_open_timestamps": "UNKNOWN",
+  "formula_verified": false,
+  "instrument_text": "Bitcoin / TetherUS",
+  "levels": {
+    "HIGH": {
+      "calculated_value": null,
+      "formula_status": "NO_VERIFICADO",
+      "value": "78285.00",
+      "visual_label_verified": true
+    },
+    "INFERIOR": {
+      "calculated_value": null,
+      "formula_status": "NO_VERIFICADO",
+      "value": "77095.25",
+      "visual_label_verified": true
+    },
+    "LOW": {
+      "calculated_value": null,
+      "formula_status": "NO_VERIFICADO",
+      "value": "77517.20",
+      "visual_label_verified": true
+    },
+    "SUPERIOR": {
+      "calculated_value": null,
+      "formula_status": "NO_VERIFICADO",
+      "value": "78653.44",
+      "visual_label_verified": true
+    }
+  },
+  "market_replay_verified": false,
+  "modality": "UNKNOWN",
+  "role": "OBSERVED_LABELS_ONLY_NOT_LEVEL_FORMULAS",
+  "source_images_sha256": {
+    "01_captura_niveles_y_long.jpg": "cdfef992f37489cd58306bb57f6cad1c6c08dca255845cec9a7b63ed04de8faa",
+    "02_captura_lineas_diagonales.jpg": "50993b13bb67bbe77c491b11eaa15c3456862e7dcff5e9d6acc6623215e86e73",
+    "03_captura_rsi_y_ruptura.jpg": "f9d8fdd1655fdfb882842062ab5e903aaab9b1b0643fae09c194515b8147c9dc",
+    "04_captura_target_superior.jpg": "2c6ec268bdf87aea887a09a6e69fbd7d8583bd856acb85c75a08ff0bf235c3ac",
+    "05_captura_cajas_antes_ruptura.jpg": "904f093868669407e3d50bfc65733e9ceac21812b4d90e5662fab5975ae1916e"
+  },
+  "symbol_exact": "UNKNOWN",
+  "venue": "UNKNOWN",
+  "visual_review_images": [
+    "01_captura_niveles_y_long.jpg",
+    "02_captura_lineas_diagonales.jpg",
+    "03_captura_rsi_y_ruptura.jpg",
+    "04_captura_target_superior.jpg",
+    "05_captura_cajas_antes_ruptura.jpg"
+  ],
+  "year_and_period": "Owner context late October / early November 2026, not timestamp verified"
+}

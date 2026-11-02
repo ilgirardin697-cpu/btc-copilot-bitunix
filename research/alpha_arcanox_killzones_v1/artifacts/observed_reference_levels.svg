@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="800" viewBox="0 0 1100 800">
+<rect width="1100" height="800" fill="#101824"/>
+<style>text{font:18px Arial;fill:#edf1f7}</style>
+<text x="30" y="40">ALPHA ARCANOX — transcripción visual de los cuatro niveles</text>
+<text x="30" y="77">NO es cálculo del indicador. Sin OHLC, ticker exacto o timestamps verificados.</text>
+<line x1="110" y1="201.778" x2="770" y2="201.778" stroke="#f75d70" stroke-width="3"/>
+<text x="790" y="207.778" style="fill:#f75d70">SUPERIOR 78653.44</text>
+<line x1="110" y1="279.150" x2="770" y2="279.150" stroke="#ead067" stroke-width="3"/>
+<text x="790" y="285.150" style="fill:#ead067">HIGH 78285.00</text>
+<line x1="110" y1="440.388" x2="770" y2="440.388" stroke="#ead067" stroke-width="3"/>
+<text x="790" y="446.388" style="fill:#ead067">LOW 77517.20</text>
+<line x1="110" y1="528.997" x2="770" y2="528.997" stroke="#42d890" stroke-width="3"/>
+<text x="790" y="534.997" style="fill:#42d890">INFERIOR 77095.25</text>
+<text x="30" y="625">Ninguna vela, entrada o ATR se reconstruye a partir de píxeles.</text>
+<text x="30" y="662">Confirmación, entrada, SL y B/R del ejemplo: NO VERIFICABLES.</text>
+<text x="30" y="700">Los valores se leen de las etiquetas; las cuatro fórmulas siguen NO VERIFICADAS.</text>
+<text x="30" y="752">PAPER BLOQUEADO · SHADOW ONLY · TRADE AUTHORITY: NONE</text>
+</svg>

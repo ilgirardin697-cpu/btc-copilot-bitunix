@@ -1,0 +1,8 @@
+{
+  "entry_fee": "0.0006",
+  "exit_fee": "0.0006",
+  "entry_slippage": "0.0005",
+  "exit_slippage": "0.0005",
+  "funding_reserve_per_btc": "0",
+  "provenance": "ILLUSTRATIVE_ASSUMPTION_ONLY: 6bp fee and 5bp adverse slippage per leg; explicit ZERO funding scenario, NOT verified venue/account costs or executable prices"
+}
