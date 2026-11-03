@@ -1,0 +1,15 @@
+{
+  "first_open": "2026-09-01T00:00:00Z",
+  "last_available": "2026-09-04T00:00:00Z",
+  "no_virgin_holdout": true,
+  "normalization": "12 exact contiguous 5m to closed 1H; UTC ms; Decimal OHLC, base volume sum",
+  "original_example_ticker": "UNKNOWN",
+  "original_example_timestamps": "UNKNOWN",
+  "role": "SESSION_ATR_MECHANICS_ONLY_NOT_ORIGINAL_ALPHA_EXAMPLE",
+  "rows": 72,
+  "sha256": "b8224074b45887bec8d91d4827e302c6322e4f93dcbddf6ef3d381a44ede1cdd",
+  "source_archive_sha256": "3a2d163a2bd28ca614fa0840a92ecbcde0d9c4962b278dd619d5bf81a9918e26",
+  "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-09.zip",
+  "symbol": "BTCUSDT",
+  "venue": "BINANCE_USDM_PERPETUAL"
+}

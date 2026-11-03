@@ -1,0 +1,326 @@
+//@version=6
+indicator("Killzone", shorttitle="Killzone", overlay=true, max_boxes_count=200, max_lines_count=300, max_labels_count=250)
+// V3.7 Lite. Basado en la V3.6 funcional: sin Radar ni MIV.
+// Sesiones independientes, bordes de cajas ajustados y alertas HIGH/LOW.
+// Adaptacion educativa del metodo descrito; las franjas de USD son una mejora adicional.
+// Codigo sin bloques indentados: pensado para pegar desde un telefono.
+
+// PROYECCIONES Y VISIBILIDAD
+int keepZones = input.int(7, "Recuadros de ciclos a conservar", minval=1, maxval=15, group="Historial ordenado", tooltip="Incluye el ciclo mas reciente. Los anteriores se muestran tenues, sin etiquetas.")
+string olderLinesList = input.string("", "Ciclos anteriores CON lineas (ej. 1,3)", group="Historial ordenado", tooltip="0 es el ciclo actual y siempre lleva lineas. 1 es el anterior, 2 el de hace dos ciclos, etc. Escribe numeros separados por comas, sin guiones. Vacio = ninguno.")
+string olderBandsList = input.string("", "Ciclos anteriores CON franjas (ej. 1,3)", group="Historial ordenado", tooltip="Elige por separado las franjas historicas. Ejemplo: 2,4 muestra las franjas de esos ciclos anteriores. Vacio = ninguna.")
+int historicalBoxTrans = input.int(94, "Transparencia recuadros anteriores", minval=75, maxval=100, group="Historial ordenado")
+int historicalLineTrans = input.int(78, "Transparencia lineas anteriores", minval=0, maxval=100, group="Historial ordenado")
+int historicalBandTrans = input.int(94, "Transparencia franjas anteriores", minval=0, maxval=100, group="Historial ordenado")
+bool historicalCircles = input.bool(false, "Circulos en ciclos anteriores elegidos", group="Historial ordenado")
+bool historicalSignals = input.bool(false, "Flechas LONG/SHORT de ciclos anteriores", group="Historial ordenado")
+int forwardBars = input.int(24, "Longitud horizontal (velas H1)", minval=2, maxval=150, group="Proyecciones")
+float topInsetPct = input.float(3.0, "Ajuste superior dentro del recuadro (%)", minval=0.0, maxval=35.0, step=0.5, group="Proyecciones", tooltip="Porcentaje de la ALTURA del recuadro elegido, no porcentaje del precio de BTC.")
+float bottomInsetPct = input.float(3.0, "Ajuste inferior dentro del recuadro (%)", minval=0.0, maxval=35.0, step=0.5, group="Proyecciones", tooltip="Porcentaje de la ALTURA del recuadro elegido, no porcentaje del precio de BTC.")
+bool showVertical = input.bool(true, "Mostrar lineas verticales de medicion", group="Medicion vertical")
+color verticalColor = input.color(color.fuchsia, "Color de medicion", group="Medicion vertical")
+int verticalWidth = input.int(1, "Grosor de medicion", minval=1, maxval=5, group="Medicion vertical")
+int verticalTransparency = input.int(30, "Transparencia de linea (0-100)", minval=0, maxval=100, group="Medicion vertical")
+int pointTransparency = input.int(25, "Transparencia de puntos (0-100)", minval=0, maxval=100, group="Medicion vertical")
+string pointSizeName = input.string("Pequeno", "Tamano de puntos", options=["Micro", "Pequeno", "Normal"], group="Medicion vertical")
+bool showCircles = input.bool(true, "Mostrar circulos en los extremos", group="Medicion vertical")
+bool showAnchors = input.bool(true, "Mostrar lineas de origen en recuadros", group="Proyecciones")
+bool showSignals = input.bool(true, "Mostrar confirmaciones LONG / SHORT", group="Proyecciones")
+
+// GUIAS HIGH / LOW: EXTREMOS REALES DE ASIA Y LONDRES (NO LOS TARGETS).
+bool showHL = input.bool(true, "Mostrar guias HIGH / LOW", group="Guias High / Low")
+color highGuideColor = input.color(color.yellow, "Color HIGH", group="Guias High / Low")
+color lowGuideColor = input.color(color.yellow, "Color LOW", group="Guias High / Low")
+int hlWidth = input.int(2, "Grosor", minval=1, maxval=5, group="Guias High / Low")
+int hlTransparency = input.int(65, "Transparencia (0-100)", minval=0, maxval=100, group="Guias High / Low")
+string hlStyleName = input.string("Discontinua", "Estilo de linea", options=["Discontinua", "Solida", "Punteada"], group="Guias High / Low")
+string hlExtentName = input.string("Hasta fin de proyeccion", "Longitud de guias", options=["Solo sesiones", "Hasta fin de proyeccion", "Extender a la derecha"], group="Guias High / Low")
+bool showHLLabels = input.bool(true, "Mostrar etiquetas HIGH / LOW", group="Guias High / Low")
+
+// FRANJAS DE TOLERANCIA (UNIDADES DE PRECIO, USDT SI EL PAR ES BTCUSDT)
+float topUSD = input.float(500.0, "Margen superior (USD/USDT)", minval=0.0, step=50.0, group="Franjas")
+float bottomUSD = input.float(500.0, "Margen inferior (USD/USDT)", minval=0.0, step=50.0, group="Franjas")
+color topColor = input.color(color.red, "Color superior", group="Franjas")
+color bottomColor = input.color(color.lime, "Color inferior", group="Franjas")
+int opacity = input.int(80, "Transparencia de franjas (0-100)", minval=0, maxval=100, group="Franjas")
+bool showBands = input.bool(true, "Mostrar franjas", group="Franjas")
+bool showValues = input.bool(true, "Mostrar precio de objetivos", group="Franjas")
+
+// SESIONES H1 CON HORARIO, HUSO Y DURACION INDEPENDIENTES.
+// Los horarios son horas de APERTURA de vela; cada sesion dura N velas H1.
+// Ambos husos son Nueva York por defecto, con ajuste de horario de verano.
+string asiaTZ = input.string("America/New_York", "Zona horaria de Tokio", options=["America/New_York", "America/London", "Asia/Tokyo", "America/Tegucigalpa", "Etc/UTC", "UTC-4", "UTC-5"], group="Sesiones")
+string londonTZ = input.string("America/New_York", "Zona horaria de Londres", options=["America/New_York", "America/London", "Asia/Tokyo", "America/Tegucigalpa", "Etc/UTC", "UTC-4", "UTC-5"], group="Sesiones")
+int asiaStartHour = input.int(20, "Tokio - inicio (hora 0-23)", minval=0, maxval=23, group="Sesiones")
+int asiaCandles = input.int(4, "Tokio - cantidad de velas H1", minval=1, maxval=8, group="Sesiones")
+int londonStartHour = input.int(2, "Londres - inicio (hora 0-23)", minval=0, maxval=23, group="Sesiones")
+int londonCandles = input.int(4, "Londres - cantidad de velas H1", minval=1, maxval=8, group="Sesiones")
+string asiaHours = str.tostring(asiaStartHour, "00") + "00-" + str.tostring((asiaStartHour + asiaCandles) % 24, "00") + "00:1234567"
+string londonHours = str.tostring(londonStartHour, "00") + "00-" + str.tostring((londonStartHour + londonCandles) % 24, "00") + "00:1234567"
+int halfBarMs = 1800000
+bool isH1 = timeframe.in_seconds() == 3600
+bool inAsia = isH1 and not na(time(timeframe.period, asiaHours, asiaTZ))
+bool inLondon = isH1 and not na(time(timeframe.period, londonHours, londonTZ))
+bool startAsia = inAsia and not inAsia[1]
+bool endAsia = not inAsia and inAsia[1]
+bool startLondon = inLondon and not inLondon[1]
+bool endLondon = not inLondon and inLondon[1]
+
+// ESTADO DE ASIA
+var float aHigh = na
+var float aLow = na
+var int aStart = na
+var int aEnd = na
+var int aFirstBar = na
+var int aLastBar = na
+var int aCount = 0
+var bool asiaReady = false
+
+// ESTADO DE LONDRES
+var float lHigh = na
+var float lLow = na
+var int lStart = na
+var int lFirstBar = na
+var int lLastBar = na
+var int lCount = 0
+
+// ESTADO DE RUPTURA Y OBJETIVOS DEL CICLO ACTUAL
+var bool pairReady = false
+var bool fired = false
+var bool highAlerted = false
+var bool lowAlerted = false
+var int direction = 0
+var int signalBar = na
+var bool topZoneHit = false
+var bool bottomZoneHit = false
+var float globalHigh = na
+var float globalLow = na
+var float targetTop = na
+var float targetBottom = na
+
+// GUARDAR SOLO LOS ULTIMOS N CICLOS, SIN BUCLES NI BLOQUES INDENTADOS.
+var array<box> asiaHistory = array.new<box>(keepZones)
+var array<box> londonHistory = array.new<box>(keepZones)
+var array<box> upperBandHistory = array.new<box>(keepZones)
+var array<box> lowerBandHistory = array.new<box>(keepZones)
+var array<line> upperLineHistory = array.new<line>(keepZones)
+var array<line> lowerLineHistory = array.new<line>(keepZones)
+var array<line> upperAnchorHistory = array.new<line>(keepZones)
+var array<line> lowerAnchorHistory = array.new<line>(keepZones)
+var array<line> topVerticalHistory = array.new<line>(keepZones)
+var array<line> bottomVerticalHistory = array.new<line>(keepZones)
+var array<line> highGuideHistory = array.new<line>(keepZones)
+var array<line> lowGuideHistory = array.new<line>(keepZones)
+var array<label> highGuideLabelHistory = array.new<label>(keepZones)
+var array<label> lowGuideLabelHistory = array.new<label>(keepZones)
+var array<label> upperLabelHistory = array.new<label>(keepZones)
+var array<label> lowerLabelHistory = array.new<label>(keepZones)
+var array<label> topBaseCircleHistory = array.new<label>(keepZones)
+var array<label> topTipCircleHistory = array.new<label>(keepZones)
+var array<label> bottomBaseCircleHistory = array.new<label>(keepZones)
+var array<label> bottomTipCircleHistory = array.new<label>(keepZones)
+var int cycles = 0
+
+// ASIA: CALCULAR MAXIMO, MINIMO Y TIEMPOS.
+aHigh := startAsia ? high : (inAsia ? math.max(nz(aHigh, high), high) : aHigh)
+aLow := startAsia ? low : (inAsia ? math.min(nz(aLow, low), low) : aLow)
+aStart := startAsia ? time : aStart
+aEnd := endAsia ? time - halfBarMs : aEnd
+aFirstBar := startAsia ? bar_index : aFirstBar
+aLastBar := inAsia ? bar_index : aLastBar
+aCount := startAsia ? 1 : (inAsia ? aCount + 1 : aCount)
+asiaReady := startAsia ? false : (endAsia ? aCount == asiaCandles : asiaReady)
+
+// LONDRES: SU SESION PERTENECE A LA ASIA ANTERIOR.
+bool validLondonStart = startLondon and asiaReady
+lHigh := startAsia ? na : (validLondonStart ? high : (inLondon and asiaReady ? math.max(nz(lHigh, high), high) : lHigh))
+lLow := startAsia ? na : (validLondonStart ? low : (inLondon and asiaReady ? math.min(nz(lLow, low), low) : lLow))
+lStart := startAsia ? na : (validLondonStart ? time : lStart)
+lFirstBar := startAsia ? na : (validLondonStart ? bar_index : lFirstBar)
+lLastBar := startAsia ? na : (inLondon and asiaReady ? bar_index : lLastBar)
+lCount := startAsia ? 0 : (validLondonStart ? 1 : (inLondon and asiaReady ? lCount + 1 : lCount))
+
+// El ciclo queda fijo al terminar las N velas de Londres.
+bool measureNow = endLondon and asiaReady and lCount == londonCandles and not na(aHigh) and not na(lHigh)
+float amplitude = measureNow ? math.max(aHigh, lHigh) - math.min(aLow, lLow) : na
+
+// REGLA DE RECUADROS: ARRIBA EL MENOR DE LOS DOS MAXIMOS; ABAJO EL MAYOR DE LOS DOS MINIMOS.
+// El movimiento del ancla conserva la amplitud total: la banda del objetivo se desplaza igual.
+// SI UNO CONTIENE AL OTRO, AMBOS ANCLAJES ESTAN EN EL RECUADRO INTERIOR.
+// SI ESTAN ESCALONADOS, CADA ANCLAJE PUEDE QUEDAR EN UN RECUADRO DIFERENTE.
+bool topInAsia = aHigh <= lHigh
+bool bottomInAsia = aLow >= lLow
+float topBoxHeight = topInAsia ? (aHigh - aLow) : (lHigh - lLow)
+float bottomBoxHeight = bottomInAsia ? (aHigh - aLow) : (lHigh - lLow)
+float topAnchor = math.min(aHigh, lHigh) - topBoxHeight * topInsetPct / 100.0
+float bottomAnchor = math.max(aLow, lLow) + bottomBoxHeight * bottomInsetPct / 100.0
+int topStartBar = topInAsia ? aFirstBar : lFirstBar
+int topEndBar = topInAsia ? aLastBar : lLastBar
+int bottomStartBar = bottomInAsia ? aFirstBar : lFirstBar
+int bottomEndBar = bottomInAsia ? aLastBar : lLastBar
+// El borde derecho queda ENTRE la ultima vela de Londres y la primera vela ajena.
+// El borde izquierdo tambien se desplaza media vela para centrar geometricamente el recuadro.
+int londonRightTime = time - halfBarMs
+int topXTime = int((topInAsia ? aStart - halfBarMs + aEnd : lStart - halfBarMs + londonRightTime) / 2.0)
+int bottomXTime = int((bottomInAsia ? aStart - halfBarMs + aEnd : lStart - halfBarMs + londonRightTime) / 2.0)
+int futureTime = time + forwardBars * timeframe.in_seconds() * 1000
+float newTopTarget = topAnchor + nz(amplitude, 0)
+float newBottomTarget = bottomAnchor - nz(amplitude, 0)
+// High y Low son los extremos del rango combinado, independientes de los anclajes.
+float highGuideValue = math.max(aHigh, lHigh)
+float lowGuideValue = math.min(aLow, lLow)
+string hlLineStyle = hlStyleName == "Solida" ? line.style_solid : hlStyleName == "Punteada" ? line.style_dotted : line.style_dashed
+string hlLineExtend = hlExtentName == "Extender a la derecha" ? extend.right : extend.none
+int hlEndTime = hlExtentName == "Solo sesiones" ? londonRightTime : futureTime
+int highGuideStart = int((aHigh >= lHigh ? aStart - halfBarMs + aEnd : lStart - halfBarMs + londonRightTime) / 2.0)
+int lowGuideStart = int((aLow <= lLow ? aStart - halfBarMs + aEnd : lStart - halfBarMs + londonRightTime) / 2.0)
+// Ciclo 0 = ultima sesion de Londres COMPLETADA en el grafico.
+// Comparacion por fecha de Nueva York, tolerante a cambios de hora de verano.
+// En BTCUSDT normalmente hay un ciclo por dia. El historial se cuenta por dias calendario.
+int londonEndHour = (londonStartHour + londonCandles) % 24
+int referenceTime = hour(last_bar_time, londonTZ) >= londonEndHour ? last_bar_time : last_bar_time - 86400000
+int referenceDay = timestamp(londonTZ, year(referenceTime, londonTZ), month(referenceTime, londonTZ), dayofmonth(referenceTime, londonTZ), 0, 0)
+int londonDay = na(lStart) ? na : timestamp(londonTZ, year(lStart, londonTZ), month(lStart, londonTZ), dayofmonth(lStart, londonTZ), 0, 0)
+int age = na(londonDay) ? 10000 : int(math.round((referenceDay - londonDay) / 86400000.0))
+bool withinHistory = age >= 0 and age < keepZones
+bool latest = age == 0
+string lineChoice = "," + str.replace_all(olderLinesList, " ", "") + ","
+string bandChoice = "," + str.replace_all(olderBandsList, " ", "") + ","
+bool chosenOldLine = age > 0 and withinHistory and str.contains(lineChoice, "," + str.tostring(age) + ",")
+bool chosenOldBand = age > 0 and withinHistory and str.contains(bandChoice, "," + str.tostring(age) + ",")
+bool drawSession = measureNow and withinHistory
+bool drawLines = drawSession and (latest or chosenOldLine)
+bool drawBandsNow = drawSession and (latest or chosenOldBand)
+color topLineInk = color.new(topColor, latest ? 0 : historicalLineTrans)
+color bottomLineInk = color.new(bottomColor, latest ? 0 : historicalLineTrans)
+color verticalInk = color.new(verticalColor, latest ? verticalTransparency : math.max(verticalTransparency, historicalLineTrans))
+color pointInk = color.new(verticalColor, latest ? pointTransparency : math.max(pointTransparency, historicalLineTrans))
+string pointGlyph = pointSizeName == "Micro" ? "·" : pointSizeName == "Pequeno" ? "•" : "●"
+string pointLabelSize = pointSizeName == "Normal" ? size.small : size.tiny
+color highGuideInk = color.new(highGuideColor, latest ? hlTransparency : math.max(hlTransparency, historicalLineTrans))
+color lowGuideInk = color.new(lowGuideColor, latest ? hlTransparency : math.max(hlTransparency, historicalLineTrans))
+color highLabelInk = color.new(highGuideColor, math.min(hlTransparency, 30))
+color lowLabelInk = color.new(lowGuideColor, math.min(hlTransparency, 30))
+int bandAlpha = latest ? opacity : historicalBandTrans
+
+// CICLO ACTUAL: DIBUJO COMPLETO. HISTORICO: CAJAS TENUES, SIN ETIQUETAS.
+// Lineas y franjas antiguas se eligen POR SEPARADO mediante listas de dias.
+box newAsia = drawSession ? box.new(aStart - halfBarMs, aHigh, aEnd, aLow, xloc=xloc.bar_time, border_color=color.new(color.yellow, latest ? 0 : historicalLineTrans), bgcolor=color.new(color.orange, latest ? 85 : historicalBoxTrans), text=latest ? "ASIA" : "", text_color=color.yellow, text_size=size.tiny) : na
+box newLondon = drawSession ? box.new(lStart - halfBarMs, lHigh, londonRightTime, lLow, xloc=xloc.bar_time, border_color=color.new(color.yellow, latest ? 0 : historicalLineTrans), bgcolor=color.new(color.orange, latest ? 85 : historicalBoxTrans), text=latest ? "LONDRES (" + str.tostring(londonCandles) + "H1)" : "", text_color=color.yellow, text_size=size.tiny) : na
+box newUpperBand = drawBandsNow and showBands and topUSD > 0 ? box.new(bar_index, newTopTarget, bar_index + forwardBars, newTopTarget - topUSD, border_color=color.new(topColor, 100), bgcolor=color.new(topColor, bandAlpha)) : na
+box newLowerBand = drawBandsNow and showBands and bottomUSD > 0 ? box.new(bar_index, newBottomTarget + bottomUSD, bar_index + forwardBars, newBottomTarget, border_color=color.new(bottomColor, 100), bgcolor=color.new(bottomColor, bandAlpha)) : na
+// Objetivos horizontales unidos al extremo de su medicion vertical.
+line newTopLine = drawLines ? line.new(topXTime, newTopTarget, futureTime, newTopTarget, xloc=xloc.bar_time, color=topLineInk, width=latest ? 2 : 1) : na
+line newBottomLine = drawLines ? line.new(bottomXTime, newBottomTarget, futureTime, newBottomTarget, xloc=xloc.bar_time, color=bottomLineInk, width=latest ? 2 : 1) : na
+line newTopVertical = drawLines and showVertical ? line.new(topXTime, topAnchor, topXTime, newTopTarget, xloc=xloc.bar_time, color=verticalInk, width=latest ? verticalWidth : 1) : na
+line newBottomVertical = drawLines and showVertical ? line.new(bottomXTime, bottomAnchor, bottomXTime, newBottomTarget, xloc=xloc.bar_time, color=verticalInk, width=latest ? verticalWidth : 1) : na
+bool circlesHere = drawLines and showVertical and showCircles and (latest or historicalCircles)
+label newTopBaseCircle = circlesHere ? label.new(topXTime, topAnchor, pointGlyph, xloc=xloc.bar_time, style=label.style_none, textcolor=pointInk, size=pointLabelSize) : na
+label newTopTipCircle = circlesHere ? label.new(topXTime, newTopTarget, pointGlyph, xloc=xloc.bar_time, style=label.style_none, textcolor=pointInk, size=pointLabelSize) : na
+label newBottomBaseCircle = circlesHere ? label.new(bottomXTime, bottomAnchor, pointGlyph, xloc=xloc.bar_time, style=label.style_none, textcolor=pointInk, size=pointLabelSize) : na
+label newBottomTipCircle = circlesHere ? label.new(bottomXTime, newBottomTarget, pointGlyph, xloc=xloc.bar_time, style=label.style_none, textcolor=pointInk, size=pointLabelSize) : na
+line newTopAnchor = drawLines and showAnchors ? line.new(topStartBar, topAnchor, topEndBar + 1, topAnchor, color=topLineInk, style=line.style_dashed, width=latest ? 2 : 1) : na
+line newBottomAnchor = drawLines and showAnchors ? line.new(bottomStartBar, bottomAnchor, bottomEndBar + 1, bottomAnchor, color=bottomLineInk, style=line.style_dashed, width=latest ? 2 : 1) : na
+// Nunca generar etiquetas de objetivos ni guias para ciclos historicos.
+label newTopLabel = drawLines and latest and showValues ? label.new(bar_index + forwardBars, newTopTarget, str.tostring(newTopTarget, format.mintick), style=label.style_label_left, color=topColor, textcolor=color.white, size=size.tiny) : na
+label newBottomLabel = drawLines and latest and showValues ? label.new(bar_index + forwardBars, newBottomTarget, str.tostring(newBottomTarget, format.mintick), style=label.style_label_left, color=bottomColor, textcolor=color.white, size=size.tiny) : na
+// HIGH / LOW: cada guia nace desde el centro del recuadro que contiene ese extremo.
+// Para el historial se desactiva la extension infinita, incluso si esta elegida para el ciclo nuevo.
+line newHighGuide = drawLines and showHL ? line.new(highGuideStart, highGuideValue, hlEndTime, highGuideValue, xloc=xloc.bar_time, extend=latest ? hlLineExtend : extend.none, color=highGuideInk, style=hlLineStyle, width=latest ? hlWidth : 1) : na
+line newLowGuide = drawLines and showHL ? line.new(lowGuideStart, lowGuideValue, hlEndTime, lowGuideValue, xloc=xloc.bar_time, extend=latest ? hlLineExtend : extend.none, color=lowGuideInk, style=hlLineStyle, width=latest ? hlWidth : 1) : na
+label newHighGuideLabel = drawLines and latest and showHL and showHLLabels ? label.new(hlEndTime, highGuideValue, "HIGH " + str.tostring(highGuideValue, format.mintick), xloc=xloc.bar_time, style=label.style_label_left, color=highLabelInk, textcolor=color.black, size=size.tiny) : na
+label newLowGuideLabel = drawLines and latest and showHL and showHLLabels ? label.new(hlEndTime, lowGuideValue, "LOW " + str.tostring(lowGuideValue, format.mintick), xloc=xloc.bar_time, style=label.style_label_left, color=lowLabelInk, textcolor=color.black, size=size.tiny) : na
+
+// BUFER CIRCULAR: AL LLEGAR UN NUEVO CICLO, ELIMINAR EL MAS ANTIGUO DEL MISMO CASILLERO.
+int slot = cycles % keepZones
+box.delete(measureNow ? array.get(asiaHistory, slot) : na)
+box.delete(measureNow ? array.get(londonHistory, slot) : na)
+box.delete(measureNow ? array.get(upperBandHistory, slot) : na)
+box.delete(measureNow ? array.get(lowerBandHistory, slot) : na)
+line.delete(measureNow ? array.get(upperLineHistory, slot) : na)
+line.delete(measureNow ? array.get(lowerLineHistory, slot) : na)
+line.delete(measureNow ? array.get(upperAnchorHistory, slot) : na)
+line.delete(measureNow ? array.get(lowerAnchorHistory, slot) : na)
+line.delete(measureNow ? array.get(topVerticalHistory, slot) : na)
+line.delete(measureNow ? array.get(bottomVerticalHistory, slot) : na)
+line.delete(measureNow ? array.get(highGuideHistory, slot) : na)
+line.delete(measureNow ? array.get(lowGuideHistory, slot) : na)
+label.delete(measureNow ? array.get(highGuideLabelHistory, slot) : na)
+label.delete(measureNow ? array.get(lowGuideLabelHistory, slot) : na)
+label.delete(measureNow ? array.get(upperLabelHistory, slot) : na)
+label.delete(measureNow ? array.get(lowerLabelHistory, slot) : na)
+label.delete(measureNow ? array.get(topBaseCircleHistory, slot) : na)
+label.delete(measureNow ? array.get(topTipCircleHistory, slot) : na)
+label.delete(measureNow ? array.get(bottomBaseCircleHistory, slot) : na)
+label.delete(measureNow ? array.get(bottomTipCircleHistory, slot) : na)
+array.set(asiaHistory, slot, measureNow ? newAsia : array.get(asiaHistory, slot))
+array.set(londonHistory, slot, measureNow ? newLondon : array.get(londonHistory, slot))
+array.set(upperBandHistory, slot, measureNow ? newUpperBand : array.get(upperBandHistory, slot))
+array.set(lowerBandHistory, slot, measureNow ? newLowerBand : array.get(lowerBandHistory, slot))
+array.set(upperLineHistory, slot, measureNow ? newTopLine : array.get(upperLineHistory, slot))
+array.set(lowerLineHistory, slot, measureNow ? newBottomLine : array.get(lowerLineHistory, slot))
+array.set(upperAnchorHistory, slot, measureNow ? newTopAnchor : array.get(upperAnchorHistory, slot))
+array.set(lowerAnchorHistory, slot, measureNow ? newBottomAnchor : array.get(lowerAnchorHistory, slot))
+array.set(topVerticalHistory, slot, measureNow ? newTopVertical : array.get(topVerticalHistory, slot))
+array.set(bottomVerticalHistory, slot, measureNow ? newBottomVertical : array.get(bottomVerticalHistory, slot))
+array.set(highGuideHistory, slot, measureNow ? newHighGuide : array.get(highGuideHistory, slot))
+array.set(lowGuideHistory, slot, measureNow ? newLowGuide : array.get(lowGuideHistory, slot))
+array.set(highGuideLabelHistory, slot, measureNow ? newHighGuideLabel : array.get(highGuideLabelHistory, slot))
+array.set(lowGuideLabelHistory, slot, measureNow ? newLowGuideLabel : array.get(lowGuideLabelHistory, slot))
+array.set(upperLabelHistory, slot, measureNow ? newTopLabel : array.get(upperLabelHistory, slot))
+array.set(lowerLabelHistory, slot, measureNow ? newBottomLabel : array.get(lowerLabelHistory, slot))
+array.set(topBaseCircleHistory, slot, measureNow ? newTopBaseCircle : array.get(topBaseCircleHistory, slot))
+array.set(topTipCircleHistory, slot, measureNow ? newTopTipCircle : array.get(topTipCircleHistory, slot))
+array.set(bottomBaseCircleHistory, slot, measureNow ? newBottomBaseCircle : array.get(bottomBaseCircleHistory, slot))
+array.set(bottomTipCircleHistory, slot, measureNow ? newBottomTipCircle : array.get(bottomTipCircleHistory, slot))
+cycles := measureNow ? cycles + 1 : cycles
+
+// SEÑALES H1 POR CIERRE FUERA DE LOS EXTREMOS GLOBALES.
+globalHigh := startAsia ? na : (measureNow ? math.max(aHigh, lHigh) : globalHigh)
+globalLow := startAsia ? na : (measureNow ? math.min(aLow, lLow) : globalLow)
+targetTop := startAsia ? na : (measureNow ? newTopTarget : targetTop)
+targetBottom := startAsia ? na : (measureNow ? newBottomTarget : targetBottom)
+pairReady := startAsia ? false : (measureNow ? true : pairReady)
+fired := startAsia ? false : fired
+highAlerted := startAsia ? false : highAlerted
+lowAlerted := startAsia ? false : lowAlerted
+direction := startAsia ? 0 : direction
+signalBar := startAsia ? na : signalBar
+topZoneHit := startAsia ? false : topZoneHit
+bottomZoneHit := startAsia ? false : bottomZoneHit
+// Alertas INDEPENDIENTES: una por lado, por cada ciclo, solo con cierre H1 fuera del rango.
+bool highConfirmed = pairReady and not highAlerted and barstate.isconfirmed and close > globalHigh
+bool lowConfirmed = pairReady and not lowAlerted and barstate.isconfirmed and close < globalLow
+highAlerted := highConfirmed ? true : highAlerted
+lowAlerted := lowConfirmed ? true : lowAlerted
+// La primera ruptura determina cual franja sigue el seguimiento de objetivos.
+bool longBreak = highConfirmed and not fired
+bool shortBreak = lowConfirmed and not fired
+fired := longBreak or shortBreak ? true : fired
+direction := longBreak ? 1 : (shortBreak ? -1 : direction)
+signalBar := longBreak or shortBreak ? bar_index : signalBar
+
+// ALERTAS DE ENTRADA EN FRANJA, NO CONFUNDIR CON TOCAR LA LINEA EXACTA.
+bool upperZoneNow = direction == 1 and fired and not topZoneHit and bar_index > nz(signalBar, bar_index) and high >= targetTop - topUSD
+bool lowerZoneNow = direction == -1 and fired and not bottomZoneHit and bar_index > nz(signalBar, bar_index) and low <= targetBottom + bottomUSD
+bool upperTouch = upperZoneNow and barstate.isconfirmed
+bool lowerTouch = lowerZoneNow and barstate.isconfirmed
+topZoneHit := upperTouch ? true : topZoneHit
+bottomZoneHit := lowerTouch ? true : bottomZoneHit
+plotshape(showSignals and (latest or historicalSignals) and longBreak, title="Confirmacion alcista", style=shape.triangleup, location=location.belowbar, color=color.lime, text="LONG", size=size.tiny)
+plotshape(showSignals and (latest or historicalSignals) and shortBreak, title="Confirmacion bajista", style=shape.triangledown, location=location.abovebar, color=color.red, text="SHORT", size=size.tiny)
+alertcondition(highConfirmed, title="Killzone - HIGH confirmado (LONG)", message="Killzone: vela H1 cerro SOBRE el HIGH del ciclo Asia/Londres en {{ticker}} (cierre {{close}}). Confirmacion de ruptura, no entrada garantizada.")
+alertcondition(lowConfirmed, title="Killzone - LOW confirmado (SHORT)", message="Killzone: vela H1 cerro DEBAJO del LOW del ciclo Asia/Londres en {{ticker}} (cierre {{close}}). Confirmacion de ruptura, no entrada garantizada.")
+alertcondition(upperTouch, title="Killzone - entrada en franja roja", message="Precio en franja superior de Killzone: {{ticker}}")
+alertcondition(lowerTouch, title="Killzone - entrada en franja verde", message="Precio en franja inferior de Killzone: {{ticker}}")
+
+
+
+// DIAGNOSTIC COPY ONLY. Original source above remains unchanged.
+// Opt-in, closed H1, bounded UTC range. NO automated activation.
+bool kzDiagEnabled = input.bool(false, "Enable diagnostic Pine Logs", group="Offline parity")
+int kzDiagStart = input.time(timestamp("2026-10-31T00:00:00+00:00"), "Log from UTC", group="Offline parity")
+int kzDiagEnd = input.time(timestamp("2026-11-02T00:00:00+00:00"), "Log until UTC (exclusive)", group="Offline parity")
+kzDiagNumber(float value) => na(value) ? "null" : str.tostring(value, "0.################")
+if kzDiagEnabled and isH1 and barstate.isconfirmed and time >= kzDiagStart and time < kzDiagEnd
+    log.info('KZ_PARITY_V37={' + '"tickerid":' + '"' + syminfo.tickerid + '"' + ',' + '"timeframe":' + '"' + timeframe.period + '"' + ',' + '"source_sha256":' + '"' + '058532c5c7964eefa3993b8aae761aef7598a542c7e43c7469ad0531f39e03a7' + '"' + ',' + '"mintick":' + kzDiagNumber(syminfo.mintick) + ',' + '"standard_chart":' + str.tostring(chart.is_standard) + ',' + '"asiaTZ":' + '"' + asiaTZ + '"' + ',' + '"londonTZ":' + '"' + londonTZ + '"' + ',' + '"asiaStartHour":' + kzDiagNumber(asiaStartHour) + ',' + '"asiaCandles":' + kzDiagNumber(asiaCandles) + ',' + '"londonStartHour":' + kzDiagNumber(londonStartHour) + ',' + '"londonCandles":' + kzDiagNumber(londonCandles) + ',' + '"topInsetPct":' + kzDiagNumber(topInsetPct) + ',' + '"bottomInsetPct":' + kzDiagNumber(bottomInsetPct) + ',' + '"topUSD":' + kzDiagNumber(topUSD) + ',' + '"bottomUSD":' + kzDiagNumber(bottomUSD) + ',' + '"time":' + kzDiagNumber(time) + ',' + '"time_close":' + kzDiagNumber(time_close) + ',' + '"open":' + kzDiagNumber(open) + ',' + '"high":' + kzDiagNumber(high) + ',' + '"low":' + kzDiagNumber(low) + ',' + '"close":' + kzDiagNumber(close) + ',' + '"confirmed":' + str.tostring(barstate.isconfirmed) + ',' + '"aHigh":' + kzDiagNumber(aHigh) + ',' + '"aLow":' + kzDiagNumber(aLow) + ',' + '"lHigh":' + kzDiagNumber(lHigh) + ',' + '"lLow":' + kzDiagNumber(lLow) + ',' + '"amplitude":' + kzDiagNumber(amplitude) + ',' + '"topBoxHeight":' + kzDiagNumber(topBoxHeight) + ',' + '"bottomBoxHeight":' + kzDiagNumber(bottomBoxHeight) + ',' + '"topAnchor":' + kzDiagNumber(topAnchor) + ',' + '"bottomAnchor":' + kzDiagNumber(bottomAnchor) + ',' + '"newTopTarget":' + kzDiagNumber(newTopTarget) + ',' + '"newBottomTarget":' + kzDiagNumber(newBottomTarget) + ',' + '"highGuideValue":' + kzDiagNumber(highGuideValue) + ',' + '"lowGuideValue":' + kzDiagNumber(lowGuideValue) + ',' + '"globalHigh":' + kzDiagNumber(globalHigh) + ',' + '"globalLow":' + kzDiagNumber(globalLow) + ',' + '"targetTop":' + kzDiagNumber(targetTop) + ',' + '"targetBottom":' + kzDiagNumber(targetBottom) + ',' + '"aCount":' + kzDiagNumber(aCount) + ',' + '"lCount":' + kzDiagNumber(lCount) + ',' + '"direction":' + kzDiagNumber(direction) + ',' + '"inAsia":' + str.tostring(inAsia) + ',' + '"inLondon":' + str.tostring(inLondon) + ',' + '"startAsia":' + str.tostring(startAsia) + ',' + '"endAsia":' + str.tostring(endAsia) + ',' + '"startLondon":' + str.tostring(startLondon) + ',' + '"endLondon":' + str.tostring(endLondon) + ',' + '"asiaReady":' + str.tostring(asiaReady) + ',' + '"measureNow":' + str.tostring(measureNow) + ',' + '"pairReady":' + str.tostring(pairReady) + ',' + '"topInAsia":' + str.tostring(topInAsia) + ',' + '"bottomInAsia":' + str.tostring(bottomInAsia) + ',' + '"highConfirmed":' + str.tostring(highConfirmed) + ',' + '"lowConfirmed":' + str.tostring(lowConfirmed) + ',' + '"longBreak":' + str.tostring(longBreak) + ',' + '"shortBreak":' + str.tostring(shortBreak) + ',' + '"upperTouch":' + str.tostring(upperTouch) + ',' + '"lowerTouch":' + str.tostring(lowerTouch) + ',' + '"fired":' + str.tostring(fired) + ',' + '"highAlerted":' + str.tostring(highAlerted) + ',' + '"lowAlerted":' + str.tostring(lowAlerted) + '}')

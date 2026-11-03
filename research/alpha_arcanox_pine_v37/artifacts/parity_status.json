@@ -1,0 +1,17 @@
+{
+  "alpha_arcanox_original_indicator_parity": "NOT_AUTHENTICATED",
+  "compared_records": 33,
+  "complete_cycles": 2,
+  "independent_platform_parity": "PASS_ON_EXPORTED_PINE_A_WINDOW_NOT_ALL_MARKETS_OR_CONFIGS",
+  "max_abs_error": 0.0,
+  "mismatches": 0,
+  "offline_owner_b_evaluation": "GO",
+  "old_78285_setup_binding": "NUMERIC_MATCH_TO_LOGGED_2026_11_01_PINE_A_LEVELS_INITIAL_ASIA_OHLC_NOT_REPLAYED",
+  "operational_paper": "NOT_ACTIVATED",
+  "owner_b_accepted_entries": 0,
+  "owner_b_first_confirmations": 2,
+  "profitability": "INSUFFICIENT_SAMPLE_NO_EDGE_CLAIM",
+  "real_tradingview_records": 64,
+  "skipped_initial_records": 31,
+  "source_formula_implementation": "MATCH_ON_SUPPLIED_REAL_TRADINGVIEW_EXPORT"
+}

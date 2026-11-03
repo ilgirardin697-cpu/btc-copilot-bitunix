@@ -1,0 +1,258 @@
+{
+  "alpha_parity": "NOT_PROVEN",
+  "author_identity": "NOT_INDEPENDENTLY_VERIFIED",
+  "bytes": 26550,
+  "declaration": "Pine v6 / V3.7 Lite / educational adaptation",
+  "executable_comparison": "REPORTED_SEPARATELY_IN_REAL_TRADINGVIEW_PARITY_ARTIFACT",
+  "formula_lines": [
+    {
+      "line": 125,
+      "text": "aHigh := startAsia ? high : (inAsia ? math.max(nz(aHigh, high), high) : aHigh)"
+    },
+    {
+      "line": 126,
+      "text": "aLow := startAsia ? low : (inAsia ? math.min(nz(aLow, low), low) : aLow)"
+    },
+    {
+      "line": 136,
+      "text": "lHigh := startAsia ? na : (validLondonStart ? high : (inLondon and asiaReady ? math.max(nz(lHigh, high), high) : lHigh))"
+    },
+    {
+      "line": 137,
+      "text": "lLow := startAsia ? na : (validLondonStart ? low : (inLondon and asiaReady ? math.min(nz(lLow, low), low) : lLow))"
+    },
+    {
+      "line": 144,
+      "text": "bool measureNow = endLondon and asiaReady and lCount == londonCandles and not na(aHigh) and not na(lHigh)"
+    },
+    {
+      "line": 145,
+      "text": "float amplitude = measureNow ? math.max(aHigh, lHigh) - math.min(aLow, lLow) : na"
+    },
+    {
+      "line": 151,
+      "text": "bool topInAsia = aHigh <= lHigh"
+    },
+    {
+      "line": 152,
+      "text": "bool bottomInAsia = aLow >= lLow"
+    },
+    {
+      "line": 153,
+      "text": "float topBoxHeight = topInAsia ? (aHigh - aLow) : (lHigh - lLow)"
+    },
+    {
+      "line": 154,
+      "text": "float bottomBoxHeight = bottomInAsia ? (aHigh - aLow) : (lHigh - lLow)"
+    },
+    {
+      "line": 155,
+      "text": "float topAnchor = math.min(aHigh, lHigh) - topBoxHeight * topInsetPct / 100.0"
+    },
+    {
+      "line": 156,
+      "text": "float bottomAnchor = math.max(aLow, lLow) + bottomBoxHeight * bottomInsetPct / 100.0"
+    },
+    {
+      "line": 167,
+      "text": "float newTopTarget = topAnchor + nz(amplitude, 0)"
+    },
+    {
+      "line": 168,
+      "text": "float newBottomTarget = bottomAnchor - nz(amplitude, 0)"
+    },
+    {
+      "line": 170,
+      "text": "float highGuideValue = math.max(aHigh, lHigh)"
+    },
+    {
+      "line": 171,
+      "text": "float lowGuideValue = math.min(aLow, lLow)"
+    },
+    {
+      "line": 292,
+      "text": "bool highConfirmed = pairReady and not highAlerted and barstate.isconfirmed and close > globalHigh"
+    },
+    {
+      "line": 293,
+      "text": "bool lowConfirmed = pairReady and not lowAlerted and barstate.isconfirmed and close < globalLow"
+    },
+    {
+      "line": 304,
+      "text": "bool upperZoneNow = direction == 1 and fired and not topZoneHit and bar_index > nz(signalBar, bar_index) and high >= targetTop - topUSD"
+    },
+    {
+      "line": 305,
+      "text": "bool lowerZoneNow = direction == -1 and fired and not bottomZoneHit and bar_index > nz(signalBar, bar_index) and low <= targetBottom + bottomUSD"
+    }
+  ],
+  "inputs": [
+    {
+      "line": 9,
+      "text": "int keepZones = input.int(7, \"Recuadros de ciclos a conservar\", minval=1, maxval=15, group=\"Historial ordenado\", tooltip=\"Incluye el ciclo mas reciente. Los anteriores se muestran tenues, sin etiquetas.\")"
+    },
+    {
+      "line": 10,
+      "text": "string olderLinesList = input.string(\"\", \"Ciclos anteriores CON lineas (ej. 1,3)\", group=\"Historial ordenado\", tooltip=\"0 es el ciclo actual y siempre lleva lineas. 1 es el anterior, 2 el de hace dos ciclos, etc. Escribe numeros separados por comas, sin guiones. Vacio = ninguno.\")"
+    },
+    {
+      "line": 11,
+      "text": "string olderBandsList = input.string(\"\", \"Ciclos anteriores CON franjas (ej. 1,3)\", group=\"Historial ordenado\", tooltip=\"Elige por separado las franjas historicas. Ejemplo: 2,4 muestra las franjas de esos ciclos anteriores. Vacio = ninguna.\")"
+    },
+    {
+      "line": 12,
+      "text": "int historicalBoxTrans = input.int(94, \"Transparencia recuadros anteriores\", minval=75, maxval=100, group=\"Historial ordenado\")"
+    },
+    {
+      "line": 13,
+      "text": "int historicalLineTrans = input.int(78, \"Transparencia lineas anteriores\", minval=0, maxval=100, group=\"Historial ordenado\")"
+    },
+    {
+      "line": 14,
+      "text": "int historicalBandTrans = input.int(94, \"Transparencia franjas anteriores\", minval=0, maxval=100, group=\"Historial ordenado\")"
+    },
+    {
+      "line": 15,
+      "text": "bool historicalCircles = input.bool(false, \"Circulos en ciclos anteriores elegidos\", group=\"Historial ordenado\")"
+    },
+    {
+      "line": 16,
+      "text": "bool historicalSignals = input.bool(false, \"Flechas LONG/SHORT de ciclos anteriores\", group=\"Historial ordenado\")"
+    },
+    {
+      "line": 17,
+      "text": "int forwardBars = input.int(24, \"Longitud horizontal (velas H1)\", minval=2, maxval=150, group=\"Proyecciones\")"
+    },
+    {
+      "line": 18,
+      "text": "float topInsetPct = input.float(3.0, \"Ajuste superior dentro del recuadro (%)\", minval=0.0, maxval=35.0, step=0.5, group=\"Proyecciones\", tooltip=\"Porcentaje de la ALTURA del recuadro elegido, no porcentaje del precio de BTC.\")"
+    },
+    {
+      "line": 19,
+      "text": "float bottomInsetPct = input.float(3.0, \"Ajuste inferior dentro del recuadro (%)\", minval=0.0, maxval=35.0, step=0.5, group=\"Proyecciones\", tooltip=\"Porcentaje de la ALTURA del recuadro elegido, no porcentaje del precio de BTC.\")"
+    },
+    {
+      "line": 20,
+      "text": "bool showVertical = input.bool(true, \"Mostrar lineas verticales de medicion\", group=\"Medicion vertical\")"
+    },
+    {
+      "line": 21,
+      "text": "color verticalColor = input.color(color.fuchsia, \"Color de medicion\", group=\"Medicion vertical\")"
+    },
+    {
+      "line": 22,
+      "text": "int verticalWidth = input.int(1, \"Grosor de medicion\", minval=1, maxval=5, group=\"Medicion vertical\")"
+    },
+    {
+      "line": 23,
+      "text": "int verticalTransparency = input.int(30, \"Transparencia de linea (0-100)\", minval=0, maxval=100, group=\"Medicion vertical\")"
+    },
+    {
+      "line": 24,
+      "text": "int pointTransparency = input.int(25, \"Transparencia de puntos (0-100)\", minval=0, maxval=100, group=\"Medicion vertical\")"
+    },
+    {
+      "line": 25,
+      "text": "string pointSizeName = input.string(\"Pequeno\", \"Tamano de puntos\", options=[\"Micro\", \"Pequeno\", \"Normal\"], group=\"Medicion vertical\")"
+    },
+    {
+      "line": 26,
+      "text": "bool showCircles = input.bool(true, \"Mostrar circulos en los extremos\", group=\"Medicion vertical\")"
+    },
+    {
+      "line": 27,
+      "text": "bool showAnchors = input.bool(true, \"Mostrar lineas de origen en recuadros\", group=\"Proyecciones\")"
+    },
+    {
+      "line": 28,
+      "text": "bool showSignals = input.bool(true, \"Mostrar confirmaciones LONG / SHORT\", group=\"Proyecciones\")"
+    },
+    {
+      "line": 31,
+      "text": "bool showHL = input.bool(true, \"Mostrar guias HIGH / LOW\", group=\"Guias High / Low\")"
+    },
+    {
+      "line": 32,
+      "text": "color highGuideColor = input.color(color.yellow, \"Color HIGH\", group=\"Guias High / Low\")"
+    },
+    {
+      "line": 33,
+      "text": "color lowGuideColor = input.color(color.yellow, \"Color LOW\", group=\"Guias High / Low\")"
+    },
+    {
+      "line": 34,
+      "text": "int hlWidth = input.int(2, \"Grosor\", minval=1, maxval=5, group=\"Guias High / Low\")"
+    },
+    {
+      "line": 35,
+      "text": "int hlTransparency = input.int(65, \"Transparencia (0-100)\", minval=0, maxval=100, group=\"Guias High / Low\")"
+    },
+    {
+      "line": 36,
+      "text": "string hlStyleName = input.string(\"Discontinua\", \"Estilo de linea\", options=[\"Discontinua\", \"Solida\", \"Punteada\"], group=\"Guias High / Low\")"
+    },
+    {
+      "line": 37,
+      "text": "string hlExtentName = input.string(\"Hasta fin de proyeccion\", \"Longitud de guias\", options=[\"Solo sesiones\", \"Hasta fin de proyeccion\", \"Extender a la derecha\"], group=\"Guias High / Low\")"
+    },
+    {
+      "line": 38,
+      "text": "bool showHLLabels = input.bool(true, \"Mostrar etiquetas HIGH / LOW\", group=\"Guias High / Low\")"
+    },
+    {
+      "line": 41,
+      "text": "float topUSD = input.float(500.0, \"Margen superior (USD/USDT)\", minval=0.0, step=50.0, group=\"Franjas\")"
+    },
+    {
+      "line": 42,
+      "text": "float bottomUSD = input.float(500.0, \"Margen inferior (USD/USDT)\", minval=0.0, step=50.0, group=\"Franjas\")"
+    },
+    {
+      "line": 43,
+      "text": "color topColor = input.color(color.red, \"Color superior\", group=\"Franjas\")"
+    },
+    {
+      "line": 44,
+      "text": "color bottomColor = input.color(color.lime, \"Color inferior\", group=\"Franjas\")"
+    },
+    {
+      "line": 45,
+      "text": "int opacity = input.int(80, \"Transparencia de franjas (0-100)\", minval=0, maxval=100, group=\"Franjas\")"
+    },
+    {
+      "line": 46,
+      "text": "bool showBands = input.bool(true, \"Mostrar franjas\", group=\"Franjas\")"
+    },
+    {
+      "line": 47,
+      "text": "bool showValues = input.bool(true, \"Mostrar precio de objetivos\", group=\"Franjas\")"
+    },
+    {
+      "line": 52,
+      "text": "string asiaTZ = input.string(\"America/New_York\", \"Zona horaria de Tokio\", options=[\"America/New_York\", \"America/London\", \"Asia/Tokyo\", \"America/Tegucigalpa\", \"Etc/UTC\", \"UTC-4\", \"UTC-5\"], group=\"Sesiones\")"
+    },
+    {
+      "line": 53,
+      "text": "string londonTZ = input.string(\"America/New_York\", \"Zona horaria de Londres\", options=[\"America/New_York\", \"America/London\", \"Asia/Tokyo\", \"America/Tegucigalpa\", \"Etc/UTC\", \"UTC-4\", \"UTC-5\"], group=\"Sesiones\")"
+    },
+    {
+      "line": 54,
+      "text": "int asiaStartHour = input.int(20, \"Tokio - inicio (hora 0-23)\", minval=0, maxval=23, group=\"Sesiones\")"
+    },
+    {
+      "line": 55,
+      "text": "int asiaCandles = input.int(4, \"Tokio - cantidad de velas H1\", minval=1, maxval=8, group=\"Sesiones\")"
+    },
+    {
+      "line": 56,
+      "text": "int londonStartHour = input.int(2, \"Londres - inicio (hora 0-23)\", minval=0, maxval=23, group=\"Sesiones\")"
+    },
+    {
+      "line": 57,
+      "text": "int londonCandles = input.int(4, \"Londres - cantidad de velas H1\", minval=1, maxval=8, group=\"Sesiones\")"
+    }
+  ],
+  "lines": 317,
+  "source_is_not_profitability_evidence": true,
+  "supplied_source_sha256": "058532c5c7964eefa3993b8aae761aef7598a542c7e43c7469ad0531f39e03a7"
+}

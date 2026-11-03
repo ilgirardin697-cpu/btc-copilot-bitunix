@@ -1,0 +1,476 @@
+{
+  "GO": "GO_OFFLINE_OWNER_B_EVALUATION_ONLY_NOT_LIVE_OR_PROFITABILITY_VALIDATION",
+  "PINE_A_body_diagnostics": [
+    {
+      "HIGH": 78878.01,
+      "LOW": 77926.7,
+      "bar_open_utc": "2026-11-02T12:00:00Z",
+      "close": 77808.01,
+      "confirmed_at_utc": "2026-11-02T13:00:00Z",
+      "interpretation": "BODY_ONLY_DIAGNOSTIC_ON_A_LEVELS_NOT_OWNER_B",
+      "open": 77894.17,
+      "side": "SHORT"
+    },
+    {
+      "HIGH": 77314.01,
+      "LOW": 76502.63,
+      "bar_open_utc": "2026-11-03T13:00:00Z",
+      "close": 77400.01,
+      "confirmed_at_utc": "2026-11-03T14:00:00Z",
+      "interpretation": "BODY_ONLY_DIAGNOSTIC_ON_A_LEVELS_NOT_OWNER_B",
+      "open": 77427.59,
+      "side": "LONG"
+    }
+  ],
+  "absolute_tolerance": 1e-07,
+  "alpha_original_parity": "NOT_PROVEN",
+  "by_field": {
+    "aCount": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 33
+    },
+    "aHigh": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 33
+    },
+    "aLow": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 33
+    },
+    "amplitude": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 31,
+      "numeric_pairs": 2
+    },
+    "asiaReady": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 0
+    },
+    "bottomAnchor": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 6,
+      "numeric_pairs": 27
+    },
+    "bottomBoxHeight": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 6,
+      "numeric_pairs": 27
+    },
+    "bottomInAsia": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 0
+    },
+    "direction": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 33
+    },
+    "endAsia": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 0
+    },
+    "endLondon": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 0
+    },
+    "fired": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 0
+    },
+    "globalHigh": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 10,
+      "numeric_pairs": 23
+    },
+    "globalLow": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 10,
+      "numeric_pairs": 23
+    },
+    "highAlerted": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 0
+    },
+    "highConfirmed": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 0
+    },
+    "highGuideValue": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 6,
+      "numeric_pairs": 27
+    },
+    "inAsia": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 0
+    },
+    "inLondon": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 0
+    },
+    "lCount": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 33
+    },
+    "lHigh": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 6,
+      "numeric_pairs": 27
+    },
+    "lLow": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 6,
+      "numeric_pairs": 27
+    },
+    "longBreak": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 0
+    },
+    "lowAlerted": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 0
+    },
+    "lowConfirmed": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 0
+    },
+    "lowGuideValue": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 6,
+      "numeric_pairs": 27
+    },
+    "lowerTouch": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 0
+    },
+    "measureNow": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 0
+    },
+    "newBottomTarget": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 6,
+      "numeric_pairs": 27
+    },
+    "newTopTarget": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 6,
+      "numeric_pairs": 27
+    },
+    "pairReady": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 0
+    },
+    "shortBreak": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 0
+    },
+    "startAsia": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 0
+    },
+    "startLondon": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 0
+    },
+    "targetBottom": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 10,
+      "numeric_pairs": 23
+    },
+    "targetTop": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 10,
+      "numeric_pairs": 23
+    },
+    "topAnchor": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 6,
+      "numeric_pairs": 27
+    },
+    "topBoxHeight": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 6,
+      "numeric_pairs": 27
+    },
+    "topInAsia": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 0
+    },
+    "upperTouch": {
+      "compared": 33,
+      "max_abs_error": 0.0,
+      "mismatches": 0,
+      "null_pairs": 0,
+      "numeric_pairs": 0
+    }
+  },
+  "compared_rows": 33,
+  "comparison_first_bar_open_utc": "2026-11-02T11:00:00Z",
+  "comparison_last_bar_open_utc": "2026-11-03T19:00:00Z",
+  "complete_cycles": 2,
+  "dst_clock": [
+    {
+      "fold": 0,
+      "inLondon_PINE_A": false,
+      "new_york": "2026-11-01T00:00:00-04:00",
+      "owner_fixed_utc4": "2026-11-01T00:00:00-04:00",
+      "utc": "2026-11-01T04:00:00Z"
+    },
+    {
+      "fold": 0,
+      "inLondon_PINE_A": false,
+      "new_york": "2026-11-01T01:00:00-04:00",
+      "owner_fixed_utc4": "2026-11-01T01:00:00-04:00",
+      "utc": "2026-11-01T05:00:00Z"
+    },
+    {
+      "fold": 1,
+      "inLondon_PINE_A": false,
+      "new_york": "2026-11-01T01:00:00-05:00",
+      "owner_fixed_utc4": "2026-11-01T02:00:00-04:00",
+      "utc": "2026-11-01T06:00:00Z"
+    },
+    {
+      "fold": 0,
+      "inLondon_PINE_A": true,
+      "new_york": "2026-11-01T02:00:00-05:00",
+      "owner_fixed_utc4": "2026-11-01T03:00:00-04:00",
+      "utc": "2026-11-01T07:00:00Z"
+    },
+    {
+      "fold": 0,
+      "inLondon_PINE_A": true,
+      "new_york": "2026-11-01T03:00:00-05:00",
+      "owner_fixed_utc4": "2026-11-01T04:00:00-04:00",
+      "utc": "2026-11-01T08:00:00Z"
+    },
+    {
+      "fold": 0,
+      "inLondon_PINE_A": true,
+      "new_york": "2026-11-01T04:00:00-05:00",
+      "owner_fixed_utc4": "2026-11-01T05:00:00-04:00",
+      "utc": "2026-11-01T09:00:00Z"
+    },
+    {
+      "fold": 0,
+      "inLondon_PINE_A": true,
+      "new_york": "2026-11-01T05:00:00-05:00",
+      "owner_fixed_utc4": "2026-11-01T06:00:00-04:00",
+      "utc": "2026-11-01T10:00:00Z"
+    },
+    {
+      "fold": 0,
+      "inLondon_PINE_A": false,
+      "new_york": "2026-11-01T06:00:00-05:00",
+      "owner_fixed_utc4": "2026-11-01T07:00:00-04:00",
+      "utc": "2026-11-01T11:00:00Z"
+    }
+  ],
+  "evidence": "CALLER_SUPPLIED_RECORDS_NOT_INDEPENDENTLY_AUTHENTICATED",
+  "external_original_csv_sha256_status": "DECLARED_IN_EXTERNAL_REVIEW_ORIGINAL_CSV_NOT_AVAILABLE",
+  "external_revision_sha256": "a515fedc25841f59632bb20a86d11733bf9aca8cfd9f5a30d5716e54752b9db1",
+  "first_bar_open_utc": "2026-11-01T04:00:00Z",
+  "input_rows": 64,
+  "last_bar_open_utc": "2026-11-03T19:00:00Z",
+  "last_close_utc": "2026-11-03T20:00:00Z",
+  "logged_PINE_A_signals": [
+    {
+      "HIGH": 78285,
+      "LOW": 77517.2,
+      "bar_open_utc": "2026-11-01T23:00:00Z",
+      "close": 78354,
+      "confirmed_at_utc": "2026-11-02T00:00:00Z",
+      "interpretation": "PINE_A_CLOSE_ONLY_NOT_OWNER_B",
+      "open": 77823.88,
+      "python_confirmation": null,
+      "replay_validated": false,
+      "side": "LONG",
+      "whole_body_on_PINE_A_levels": false
+    },
+    {
+      "HIGH": 78878.01,
+      "LOW": 77926.7,
+      "bar_open_utc": "2026-11-02T11:00:00Z",
+      "close": 77894.16,
+      "confirmed_at_utc": "2026-11-02T12:00:00Z",
+      "interpretation": "PINE_A_CLOSE_ONLY_NOT_OWNER_B",
+      "open": 77973.99,
+      "python_confirmation": true,
+      "replay_validated": true,
+      "side": "SHORT",
+      "whole_body_on_PINE_A_levels": false
+    },
+    {
+      "HIGH": 77314.01,
+      "LOW": 76502.63,
+      "bar_open_utc": "2026-11-03T12:00:00Z",
+      "close": 77427.59,
+      "confirmed_at_utc": "2026-11-03T13:00:00Z",
+      "interpretation": "PINE_A_CLOSE_ONLY_NOT_OWNER_B",
+      "open": 77108.37,
+      "python_confirmation": true,
+      "replay_validated": true,
+      "side": "LONG",
+      "whole_body_on_PINE_A_levels": false
+    }
+  ],
+  "max_abs_error": 0.0,
+  "measurement_records": [
+    {
+      "HIGH": 78285,
+      "INFERIOR": 77095.25,
+      "LOW": 77517.2,
+      "SUPERIOR": 78653.4351,
+      "algebra_from_logged_extrema_only_max_error": 0,
+      "complete_ohlc_replay_validated": false,
+      "displayed_HIGH": "78285.00",
+      "displayed_INFERIOR": "77095.25",
+      "displayed_LOW": "77517.20",
+      "displayed_SUPERIOR": "78653.44",
+      "first_cycle_caveat": "LOGGED_EXTREMA_ALGEBRA_ONLY_NOT_RECONSTRUCTED_FROM_MISSING_ASIA_OHLC",
+      "measure_bar_close": "2026-11-01T12:00:00Z",
+      "measure_bar_open": "2026-11-01T11:00:00Z"
+    },
+    {
+      "HIGH": 78878.01,
+      "INFERIOR": 77179.79030000001,
+      "LOW": 77926.7,
+      "SUPERIOR": 79342.6012,
+      "algebra_from_logged_extrema_only_max_error": 0.0,
+      "complete_ohlc_replay_validated": true,
+      "displayed_HIGH": "78878.01",
+      "displayed_INFERIOR": "77179.79",
+      "displayed_LOW": "77926.70",
+      "displayed_SUPERIOR": "79342.60",
+      "first_cycle_caveat": null,
+      "measure_bar_close": "2026-11-02T12:00:00Z",
+      "measure_bar_open": "2026-11-02T11:00:00Z"
+    },
+    {
+      "HIGH": 77314.01,
+      "INFERIOR": 75753.39230000002,
+      "LOW": 76502.63,
+      "SUPERIOR": 77939.27199999998,
+      "algebra_from_logged_extrema_only_max_error": 0.0,
+      "complete_ohlc_replay_validated": true,
+      "displayed_HIGH": "77314.01",
+      "displayed_INFERIOR": "75753.39",
+      "displayed_LOW": "76502.63",
+      "displayed_SUPERIOR": "77939.27",
+      "first_cycle_caveat": null,
+      "measure_bar_close": "2026-11-03T12:00:00Z",
+      "measure_bar_open": "2026-11-03T11:00:00Z"
+    }
+  ],
+  "mismatches": [],
+  "profile": "PINE_A",
+  "profitability": "NOT_EVALUATED",
+  "replay_validated_signal_count": 2,
+  "skipped_rows": 31,
+  "source_log_bytes": 81822,
+  "source_log_sha256": "3fc02a8fc12664591766df834c869b10d66cf54606ce12b5e9f87ce54b9d3097",
+  "status": "MATCH_FOR_SUPPLIED_LOGS",
+  "tickerid": "BINANCE:BTCUSDT"
+}

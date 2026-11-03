@@ -1,0 +1,2704 @@
+{
+  "arms": [
+    {
+      "classification": "INCONCLUSIVE",
+      "summary": {
+        "cycles": 365,
+        "monthly": {
+          "2025-11": {
+            "cycles": 30,
+            "no_confirmation": 8,
+            "price": {
+              "confirmations": 22,
+              "no_target_by_expiry": 11,
+              "orders": {
+                "NEITHER_BY_EXPIRY": 2,
+                "SL_ONLY_NO_TARGET": 9,
+                "TARGET_FIRST": 2,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 5,
+                "TARGET_ONLY": 4
+              },
+              "sl_before_later_target": 0,
+              "target_eligible": 17,
+              "target_hit_rate": 0.35294117647058826,
+              "target_hits": 6,
+              "target_not_ahead": 5,
+              "time_to_target_minutes_upper": [
+                35.0,
+                372.0,
+                3.0,
+                35.0,
+                3.0,
+                19.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 6,
+              "accepted_entries": 6,
+              "adverse_minute_drawdown_upper_bound_pct": 1.077977431077152,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": -1.0000000000000044,
+                  "n": 1,
+                  "net_pnl": -24.937437780211265,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                },
+                "SHORT": {
+                  "mean_net_R": -0.49182245380977196,
+                  "n": 5,
+                  "net_pnl": -61.3951979923938,
+                  "profit_factor": 0.38435291012647643,
+                  "win_rate": 0.2
+                }
+              },
+              "ending_realized_equity": 9913.667364227395,
+              "fees": 45.5090244428598,
+              "gross_before_costs": -31.72180771004562,
+              "holding_minutes_upper": 598,
+              "long_entries": 1,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": -0.576518711508144,
+              "minute_close_mtm_max_drawdown_pct": 1.064004787806469,
+              "net_pnl": -86.33263577260506,
+              "net_return_pct": -0.8633263577260506,
+              "outcomes": {
+                "SL": 5,
+                "TP": 1
+              },
+              "profit_factor": 0.30746685740161755,
+              "realized_max_drawdown_pct": 0.863326357726055,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 9,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 7
+              },
+              "short_entries": 5,
+              "slippage_cost": 9.101803619699652,
+              "win_rate": 0.16666666666666666
+            }
+          },
+          "2025-12": {
+            "cycles": 31,
+            "no_confirmation": 10,
+            "price": {
+              "confirmations": 21,
+              "no_target_by_expiry": 8,
+              "orders": {
+                "NEITHER_BY_EXPIRY": 1,
+                "SL_FIRST": 3,
+                "SL_ONLY_NO_TARGET": 7,
+                "TARGET_FIRST": 2,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 6,
+                "TARGET_ONLY": 2
+              },
+              "sl_before_later_target": 3,
+              "target_eligible": 15,
+              "target_hit_rate": 0.4666666666666667,
+              "target_hits": 7,
+              "target_not_ahead": 6,
+              "time_to_target_minutes_upper": [
+                254.0,
+                136.0,
+                333.0,
+                4.0,
+                234.0,
+                151.0,
+                15.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 3,
+              "accepted_entries": 3,
+              "adverse_minute_drawdown_upper_bound_pct": 0.7529924049749488,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": -0.9999999999999984,
+                  "n": 2,
+                  "net_pnl": -49.38208373917108,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                },
+                "SHORT": {
+                  "mean_net_R": -1.0000000000000029,
+                  "n": 1,
+                  "net_pnl": -24.78325949604846,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                }
+              },
+              "ending_realized_equity": 9839.502020992175,
+              "fees": 22.5792079324557,
+              "gross_before_costs": -47.070295599084524,
+              "holding_minutes_upper": 239,
+              "long_entries": 2,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": -1.0,
+              "minute_close_mtm_max_drawdown_pct": 0.7481120811339579,
+              "net_pnl": -74.16534323521954,
+              "net_return_pct": -0.7481120811339578,
+              "outcomes": {
+                "SL": 3
+              },
+              "profit_factor": 0.0,
+              "realized_max_drawdown_pct": 0.7481120811339579,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 10,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 8
+              },
+              "short_entries": 1,
+              "slippage_cost": 4.515839703679316,
+              "win_rate": 0.0
+            }
+          },
+          "2026-01": {
+            "cycles": 31,
+            "no_confirmation": 9,
+            "price": {
+              "confirmations": 22,
+              "no_target_by_expiry": 7,
+              "orders": {
+                "NEITHER_BY_EXPIRY": 2,
+                "SL_FIRST": 4,
+                "SL_ONLY_NO_TARGET": 5,
+                "TARGET_FIRST": 3,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 5,
+                "TARGET_ONLY": 3
+              },
+              "sl_before_later_target": 4,
+              "target_eligible": 17,
+              "target_hit_rate": 0.5882352941176471,
+              "target_hits": 10,
+              "target_not_ahead": 5,
+              "time_to_target_minutes_upper": [
+                50.0,
+                231.0,
+                269.0,
+                475.0,
+                32.0,
+                96.0,
+                9.0,
+                14.0,
+                405.0,
+                3.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 0,
+              "accepted_entries": 0,
+              "adverse_minute_drawdown_upper_bound_pct": 0,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": null,
+                  "n": 0,
+                  "net_pnl": 0,
+                  "profit_factor": null,
+                  "win_rate": null
+                },
+                "SHORT": {
+                  "mean_net_R": null,
+                  "n": 0,
+                  "net_pnl": 0,
+                  "profit_factor": null,
+                  "win_rate": null
+                }
+              },
+              "ending_realized_equity": 9839.502020992175,
+              "fees": 0,
+              "gross_before_costs": 0,
+              "holding_minutes_upper": 0,
+              "long_entries": 0,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": null,
+              "minute_close_mtm_max_drawdown_pct": 0,
+              "net_pnl": 0,
+              "net_return_pct": 0.0,
+              "outcomes": {},
+              "profit_factor": null,
+              "realized_max_drawdown_pct": 0,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 13,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 9
+              },
+              "short_entries": 0,
+              "slippage_cost": 0,
+              "win_rate": null
+            }
+          },
+          "2026-02": {
+            "cycles": 28,
+            "no_confirmation": 4,
+            "price": {
+              "confirmations": 24,
+              "no_target_by_expiry": 9,
+              "orders": {
+                "NEITHER_BY_EXPIRY": 3,
+                "NO_POST_CONFIRMATION_TIME": 1,
+                "SL_FIRST": 5,
+                "SL_ONLY_NO_TARGET": 6,
+                "TARGET_FIRST": 1,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 5,
+                "TARGET_ONLY": 3
+              },
+              "sl_before_later_target": 5,
+              "target_eligible": 18,
+              "target_hit_rate": 0.5,
+              "target_hits": 9,
+              "target_not_ahead": 5,
+              "time_to_target_minutes_upper": [
+                208.0,
+                83.0,
+                606.0,
+                226.0,
+                166.0,
+                165.0,
+                202.0,
+                24.0,
+                51.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 5,
+              "accepted_entries": 5,
+              "adverse_minute_drawdown_upper_bound_pct": 0.9379487317254825,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": 0.11001854492719365,
+                  "n": 2,
+                  "net_pnl": 5.26261446176531,
+                  "profit_factor": 1.2139413014593883,
+                  "win_rate": 0.5
+                },
+                "SHORT": {
+                  "mean_net_R": -0.9999999999999778,
+                  "n": 3,
+                  "net_pnl": -73.57641177217525,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                }
+              },
+              "ending_realized_equity": 9771.188223681766,
+              "fees": 31.45752586731426,
+              "gross_before_costs": -30.564767492223524,
+              "holding_minutes_upper": 843,
+              "long_entries": 2,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": -0.5559925820291093,
+              "minute_close_mtm_max_drawdown_pct": 0.8386310784246261,
+              "net_pnl": -68.31379731040994,
+              "net_return_pct": -0.6942810435392488,
+              "outcomes": {
+                "SL": 4,
+                "TIME_EXIT": 1
+              },
+              "profit_factor": 0.3041616924791992,
+              "realized_max_drawdown_pct": 0.6942810435392436,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 12,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 6,
+                "CONFIRMATION_AT_CYCLE_EXPIRY": 1
+              },
+              "short_entries": 3,
+              "slippage_cost": 6.291503950872153,
+              "win_rate": 0.2
+            }
+          },
+          "2026-03": {
+            "cycles": 31,
+            "no_confirmation": 3,
+            "price": {
+              "confirmations": 28,
+              "no_target_by_expiry": 13,
+              "orders": {
+                "NEITHER_BY_EXPIRY": 2,
+                "NO_POST_CONFIRMATION_TIME": 2,
+                "SL_FIRST": 3,
+                "SL_ONLY_NO_TARGET": 11,
+                "TARGET_FIRST": 2,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 5,
+                "TARGET_ONLY": 3
+              },
+              "sl_before_later_target": 3,
+              "target_eligible": 21,
+              "target_hit_rate": 0.38095238095238093,
+              "target_hits": 8,
+              "target_not_ahead": 5,
+              "time_to_target_minutes_upper": [
+                213.0,
+                32.0,
+                1.0,
+                144.0,
+                347.0,
+                165.0,
+                250.0,
+                21.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 9,
+              "accepted_entries": 8,
+              "adverse_minute_drawdown_upper_bound_pct": 0.8187807375027629,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": 0.32740170564509136,
+                  "n": 3,
+                  "net_pnl": 23.631175276410417,
+                  "profit_factor": 1.485518599732267,
+                  "win_rate": 0.3333333333333333
+                },
+                "SHORT": {
+                  "mean_net_R": -0.371303064333684,
+                  "n": 5,
+                  "net_pnl": -45.55747894774824,
+                  "profit_factor": 0.5334717162404767,
+                  "win_rate": 0.2
+                }
+              },
+              "ending_realized_equity": 9749.261920010427,
+              "fees": 68.56899514024484,
+              "gross_before_costs": 60.35649291121571,
+              "holding_minutes_upper": 353,
+              "long_entries": 3,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": -0.10928877559164321,
+              "minute_close_mtm_max_drawdown_pct": 0.796505489934993,
+              "net_pnl": -21.926303671337816,
+              "net_return_pct": -0.22439751614032488,
+              "outcomes": {
+                "SL": 6,
+                "TP": 2
+              },
+              "profit_factor": 0.850152535410344,
+              "realized_max_drawdown_pct": 0.7481157881082654,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 12,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 6,
+                "CONFIRMATION_AT_CYCLE_EXPIRY": 2
+              },
+              "short_entries": 5,
+              "slippage_cost": 13.713801442308684,
+              "win_rate": 0.25
+            }
+          },
+          "2026-04": {
+            "cycles": 30,
+            "no_confirmation": 6,
+            "price": {
+              "confirmations": 24,
+              "no_target_by_expiry": 11,
+              "orders": {
+                "NEITHER_BY_EXPIRY": 3,
+                "NO_POST_CONFIRMATION_TIME": 2,
+                "SL_FIRST": 3,
+                "SL_ONLY_NO_TARGET": 8,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 3,
+                "TARGET_ONLY": 5
+              },
+              "sl_before_later_target": 3,
+              "target_eligible": 19,
+              "target_hit_rate": 0.42105263157894735,
+              "target_hits": 8,
+              "target_not_ahead": 3,
+              "time_to_target_minutes_upper": [
+                98.0,
+                225.0,
+                346.0,
+                1.0,
+                192.0,
+                69.0,
+                96.0,
+                116.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 1,
+              "accepted_entries": 0,
+              "adverse_minute_drawdown_upper_bound_pct": 0,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": null,
+                  "n": 0,
+                  "net_pnl": 0,
+                  "profit_factor": null,
+                  "win_rate": null
+                },
+                "SHORT": {
+                  "mean_net_R": null,
+                  "n": 0,
+                  "net_pnl": 0,
+                  "profit_factor": null,
+                  "win_rate": null
+                }
+              },
+              "ending_realized_equity": 9749.261920010427,
+              "fees": 0,
+              "gross_before_costs": 0,
+              "holding_minutes_upper": 0,
+              "long_entries": 0,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": null,
+              "minute_close_mtm_max_drawdown_pct": 0,
+              "net_pnl": 0,
+              "net_return_pct": 0.0,
+              "outcomes": {},
+              "profit_factor": null,
+              "realized_max_drawdown_pct": 0,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 15,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 7,
+                "CONFIRMATION_AT_CYCLE_EXPIRY": 2
+              },
+              "short_entries": 0,
+              "slippage_cost": 0,
+              "win_rate": null
+            }
+          },
+          "2026-05": {
+            "cycles": 31,
+            "no_confirmation": 5,
+            "price": {
+              "confirmations": 26,
+              "no_target_by_expiry": 12,
+              "orders": {
+                "NEITHER_BY_EXPIRY": 2,
+                "SL_FIRST": 3,
+                "SL_ONLY_NO_TARGET": 10,
+                "TARGET_FIRST": 2,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 5,
+                "TARGET_ONLY": 4
+              },
+              "sl_before_later_target": 3,
+              "target_eligible": 21,
+              "target_hit_rate": 0.42857142857142855,
+              "target_hits": 9,
+              "target_not_ahead": 5,
+              "time_to_target_minutes_upper": [
+                64.0,
+                19.0,
+                107.0,
+                100.0,
+                158.0,
+                42.0,
+                194.0,
+                177.0,
+                34.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 1,
+              "accepted_entries": 1,
+              "adverse_minute_drawdown_upper_bound_pct": 0.24999833749938596,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": -0.999999999999975,
+                  "n": 1,
+                  "net_pnl": -24.372992718487065,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                },
+                "SHORT": {
+                  "mean_net_R": null,
+                  "n": 0,
+                  "net_pnl": 0,
+                  "profit_factor": null,
+                  "win_rate": null
+                }
+              },
+              "ending_realized_equity": 9724.88892729194,
+              "fees": 13.432456429796174,
+              "gross_before_costs": -8.25404533289347,
+              "holding_minutes_upper": 3,
+              "long_entries": 1,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": -0.999999999999975,
+              "minute_close_mtm_max_drawdown_pct": 0.24999833749938596,
+              "net_pnl": -24.372992718487065,
+              "net_return_pct": -0.24999833749938888,
+              "outcomes": {
+                "SL": 1
+              },
+              "profit_factor": 0.0,
+              "realized_max_drawdown_pct": 0.24999833749938596,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 16,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 9
+              },
+              "short_entries": 0,
+              "slippage_cost": 2.6864909557974213,
+              "win_rate": 0.0
+            }
+          },
+          "2026-06": {
+            "cycles": 30,
+            "no_confirmation": 7,
+            "price": {
+              "confirmations": 23,
+              "no_target_by_expiry": 6,
+              "orders": {
+                "NO_POST_CONFIRMATION_TIME": 1,
+                "SL_FIRST": 6,
+                "SL_ONLY_NO_TARGET": 6,
+                "TARGET_FIRST": 1,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 4,
+                "TARGET_ONLY": 5
+              },
+              "sl_before_later_target": 6,
+              "target_eligible": 18,
+              "target_hit_rate": 0.6666666666666666,
+              "target_hits": 12,
+              "target_not_ahead": 5,
+              "time_to_target_minutes_upper": [
+                14.0,
+                190.0,
+                232.0,
+                55.0,
+                142.0,
+                98.0,
+                1.0,
+                467.0,
+                537.0,
+                92.0,
+                261.0,
+                65.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 5,
+              "accepted_entries": 5,
+              "adverse_minute_drawdown_upper_bound_pct": 1.4202005300916622,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": -0.9999999999999897,
+                  "n": 3,
+                  "net_pnl": -73.0575560608177,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                },
+                "SHORT": {
+                  "mean_net_R": 0.8379619779010463,
+                  "n": 2,
+                  "net_pnl": 40.583002473976435,
+                  "profit_factor": 2.658175739891678,
+                  "win_rate": 0.5
+                }
+              },
+              "ending_realized_equity": 9692.4143737051,
+              "fees": 50.76008943700416,
+              "gross_before_costs": 28.437554875065928,
+              "holding_minutes_upper": 319,
+              "long_entries": 3,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": -0.2648152088395752,
+              "minute_close_mtm_max_drawdown_pct": 1.3953830226785937,
+              "net_pnl": -32.47455358684127,
+              "net_return_pct": -0.3339323855484317,
+              "outcomes": {
+                "SL": 4,
+                "TP": 1
+              },
+              "profit_factor": 0.6670370865888047,
+              "realized_max_drawdown_pct": 0.9962469663656721,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 9,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 8,
+                "CONFIRMATION_AT_CYCLE_EXPIRY": 1
+              },
+              "short_entries": 2,
+              "slippage_cost": 10.152019024903028,
+              "win_rate": 0.2
+            }
+          },
+          "2026-07": {
+            "cycles": 31,
+            "no_confirmation": 6,
+            "price": {
+              "confirmations": 25,
+              "no_target_by_expiry": 11,
+              "orders": {
+                "NEITHER_BY_EXPIRY": 5,
+                "NO_POST_CONFIRMATION_TIME": 1,
+                "SL_FIRST": 3,
+                "SL_ONLY_NO_TARGET": 6,
+                "TARGET_FIRST": 1,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 4,
+                "TARGET_ONLY": 5
+              },
+              "sl_before_later_target": 3,
+              "target_eligible": 20,
+              "target_hit_rate": 0.45,
+              "target_hits": 9,
+              "target_not_ahead": 5,
+              "time_to_target_minutes_upper": [
+                442.0,
+                189.0,
+                24.0,
+                429.0,
+                7.0,
+                32.0,
+                401.0,
+                170.0,
+                10.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 3,
+              "accepted_entries": 3,
+              "adverse_minute_drawdown_upper_bound_pct": 0.5954054314541349,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": 1.501673141276612,
+                  "n": 3,
+                  "net_pnl": 109.24992221999514,
+                  "profit_factor": 5.447300783315656,
+                  "win_rate": 0.6666666666666666
+                },
+                "SHORT": {
+                  "mean_net_R": null,
+                  "n": 0,
+                  "net_pnl": 0,
+                  "profit_factor": null,
+                  "win_rate": null
+                }
+              },
+              "ending_realized_equity": 9801.664295925095,
+              "fees": 29.27075296686892,
+              "gross_before_costs": 144.3748315552311,
+              "holding_minutes_upper": 608,
+              "long_entries": 3,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": 1.501673141276612,
+              "minute_close_mtm_max_drawdown_pct": 0.547875213769955,
+              "net_pnl": 109.24992221999514,
+              "net_return_pct": 1.1271693306508148,
+              "outcomes": {
+                "SL": 1,
+                "TP": 2
+              },
+              "profit_factor": 5.447300783315656,
+              "realized_max_drawdown_pct": 0.24999868229841601,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 14,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 7,
+                "CONFIRMATION_AT_CYCLE_EXPIRY": 1
+              },
+              "short_entries": 0,
+              "slippage_cost": 5.854156368367046,
+              "win_rate": 0.6666666666666666
+            }
+          },
+          "2026-08": {
+            "cycles": 31,
+            "no_confirmation": 5,
+            "price": {
+              "confirmations": 26,
+              "no_target_by_expiry": 11,
+              "orders": {
+                "NEITHER_BY_EXPIRY": 2,
+                "SL_FIRST": 3,
+                "SL_ONLY_NO_TARGET": 9,
+                "TARGET_FIRST": 4,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 4,
+                "TARGET_ONLY": 4
+              },
+              "sl_before_later_target": 3,
+              "target_eligible": 22,
+              "target_hit_rate": 0.5,
+              "target_hits": 11,
+              "target_not_ahead": 4,
+              "time_to_target_minutes_upper": [
+                23.0,
+                25.0,
+                70.0,
+                50.0,
+                641.0,
+                144.0,
+                1.0,
+                213.0,
+                14.0,
+                138.0,
+                73.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 2,
+              "accepted_entries": 2,
+              "adverse_minute_drawdown_upper_bound_pct": 0.5229940036022707,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": null,
+                  "n": 0,
+                  "net_pnl": 0,
+                  "profit_factor": null,
+                  "win_rate": null
+                },
+                "SHORT": {
+                  "mean_net_R": -0.9999999999999896,
+                  "n": 2,
+                  "net_pnl": -48.9461913791869,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                }
+              },
+              "ending_realized_equity": 9752.718104545907,
+              "fees": 17.25302593639749,
+              "gross_before_costs": -28.24256138521237,
+              "holding_minutes_upper": 10,
+              "long_entries": 0,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": -0.9999999999999896,
+              "minute_close_mtm_max_drawdown_pct": 0.4993661270314689,
+              "net_pnl": -48.9461913791869,
+              "net_return_pct": -0.4993661270314633,
+              "outcomes": {
+                "SL": 2
+              },
+              "profit_factor": 0.0,
+              "realized_max_drawdown_pct": 0.4993661270314689,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 11,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 13
+              },
+              "short_entries": 2,
+              "slippage_cost": 3.4506040575770425,
+              "win_rate": 0.0
+            }
+          },
+          "2026-09": {
+            "cycles": 30,
+            "no_confirmation": 16,
+            "price": {
+              "confirmations": 14,
+              "no_target_by_expiry": 2,
+              "orders": {
+                "NEITHER_BY_EXPIRY": 1,
+                "SL_FIRST": 1,
+                "SL_ONLY_NO_TARGET": 1,
+                "TARGET_FIRST": 1,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 5,
+                "TARGET_ONLY": 5
+              },
+              "sl_before_later_target": 1,
+              "target_eligible": 9,
+              "target_hit_rate": 0.7777777777777778,
+              "target_hits": 7,
+              "target_not_ahead": 5,
+              "time_to_target_minutes_upper": [
+                29.0,
+                18.0,
+                37.0,
+                319.0,
+                82.0,
+                74.0,
+                32.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 0,
+              "accepted_entries": 0,
+              "adverse_minute_drawdown_upper_bound_pct": 0,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": null,
+                  "n": 0,
+                  "net_pnl": 0,
+                  "profit_factor": null,
+                  "win_rate": null
+                },
+                "SHORT": {
+                  "mean_net_R": null,
+                  "n": 0,
+                  "net_pnl": 0,
+                  "profit_factor": null,
+                  "win_rate": null
+                }
+              },
+              "ending_realized_equity": 9752.718104545907,
+              "fees": 0,
+              "gross_before_costs": 0,
+              "holding_minutes_upper": 0,
+              "long_entries": 0,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": null,
+              "minute_close_mtm_max_drawdown_pct": 0,
+              "net_pnl": 0,
+              "net_return_pct": 0.0,
+              "outcomes": {},
+              "profit_factor": null,
+              "realized_max_drawdown_pct": 0,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 9,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 5
+              },
+              "short_entries": 0,
+              "slippage_cost": 0,
+              "win_rate": null
+            }
+          },
+          "2026-10": {
+            "cycles": 31,
+            "no_confirmation": 5,
+            "price": {
+              "confirmations": 26,
+              "no_target_by_expiry": 11,
+              "orders": {
+                "NEITHER_BY_EXPIRY": 3,
+                "SL_FIRST": 2,
+                "SL_ONLY_NO_TARGET": 8,
+                "TARGET_FIRST": 3,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 5,
+                "TARGET_ONLY": 5
+              },
+              "sl_before_later_target": 2,
+              "target_eligible": 21,
+              "target_hit_rate": 0.47619047619047616,
+              "target_hits": 10,
+              "target_not_ahead": 5,
+              "time_to_target_minutes_upper": [
+                202.0,
+                67.0,
+                99.0,
+                13.0,
+                9.0,
+                270.0,
+                378.0,
+                748.0,
+                272.0,
+                106.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 3,
+              "accepted_entries": 3,
+              "adverse_minute_drawdown_upper_bound_pct": 0.5287213775234089,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": -0.11799315135239567,
+                  "n": 1,
+                  "net_pnl": -2.869635843729408,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                },
+                "SHORT": {
+                  "mean_net_R": -1.0000000000000007,
+                  "n": 2,
+                  "net_pnl": -48.6950696646015,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                }
+              },
+              "ending_realized_equity": 9701.153399037577,
+              "fees": 27.437831564957627,
+              "gross_before_costs": -18.639308375954084,
+              "holding_minutes_upper": 535,
+              "long_entries": 1,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": -0.7059977171174657,
+              "minute_close_mtm_max_drawdown_pct": 0.5287213775234089,
+              "net_pnl": -51.5647055083309,
+              "net_return_pct": -0.528721377523418,
+              "outcomes": {
+                "SL": 2,
+                "TIME_EXIT": 1
+              },
+              "profit_factor": 0.0,
+              "realized_max_drawdown_pct": 0.5287213775234089,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 12,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 11
+              },
+              "short_entries": 2,
+              "slippage_cost": 5.487565567419191,
+              "win_rate": 0.0
+            }
+          }
+        },
+        "no_confirmation": 84,
+        "price": {
+          "confirmations": 281,
+          "no_target_by_expiry": 112,
+          "orders": {
+            "NEITHER_BY_EXPIRY": 26,
+            "NO_POST_CONFIRMATION_TIME": 7,
+            "SL_FIRST": 36,
+            "SL_ONLY_NO_TARGET": 86,
+            "TARGET_FIRST": 22,
+            "TARGET_NOT_AHEAD_AT_CONFIRMATION": 56,
+            "TARGET_ONLY": 48
+          },
+          "sl_before_later_target": 36,
+          "target_eligible": 218,
+          "target_hit_rate": 0.48623853211009177,
+          "target_hits": 106,
+          "target_not_ahead": 58,
+          "time_to_target_minutes_upper": [
+            35.0,
+            372.0,
+            3.0,
+            35.0,
+            3.0,
+            19.0,
+            254.0,
+            136.0,
+            333.0,
+            4.0,
+            234.0,
+            151.0,
+            15.0,
+            50.0,
+            231.0,
+            269.0,
+            475.0,
+            32.0,
+            96.0,
+            9.0,
+            14.0,
+            405.0,
+            3.0,
+            208.0,
+            83.0,
+            606.0,
+            226.0,
+            166.0,
+            165.0,
+            202.0,
+            24.0,
+            51.0,
+            213.0,
+            32.0,
+            1.0,
+            144.0,
+            347.0,
+            165.0,
+            250.0,
+            21.0,
+            98.0,
+            225.0,
+            346.0,
+            1.0,
+            192.0,
+            69.0,
+            96.0,
+            116.0,
+            64.0,
+            19.0,
+            107.0,
+            100.0,
+            158.0,
+            42.0,
+            194.0,
+            177.0,
+            34.0,
+            14.0,
+            190.0,
+            232.0,
+            55.0,
+            142.0,
+            98.0,
+            1.0,
+            467.0,
+            537.0,
+            92.0,
+            261.0,
+            65.0,
+            442.0,
+            189.0,
+            24.0,
+            429.0,
+            7.0,
+            32.0,
+            401.0,
+            170.0,
+            10.0,
+            23.0,
+            25.0,
+            70.0,
+            50.0,
+            641.0,
+            144.0,
+            1.0,
+            213.0,
+            14.0,
+            138.0,
+            73.0,
+            29.0,
+            18.0,
+            37.0,
+            319.0,
+            82.0,
+            74.0,
+            32.0,
+            202.0,
+            67.0,
+            99.0,
+            13.0,
+            9.0,
+            270.0,
+            378.0,
+            748.0,
+            272.0,
+            106.0
+          ]
+        },
+        "strategy": {
+          "accepted_at_close": 38,
+          "accepted_entries": 36,
+          "adverse_minute_drawdown_upper_bound_pct": 3.350744198617296,
+          "ambiguous_same_minute": 0,
+          "by_side": {
+            "LONG": {
+              "mean_net_R": -0.08817072004580269,
+              "n": 16,
+              "net_pnl": -36.47599418424565,
+              "profit_factor": 0.8661213187977963,
+              "win_rate": 0.25
+            },
+            "SHORT": {
+              "mean_net_R": -0.5319851817457553,
+              "n": 20,
+              "net_pnl": -262.3706067781777,
+              "profit_factor": 0.37209711673032836,
+              "win_rate": 0.15
+            }
+          },
+          "ending_realized_equity": 9701.153399037577,
+          "ex_best_one_mean_R": -0.44460933996640406,
+          "exposure_pct_upper": 0.667427701674277,
+          "fees": 306.26890971789896,
+          "gross_before_costs": 68.67609344609916,
+          "holding_minutes_upper": 3508,
+          "long_entries": 16,
+          "losses_beyond_risk_budget": 0,
+          "mean_net_R": -0.3347343098791097,
+          "mean_net_R_block_ci95": [
+            -0.7546551448063848,
+            0.1139124704124839
+          ],
+          "minute_close_mtm_max_drawdown_pct": 3.326804274556911,
+          "net_pnl": -298.84660096242334,
+          "net_return_pct": -2.9884660096242333,
+          "outcomes": {
+            "SL": 28,
+            "TIME_EXIT": 2,
+            "TP": 6
+          },
+          "positive_months": 1,
+          "profit_factor": 0.5670820983044942,
+          "realized_max_drawdown_pct": 3.0758562629490003,
+          "rejections": {
+            "ADVANCED_TP_NET_RR_BELOW_1_5": 142,
+            "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 96,
+            "CONFIRMATION_AT_CYCLE_EXPIRY": 7
+          },
+          "second_half_net_pnl": -48.108520972851,
+          "short_entries": 20,
+          "slippage_cost": 61.25378469062353,
+          "win_rate": 0.19444444444444445
+        }
+      },
+      "variant": "OWNER_B"
+    },
+    {
+      "classification": "NO EDGE",
+      "summary": {
+        "cycles": 365,
+        "monthly": {
+          "2025-11": {
+            "cycles": 30,
+            "no_confirmation": 6,
+            "price": {
+              "confirmations": 24,
+              "no_target_by_expiry": 14,
+              "orders": {
+                "NEITHER_BY_EXPIRY": 1,
+                "SL_FIRST": 2,
+                "SL_ONLY_NO_TARGET": 13,
+                "TARGET_FIRST": 2,
+                "TARGET_ONLY": 6
+              },
+              "sl_before_later_target": 2,
+              "target_eligible": 24,
+              "target_hit_rate": 0.4166666666666667,
+              "target_hits": 10,
+              "target_not_ahead": 0,
+              "time_to_target_minutes_upper": [
+                52.0,
+                215.0,
+                39.0,
+                10.0,
+                432.0,
+                35.0,
+                95.0,
+                3.0,
+                63.0,
+                169.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 9,
+              "accepted_entries": 9,
+              "adverse_minute_drawdown_upper_bound_pct": 0.9059208611670131,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": -1.0000000000000007,
+                  "n": 2,
+                  "net_pnl": -50.13986976377428,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                },
+                "SHORT": {
+                  "mean_net_R": 0.32368196544997535,
+                  "n": 7,
+                  "net_pnl": 56.189603211621346,
+                  "profit_factor": 1.5584125194047675,
+                  "win_rate": 0.42857142857142855
+                }
+              },
+              "ending_realized_equity": 10006.049733447848,
+              "fees": 77.29753652163821,
+              "gross_before_costs": 98.80678122608417,
+              "holding_minutes_upper": 663,
+              "long_entries": 2,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": 0.029530417572202886,
+              "minute_close_mtm_max_drawdown_pct": 0.8884181503125828,
+              "net_pnl": 6.049733447847064,
+              "net_return_pct": 0.06049733447847064,
+              "outcomes": {
+                "SL": 6,
+                "TP": 3
+              },
+              "profit_factor": 1.040127256680854,
+              "realized_max_drawdown_pct": 0.7481211040328326,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 13,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 2
+              },
+              "short_entries": 7,
+              "slippage_cost": 15.45951125659889,
+              "win_rate": 0.3333333333333333
+            }
+          },
+          "2025-12": {
+            "cycles": 31,
+            "no_confirmation": 3,
+            "price": {
+              "confirmations": 28,
+              "no_target_by_expiry": 12,
+              "orders": {
+                "NO_POST_CONFIRMATION_TIME": 1,
+                "SL_FIRST": 6,
+                "SL_ONLY_NO_TARGET": 12,
+                "TARGET_FIRST": 3,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 4,
+                "TARGET_ONLY": 2
+              },
+              "sl_before_later_target": 6,
+              "target_eligible": 23,
+              "target_hit_rate": 0.4782608695652174,
+              "target_hits": 11,
+              "target_not_ahead": 4,
+              "time_to_target_minutes_upper": [
+                135.0,
+                314.0,
+                196.0,
+                263.0,
+                611.0,
+                1.0,
+                64.0,
+                4.0,
+                294.0,
+                211.0,
+                75.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 4,
+              "accepted_entries": 4,
+              "adverse_minute_drawdown_upper_bound_pct": 0.9962511847798031,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": -0.9999999999999931,
+                  "n": 2,
+                  "net_pnl": -49.84241093558428,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                },
+                "SHORT": {
+                  "mean_net_R": -1.0000000000000036,
+                  "n": 2,
+                  "net_pnl": -49.842978083544764,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                }
+              },
+              "ending_realized_equity": 9906.364344428719,
+              "fees": 42.272542006151525,
+              "gross_before_costs": -48.958340570080836,
+              "holding_minutes_upper": 178,
+              "long_entries": 2,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": -0.9999999999999983,
+              "minute_close_mtm_max_drawdown_pct": 0.9962511847798031,
+              "net_pnl": -99.68538901912905,
+              "net_return_pct": -0.9962511847797885,
+              "outcomes": {
+                "SL": 4
+              },
+              "profit_factor": 0.0,
+              "realized_max_drawdown_pct": 0.9962511847798031,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 17,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 6,
+                "CONFIRMATION_AT_CYCLE_EXPIRY": 1
+              },
+              "short_entries": 2,
+              "slippage_cost": 8.454506442896683,
+              "win_rate": 0.0
+            }
+          },
+          "2026-01": {
+            "cycles": 31,
+            "no_confirmation": 8,
+            "price": {
+              "confirmations": 23,
+              "no_target_by_expiry": 7,
+              "orders": {
+                "NEITHER_BY_EXPIRY": 1,
+                "SL_FIRST": 5,
+                "SL_ONLY_NO_TARGET": 6,
+                "TARGET_FIRST": 5,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 1,
+                "TARGET_ONLY": 5
+              },
+              "sl_before_later_target": 5,
+              "target_eligible": 22,
+              "target_hit_rate": 0.6818181818181818,
+              "target_hits": 15,
+              "target_not_ahead": 1,
+              "time_to_target_minutes_upper": [
+                1.0,
+                17.0,
+                329.0,
+                18.0,
+                535.0,
+                119.0,
+                37.0,
+                1.0,
+                1.0,
+                156.0,
+                25.0,
+                74.0,
+                465.0,
+                115.0,
+                8.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 1,
+              "accepted_entries": 1,
+              "adverse_minute_drawdown_upper_bound_pct": 0.24999896014499054,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": -0.999999999999977,
+                  "n": 1,
+                  "net_pnl": -24.76580784924691,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                },
+                "SHORT": {
+                  "mean_net_R": null,
+                  "n": 0,
+                  "net_pnl": 0,
+                  "profit_factor": null,
+                  "win_rate": null
+                }
+              },
+              "ending_realized_equity": 9881.59853657947,
+              "fees": 12.981603641730084,
+              "gross_before_costs": -9.187883846686166,
+              "holding_minutes_upper": 2,
+              "long_entries": 1,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": -0.999999999999977,
+              "minute_close_mtm_max_drawdown_pct": 0.24999896014499054,
+              "net_pnl": -24.76580784924691,
+              "net_return_pct": -0.24999896014500073,
+              "outcomes": {
+                "SL": 1
+              },
+              "profit_factor": 0.0,
+              "realized_max_drawdown_pct": 0.24999896014499054,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 17,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 5
+              },
+              "short_entries": 0,
+              "slippage_cost": 2.5963203608306626,
+              "win_rate": 0.0
+            }
+          },
+          "2026-02": {
+            "cycles": 28,
+            "no_confirmation": 3,
+            "price": {
+              "confirmations": 25,
+              "no_target_by_expiry": 8,
+              "orders": {
+                "NEITHER_BY_EXPIRY": 2,
+                "SL_FIRST": 7,
+                "SL_ONLY_NO_TARGET": 6,
+                "TARGET_FIRST": 3,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 1,
+                "TARGET_ONLY": 6
+              },
+              "sl_before_later_target": 7,
+              "target_eligible": 24,
+              "target_hit_rate": 0.6666666666666666,
+              "target_hits": 16,
+              "target_not_ahead": 1,
+              "time_to_target_minutes_upper": [
+                268.0,
+                95.0,
+                58.0,
+                143.0,
+                666.0,
+                286.0,
+                226.0,
+                2.0,
+                225.0,
+                37.0,
+                35.0,
+                262.0,
+                7.0,
+                84.0,
+                111.0,
+                39.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 7,
+              "accepted_entries": 7,
+              "adverse_minute_drawdown_upper_bound_pct": 1.178910745016477,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": 2.016787043968884,
+                  "n": 2,
+                  "net_pnl": 99.49756297266643,
+                  "profit_factor": null,
+                  "win_rate": 1.0
+                },
+                "SHORT": {
+                  "mean_net_R": -0.3872813033070776,
+                  "n": 5,
+                  "net_pnl": -48.16796738039744,
+                  "profit_factor": 0.5137423606378361,
+                  "win_rate": 0.2
+                }
+              },
+              "ending_realized_equity": 9932.92813217174,
+              "fees": 52.18774244084231,
+              "gross_before_costs": 113.95489107947539,
+              "holding_minutes_upper": 1033,
+              "long_entries": 2,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": 0.29959536734319714,
+              "minute_close_mtm_max_drawdown_pct": 1.1146087517047705,
+              "net_pnl": 51.32959559226899,
+              "net_return_pct": 0.5194462758455354,
+              "outcomes": {
+                "SL": 4,
+                "TIME_EXIT": 2,
+                "TP": 1
+              },
+              "profit_factor": 1.5181744080043702,
+              "realized_max_drawdown_pct": 0.748121010921636,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 14,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 4
+              },
+              "short_entries": 5,
+              "slippage_cost": 10.437553046364105,
+              "win_rate": 0.42857142857142855
+            }
+          },
+          "2026-03": {
+            "cycles": 31,
+            "no_confirmation": 2,
+            "price": {
+              "confirmations": 29,
+              "no_target_by_expiry": 18,
+              "orders": {
+                "NEITHER_BY_EXPIRY": 2,
+                "SL_FIRST": 5,
+                "SL_ONLY_NO_TARGET": 16,
+                "TARGET_FIRST": 2,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 2,
+                "TARGET_ONLY": 2
+              },
+              "sl_before_later_target": 5,
+              "target_eligible": 27,
+              "target_hit_rate": 0.3333333333333333,
+              "target_hits": 9,
+              "target_not_ahead": 2,
+              "time_to_target_minutes_upper": [
+                273.0,
+                61.0,
+                204.0,
+                651.0,
+                31.0,
+                407.0,
+                225.0,
+                310.0,
+                81.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 10,
+              "accepted_entries": 10,
+              "adverse_minute_drawdown_upper_bound_pct": 2.254969086932418,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": -0.6719640668244309,
+                  "n": 4,
+                  "net_pnl": -66.28426219800991,
+                  "profit_factor": 0.10399378110786112,
+                  "win_rate": 0.25
+                },
+                "SHORT": {
+                  "mean_net_R": -1.0000000000000095,
+                  "n": 6,
+                  "net_pnl": -147.40455458843635,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                }
+              },
+              "ending_realized_equity": 9719.239315385295,
+              "fees": 90.11143179755193,
+              "gross_before_costs": -105.55510285158806,
+              "holding_minutes_upper": 797,
+              "long_entries": 4,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": -0.868785626729778,
+              "minute_close_mtm_max_drawdown_pct": 2.189734277110297,
+              "net_pnl": -213.68881678644627,
+              "net_return_pct": -2.151317455870138,
+              "outcomes": {
+                "SL": 9,
+                "TIME_EXIT": 1
+              },
+              "profit_factor": 0.034750770699985195,
+              "realized_max_drawdown_pct": 2.151317455870147,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 16,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 3
+              },
+              "short_entries": 6,
+              "slippage_cost": 18.02228213730627,
+              "win_rate": 0.1
+            }
+          },
+          "2026-04": {
+            "cycles": 30,
+            "no_confirmation": 2,
+            "price": {
+              "confirmations": 28,
+              "no_target_by_expiry": 15,
+              "orders": {
+                "NEITHER_BY_EXPIRY": 3,
+                "SL_FIRST": 6,
+                "SL_ONLY_NO_TARGET": 12,
+                "TARGET_FIRST": 1,
+                "TARGET_ONLY": 6
+              },
+              "sl_before_later_target": 6,
+              "target_eligible": 28,
+              "target_hit_rate": 0.4642857142857143,
+              "target_hits": 13,
+              "target_not_ahead": 0,
+              "time_to_target_minutes_upper": [
+                158.0,
+                285.0,
+                406.0,
+                667.0,
+                335.0,
+                25.0,
+                33.0,
+                35.0,
+                1.0,
+                174.0,
+                3.0,
+                8.0,
+                176.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 3,
+              "accepted_entries": 3,
+              "adverse_minute_drawdown_upper_bound_pct": 0.9188455179115704,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": -1.0000000000000147,
+                  "n": 1,
+                  "net_pnl": -24.176511719678174,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                },
+                "SHORT": {
+                  "mean_net_R": -1.0000000000000013,
+                  "n": 2,
+                  "net_pnl": -48.534717722081,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                }
+              },
+              "ending_realized_equity": 9646.528085943535,
+              "fees": 29.539868016134832,
+              "gross_before_costs": -37.263389312932944,
+              "holding_minutes_upper": 526,
+              "long_entries": 1,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": -1.0000000000000058,
+              "minute_close_mtm_max_drawdown_pct": 0.8812864551799144,
+              "net_pnl": -72.71122944175917,
+              "net_return_pct": -0.7481164634629303,
+              "outcomes": {
+                "SL": 3
+              },
+              "profit_factor": 0.0,
+              "realized_max_drawdown_pct": 0.7481164634629224,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 22,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 3
+              },
+              "short_entries": 2,
+              "slippage_cost": 5.907972112691394,
+              "win_rate": 0.0
+            }
+          },
+          "2026-05": {
+            "cycles": 31,
+            "no_confirmation": 3,
+            "price": {
+              "confirmations": 28,
+              "no_target_by_expiry": 12,
+              "orders": {
+                "NEITHER_BY_EXPIRY": 1,
+                "SL_FIRST": 2,
+                "SL_ONLY_NO_TARGET": 11,
+                "TARGET_FIRST": 5,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 2,
+                "TARGET_ONLY": 7
+              },
+              "sl_before_later_target": 2,
+              "target_eligible": 26,
+              "target_hit_rate": 0.5384615384615384,
+              "target_hits": 14,
+              "target_not_ahead": 2,
+              "time_to_target_minutes_upper": [
+                54.0,
+                54.0,
+                37.0,
+                79.0,
+                27.0,
+                167.0,
+                37.0,
+                160.0,
+                24.0,
+                102.0,
+                206.0,
+                28.0,
+                27.0,
+                94.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 4,
+              "accepted_entries": 4,
+              "adverse_minute_drawdown_upper_bound_pct": 0.4799035456169214,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": 0.8601853126606226,
+                  "n": 3,
+                  "net_pnl": 62.11245424041408,
+                  "profit_factor": 3.575549719089481,
+                  "win_rate": 0.6666666666666666
+                },
+                "SHORT": {
+                  "mean_net_R": -1.0000000000000293,
+                  "n": 1,
+                  "net_pnl": -24.177044150024226,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                }
+              },
+              "ending_realized_equity": 9684.463496033924,
+              "fees": 48.41816032829654,
+              "gross_before_costs": 96.03720632583395,
+              "holding_minutes_upper": 240,
+              "long_entries": 3,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": 0.39513898449545953,
+              "minute_close_mtm_max_drawdown_pct": 0.38945046261725086,
+              "net_pnl": 37.93541009038985,
+              "net_return_pct": 0.3932545445616598,
+              "outcomes": {
+                "SL": 2,
+                "TP": 2
+              },
+              "profit_factor": 1.7855222032796818,
+              "realized_max_drawdown_pct": 0.24999868177520554,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 17,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 7
+              },
+              "short_entries": 1,
+              "slippage_cost": 9.68363590714756,
+              "win_rate": 0.5
+            }
+          },
+          "2026-06": {
+            "cycles": 30,
+            "no_confirmation": 5,
+            "price": {
+              "confirmations": 25,
+              "no_target_by_expiry": 7,
+              "orders": {
+                "NO_POST_CONFIRMATION_TIME": 1,
+                "SL_FIRST": 7,
+                "SL_ONLY_NO_TARGET": 7,
+                "TARGET_FIRST": 3,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 2,
+                "TARGET_ONLY": 5
+              },
+              "sl_before_later_target": 7,
+              "target_eligible": 22,
+              "target_hit_rate": 0.6818181818181818,
+              "target_hits": 15,
+              "target_not_ahead": 2,
+              "time_to_target_minutes_upper": [
+                74.0,
+                250.0,
+                139.0,
+                292.0,
+                22.0,
+                202.0,
+                158.0,
+                61.0,
+                527.0,
+                597.0,
+                21.0,
+                11.0,
+                143.0,
+                321.0,
+                3.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 3,
+              "accepted_entries": 3,
+              "adverse_minute_drawdown_upper_bound_pct": 0.7481217688252524,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": -0.9999999999999963,
+                  "n": 3,
+                  "net_pnl": -72.451579607764,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                },
+                "SHORT": {
+                  "mean_net_R": null,
+                  "n": 0,
+                  "net_pnl": 0,
+                  "profit_factor": null,
+                  "win_rate": null
+                }
+              },
+              "ending_realized_equity": 9612.01191642616,
+              "fees": 28.709330736633028,
+              "gross_before_costs": -38.00038424381974,
+              "holding_minutes_upper": 116,
+              "long_entries": 3,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": -0.9999999999999963,
+              "minute_close_mtm_max_drawdown_pct": 0.7481217688252524,
+              "net_pnl": -72.451579607764,
+              "net_return_pct": -0.7481217688252434,
+              "outcomes": {
+                "SL": 3
+              },
+              "profit_factor": 0.0,
+              "realized_max_drawdown_pct": 0.7481217688252524,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 17,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 4,
+                "CONFIRMATION_AT_CYCLE_EXPIRY": 1
+              },
+              "short_entries": 0,
+              "slippage_cost": 5.7418646273112355,
+              "win_rate": 0.0
+            }
+          },
+          "2026-07": {
+            "cycles": 31,
+            "no_confirmation": 2,
+            "price": {
+              "confirmations": 29,
+              "no_target_by_expiry": 14,
+              "orders": {
+                "NEITHER_BY_EXPIRY": 3,
+                "NO_POST_CONFIRMATION_TIME": 1,
+                "SL_FIRST": 6,
+                "SL_ONLY_NO_TARGET": 11,
+                "TARGET_FIRST": 2,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 3,
+                "TARGET_ONLY": 3
+              },
+              "sl_before_later_target": 6,
+              "target_eligible": 25,
+              "target_hit_rate": 0.44,
+              "target_hits": 11,
+              "target_not_ahead": 3,
+              "time_to_target_minutes_upper": [
+                502.0,
+                249.0,
+                7.0,
+                124.0,
+                7.0,
+                489.0,
+                67.0,
+                92.0,
+                461.0,
+                230.0,
+                250.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 7,
+              "accepted_entries": 7,
+              "adverse_minute_drawdown_upper_bound_pct": 1.3052446451063464,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": -0.06464913955449156,
+                  "n": 4,
+                  "net_pnl": -6.406442313421728,
+                  "profit_factor": 0.9111664197874983,
+                  "win_rate": 0.25
+                },
+                "SHORT": {
+                  "mean_net_R": -0.9999999999999951,
+                  "n": 3,
+                  "net_pnl": -71.98118817942579,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                }
+              },
+              "ending_realized_equity": 9533.624285933312,
+              "fees": 70.59449960213703,
+              "gross_before_costs": 6.325769282747704,
+              "holding_minutes_upper": 533,
+              "long_entries": 4,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": -0.46551379403113596,
+              "minute_close_mtm_max_drawdown_pct": 1.24375897650107,
+              "net_pnl": -78.3876304928475,
+              "net_return_pct": -0.8155174085759227,
+              "outcomes": {
+                "SL": 6,
+                "TP": 1
+              },
+              "profit_factor": 0.4560136973732236,
+              "realized_max_drawdown_pct": 1.24375897650107,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 15,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 6,
+                "CONFIRMATION_AT_CYCLE_EXPIRY": 1
+              },
+              "short_entries": 3,
+              "slippage_cost": 14.11890017345818,
+              "win_rate": 0.14285714285714285
+            }
+          },
+          "2026-08": {
+            "cycles": 31,
+            "no_confirmation": 4,
+            "price": {
+              "confirmations": 27,
+              "no_target_by_expiry": 10,
+              "orders": {
+                "NEITHER_BY_EXPIRY": 2,
+                "SL_FIRST": 5,
+                "SL_ONLY_NO_TARGET": 8,
+                "TARGET_FIRST": 7,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 2,
+                "TARGET_ONLY": 3
+              },
+              "sl_before_later_target": 5,
+              "target_eligible": 25,
+              "target_hit_rate": 0.6,
+              "target_hits": 15,
+              "target_not_ahead": 2,
+              "time_to_target_minutes_upper": [
+                31.0,
+                83.0,
+                1.0,
+                85.0,
+                130.0,
+                110.0,
+                701.0,
+                204.0,
+                31.0,
+                273.0,
+                43.0,
+                4.0,
+                13.0,
+                378.0,
+                253.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 3,
+              "accepted_entries": 3,
+              "adverse_minute_drawdown_upper_bound_pct": 0.788218227118552,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": -1.000000000000018,
+                  "n": 1,
+                  "net_pnl": -23.83405794043748,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                },
+                "SHORT": {
+                  "mean_net_R": -1.0000000000000133,
+                  "n": 2,
+                  "net_pnl": -47.48885002029749,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                }
+              },
+              "ending_realized_equity": 9462.301377972577,
+              "fees": 27.22705166210568,
+              "gross_before_costs": -38.65044751222605,
+              "holding_minutes_upper": 109,
+              "long_entries": 1,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": -1.0000000000000149,
+              "minute_close_mtm_max_drawdown_pct": 0.7790857592971345,
+              "net_pnl": -71.32290796073497,
+              "net_return_pct": -0.7481195589590268,
+              "outcomes": {
+                "SL": 3
+              },
+              "profit_factor": 0.0,
+              "realized_max_drawdown_pct": 0.7481195589590122,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 11,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 13
+              },
+              "short_entries": 2,
+              "slippage_cost": 5.4454087864032354,
+              "win_rate": 0.0
+            }
+          },
+          "2026-09": {
+            "cycles": 30,
+            "no_confirmation": 2,
+            "price": {
+              "confirmations": 28,
+              "no_target_by_expiry": 14,
+              "orders": {
+                "NO_POST_CONFIRMATION_TIME": 1,
+                "SL_FIRST": 5,
+                "SL_ONLY_NO_TARGET": 14,
+                "TARGET_FIRST": 4,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 1,
+                "TARGET_ONLY": 3
+              },
+              "sl_before_later_target": 5,
+              "target_eligible": 26,
+              "target_hit_rate": 0.46153846153846156,
+              "target_hits": 12,
+              "target_not_ahead": 1,
+              "time_to_target_minutes_upper": [
+                89.0,
+                78.0,
+                55.0,
+                97.0,
+                49.0,
+                3.0,
+                619.0,
+                36.0,
+                167.0,
+                142.0,
+                134.0,
+                92.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 5,
+              "accepted_entries": 5,
+              "adverse_minute_drawdown_upper_bound_pct": 1.426811392228564,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": -1.000000000000012,
+                  "n": 2,
+                  "net_pnl": -47.133889173248036,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                },
+                "SHORT": {
+                  "mean_net_R": -1.0000000000000047,
+                  "n": 3,
+                  "net_pnl": -70.55396154969924,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                }
+              },
+              "ending_realized_equity": 9344.613527249632,
+              "fees": 58.74909444734916,
+              "gross_before_costs": -47.188939273685854,
+              "holding_minutes_upper": 202,
+              "long_entries": 2,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": -1.0000000000000075,
+              "minute_close_mtm_max_drawdown_pct": 1.4168930105896198,
+              "net_pnl": -117.68785072294727,
+              "net_return_pct": -1.2437550445911016,
+              "outcomes": {
+                "SL": 5
+              },
+              "profit_factor": 0.0,
+              "realized_max_drawdown_pct": 1.2437550445911145,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 18,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 4,
+                "CONFIRMATION_AT_CYCLE_EXPIRY": 1
+              },
+              "short_entries": 3,
+              "slippage_cost": 11.74981700191226,
+              "win_rate": 0.0
+            }
+          },
+          "2026-10": {
+            "cycles": 31,
+            "no_confirmation": 2,
+            "price": {
+              "confirmations": 29,
+              "no_target_by_expiry": 15,
+              "orders": {
+                "NEITHER_BY_EXPIRY": 2,
+                "SL_FIRST": 5,
+                "SL_ONLY_NO_TARGET": 13,
+                "TARGET_FIRST": 3,
+                "TARGET_NOT_AHEAD_AT_CONFIRMATION": 2,
+                "TARGET_ONLY": 4
+              },
+              "sl_before_later_target": 5,
+              "target_eligible": 27,
+              "target_hit_rate": 0.4444444444444444,
+              "target_hits": 12,
+              "target_not_ahead": 2,
+              "time_to_target_minutes_upper": [
+                36.0,
+                19.0,
+                93.0,
+                159.0,
+                73.0,
+                15.0,
+                330.0,
+                44.0,
+                11.0,
+                139.0,
+                808.0,
+                332.0
+              ]
+            },
+            "strategy": {
+              "accepted_at_close": 7,
+              "accepted_entries": 7,
+              "adverse_minute_drawdown_upper_bound_pct": 1.8465202190946728,
+              "ambiguous_same_minute": 0,
+              "by_side": {
+                "LONG": {
+                  "mean_net_R": -1.0000000000000149,
+                  "n": 1,
+                  "net_pnl": -23.30283854265931,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                },
+                "SHORT": {
+                  "mean_net_R": -0.9999999999999964,
+                  "n": 6,
+                  "net_pnl": -139.00487976760454,
+                  "profit_factor": 0.0,
+                  "win_rate": 0.0
+                }
+              },
+              "ending_realized_equity": 9182.305808939367,
+              "fees": 79.13878770062942,
+              "gross_before_costs": -67.34117576315555,
+              "holding_minutes_upper": 588,
+              "long_entries": 1,
+              "losses_beyond_risk_budget": 0,
+              "mean_net_R": -0.9999999999999991,
+              "minute_close_mtm_max_drawdown_pct": 1.8224241162801,
+              "net_pnl": -162.30771831026382,
+              "net_return_pct": -1.7369120492459287,
+              "outcomes": {
+                "SL": 7
+              },
+              "profit_factor": 0.0,
+              "realized_max_drawdown_pct": 1.7369120492459225,
+              "rejections": {
+                "ADVANCED_TP_NET_RR_BELOW_1_5": 15,
+                "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 7
+              },
+              "short_entries": 6,
+              "slippage_cost": 15.827754846478856,
+              "win_rate": 0.0
+            }
+          }
+        },
+        "no_confirmation": 42,
+        "price": {
+          "confirmations": 323,
+          "no_target_by_expiry": 146,
+          "orders": {
+            "NEITHER_BY_EXPIRY": 17,
+            "NO_POST_CONFIRMATION_TIME": 4,
+            "SL_FIRST": 61,
+            "SL_ONLY_NO_TARGET": 129,
+            "TARGET_FIRST": 40,
+            "TARGET_NOT_AHEAD_AT_CONFIRMATION": 20,
+            "TARGET_ONLY": 52
+          },
+          "sl_before_later_target": 61,
+          "target_eligible": 299,
+          "target_hit_rate": 0.5117056856187291,
+          "target_hits": 153,
+          "target_not_ahead": 20,
+          "time_to_target_minutes_upper": [
+            52.0,
+            215.0,
+            39.0,
+            10.0,
+            432.0,
+            35.0,
+            95.0,
+            3.0,
+            63.0,
+            169.0,
+            135.0,
+            314.0,
+            196.0,
+            263.0,
+            611.0,
+            1.0,
+            64.0,
+            4.0,
+            294.0,
+            211.0,
+            75.0,
+            1.0,
+            17.0,
+            329.0,
+            18.0,
+            535.0,
+            119.0,
+            37.0,
+            1.0,
+            1.0,
+            156.0,
+            25.0,
+            74.0,
+            465.0,
+            115.0,
+            8.0,
+            268.0,
+            95.0,
+            58.0,
+            143.0,
+            666.0,
+            286.0,
+            226.0,
+            2.0,
+            225.0,
+            37.0,
+            35.0,
+            262.0,
+            7.0,
+            84.0,
+            111.0,
+            39.0,
+            273.0,
+            61.0,
+            204.0,
+            651.0,
+            31.0,
+            407.0,
+            225.0,
+            310.0,
+            81.0,
+            158.0,
+            285.0,
+            406.0,
+            667.0,
+            335.0,
+            25.0,
+            33.0,
+            35.0,
+            1.0,
+            174.0,
+            3.0,
+            8.0,
+            176.0,
+            54.0,
+            54.0,
+            37.0,
+            79.0,
+            27.0,
+            167.0,
+            37.0,
+            160.0,
+            24.0,
+            102.0,
+            206.0,
+            28.0,
+            27.0,
+            94.0,
+            74.0,
+            250.0,
+            139.0,
+            292.0,
+            22.0,
+            202.0,
+            158.0,
+            61.0,
+            527.0,
+            597.0,
+            21.0,
+            11.0,
+            143.0,
+            321.0,
+            3.0,
+            502.0,
+            249.0,
+            7.0,
+            124.0,
+            7.0,
+            489.0,
+            67.0,
+            92.0,
+            461.0,
+            230.0,
+            250.0,
+            31.0,
+            83.0,
+            1.0,
+            85.0,
+            130.0,
+            110.0,
+            701.0,
+            204.0,
+            31.0,
+            273.0,
+            43.0,
+            4.0,
+            13.0,
+            378.0,
+            253.0,
+            89.0,
+            78.0,
+            55.0,
+            97.0,
+            49.0,
+            3.0,
+            619.0,
+            36.0,
+            167.0,
+            142.0,
+            134.0,
+            92.0,
+            36.0,
+            19.0,
+            93.0,
+            159.0,
+            73.0,
+            15.0,
+            330.0,
+            44.0,
+            11.0,
+            139.0,
+            808.0,
+            332.0
+          ]
+        },
+        "strategy": {
+          "accepted_at_close": 63,
+          "accepted_entries": 63,
+          "adverse_minute_drawdown_upper_bound_pct": 9.06380012619932,
+          "ambiguous_same_minute": 0,
+          "by_side": {
+            "LONG": {
+              "mean_net_R": -0.35893549229215693,
+              "n": 26,
+              "net_pnl": -226.7276528307436,
+              "profit_factor": 0.5333458150808875,
+              "win_rate": 0.23076923076923078
+            },
+            "SHORT": {
+              "mean_net_R": -0.6667738583347476,
+              "n": 37,
+              "net_pnl": -590.9665382298895,
+              "profit_factor": 0.2600621700234176,
+              "win_rate": 0.10810810810810811
+            }
+          },
+          "ending_realized_equity": 9182.305808939367,
+          "ex_best_one_mean_R": -0.6021233207930969,
+          "exposure_pct_upper": 0.9488203957382039,
+          "fees": 617.2276489011998,
+          "gross_before_costs": -77.02101546003401,
+          "holding_minutes_upper": 4987,
+          "long_entries": 26,
+          "losses_beyond_risk_budget": 0,
+          "mean_net_R": -0.5397294533012975,
+          "mean_net_R_block_ci95": [
+            -0.7806589498723887,
+            -0.26568252283260824
+          ],
+          "minute_close_mtm_max_drawdown_pct": 9.047738318809579,
+          "net_pnl": -817.6941910606331,
+          "net_return_pct": -8.176941910606331,
+          "outcomes": {
+            "SL": 53,
+            "TIME_EXIT": 3,
+            "TP": 7
+          },
+          "positive_months": 3,
+          "profit_factor": 0.36342853077357395,
+          "realized_max_drawdown_pct": 8.918991169100211,
+          "rejections": {
+            "ADVANCED_TP_NET_RR_BELOW_1_5": 192,
+            "ADVANCED_TP_NOT_AHEAD_OF_ENTRY": 64,
+            "CONFIRMATION_AT_CYCLE_EXPIRY": 4
+          },
+          "second_half_net_pnl": -464.2222770041677,
+          "short_entries": 37,
+          "slippage_cost": 123.44552669939934,
+          "win_rate": 0.15873015873015872
+        }
+      },
+      "variant": "OWNER_B_CLOSE_ONLY_SENSITIVITY"
+    }
+  ],
+  "data": {
+    "exact_aggregated_hours": 8760,
+    "h1_manifest": {
+      "archives": [
+        {
+          "bytes": 44751,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-10.zip.CHECKSUM",
+          "file": "BTCUSDT-1h-2025-10.zip",
+          "first_open": "2025-10-01T00:00:00Z",
+          "last_available": "2025-11-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 744,
+          "schema_fields": 12,
+          "sha256": "5426b1b48905963d50e11d1243910b5fa05a89c9a2003bcd5082561d352a2123",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-10.zip"
+        },
+        {
+          "bytes": 43273,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-11.zip.CHECKSUM",
+          "file": "BTCUSDT-1h-2025-11.zip",
+          "first_open": "2025-11-01T00:00:00Z",
+          "last_available": "2025-12-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 720,
+          "schema_fields": 12,
+          "sha256": "1f28f02e33e1f19e5163cd45b67c07b3b75870e78dbbf9f861d1348ca372d942",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-11.zip"
+        },
+        {
+          "bytes": 43894,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-12.zip.CHECKSUM",
+          "file": "BTCUSDT-1h-2025-12.zip",
+          "first_open": "2025-12-01T00:00:00Z",
+          "last_available": "2026-01-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 744,
+          "schema_fields": 12,
+          "sha256": "d546c6e44b443e34cef5122043c5cdd3b9c76980e23cc408dafd9f6f76d65c05",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-12.zip"
+        },
+        {
+          "bytes": 43807,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-01.zip.CHECKSUM",
+          "file": "BTCUSDT-1h-2026-01.zip",
+          "first_open": "2026-01-01T00:00:00Z",
+          "last_available": "2026-02-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 744,
+          "schema_fields": 12,
+          "sha256": "a40e86beb4f1e6d4b19ca022c87b8b2f0e4e40874d349a5a75b27baa9634c858",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-01.zip"
+        },
+        {
+          "bytes": 40150,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-02.zip.CHECKSUM",
+          "file": "BTCUSDT-1h-2026-02.zip",
+          "first_open": "2026-02-01T00:00:00Z",
+          "last_available": "2026-03-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 672,
+          "schema_fields": 12,
+          "sha256": "0be4e5c92892495c5da5b371fe8755f2d508b28a58414b4171284480806ed6c4",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-02.zip"
+        },
+        {
+          "bytes": 44392,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-03.zip.CHECKSUM",
+          "file": "BTCUSDT-1h-2026-03.zip",
+          "first_open": "2026-03-01T00:00:00Z",
+          "last_available": "2026-04-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 744,
+          "schema_fields": 12,
+          "sha256": "44f383f9423f96cdc29e03b4ba8062296763dd740ab1d93f04b62c88bac30aa6",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-03.zip"
+        },
+        {
+          "bytes": 42394,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-04.zip.CHECKSUM",
+          "file": "BTCUSDT-1h-2026-04.zip",
+          "first_open": "2026-04-01T00:00:00Z",
+          "last_available": "2026-05-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 720,
+          "schema_fields": 12,
+          "sha256": "9f8e49b70978177414a005a6e84b1cf891f97b0196526cbd579535449c14b6f6",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-04.zip"
+        },
+        {
+          "bytes": 43547,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-05.zip.CHECKSUM",
+          "file": "BTCUSDT-1h-2026-05.zip",
+          "first_open": "2026-05-01T00:00:00Z",
+          "last_available": "2026-06-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 744,
+          "schema_fields": 12,
+          "sha256": "11b8537dc1769a7de9d6cb2e0354dd4a376018986a826c67d1078e25fbf8fb80",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-05.zip"
+        },
+        {
+          "bytes": 42265,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-06.zip.CHECKSUM",
+          "file": "BTCUSDT-1h-2026-06.zip",
+          "first_open": "2026-06-01T00:00:00Z",
+          "last_available": "2026-07-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 720,
+          "schema_fields": 12,
+          "sha256": "7c446aee297f382ee92b8d9b3300a1d7c21bed8166118f3bb261275bed5e308e",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-06.zip"
+        },
+        {
+          "bytes": 43238,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-07.zip.CHECKSUM",
+          "file": "BTCUSDT-1h-2026-07.zip",
+          "first_open": "2026-07-01T00:00:00Z",
+          "last_available": "2026-08-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 744,
+          "schema_fields": 12,
+          "sha256": "ec98553c10acdbf3f210c55045614e8d3daf616e407c36718269361b1e972b16",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-07.zip"
+        },
+        {
+          "bytes": 43110,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-08.zip.CHECKSUM",
+          "file": "BTCUSDT-1h-2026-08.zip",
+          "first_open": "2026-08-01T00:00:00Z",
+          "last_available": "2026-09-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 744,
+          "schema_fields": 12,
+          "sha256": "1fa85817e358f73e0dd9509f6f31c79bf9b23d9470971a882c8f814871a3fccf",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-08.zip"
+        },
+        {
+          "bytes": 41901,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-09.zip.CHECKSUM",
+          "file": "BTCUSDT-1h-2026-09.zip",
+          "first_open": "2026-09-01T00:00:00Z",
+          "last_available": "2026-10-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 720,
+          "schema_fields": 12,
+          "sha256": "39b31046d702bd7e482e03b125d6fbfd730147aa5d9ad03d8b04bf1961a8e9bd",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-09.zip"
+        },
+        {
+          "bytes": 43248,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-10.zip.CHECKSUM",
+          "file": "BTCUSDT-1h-2026-10.zip",
+          "first_open": "2026-10-01T00:00:00Z",
+          "last_available": "2026-11-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 744,
+          "schema_fields": 12,
+          "sha256": "da174c1563c8436f1700be3587800376f6edadfa12e28a142ac8a5dc53f2d1a3",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-10.zip"
+        }
+      ],
+      "interval": "1h",
+      "protocol_sha256": "07525afc045d503524413cdce1aa0460e861c9cacddb95ebca96ce9ad6b886c2",
+      "status": "COMPLETE",
+      "symbol": "BTCUSDT",
+      "venue": "BINANCE_SPOT",
+      "warmup_excluded_from_outcomes": true
+    },
+    "h1_rows": 9504,
+    "m1_manifest": {
+      "archives": [
+        {
+          "bytes": 2165376,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2025-11.zip.CHECKSUM",
+          "file": "BTCUSDT-1m-2025-11.zip",
+          "first_open": "2025-11-01T00:00:00Z",
+          "last_available": "2025-12-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 43200,
+          "schema_fields": 12,
+          "sha256": "c54159d1216ab07f040a96d6678748e8746ac4200cba373fb6b758f2cdd1e5e5",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2025-11.zip"
+        },
+        {
+          "bytes": 2154846,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2025-12.zip.CHECKSUM",
+          "file": "BTCUSDT-1m-2025-12.zip",
+          "first_open": "2025-12-01T00:00:00Z",
+          "last_available": "2026-01-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 44640,
+          "schema_fields": 12,
+          "sha256": "7b47647352b01356dcd678a1438efb8baac03ed798785ed2179d428aab0cca9b",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2025-12.zip"
+        },
+        {
+          "bytes": 2127988,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2026-01.zip.CHECKSUM",
+          "file": "BTCUSDT-1m-2026-01.zip",
+          "first_open": "2026-01-01T00:00:00Z",
+          "last_available": "2026-02-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 44640,
+          "schema_fields": 12,
+          "sha256": "d28b369da32a6ea84ba0af517b1847ab67b2fcc1e0e111c1b24d56ae07240cb9",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2026-01.zip"
+        },
+        {
+          "bytes": 2021779,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2026-02.zip.CHECKSUM",
+          "file": "BTCUSDT-1m-2026-02.zip",
+          "first_open": "2026-02-01T00:00:00Z",
+          "last_available": "2026-03-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 40320,
+          "schema_fields": 12,
+          "sha256": "cee2e913ed07e02834e2387c65ca430fe3576f620588bad8a02229238f385407",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2026-02.zip"
+        },
+        {
+          "bytes": 2213444,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2026-03.zip.CHECKSUM",
+          "file": "BTCUSDT-1m-2026-03.zip",
+          "first_open": "2026-03-01T00:00:00Z",
+          "last_available": "2026-04-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 44640,
+          "schema_fields": 12,
+          "sha256": "a2c1e689d39aa7877e218f436f15162e9a4436778a377d32e9d9b81b081381cd",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2026-03.zip"
+        },
+        {
+          "bytes": 2088776,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2026-04.zip.CHECKSUM",
+          "file": "BTCUSDT-1m-2026-04.zip",
+          "first_open": "2026-04-01T00:00:00Z",
+          "last_available": "2026-05-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 43200,
+          "schema_fields": 12,
+          "sha256": "318afd4f5acfbcfbb40fbe727a77eee8e9e7b54d8941589c78a32283d90b4a01",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2026-04.zip"
+        },
+        {
+          "bytes": 2120776,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2026-05.zip.CHECKSUM",
+          "file": "BTCUSDT-1m-2026-05.zip",
+          "first_open": "2026-05-01T00:00:00Z",
+          "last_available": "2026-06-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 44640,
+          "schema_fields": 12,
+          "sha256": "62983d93c35e26ec6c29116c629e443b7ddfe3d301aca83331ff58112199d8d0",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2026-05.zip"
+        },
+        {
+          "bytes": 2092027,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2026-06.zip.CHECKSUM",
+          "file": "BTCUSDT-1m-2026-06.zip",
+          "first_open": "2026-06-01T00:00:00Z",
+          "last_available": "2026-07-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 43200,
+          "schema_fields": 12,
+          "sha256": "c8e1d5e70b766dd2312fc9cd7085785bb25708e27e75c21a5a5aaba61a6d07f5",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2026-06.zip"
+        },
+        {
+          "bytes": 2112275,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2026-07.zip.CHECKSUM",
+          "file": "BTCUSDT-1m-2026-07.zip",
+          "first_open": "2026-07-01T00:00:00Z",
+          "last_available": "2026-08-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 44640,
+          "schema_fields": 12,
+          "sha256": "3ef15c84353da48e1c7c5fd99b9751cb036bf8986ed47f7cd1be63359c0d4f6b",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2026-07.zip"
+        },
+        {
+          "bytes": 2084946,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2026-08.zip.CHECKSUM",
+          "file": "BTCUSDT-1m-2026-08.zip",
+          "first_open": "2026-08-01T00:00:00Z",
+          "last_available": "2026-09-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 44640,
+          "schema_fields": 12,
+          "sha256": "acab442e02745177063031d402929703ae983715010064b40cf811c4beb843d4",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2026-08.zip"
+        },
+        {
+          "bytes": 2054117,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2026-09.zip.CHECKSUM",
+          "file": "BTCUSDT-1m-2026-09.zip",
+          "first_open": "2026-09-01T00:00:00Z",
+          "last_available": "2026-10-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 43200,
+          "schema_fields": 12,
+          "sha256": "7a021fb5981cfdb1a56457d68fa81360ab27350c981ddfe63112b2322df44b56",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2026-09.zip"
+        },
+        {
+          "bytes": 2111822,
+          "checksum_url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2026-10.zip.CHECKSUM",
+          "file": "BTCUSDT-1m-2026-10.zip",
+          "first_open": "2026-10-01T00:00:00Z",
+          "last_available": "2026-11-01T00:00:00Z",
+          "normalized_time_unit": "milliseconds",
+          "official_checksum_verified": true,
+          "rows": 44640,
+          "schema_fields": 12,
+          "sha256": "17168f260306752e39177a6c038bb8952f52bf08ff20e36d8da6068732621f1c",
+          "source_time_unit": "microseconds",
+          "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2026-10.zip"
+        }
+      ],
+      "interval": "1m",
+      "protocol_sha256": "07525afc045d503524413cdce1aa0460e861c9cacddb95ebca96ce9ad6b886c2",
+      "status": "COMPLETE",
+      "symbol": "BTCUSDT",
+      "venue": "BINANCE_SPOT",
+      "warmup_excluded_from_outcomes": true
+    },
+    "m1_rows": 525600
+  },
+  "price_control_comparison": {
+    "body_minus_close_percentage_points": -2.5467153508637317,
+    "body_target_rate": 0.48623853211009177,
+    "close_only_target_rate": 0.5117056856187291,
+    "interpretation": "SENSITIVITY_ONLY_NOT_PARAMETER_SELECTION_NOT_PINE_A",
+    "paired_block_ci95_percentage_points": [
+      -7.245946427510836,
+      2.071737786023503
+    ],
+    "sessions_and_levels_exactly_identical": true,
+    "target_rate_lift": 0.9502308568687414
+  },
+  "protocol_sha256": "23a236d03415438957f0ac4a820f668f87b2947916a9fd5a4fbe078b41e55cb3"
+}
