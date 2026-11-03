@@ -1,0 +1,32 @@
+{
+  "cash_and_minute_close_equity_curves_identical": true,
+  "changed_existing_fields": [
+    "/arms/0/summary/monthly/2025-11/strategy/adverse_minute_drawdown_upper_bound_pct",
+    "/arms/0/summary/monthly/2025-12/strategy/adverse_minute_drawdown_upper_bound_pct",
+    "/arms/0/summary/monthly/2026-02/strategy/adverse_minute_drawdown_upper_bound_pct",
+    "/arms/0/summary/monthly/2026-05/strategy/adverse_minute_drawdown_upper_bound_pct",
+    "/arms/0/summary/monthly/2026-06/strategy/adverse_minute_drawdown_upper_bound_pct",
+    "/arms/0/summary/monthly/2026-07/strategy/adverse_minute_drawdown_upper_bound_pct",
+    "/arms/0/summary/monthly/2026-10/strategy/adverse_minute_drawdown_upper_bound_pct",
+    "/arms/0/summary/strategy/adverse_minute_drawdown_upper_bound_pct",
+    "/arms/1/summary/monthly/2025-11/strategy/adverse_minute_drawdown_upper_bound_pct",
+    "/arms/1/summary/monthly/2025-12/strategy/adverse_minute_drawdown_upper_bound_pct",
+    "/arms/1/summary/monthly/2026-01/strategy/adverse_minute_drawdown_upper_bound_pct",
+    "/arms/1/summary/monthly/2026-02/strategy/adverse_minute_drawdown_upper_bound_pct",
+    "/arms/1/summary/monthly/2026-03/strategy/adverse_minute_drawdown_upper_bound_pct",
+    "/arms/1/summary/monthly/2026-04/strategy/adverse_minute_drawdown_upper_bound_pct",
+    "/arms/1/summary/monthly/2026-05/strategy/adverse_minute_drawdown_upper_bound_pct",
+    "/arms/1/summary/monthly/2026-06/strategy/adverse_minute_drawdown_upper_bound_pct",
+    "/arms/1/summary/monthly/2026-07/strategy/adverse_minute_drawdown_upper_bound_pct",
+    "/arms/1/summary/monthly/2026-08/strategy/adverse_minute_drawdown_upper_bound_pct",
+    "/arms/1/summary/monthly/2026-09/strategy/adverse_minute_drawdown_upper_bound_pct",
+    "/arms/1/summary/monthly/2026-10/strategy/adverse_minute_drawdown_upper_bound_pct",
+    "/arms/1/summary/strategy/adverse_minute_drawdown_upper_bound_pct"
+  ],
+  "classifications_identical": true,
+  "final_result_sha256": "4cca224b065d2ca0b3a4f1431c0c6f7b541fc9258083996db63e868ccd4ca345",
+  "first_result_sha256": "cfcfe44e32549c025ed414a51f391ab5cff8dea5eedcdb568a85134f480f43b8",
+  "new_descriptive_comparison": "PAIRED_WEEKLY_BLOCK_CI_SAME_FROZEN_BOOTSTRAP_NOT_NEW_TRADING_RULE",
+  "reason": "REPORTING_ONLY_BOUND_MUST_INCLUDE_EXIT_FEES_AND_WORST_UNKNOWN_INTRAMINUTE_EXTREME_ORDER",
+  "trade_ledgers_and_fills_identical": true
+}

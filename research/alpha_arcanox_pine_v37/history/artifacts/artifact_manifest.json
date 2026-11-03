@@ -1,0 +1,76 @@
+{
+  "files": {
+    "KILLZONE_OWNER_B_HISTORY_12M.md": {
+      "bytes": 8995,
+      "sha256": "efbabd88434130addec560332eee99683b7066dc27d9c88a701bd06282413b4c"
+    },
+    "STRESS_40X_NO_SL.md": {
+      "bytes": 4542,
+      "sha256": "29b28892b20cf9c749b7bdc5330548035794fffcfba3fb76292b287b015fe55a"
+    },
+    "cycles_OWNER_B.csv": {
+      "bytes": 132531,
+      "sha256": "b9b98b518f2223d06cc2d9af325f8d5c9e5674446bf319d65ed449d38138612f"
+    },
+    "cycles_OWNER_B_CLOSE_ONLY_SENSITIVITY.csv": {
+      "bytes": 155770,
+      "sha256": "57342f251900e36824f24850a01cb66100a2bdab24685c94c8493e0b773e1eee"
+    },
+    "equity.svg": {
+      "bytes": 11780,
+      "sha256": "239f77b8f4264b891c2b580c9470a597a613611ddf82475991be205ee612ba73"
+    },
+    "first_LONG_loser.svg": {
+      "bytes": 4994,
+      "sha256": "63f77e89202f93428277128c7149f4c7425066647b685fe9607b6a566b9a48d6"
+    },
+    "first_LONG_winner.svg": {
+      "bytes": 5001,
+      "sha256": "5f1aa98abd7b5e532c5d9414406be555599805db5567b80f8f302983a82f4590"
+    },
+    "first_SHORT_loser.svg": {
+      "bytes": 4997,
+      "sha256": "417e458ad0fd22e6784ffe4575f760cf3e06c60dae56fdaf4fe178075e6e6814"
+    },
+    "first_SHORT_winner.svg": {
+      "bytes": 4996,
+      "sha256": "050b2113ae18c5e6c9b38bad23af564a91f2687298a8e6d867fb22432df508d4"
+    },
+    "first_result_before_dd_reporting_fix.json.gz": {
+      "bytes": 377009,
+      "sha256": "fe01d98f531ed66e60b2d12524a1e5988b9c2b16c74d01de295b74c0cde0a132"
+    },
+    "hourly_input.csv.gz": {
+      "bytes": 163916,
+      "sha256": "41f87066420c807f1f748d67cab7e30f9a1e3e89f8f91ecbdae8b2632ee371b6"
+    },
+    "monthly.csv": {
+      "bytes": 2845,
+      "sha256": "da9bbace6f1eccfd27bdc622df38fcbc9acf40b91db02837338b5769022dc7fd"
+    },
+    "reporting_fix_audit.json": {
+      "bytes": 2383,
+      "sha256": "570f425dcea3eaff59e3fca1440cbbb956d15d37e87025535ec6cfa6a9f42c37"
+    },
+    "stress_40x_status.json": {
+      "bytes": 6345,
+      "sha256": "0fbce3bc52ca176ba8683b5b88d89e130ffec03134dfb5d1838535a6027f1508"
+    },
+    "study_results.json.gz": {
+      "bytes": 377174,
+      "sha256": "3920578bfe16cb71932c8e701f796e85445800a4dbf6612fb0bbec2b04b2712e"
+    },
+    "summary.json": {
+      "bytes": 94491,
+      "sha256": "16c0be65b784fb3a4b3176305054719d043dbb6db7af53632bfa1788aa7dc205"
+    },
+    "trades_OWNER_B.csv": {
+      "bytes": 16496,
+      "sha256": "51450322a15d277fa9fd0b299121cb0345861a9cb04a536d890459f5416b7326"
+    },
+    "trades_OWNER_B_CLOSE_ONLY_SENSITIVITY.csv": {
+      "bytes": 30060,
+      "sha256": "64637a7e68ba63908c695dfc6ce27eba90b545a25e9d8e2cd0a06d8154ec24bf"
+    }
+  }
+}

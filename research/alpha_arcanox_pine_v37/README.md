@@ -4,6 +4,10 @@ Dos perfiles sin mezcla: `PINE_A` (defaults originales) y `OWNER_B`
 (UTC−4, cuerpo completo, reglas PAPER del propietario, TP adelantado200).
 SHADOW ONLY. TRADE AUTHORITY: NONE.
 
+**Nueva fase histórica:** [12 meses OWNER_B y control](history/README.md),
+con protocolo previo, todos los ciclos y stress40x separado y bloqueado si
+faltan reglas verificadas. Los resultados previos de64 registros se conservan.
+
 **Actualización: ya se dispone de64 registros REALES de TradingView. Paridad
 comprobada en33 registros/2 pares completos,0 discrepancias;31 iniciales excluidos.**
 GO para revisión PAPER offline; sin activación operativa ni validación de edge.

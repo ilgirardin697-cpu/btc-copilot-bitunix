@@ -1,0 +1,141 @@
+{
+  "blocking_reason": "NO_VERIFIED_EFFECTIVE_DATED_BTCUSDT_MAINTENANCE_TIERS_CLEARANCE_RULES_FOR_ENTIRE_WINDOW",
+  "classification": "INCONCLUSIVE",
+  "equity_change_for_one_percent_adverse_move_before_costs": "-20% OF EQUITY",
+  "equity_reset_or_external_capital": false,
+  "gross_bankruptcy_distance_ignoring_maintenance_and_costs": {
+    "cross_single_position": "5%",
+    "isolated": "2.5%",
+    "warning": "NOT_LIQUIDATION_PRICES_MAINTENANCE_AND_COSTS_TRIGGER_EARLIER_OR_CHANGE_THRESHOLD"
+  },
+  "hypothetical_loss_ladder": [
+    {
+      "equity": "10000",
+      "hypothetical_half_equity_losses": 0,
+      "remaining_fraction": "1",
+      "role": "PURE_HALF_LOSS_ALGEBRA_NO_FEES_NOT_A_HISTORICAL_LIQUIDATION_RESULT"
+    },
+    {
+      "equity": "5000.0",
+      "hypothetical_half_equity_losses": 1,
+      "remaining_fraction": "0.5",
+      "role": "PURE_HALF_LOSS_ALGEBRA_NO_FEES_NOT_A_HISTORICAL_LIQUIDATION_RESULT"
+    },
+    {
+      "equity": "2500.00",
+      "hypothetical_half_equity_losses": 2,
+      "remaining_fraction": "0.25",
+      "role": "PURE_HALF_LOSS_ALGEBRA_NO_FEES_NOT_A_HISTORICAL_LIQUIDATION_RESULT"
+    },
+    {
+      "equity": "1250.000",
+      "hypothetical_half_equity_losses": 3,
+      "remaining_fraction": "0.125",
+      "role": "PURE_HALF_LOSS_ALGEBRA_NO_FEES_NOT_A_HISTORICAL_LIQUIDATION_RESULT"
+    },
+    {
+      "equity": "312.50000",
+      "hypothetical_half_equity_losses": 5,
+      "remaining_fraction": "0.03125",
+      "role": "PURE_HALF_LOSS_ALGEBRA_NO_FEES_NOT_A_HISTORICAL_LIQUIDATION_RESULT"
+    },
+    {
+      "equity": "9.7656250000",
+      "hypothetical_half_equity_losses": 10,
+      "remaining_fraction": "0.0009765625",
+      "role": "PURE_HALF_LOSS_ALGEBRA_NO_FEES_NOT_A_HISTORICAL_LIQUIDATION_RESULT"
+    }
+  ],
+  "initial_budget": {
+    "equity": "10000",
+    "initial_margin": "5000.0",
+    "leverage": "40",
+    "notional": "200000.0"
+  },
+  "mark_trade_funding_history_status": "OFFICIAL_PUBLIC_SERIES_EXIST_BUT_NOT_ACQUIRED_AFTER_TIER_GATE_FAILED_NOT_REPLACED_BY_SPOT",
+  "modes": {
+    "CROSS_SEPARATE_RISK_SCENARIO": {
+      "liquidations": null,
+      "max_drawdown": null,
+      "net_pnl": null,
+      "probability_of_ruin": null,
+      "reason": "MISSING_VERIFIED_MODEL_AND_DATA",
+      "tp_trades": null
+    },
+    "ISOLATED_NO_AUTO_ADD_MARGIN": {
+      "liquidations": null,
+      "max_drawdown": null,
+      "net_pnl": null,
+      "probability_of_ruin": null,
+      "reason": "MISSING_VERIFIED_MODEL_AND_DATA",
+      "tp_trades": null
+    }
+  },
+  "name": "OWNER_C_STRESS_40X_NO_SL",
+  "no_credentials_requested_or_used": true,
+  "no_private_account_api_called": true,
+  "official_sources": [
+    {
+      "fact": "LEVERAGE_BRACKETS_USER_DATA_SIGNED_CURRENT_USER_BRACKETS_NOT_EFFECTIVE_DATED_HISTORICAL_TABLE",
+      "url": "https://developers.binance.com/en/docs/catalog/core-trading-derivatives-trading-usd-s-m-futures/api/rest-api/account"
+    },
+    {
+      "fact": "LIQUIDATION_TRIGGER_USES_MARK_PRICE_MARGIN_BALANCE_AND_MAINTENANCE_NOT_SPOT_LAST_PRICE",
+      "url": "https://www.binance.com/en-KZ/support/faq/detail/360033525271"
+    },
+    {
+      "fact": "OFFICIAL_MARGIN_TIERS_CAN_CHANGE_2021_NOTICE_NOT_EVIDENCE_FOR_ALL_2025_2026_DATES",
+      "url": "https://www.binance.com/en/support/announcement/detail/f55d25695ca8453ab4c132c1fd4dc36a"
+    }
+  ],
+  "protocol": {
+    "allowed_diagnostic": "PURE_ALGEBRA_OF_20X_EQUITY_NOTIONAL_AND_HYPOTHETICAL_REPEATED_HALF_EQUITY_LOSS_NOT_EXCHANGE_LIQUIDATION_OR_PROBABILITY",
+    "candidate_execution_venue": "BINANCE_USDM_PERPETUAL_BTCUSDT_DIFFERENT_FROM_BINANCE_SPOT",
+    "equity_sequence": "RECOMPUTE_MARGIN_FROM_REMAINING_EQUITY_AFTER_EACH_CLOSED_POSITION_NEVER_RESET_OR_ADD_FUNDS",
+    "exits": "TP_OR_VERIFIED_LIQUIDATION_DATA_END_RIGHT_CENSOR_WITH_LIABILITY_MTM_NO_ASSUMED_INFINITE_SURVIVAL",
+    "independent_from_owner_b": true,
+    "initial_equity_reporting_scale": "10000",
+    "initial_exposure": "QUANTITY_EQUALS_40_TIMES_HALF_EQUITY_DIVIDED_BY_ADVERSE_ENTRY_PRICE",
+    "initial_margin_fraction_of_available_equity": "0.50",
+    "leverage": "40",
+    "minimum_rr_filter": null,
+    "missing_inputs_action": "BLOCK_NUMERIC_LIQUIDATION_PNL_DRAWDOWN_AND_RUIN_PROBABILITY_REPORT_WHAT_IS_MISSING",
+    "mode": "EXCLUSIVELY_OFFLINE_STRESS_NO_BUTTON_NO_RUNNER_NO_REAL_LEVERAGE",
+    "modes": [
+      "ISOLATED_NO_AUTO_ADD_MARGIN",
+      "CROSS_SEPARATE_RISK_SCENARIO"
+    ],
+    "name": "OWNER_C_STRESS_40X_NO_SL",
+    "no_assumptions_to_fill_missing_inputs": true,
+    "protocol": "OWNER_C_STRESS_OFFLINE_V1",
+    "required_before_any_historical_liquidation_result": [
+      "OFFICIAL_EFFECTIVE_DATED_MAINTENANCE_TIERS_AND_CUMULATIVE_DEDUCTIONS_OVER_ENTIRE_2025_11_TO_2026_10_WINDOW",
+      "VERIFIED_ACCOUNT_MODE_LIQUIDATION_TRIGGER_AND_CLEARANCE_FEE_RULES",
+      "CONTIGUOUS_VENUE_MARK_PRICE_INTRABAR_SERIES",
+      "CONTIGUOUS_VENUE_TRADE_PRICE_SERIES_FOR_TP_AND_EXECUTION_SPOT_NOT_A_SUBSTITUTE",
+      "REAL_FUNDING_RATES_AND_APPLICABLE_FUNDING_MARK_PRICES",
+      "DOCUMENTED_FEE_SCENARIO_AND_LOT_MIN_NOTIONAL_RULES",
+      "CHRONOLOGY_TP_VS_MARK_LIQUIDATION_AMBIGUOUS_IF_UNRESOLVED"
+    ],
+    "ruin_reporting": "HISTORICAL_PATH_IS_NOT_A_PROBABILITY_DISTRIBUTION_NO_P_RUIN_WITHOUT_VERIFIED_DATA_AND_STATED_MODEL",
+    "signal_source": "OWNER_B_SPOT_FULL_BODY_SAME_SESSIONS_LEVELS_FIRST_CONFIRMATION_PER_CYCLE",
+    "tp": "OWNER_B_SUPERIOR_MINUS_200_OR_INFERIOR_PLUS_200_NO_RECALIBRATION",
+    "trade_authority": "NONE",
+    "voluntary_stop": null,
+    "while_position_open": "ONE_POSITION_ONLY_RECORD_LATER_CYCLES_AS_POSITION_ACTIVE_NO_PYRAMIDING"
+  },
+  "protocol_sha256": "8e11c9af1b3bfc9394536a3d3eace43150799d015b1f11c95c34597af9b44d60",
+  "required_missing_inputs": [
+    "OFFICIAL_EFFECTIVE_DATED_MAINTENANCE_TIERS_AND_CUMULATIVE_DEDUCTIONS_OVER_ENTIRE_2025_11_TO_2026_10_WINDOW",
+    "VERIFIED_ACCOUNT_MODE_LIQUIDATION_TRIGGER_AND_CLEARANCE_FEE_RULES",
+    "CONTIGUOUS_VENUE_MARK_PRICE_INTRABAR_SERIES",
+    "CONTIGUOUS_VENUE_TRADE_PRICE_SERIES_FOR_TP_AND_EXECUTION_SPOT_NOT_A_SUBSTITUTE",
+    "REAL_FUNDING_RATES_AND_APPLICABLE_FUNDING_MARK_PRICES",
+    "DOCUMENTED_FEE_SCENARIO_AND_LOT_MIN_NOTIONAL_RULES",
+    "CHRONOLOGY_TP_VS_MARK_LIQUIDATION_AMBIGUOUS_IF_UNRESOLVED"
+  ],
+  "rr_filter_applied": false,
+  "status": "BLOCKED_NOT_EVALUABLE",
+  "stop_loss_added": false,
+  "trade_authority": "NONE"
+}

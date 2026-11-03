@@ -1,0 +1,26 @@
+name: Killzone OWNER_B history offline audit
+on:
+  push:
+    paths:
+      - 'research/alpha_arcanox_pine_v37/history/**'
+      - '.github/workflows/killzone-owner-b-history.yml'
+  pull_request:
+    paths:
+      - 'research/alpha_arcanox_pine_v37/history/**'
+      - '.github/workflows/killzone-owner-b-history.yml'
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m compileall -q research/alpha_arcanox_pine_v37/history
+      - name: Causality, all cycles, remaining equity, costs, drawdown, stress gate
+        run: python -m unittest research.alpha_arcanox_pine_v37.history.test_history -v
+      - run: git diff --check HEAD^ HEAD
