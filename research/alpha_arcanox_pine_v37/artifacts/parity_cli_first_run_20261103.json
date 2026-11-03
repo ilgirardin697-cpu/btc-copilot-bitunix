@@ -1,0 +1,14 @@
+{
+  "status": "MATCH_FOR_SUPPLIED_LOGS",
+  "evidence": "CALLER_SUPPLIED_RECORDS_NOT_INDEPENDENTLY_AUTHENTICATED",
+  "tickerid": "BINANCE:BTCUSDT",
+  "profile": "PINE_A",
+  "input_rows": 64,
+  "compared_rows": 33,
+  "complete_cycles": 2,
+  "absolute_tolerance": 1e-07,
+  "mismatches": [],
+  "alpha_original_parity": "NOT_PROVEN",
+  "profitability": "NOT_EVALUATED",
+  "source_sha256": "3fc02a8fc12664591766df834c869b10d66cf54606ce12b5e9f87ce54b9d3097"
+}

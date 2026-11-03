@@ -1,5 +1,10 @@
 # Verificación local — 2026-11-03
 
+**SNAPSHOT HISTÓRICO del commit31bcbe3, anterior a recibir el export real.**
+Los resultados actuales de paridad están en
+[REAL_TRADINGVIEW_PARITY_20261103.md](artifacts/REAL_TRADINGVIEW_PARITY_20261103.md).
+La frase "registros reales:0" más abajo describe solo aquella fase anterior.
+
 Python3.12.12; base de zonas IANA disponible mediante PYTHONTZPATH local. Linux
 CI usa su base IANA del sistema. Sin credenciales, producción ni exchange API.
 

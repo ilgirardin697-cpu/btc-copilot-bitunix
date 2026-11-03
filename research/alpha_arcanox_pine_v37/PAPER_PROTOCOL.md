@@ -1,5 +1,11 @@
 # Protocolo candidato PAPER — no activado
 
+Actualización de evidencia:64 logs reales permiten comprobar33 filas/2 pares
+PINE_A, sin inyectar el primer ciclo incompleto. GO para evaluación OFFLINE.
+La revisión acotada OWNER_B fija su escenario en `OWNER_B_REVIEW_SPEC.json`
+(checkpoint4e070b4); no cambia las reglas siguientes ni activa observación
+forward. Ver `EVALUATION_PLAN.md` y los resultados separados de ambos perfiles.
+
 SHADOW ONLY. TRADE AUTHORITY: NONE. Requiere revisión independiente y logs
 TradingView reales antes de congelar su hash/fecha de activación. Este documento
 no otorga permiso de ejecución ni integra un observer.

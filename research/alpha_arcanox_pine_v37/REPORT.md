@@ -4,9 +4,13 @@ SHADOW ONLY. TRADE AUTHORITY: NONE. Sin backtest de rentabilidad, ejecución,
 Telegram, Railway ni cambios en Guardian/V8. Base independiente:
 `9d40020d539033cefb8f01734db8c6a6fdbba2e3`.
 
-**Resultado: las fórmulas del archivo adjunto ya son implementables. La paridad
-numérica independiente con TradingView y con el indicador de Alpha sigue
-PENDIENTE. PAPER operativo: NO-GO hasta completar esa comprobación.**
+**Actualización con export REAL:64 registros recibidos,33 comparados,2 pares
+completos,0 discrepancias. Se excluyen31 registros iniciales sin warmup de sesión.**
+GO para evaluación PAPER exclusivamente offline. No se activa un proceso
+continuo, no se acredita rentabilidad ni autoría del indicador privado de Alpha.
+[Paridad por campo y DST](artifacts/REAL_TRADINGVIEW_PARITY_20261103.md) ·
+[OWNER_B con cuerpo completo, TP200 y riesgos](artifacts/OWNER_B_64_REVIEW.md) ·
+[Gráficos con OHLC reales](artifacts/real_evidence.html).
 
 ## Fuente auditada
 
@@ -183,14 +187,21 @@ para mecánica. Checksum y linaje están en
 Binance Vision USD-M mensual 5m, agregado previamente a H1 sin huecos. Es un
 fixture ya visto, NO holdout ni captura Alpha, ni Spot. No se mide PnL con él.
 
-**Registros numéricos reales TradingView recuperados en esta tarea: 0.** No hay
-herramienta de navegador/sesión TradingView conectada ni exportación/logs
-del indicador adjuntos. Por tanto no se ha ejecutado el Pine en TradingView
-ni se declara que compile la copia diagnóstica. El ticker/exchange de las
-capturas Alpha sigue desconocido; el setup HIGH=78285.00, LOW=77517.20,
-SUPERIOR=78653.44, INFERIOR=77095.25 NO se usa para calibración o comparación.
+**Registros numéricos reales TradingView recibidos posteriormente:64.** El
+propietario aporta el export del diagnóstico de BINANCE:BTCUSDT Spot H1.
+El comparador ORIGINAL se ejecutó antes de cambios y obtuvo MATCH en33 filas,
+2 pares completos;31 filas iniciales quedan excluidas. Se preserva esa lógica:
+no se cargan extremos agregados para suplir las velas de Asia ausentes.
+Todos los campos comparados tienen error0 en esta muestra a tolerancia1e-7.
 
-## Cómo completar la paridad sin suscripción
+El par PINE_A del1-Nov registra HIGH78285.00, LOW77517.20, SUPERIOR78653.4351
+(etiqueta78653.44), INFERIOR77095.25. Esto establece una coincidencia numérica
+específica con las etiquetas antiguas. El primer par SOLO se verifica
+algebraicamente desde los extremos guardados; no se cuenta como reconstrucción
+independiente de sus OHLC faltantes ni autentica el indicador privado del autor.
+No se han cambiado fórmulas para forzar esa coincidencia.
+
+## Cómo repetir/ampliar la paridad sin suscripción
 
 Se genera una [COPIA diagnóstica](artifacts/Killzone_H1_v3_7_Lite_DIAGNOSTIC.pine)
 cuyo prefijo contiene TODOS los bytes originales; el original permanece intacto.
@@ -224,9 +235,13 @@ hash normalizado únicamente CRLF→LF para checkouts Git multiplataforma. No ha
 modificaciones de esos archivos ni de protocolos/journals. La nueva investigación
 no está importada por producción; ramas/resultados anteriores no se reescriben.
 
-**GO para revisión de implementación y captura de paridad. NO-GO para PAPER
-operativo hasta obtener registros independientes.** La ambigüedad matemática
-de los cuatro niveles queda resuelta respecto a ESTE archivo, no respecto a la
-autoría del indicador privado. Rentabilidad: NO EVALUADA. Si la paridad con
-la fuente se verifica, ejecutar primero el [protocolo PAPER](PAPER_PROTOCOL.md),
-sin mezclar perfiles ni modificar parámetros después de mirar resultados.
+**GO para evaluación PAPER exclusivamente offline bajo el protocolo fijado.
+NO-GO para activar ejecución, un proceso continuo o producción.** La ambigüedad
+matemática queda resuelta respecto a ESTE archivo y se ha contrastado con dos
+pares reales exportados; no respecto a la autoría privada ni todas las
+configuraciones. OWNER_B usa sus horarios y produce dos confirmaciones en la
+misma muestra, ambas rechazadas por1.5R neto en el escenario congelado antes
+de outcomes. Ambas trayectorias tocan SL antes de visitar después los targets.
+No hubo entradas aceptadas ni evidencia de rentabilidad.
+Seguir el [plan de evaluación](EVALUATION_PLAN.md) sin usar estos ejemplos para
+retocar reglas, costes o umbrales y sin fingir holdout virgen.

@@ -89,7 +89,20 @@ def main():
                alpha_arcanox_original_indicator_parity='NOT_PROVEN',
                old_78285_setup_binding='UNVERIFIED_NOT_USED',
                operational_paper='BLOCKED_PENDING_INDEPENDENT_PARITY',profitability='NOT_EVALUATED'))
+    from .real_artifacts import write_artifacts
+    p,b=write_artifacts(art)
+    write_json(art/'parity_status.json',dict(source_formula_implementation='MATCH_ON_SUPPLIED_REAL_TRADINGVIEW_EXPORT',
+               real_tradingview_records=p['input_rows'],compared_records=p['compared_rows'],
+               skipped_initial_records=p['skipped_rows'],complete_cycles=p['complete_cycles'],
+               max_abs_error=p['max_abs_error'],mismatches=len(p['mismatches']),
+               independent_platform_parity='PASS_ON_EXPORTED_PINE_A_WINDOW_NOT_ALL_MARKETS_OR_CONFIGS',
+               alpha_arcanox_original_indicator_parity='NOT_AUTHENTICATED',
+               old_78285_setup_binding='NUMERIC_MATCH_TO_LOGGED_2026_11_01_PINE_A_LEVELS_INITIAL_ASIA_OHLC_NOT_REPLAYED',
+               offline_owner_b_evaluation='GO',operational_paper='NOT_ACTIVATED',
+               profitability='INSUFFICIENT_SAMPLE_NO_EDGE_CLAIM',
+               owner_b_first_confirmations=b['first_confirmations'],owner_b_accepted_entries=b['entered_scenarios']))
     (art/'index.html').write_text('<!doctype html><html lang="es"><meta charset="utf-8"><title>Killzone Pine V3.7 — investigación</title><style>body{background:#111b28;color:white;font:16px Arial;margin:30px}a{color:#65dbff}img{width:100%;max-width:1000px}</style><h1>Fórmulas Pine V3.7: pruebas de geometría</h1><p>Ejemplos SINTÉTICOS de cajas; no capturas ni resultados TradingView. No prueban rentabilidad ni paridad Alpha.</p>'+''.join('<img alt="'+n+'" src="'+n+'.svg">' for n,*_ in CASES)+'<p><a href="../REPORT.md">Informe</a> · SHADOW ONLY · TRADE AUTHORITY: NONE</p></html>\n',encoding='utf-8',newline='\n')
+    (art/'real_evidence.html').write_text('<!doctype html><html lang="es"><meta charset="utf-8"><title>TradingView real y OWNER_B</title><style>body{background:#101a27;color:white;font:16px Arial;margin:25px}a{color:#56cbe4}img{width:100%;max-width:1400px}</style><h1>Evidencia REAL TradingView y replay OWNER_B separado</h1><p>64 registros;33 comparados;2 ciclos PINE_A completos;0 diferencias. No se fuerza el primer ciclo.</p><p>OWNER_B:2 confirmaciones de cuerpo completo, ambas rechazadas por1.5R neto en escenario congelado; no se ejecutó PAPER.</p><p><a href="REAL_TRADINGVIEW_PARITY_20261103.md">Paridad y diferencias por campo</a> · <a href="OWNER_B_64_REVIEW.md">Resultados y límites OWNER_B</a></p><img src="owner_b_2026-11-02.svg" alt="OWNER_B Short 2 noviembre, riesgo rechazado"><img src="owner_b_2026-11-03.svg" alt="OWNER_B Long 3 noviembre, riesgo rechazado"><p>SHADOW ONLY · TRADE AUTHORITY: NONE · Sin rentabilidad validada</p></html>\n',encoding='utf-8',newline='\n')
 
 
 if __name__=='__main__':

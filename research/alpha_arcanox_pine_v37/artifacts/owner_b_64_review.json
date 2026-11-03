@@ -1,0 +1,292 @@
+{
+  "complete_pairs": 2,
+  "cycles": [
+    {
+      "asia_open_utc": null,
+      "cycle_id": "OWNER_B:1793505600000",
+      "first_observed_asia_bar_utc": "2026-11-01T04:00:00Z",
+      "signal": null,
+      "status": "EXCLUDED_INITIAL_PARTIAL_PAIR"
+    },
+    {
+      "asia_open_utc": "2026-11-02T00:00:00Z",
+      "atr14_at_first_outside_close": 283.55076824586865,
+      "cycle_id": "OWNER_B:1793577600000",
+      "first_observed_asia_bar_utc": "2026-11-02T00:00:00Z",
+      "levels": {
+        "aHigh": 78878.01,
+        "aLow": 78044.11,
+        "amplitude": 951.3099999999977,
+        "asia_left": 1793575800000,
+        "asia_right": 1793593800000,
+        "bottomAnchor": 78069.12700000001,
+        "bottomBoxHeight": 833.8999999999942,
+        "bottomInAsia": true,
+        "bottomXTime": 1793584800000,
+        "data_complete": true,
+        "futureTime": 1793696400000,
+        "highGuideValue": 78878.01,
+        "lHigh": 78470.72,
+        "lLow": 77926.7,
+        "levels_available_at": 1793610000000,
+        "london_left": 1793593800000,
+        "london_right": 1793608200000,
+        "lowGuideValue": 77926.7,
+        "newBottomTarget": 77117.81700000001,
+        "newTopTarget": 79405.70939999999,
+        "topAnchor": 78454.3994,
+        "topBoxHeight": 544.0200000000041,
+        "topInAsia": false,
+        "topXTime": 1793601000000
+      },
+      "levels_available_at_utc": "2026-11-02T09:00:00Z",
+      "signal": {
+        "actual_executable_quote": "NOT_AVAILABLE_FROM_H1_OHLC",
+        "atr14_at_confirmation": 279.0352324475855,
+        "capital_before": "10000",
+        "confirmed_at_utc": "2026-11-02T13:00:00Z",
+        "execution_status": "REJECTED_AT_CONFIRMATION",
+        "expiry_utc": "2026-11-03T00:00:00Z",
+        "next_open_check": {
+          "accepted": false,
+          "adverse_entry_scenario": "77792.43840",
+          "net_reward_per_btc": "304.032117636589987998",
+          "net_risk_per_btc": "361.4556898467138184234200",
+          "net_rr": "0.8411324712180460424100305527853181856469",
+          "reasons": [
+            "NEXT_OPEN_NET_RR_BELOW_1_5"
+          ],
+          "reference_entry": "77808.0",
+          "role": "DIAGNOSTIC_ONLY_IF_SIGNAL_ALREADY_REJECTED"
+        },
+        "next_open_reference_price": "77808.0",
+        "next_open_reference_utc": "2026-11-02T13:00:00Z",
+        "plan_at_close": {
+          "accepted": false,
+          "actual_fill": null,
+          "advanced_tp": "77317.81700000001",
+          "adverse_entry_scenario": "77792.448398",
+          "adverse_stop_scenario": "77998.1035478988150034200",
+          "adverse_tp_scenario": "77333.280563400010002",
+          "cost_provenance": "FIXED_SCENARIO_SPOT_REGULAR_TAKER_REFERENCE_NO_BNB_DISCOUNT_2BPS_SLIPPAGE_NOT_ACTUAL_ACCOUNT_FEES_OR_OBSERVED_FILLS",
+          "funding": "EXPLICIT_ASSUMED_RESERVE_NOT_OBSERVED_FUNDING",
+          "net_reward_per_btc": "304.042105638589987998",
+          "net_risk_per_btc": "361.4457018447138184234200",
+          "net_rr": "0.8411833481124479884732039268952522219662",
+          "operational_paper_authorized": false,
+          "profile": "OWNER_B",
+          "quantity_btc": null,
+          "reasons": [
+            "ADVANCED_TP_NET_RR_BELOW_1_5"
+          ],
+          "side": "SHORT",
+          "stop": "77982.507046489517100",
+          "theoretical_entry": "77808.01",
+          "theoretical_target": "77117.81700000001",
+          "tp_advance_price": "200",
+          "trade_authority": "NONE"
+        },
+        "realized_net_pnl": null,
+        "reference_path": {
+          "advanced_tp_touch": {
+            "bar_open_utc": "2026-11-02T15:00:00Z",
+            "known_at_utc": "2026-11-02T16:00:00Z"
+          },
+          "coverage_complete_to_expiry": true,
+          "first_event": {
+            "ambiguous": false,
+            "bar_open_utc": "2026-11-02T13:00:00Z",
+            "kind": "SL",
+            "known_at_utc": "2026-11-02T14:00:00Z",
+            "reference_exit": 77982.50704648951
+          },
+          "no_event_interpretation": null,
+          "role": "SIGNAL_PRICE_PATH_NOT_ACCEPTED_TRADE_RESULT",
+          "same_confirmation_candle_excluded": true,
+          "sl_touch": {
+            "bar_open_utc": "2026-11-02T13:00:00Z",
+            "known_at_utc": "2026-11-02T14:00:00Z"
+          },
+          "theoretical_target_role": "COUNTERFACTUAL_PRICE_HITO_NOT_REALIZED_TRADE_PROFIT",
+          "theoretical_target_touch": {
+            "bar_open_utc": "2026-11-02T17:00:00Z",
+            "known_at_utc": "2026-11-02T18:00:00Z"
+          }
+        },
+        "short_inventory_or_borrow": "NOT_VERIFIED_HYPOTHETICAL_DIRECTIONAL_PAPER_ONLY",
+        "side": "SHORT",
+        "signal_bar_open_utc": "2026-11-02T12:00:00Z",
+        "signal_close": "77808.01",
+        "signal_open": "77894.17"
+      },
+      "status": "REJECTED_AT_CONFIRMATION"
+    },
+    {
+      "asia_open_utc": "2026-11-03T00:00:00Z",
+      "atr14_at_first_outside_close": 393.23310284368495,
+      "cycle_id": "OWNER_B:1793664000000",
+      "first_observed_asia_bar_utc": "2026-11-03T00:00:00Z",
+      "levels": {
+        "aHigh": 77314.01,
+        "aLow": 76541.6,
+        "amplitude": 925.1299999999901,
+        "asia_left": 1793662200000,
+        "asia_right": 1793680200000,
+        "bottomAnchor": 76564.77230000001,
+        "bottomBoxHeight": 772.4099999999889,
+        "bottomInAsia": true,
+        "bottomXTime": 1793671200000,
+        "data_complete": true,
+        "futureTime": 1793782800000,
+        "highGuideValue": 77314.01,
+        "lHigh": 76979.37,
+        "lLow": 76388.88,
+        "levels_available_at": 1793696400000,
+        "london_left": 1793680200000,
+        "london_right": 1793694600000,
+        "lowGuideValue": 76388.88,
+        "newBottomTarget": 75639.64230000002,
+        "newTopTarget": 77886.78529999999,
+        "topAnchor": 76961.6553,
+        "topBoxHeight": 590.4899999999907,
+        "topInAsia": false,
+        "topXTime": 1793687400000
+      },
+      "levels_available_at_utc": "2026-11-03T09:00:00Z",
+      "signal": {
+        "actual_executable_quote": "NOT_AVAILABLE_FROM_H1_OHLC",
+        "atr14_at_confirmation": 389.0490759141641,
+        "capital_before": "10000",
+        "confirmed_at_utc": "2026-11-03T14:00:00Z",
+        "execution_status": "REJECTED_AT_CONFIRMATION",
+        "expiry_utc": "2026-11-04T00:00:00Z",
+        "next_open_check": {
+          "accepted": false,
+          "adverse_entry_scenario": "77415.48000",
+          "net_reward_per_btc": "100.681214997050011998",
+          "net_risk_per_btc": "349.3632881645764571825640",
+          "net_rr": "0.2881848734765215700272108272563445892107",
+          "reasons": [
+            "NEXT_OPEN_NET_RR_BELOW_1_5"
+          ],
+          "reference_entry": "77400.0",
+          "role": "DIAGNOSTIC_ONLY_IF_SIGNAL_ALREADY_REJECTED"
+        },
+        "next_open_reference_price": "77400.0",
+        "next_open_reference_utc": "2026-11-03T14:00:00Z",
+        "plan_at_close": {
+          "accepted": false,
+          "actual_fill": null,
+          "advanced_tp": "77686.78529999999",
+          "adverse_entry_scenario": "77415.490002",
+          "adverse_stop_scenario": "77220.7529447802037465640",
+          "adverse_tp_scenario": "77671.247942939990002",
+          "cost_provenance": "FIXED_SCENARIO_SPOT_REGULAR_TAKER_REFERENCE_NO_BNB_DISCOUNT_2BPS_SLIPPAGE_NOT_ACTUAL_ACCOUNT_FEES_OR_OBSERVED_FILLS",
+          "funding": "EXPLICIT_ASSUMED_RESERVE_NOT_OBSERVED_FUNDING",
+          "net_reward_per_btc": "100.671202995050011998",
+          "net_risk_per_btc": "349.3733001665764571825640",
+          "net_rr": "0.2881479579208008912620468053548250272229",
+          "operational_paper_authorized": false,
+          "profile": "OWNER_B",
+          "quantity_btc": null,
+          "reasons": [
+            "ADVANCED_TP_NET_RR_BELOW_1_5"
+          ],
+          "side": "LONG",
+          "stop": "77236.200184817167180",
+          "theoretical_entry": "77400.01",
+          "theoretical_target": "77886.78529999999",
+          "tp_advance_price": "200",
+          "trade_authority": "NONE"
+        },
+        "realized_net_pnl": null,
+        "reference_path": {
+          "advanced_tp_touch": {
+            "bar_open_utc": "2026-11-03T15:00:00Z",
+            "known_at_utc": "2026-11-03T16:00:00Z"
+          },
+          "coverage_complete_to_expiry": false,
+          "first_event": {
+            "ambiguous": false,
+            "bar_open_utc": "2026-11-03T14:00:00Z",
+            "kind": "SL",
+            "known_at_utc": "2026-11-03T15:00:00Z",
+            "reference_exit": 77236.20018481716
+          },
+          "no_event_interpretation": null,
+          "role": "SIGNAL_PRICE_PATH_NOT_ACCEPTED_TRADE_RESULT",
+          "same_confirmation_candle_excluded": true,
+          "sl_touch": {
+            "bar_open_utc": "2026-11-03T14:00:00Z",
+            "known_at_utc": "2026-11-03T15:00:00Z"
+          },
+          "theoretical_target_role": "COUNTERFACTUAL_PRICE_HITO_NOT_REALIZED_TRADE_PROFIT",
+          "theoretical_target_touch": {
+            "bar_open_utc": "2026-11-03T18:00:00Z",
+            "known_at_utc": "2026-11-03T19:00:00Z"
+          }
+        },
+        "short_inventory_or_borrow": "NOT_VERIFIED_HYPOTHETICAL_DIRECTIONAL_PAPER_ONLY",
+        "side": "LONG",
+        "signal_bar_open_utc": "2026-11-03T13:00:00Z",
+        "signal_close": "77400.01",
+        "signal_open": "77427.59"
+      },
+      "status": "REJECTED_AT_CONFIRMATION"
+    }
+  ],
+  "ending_realized_capital": "10000",
+  "entered_scenarios": 0,
+  "first_confirmations": 2,
+  "logs_sha256": "3fc02a8fc12664591766df834c869b10d66cf54606ce12b5e9f87ce54b9d3097",
+  "matured_scenarios": 0,
+  "net_realized_pnl": "0",
+  "partial_cycle": {
+    "first_available_bar_open_utc": "2026-11-01T04:00:00Z",
+    "reason": "EXPORT_STARTS_AFTER_ASIA_BEGAN_NO_STATE_OR_EXTREMA_INJECTED",
+    "status": "EXCLUDED_INITIAL_PARTIAL_PAIR"
+  },
+  "profile": "OWNER_B",
+  "profitability_conclusion": "INSUFFICIENT_SAMPLE_NOT_EDGE_EVIDENCE",
+  "prospective_observer": "NOT_IMPLEMENTED_OR_ACTIVATED",
+  "protocol": {
+    "atr14_initialization": "EXISTING_ATR14_FIRST_14_EXPORTED_TRUE_RANGES_SMA_THEN_WILDER_RMA_NOT_TRADINGVIEW_ATR_PARITY",
+    "atr_stop_buffer": "0.20",
+    "authorization": "OFFLINE_RESEARCH_ONLY_NO_ORDERS_NO_FORWARD_PROCESS",
+    "confirmation_bar_hits": "EXCLUDE_COMPLETELY",
+    "cost_provenance": "FIXED_SCENARIO_SPOT_REGULAR_TAKER_REFERENCE_NO_BNB_DISCOUNT_2BPS_SLIPPAGE_NOT_ACTUAL_ACCOUNT_FEES_OR_OBSERVED_FILLS",
+    "entry_fee_rate": "0.001",
+    "entry_reference": "NEXT_H1_OPEN_AFTER_SIGNAL_CLOSE_PLUS_ADVERSE_SLIPPAGE_SCENARIO_NOT_GUARANTEED_EXECUTABLE_QUOTE",
+    "entry_slippage_rate": "0.0002",
+    "exit_fee_rate": "0.001",
+    "exit_slippage_rate": "0.0002",
+    "fee_reference": "https://www.binance.com/en/fee/trading",
+    "first_confirmation_consumes_cycle_even_if_rejected": true,
+    "funding_reserve_per_btc": "0",
+    "funding_role": "SPOT_PRICE_SERIES_NO_PERPETUAL_FUNDING_SHORT_EXPOSURE_IS_HYPOTHETICAL_NO_BORROW_OR_INVENTORY_VERIFIED",
+    "holding_expiry": "EXISTING_PAPER_PROTOCOL_NEXT_ASIA_START_NO_ADDED_STRATEGY_EXIT",
+    "initial_partial_cycle": "EXCLUDE_NO_INFERRED_ASIA_OHLC_OR_STATE_INJECTION",
+    "input_start_utc": "2026-11-01T04:00:00Z",
+    "last_bar_open_utc": "2026-11-03T19:00:00Z",
+    "maximum_simulated_risk_fraction": "0.0025",
+    "minimum_net_rr": "1.5",
+    "notional_cap_multiple": "1",
+    "profile": "OWNER_B",
+    "same_bar_tp_and_sl": "ADVERSE_STOP_FIRST_AND_MARK_AMBIGUOUS",
+    "sample_end_before_expiry": "RIGHT_CENSORED_NO_INVENTED_EXIT",
+    "scope": "POST_HOC_REVIEW_OF_OWNER_SUPPLIED_64_H1_LOGS_NOT_HOLDOUT_OR_FORWARD",
+    "simulated_capital_role": "FIXED_REPORTING_SCALE_NOT_OWNER_ACCOUNT",
+    "simulated_starting_capital": "10000",
+    "source_available_until_utc": "2026-11-03T20:00:00Z",
+    "stop_gap": "WORSE_OF_STOP_OR_NEXT_BAR_OPEN_THEN_ADVERSE_EXIT_SLIPPAGE",
+    "theoretical_target_touch": "SEPARATE_COUNTERFACTUAL_HITO_NOT_TRADE_PROFIT",
+    "tickerid": "BINANCE:BTCUSDT",
+    "tp_advance_price": "200",
+    "tp_gap": "TARGET_PRICE_THEN_ADVERSE_EXIT_SLIPPAGE_NO_BETTER_FILL_ASSUMED",
+    "venue": "BINANCE_SPOT"
+  },
+  "protocol_sha256": "6ae03fc0315cf5ad81d4bdb47690518140ebb8f21c6ea1893313f63261e127dc",
+  "scope": "POST_HOC_REVIEW_OF_OWNER_SUPPLIED_64_H1_LOGS_NOT_HOLDOUT_OR_FORWARD",
+  "trade_authority": "NONE",
+  "venue": "BINANCE_SPOT"
+}

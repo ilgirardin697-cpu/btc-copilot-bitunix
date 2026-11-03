@@ -33,7 +33,7 @@ def audit():
                 declaration='Pine v6 / V3.7 Lite / educational adaptation',
                 author_identity='NOT_INDEPENDENTLY_VERIFIED',alpha_parity='NOT_PROVEN',
                 inputs=inputs,formula_lines=formulas,
-                executable_comparison='NO_ACTUAL_TRADINGVIEW_RECORDS_AVAILABLE',
+                executable_comparison='REPORTED_SEPARATELY_IN_REAL_TRADINGVIEW_PARITY_ARTIFACT',
                 source_is_not_profitability_evidence=True)
 
 

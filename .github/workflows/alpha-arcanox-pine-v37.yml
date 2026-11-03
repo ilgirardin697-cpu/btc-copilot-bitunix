@@ -21,7 +21,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m compileall -q research/alpha_arcanox_pine_v37
-      - run: python -m unittest research.alpha_arcanox_pine_v37.test_pine -v
+      - run: python -m unittest research.alpha_arcanox_pine_v37.test_pine research.alpha_arcanox_pine_v37.test_real_evidence -v
       - name: Reproduce source audit and mechanics artifacts (not platform evidence)
         run: |
           python -m research.alpha_arcanox_pine_v37.build

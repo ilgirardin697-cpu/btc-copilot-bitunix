@@ -1,0 +1,82 @@
+{
+  "source_filename": "pine-logs-Killzone.csv",
+  "source_sha256": "5db1bf83795154c5c771dd13b7bc72f81d7dc0e89a28ae8c626519b533954e6b",
+  "converted_logs_filename": "Killzone_PineLogs_64_registros_para_Codex.txt",
+  "converted_logs_sha256": "3fc02a8fc12664591766df834c869b10d66cf54606ce12b5e9f87ce54b9d3097",
+  "rows": 64,
+  "hourly_continuity": true,
+  "start_ny": "2026-11-01T00:00:00.000-04:00",
+  "end_ny": "2026-11-03T14:00:00.000-05:00",
+  "tickerid": "BINANCE:BTCUSDT",
+  "profile_source": "PINE_A original defaults",
+  "measureNow_count": 3,
+  "cycles": [
+    {
+      "date_ny": "2026-11-01T06:00:00.000-05:00",
+      "HIGH": 78285,
+      "LOW": 77517.2,
+      "SUPERIOR": 78653.4351,
+      "INFERIOR": 77095.25,
+      "TP_200_LONG": 78453.44,
+      "TP_200_SHORT": 77295.25,
+      "max_math_error_usdt": 0.0
+    },
+    {
+      "date_ny": "2026-11-02T06:00:00.000-05:00",
+      "HIGH": 78878.01,
+      "LOW": 77926.7,
+      "SUPERIOR": 79342.6012,
+      "INFERIOR": 77179.79030000001,
+      "TP_200_LONG": 79142.6,
+      "TP_200_SHORT": 77379.79,
+      "max_math_error_usdt": 0.0
+    },
+    {
+      "date_ny": "2026-11-03T06:00:00.000-05:00",
+      "HIGH": 77314.01,
+      "LOW": 76502.63,
+      "SUPERIOR": 77939.27199999998,
+      "INFERIOR": 75753.39230000002,
+      "TP_200_LONG": 77739.27,
+      "TP_200_SHORT": 75953.39,
+      "max_math_error_usdt": 0.0
+    }
+  ],
+  "pine_signals_count": 3,
+  "pine_signals": [
+    {
+      "date_ny": "2026-11-01T18:00:00.000-05:00",
+      "original_pine_side": "LONG",
+      "open": 77823.88,
+      "close": 78354,
+      "HIGH": 78285,
+      "LOW": 77517.2,
+      "whole_body_qualifies_on_original_PINE_A_levels": false
+    },
+    {
+      "date_ny": "2026-11-02T06:00:00.000-05:00",
+      "original_pine_side": "SHORT",
+      "open": 77973.99,
+      "close": 77894.16,
+      "HIGH": 78878.01,
+      "LOW": 77926.7,
+      "whole_body_qualifies_on_original_PINE_A_levels": false
+    },
+    {
+      "date_ny": "2026-11-03T07:00:00.000-05:00",
+      "original_pine_side": "LONG",
+      "open": 77108.37,
+      "close": 77427.59,
+      "HIGH": 77314.01,
+      "LOW": 76502.63,
+      "whole_body_qualifies_on_original_PINE_A_levels": false
+    }
+  ],
+  "zone_touch_count": 3,
+  "caveats": [
+    "Only supplied Pine CSV verified here; independent Python replay from PR #41 still needed.",
+    "First logged cycle begins after Asia started (Oct31) so Codex comparator is designed to skip unprimed first cycle.",
+    "OWNER_B changes sessions/time zone and cannot be validated from original PINE_A level comparisons.",
+    "No profitability conclusions."
+  ]
+}
