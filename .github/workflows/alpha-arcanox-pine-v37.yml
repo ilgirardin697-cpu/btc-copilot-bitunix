@@ -1,0 +1,29 @@
+name: Alpha Arcanox Pine V3.7 offline audit
+on:
+  push:
+    paths:
+      - 'research/alpha_arcanox_pine_v37/**'
+      - '.github/workflows/alpha-arcanox-pine-v37.yml'
+  pull_request:
+    paths:
+      - 'research/alpha_arcanox_pine_v37/**'
+      - '.github/workflows/alpha-arcanox-pine-v37.yml'
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m compileall -q research/alpha_arcanox_pine_v37
+      - run: python -m unittest research.alpha_arcanox_pine_v37.test_pine -v
+      - name: Reproduce source audit and mechanics artifacts (not platform evidence)
+        run: |
+          python -m research.alpha_arcanox_pine_v37.build
+          git diff --exit-code -- research/alpha_arcanox_pine_v37/artifacts
+      - run: git diff --check HEAD^ HEAD

@@ -1,0 +1,4 @@
+* text eol=lf
+source/Killzone_H1_v3_7_Lite.txt -text whitespace=-blank-at-eof
+fixtures/public_sessions_demo.csv -text
+artifacts/Killzone_H1_v3_7_Lite_DIAGNOSTIC.pine -text
