@@ -1,0 +1,30 @@
+name: Killzone Optimal Entry offline research
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  offline-research:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Existing dependencies and timezone database
+        run: python -m pip install -r requirements.txt tzdata
+      - name: Compile isolated research
+        run: python -m compileall -q research/killzone_optimal_entry
+      - name: Frozen protocol, causality, fills and artifact integrity
+        run: python -m unittest research.killzone_optimal_entry.test_research -v
+      - name: Guardian and ML RSI safety
+        run: python mlrsi_safety_audit.py
+      - name: Preserved V8, weekly protocol and readiness boundary
+        run: |
+          python test_bitman_weekly_boundary.py --require-v8 -v
+          python test_bitman_readiness_boundary.py --require-v8 -v
+      - name: Existing protection regression and 900 readiness states
+        run: python -m unittest test_guardian_capital_v2 test_guardian_capital_v2_campaigns test_guardian_capital_v2_runtime test_bitman_readiness test_guardian_commands -v
+      - name: No patch whitespace errors
+        run: git diff --check HEAD^ HEAD

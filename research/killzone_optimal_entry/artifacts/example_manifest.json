@@ -1,0 +1,145 @@
+[
+  {
+    "file": "example_BASELINE_LONG_winner.svg",
+    "selection": "FIRST_CHRONOLOGICAL_NOT_BEST_RESULT",
+    "cycle": "2025-11-23",
+    "method": "BASELINE",
+    "side": 1,
+    "signal_available_at": "2025-11-23T11:00:00Z",
+    "entry_at": "2025-11-23T11:01:00Z",
+    "exit_at": "2025-11-24T00:59:00Z",
+    "net_pnl": 11.960647386258062
+  },
+  {
+    "file": "example_BASELINE_LONG_loser.svg",
+    "selection": "FIRST_CHRONOLOGICAL_NOT_BEST_RESULT",
+    "cycle": "2025-11-19",
+    "method": "BASELINE",
+    "side": 1,
+    "signal_available_at": "2025-11-19T11:00:00Z",
+    "entry_at": "2025-11-19T11:01:00Z",
+    "exit_at": "2025-11-19T15:34:00Z",
+    "net_pnl": -25.000000000000004
+  },
+  {
+    "file": "example_BASELINE_SHORT_winner.svg",
+    "selection": "FIRST_CHRONOLOGICAL_NOT_BEST_RESULT",
+    "cycle": "2025-11-06",
+    "method": "BASELINE",
+    "side": -1,
+    "signal_available_at": "2025-11-06T11:00:00Z",
+    "entry_at": "2025-11-06T11:01:00Z",
+    "exit_at": "2025-11-06T16:39:00Z",
+    "net_pnl": 44.58414164258901
+  },
+  {
+    "file": "example_BASELINE_SHORT_loser.svg",
+    "selection": "FIRST_CHRONOLOGICAL_NOT_BEST_RESULT",
+    "cycle": "2025-11-03",
+    "method": "BASELINE",
+    "side": -1,
+    "signal_available_at": "2025-11-03T11:00:00Z",
+    "entry_at": "2025-11-03T11:01:00Z",
+    "exit_at": "2025-11-03T12:04:00Z",
+    "net_pnl": -24.999999999999996
+  },
+  {
+    "file": "example_AFTER_LONDON_LONG_winner.svg",
+    "selection": "FIRST_CHRONOLOGICAL_NOT_BEST_RESULT",
+    "cycle": "2026-07-09",
+    "method": "AFTER_LONDON",
+    "side": 1,
+    "signal_available_at": "2026-07-09T10:00:00Z",
+    "entry_at": "2026-07-09T10:01:00Z",
+    "exit_at": "2026-07-09T23:59:00Z",
+    "net_pnl": 6.1699661620532416
+  },
+  {
+    "file": "example_AFTER_LONDON_LONG_loser.svg",
+    "selection": "FIRST_CHRONOLOGICAL_NOT_BEST_RESULT",
+    "cycle": "2025-12-19",
+    "method": "AFTER_LONDON",
+    "side": 1,
+    "signal_available_at": "2025-12-19T11:00:00Z",
+    "entry_at": "2025-12-19T11:01:00Z",
+    "exit_at": "2025-12-19T17:31:00Z",
+    "net_pnl": -25.0
+  },
+  {
+    "file": "example_AFTER_LONDON_SHORT_winner.svg",
+    "selection": "FIRST_CHRONOLOGICAL_NOT_BEST_RESULT",
+    "cycle": "2025-11-11",
+    "method": "AFTER_LONDON",
+    "side": -1,
+    "signal_available_at": "2025-11-11T11:00:00Z",
+    "entry_at": "2025-11-11T11:01:00Z",
+    "exit_at": "2025-11-11T17:40:00Z",
+    "net_pnl": 73.7996757489401
+  },
+  {
+    "file": "example_AFTER_LONDON_SHORT_loser.svg",
+    "selection": "FIRST_CHRONOLOGICAL_NOT_BEST_RESULT",
+    "cycle": "2025-11-03",
+    "method": "AFTER_LONDON",
+    "side": -1,
+    "signal_available_at": "2025-11-03T11:00:00Z",
+    "entry_at": "2025-11-03T11:01:00Z",
+    "exit_at": "2025-11-03T12:04:00Z",
+    "net_pnl": -24.999999999999996
+  },
+  {
+    "file": "example_BREAKOUT_LONG_loser.svg",
+    "selection": "FIRST_CHRONOLOGICAL_NOT_BEST_RESULT",
+    "cycle": "2026-04-22",
+    "method": "BREAKOUT",
+    "side": 1,
+    "signal_available_at": "2026-04-22T13:00:00Z",
+    "entry_at": "2026-04-22T13:01:00Z",
+    "exit_at": "2026-04-22T23:59:00Z",
+    "net_pnl": -7.385614002646201
+  },
+  {
+    "file": "example_LIMIT_ZONE_LONG_winner.svg",
+    "selection": "FIRST_CHRONOLOGICAL_NOT_BEST_RESULT",
+    "cycle": "2025-11-23",
+    "method": "LIMIT_ZONE",
+    "side": 1,
+    "signal_available_at": "2025-11-23T11:00:00Z",
+    "entry_at": "2025-11-23T11:04:00Z",
+    "exit_at": "2025-11-24T00:59:00Z",
+    "net_pnl": 16.97793268385114
+  },
+  {
+    "file": "example_LIMIT_ZONE_LONG_loser.svg",
+    "selection": "FIRST_CHRONOLOGICAL_NOT_BEST_RESULT",
+    "cycle": "2025-11-08",
+    "method": "LIMIT_ZONE",
+    "side": 1,
+    "signal_available_at": "2025-11-08T11:00:00Z",
+    "entry_at": "2025-11-08T11:36:00Z",
+    "exit_at": "2025-11-08T11:55:00Z",
+    "net_pnl": -25.0
+  },
+  {
+    "file": "example_LIMIT_ZONE_SHORT_winner.svg",
+    "selection": "FIRST_CHRONOLOGICAL_NOT_BEST_RESULT",
+    "cycle": "2025-11-10",
+    "method": "LIMIT_ZONE",
+    "side": -1,
+    "signal_available_at": "2025-11-10T11:00:00Z",
+    "entry_at": "2025-11-10T11:26:00Z",
+    "exit_at": "2025-11-10T14:54:00Z",
+    "net_pnl": 41.04945361861277
+  },
+  {
+    "file": "example_LIMIT_ZONE_SHORT_loser.svg",
+    "selection": "FIRST_CHRONOLOGICAL_NOT_BEST_RESULT",
+    "cycle": "2025-11-01",
+    "method": "LIMIT_ZONE",
+    "side": -1,
+    "signal_available_at": "2025-11-01T10:00:00Z",
+    "entry_at": "2025-11-01T10:49:00Z",
+    "exit_at": "2025-11-01T16:05:00Z",
+    "net_pnl": -25.0
+  }
+]
