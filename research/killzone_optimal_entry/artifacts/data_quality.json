@@ -1,0 +1,24 @@
+{
+  "venue": "BINANCE_SPOT",
+  "symbol": "BTCUSDT",
+  "h1_rows": 9504,
+  "m1_rows": 525600,
+  "h1_vs_m1_exact_checks": 8760,
+  "cycles_planned": 365,
+  "complete_cycles": 364,
+  "incomplete": [
+    {
+      "cycle": "2026-03-08",
+      "reason": "DST_MISSING_LOCAL_HOUR"
+    }
+  ],
+  "first_minute": "2025-11-01T00:00:00Z",
+  "last_minute_available": "2026-11-01T00:00:00Z",
+  "archive_checksums_verified": 25,
+  "new_downloads": 0,
+  "data_repairs": 0,
+  "protocol_sha256": "525d73e8f3982430c9d0c1cc199693a21504eaf93a5c074c7a89fd13e4b88237",
+  "preregistration_commit": "cc74bb5",
+  "holdout": "NO_VIRGIN_HOLDOUT",
+  "forward_observations": 0
+}

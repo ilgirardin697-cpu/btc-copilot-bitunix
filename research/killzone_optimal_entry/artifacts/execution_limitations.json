@@ -1,0 +1,367 @@
+{
+  "status": "SCENARIO_FILLS_NOT_VERIFIED_EXCHANGE_EXECUTIONS",
+  "tick_reference": "0.01_FROM_REUSED_REAL_PINE_RECORD_NOT_HISTORICAL_EXCHANGE_FILTER_AUDIT",
+  "primary_limit_fills": 160,
+  "arithmetic_limits_off_cent_tick": 71,
+  "cases": [
+    {
+      "cycle": "2025-11-16",
+      "side": 1,
+      "arithmetic_limit": 96178.39499999999
+    },
+    {
+      "cycle": "2025-12-01",
+      "side": 1,
+      "arithmetic_limit": 86493.95499999999
+    },
+    {
+      "cycle": "2025-12-04",
+      "side": 1,
+      "arithmetic_limit": 93254.655
+    },
+    {
+      "cycle": "2025-12-08",
+      "side": 1,
+      "arithmetic_limit": 91823.575
+    },
+    {
+      "cycle": "2025-12-19",
+      "side": 1,
+      "arithmetic_limit": 87961.295
+    },
+    {
+      "cycle": "2025-12-24",
+      "side": 1,
+      "arithmetic_limit": 86960.025
+    },
+    {
+      "cycle": "2026-01-05",
+      "side": 1,
+      "arithmetic_limit": 92735.58499999999
+    },
+    {
+      "cycle": "2026-01-14",
+      "side": 1,
+      "arithmetic_limit": 95082.575
+    },
+    {
+      "cycle": "2026-01-15",
+      "side": 1,
+      "arithmetic_limit": 96692.565
+    },
+    {
+      "cycle": "2026-01-20",
+      "side": 1,
+      "arithmetic_limit": 91006.025
+    },
+    {
+      "cycle": "2026-02-16",
+      "side": 1,
+      "arithmetic_limit": 68720.38500000001
+    },
+    {
+      "cycle": "2026-03-09",
+      "side": 1,
+      "arithmetic_limit": 67656.785
+    },
+    {
+      "cycle": "2026-03-12",
+      "side": 1,
+      "arithmetic_limit": 69857.815
+    },
+    {
+      "cycle": "2026-04-27",
+      "side": 1,
+      "arithmetic_limit": 77722.525
+    },
+    {
+      "cycle": "2026-04-29",
+      "side": 1,
+      "arithmetic_limit": 77353.535
+    },
+    {
+      "cycle": "2026-04-30",
+      "side": 1,
+      "arithmetic_limit": 75954.685
+    },
+    {
+      "cycle": "2026-05-08",
+      "side": 1,
+      "arithmetic_limit": 79654.875
+    },
+    {
+      "cycle": "2026-05-18",
+      "side": 1,
+      "arithmetic_limit": 76882.60500000001
+    },
+    {
+      "cycle": "2026-05-28",
+      "side": 1,
+      "arithmetic_limit": 73160.555
+    },
+    {
+      "cycle": "2026-06-05",
+      "side": 1,
+      "arithmetic_limit": 62192.955
+    },
+    {
+      "cycle": "2026-06-11",
+      "side": 1,
+      "arithmetic_limit": 62797.445
+    },
+    {
+      "cycle": "2026-06-12",
+      "side": 1,
+      "arithmetic_limit": 63391.825
+    },
+    {
+      "cycle": "2026-07-10",
+      "side": 1,
+      "arithmetic_limit": 64141.015
+    },
+    {
+      "cycle": "2026-07-12",
+      "side": 1,
+      "arithmetic_limit": 63870.575
+    },
+    {
+      "cycle": "2026-07-13",
+      "side": 1,
+      "arithmetic_limit": 63006.66499999999
+    },
+    {
+      "cycle": "2026-09-04",
+      "side": 1,
+      "arithmetic_limit": 80906.435
+    },
+    {
+      "cycle": "2026-09-19",
+      "side": 1,
+      "arithmetic_limit": 81226.885
+    },
+    {
+      "cycle": "2026-10-06",
+      "side": 1,
+      "arithmetic_limit": 85682.765
+    },
+    {
+      "cycle": "2026-10-15",
+      "side": 1,
+      "arithmetic_limit": 81042.505
+    },
+    {
+      "cycle": "2026-10-26",
+      "side": 1,
+      "arithmetic_limit": 80124.625
+    },
+    {
+      "cycle": "2025-11-03",
+      "side": -1,
+      "arithmetic_limit": 107319.745
+    },
+    {
+      "cycle": "2025-11-05",
+      "side": -1,
+      "arithmetic_limit": 101689.975
+    },
+    {
+      "cycle": "2025-11-07",
+      "side": -1,
+      "arithmetic_limit": 101307.215
+    },
+    {
+      "cycle": "2025-11-10",
+      "side": -1,
+      "arithmetic_limit": 106217.735
+    },
+    {
+      "cycle": "2025-11-15",
+      "side": -1,
+      "arithmetic_limit": 96007.64499999999
+    },
+    {
+      "cycle": "2025-11-20",
+      "side": -1,
+      "arithmetic_limit": 91943.175
+    },
+    {
+      "cycle": "2025-11-22",
+      "side": -1,
+      "arithmetic_limit": 84086.005
+    },
+    {
+      "cycle": "2025-12-03",
+      "side": -1,
+      "arithmetic_limit": 93075.265
+    },
+    {
+      "cycle": "2025-12-10",
+      "side": -1,
+      "arithmetic_limit": 92713.295
+    },
+    {
+      "cycle": "2026-01-21",
+      "side": -1,
+      "arithmetic_limit": 89383.64499999999
+    },
+    {
+      "cycle": "2026-02-07",
+      "side": -1,
+      "arithmetic_limit": 68192.275
+    },
+    {
+      "cycle": "2026-02-09",
+      "side": -1,
+      "arithmetic_limit": 69661.545
+    },
+    {
+      "cycle": "2026-02-11",
+      "side": -1,
+      "arithmetic_limit": 66812.04500000001
+    },
+    {
+      "cycle": "2026-02-19",
+      "side": -1,
+      "arithmetic_limit": 67030.88500000001
+    },
+    {
+      "cycle": "2026-03-01",
+      "side": -1,
+      "arithmetic_limit": 66754.005
+    },
+    {
+      "cycle": "2026-03-03",
+      "side": -1,
+      "arithmetic_limit": 67325.985
+    },
+    {
+      "cycle": "2026-03-26",
+      "side": -1,
+      "arithmetic_limit": 69788.63500000001
+    },
+    {
+      "cycle": "2026-03-31",
+      "side": -1,
+      "arithmetic_limit": 66854.535
+    },
+    {
+      "cycle": "2026-04-13",
+      "side": -1,
+      "arithmetic_limit": 70836.765
+    },
+    {
+      "cycle": "2026-04-24",
+      "side": -1,
+      "arithmetic_limit": 77701.005
+    },
+    {
+      "cycle": "2026-05-05",
+      "side": -1,
+      "arithmetic_limit": 80832.17499999999
+    },
+    {
+      "cycle": "2026-05-19",
+      "side": -1,
+      "arithmetic_limit": 77013.155
+    },
+    {
+      "cycle": "2026-05-26",
+      "side": -1,
+      "arithmetic_limit": 76831.735
+    },
+    {
+      "cycle": "2026-06-04",
+      "side": -1,
+      "arithmetic_limit": 63592.275
+    },
+    {
+      "cycle": "2026-06-22",
+      "side": -1,
+      "arithmetic_limit": 64171.785
+    },
+    {
+      "cycle": "2026-07-06",
+      "side": -1,
+      "arithmetic_limit": 62937.425
+    },
+    {
+      "cycle": "2026-07-08",
+      "side": -1,
+      "arithmetic_limit": 62342.645000000004
+    },
+    {
+      "cycle": "2026-07-15",
+      "side": -1,
+      "arithmetic_limit": 64881.185
+    },
+    {
+      "cycle": "2026-08-02",
+      "side": -1,
+      "arithmetic_limit": 63319.255000000005
+    },
+    {
+      "cycle": "2026-08-04",
+      "side": -1,
+      "arithmetic_limit": 63683.244999999995
+    },
+    {
+      "cycle": "2026-08-17",
+      "side": -1,
+      "arithmetic_limit": 63506.085
+    },
+    {
+      "cycle": "2026-08-22",
+      "side": -1,
+      "arithmetic_limit": 77260.265
+    },
+    {
+      "cycle": "2026-08-26",
+      "side": -1,
+      "arithmetic_limit": 78725.41500000001
+    },
+    {
+      "cycle": "2026-08-28",
+      "side": -1,
+      "arithmetic_limit": 79629.215
+    },
+    {
+      "cycle": "2026-09-02",
+      "side": -1,
+      "arithmetic_limit": 77125.315
+    },
+    {
+      "cycle": "2026-09-03",
+      "side": -1,
+      "arithmetic_limit": 77891.955
+    },
+    {
+      "cycle": "2026-09-28",
+      "side": -1,
+      "arithmetic_limit": 82946.695
+    },
+    {
+      "cycle": "2026-10-01",
+      "side": -1,
+      "arithmetic_limit": 83802.845
+    },
+    {
+      "cycle": "2026-10-13",
+      "side": -1,
+      "arithmetic_limit": 83772.825
+    },
+    {
+      "cycle": "2026-10-16",
+      "side": -1,
+      "arithmetic_limit": 82201.655
+    },
+    {
+      "cycle": "2026-10-23",
+      "side": -1,
+      "arithmetic_limit": 81766.315
+    }
+  ],
+  "no_posthoc_rounding_or_recalculation": true,
+  "quantity_step_and_min_notional": "NOT_MODELED_WITH_HISTORIC_FILTERS",
+  "order_queue": "NOT_VERIFIED_BY_OHLC",
+  "futures": "BLOCKED_NO_EQUIVALENT_FUNDING_MARK_CONTRACT_DATA"
+}
