@@ -1,0 +1,14 @@
+{
+  "model_version": "KZ_PRICE_V1_db59d952e6c7",
+  "model_sha256": "db59d952e6c79da87adb7a31cba41a6ee3a5879a8e0c57638336e58f7be6a6d9",
+  "offline_scalar_vectors": 936,
+  "offline_scalar_max_error": 2.220446049250313e-16,
+  "offline_scope": "ARITHMETIC_ONLY_NOT_ACTUAL_PINE_EXECUTION_NOT_INDEPENDENT_PARITY",
+  "actual_tradingview_records": 0,
+  "actual_complete_cycles": 0,
+  "compile": "PENDING",
+  "realtime": "PENDING",
+  "reload": "PENDING",
+  "prospective_cycles": 0,
+  "publication_enabled": false
+}

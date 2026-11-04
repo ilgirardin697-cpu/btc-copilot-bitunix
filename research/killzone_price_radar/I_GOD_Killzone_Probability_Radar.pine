@@ -1,0 +1,237 @@
+//@version=6
+indicator("I-GOD Killzone Probability Radar", shorttitle="I-GOD PRICE Radar", overlay=true, max_bars_back=500)
+// Frozen PRICE only, post-hoc choice. Original Killzone V3.7 Lite is not changed.
+// BINANCE:BTCUSDT SPOT, standard candles, H1 only. No orders, alerts or webhooks.
+const string TZ = "America/New_York"
+const int HOUR = 3600000
+const int MINUTE = 60000
+// Generated publication gate. NOT an input: historical fit alone cannot enable probabilities.
+const bool MODEL_VALIDATED = false
+const string MODEL_VERSION = "KZ_PRICE_V1_db59d952e6c7"
+const string MODEL_STATUS = "NO VALIDADO"
+const string PROTOCOL_HASH = "892ec9aa89c4b1984eab46d6c20d97704379e022671ddc34c68227131e164289"
+bool hideOutside = input.bool(true, "Ocultar fuera de 05:00-06:00 Nueva York")
+bool logRealtime = input.bool(true, "Pine Logs: ultimo minuto real disponible (sin alertas)")
+string panelCorner = input.string("Arriba derecha", "Panel", options=["Arriba derecha", "Arriba izquierda", "Abajo derecha", "Abajo izquierda"])
+string panelPosition = switch panelCorner
+    "Arriba izquierda" => position.top_left
+    "Abajo derecha" => position.bottom_right
+    "Abajo izquierda" => position.bottom_left
+    => position.top_right
+
+f_predict(array<float> x) =>
+    float z0 = -0.23506981307079255
+    float z1 = -0.31120130997413831
+    float z2 = 0.2833144130149044
+    float v0 = math.max(-8.0, math.min(8.0, (array.get(x, 0) - (0.49166666666666664)) / 0.28863503804144286))
+    z0 += v0 * (0.005575865373476499)
+    z1 += v0 * (0.0035771549323754051)
+    z2 += v0 * (-0.0091530211679660429)
+    float v1 = math.max(-8.0, math.min(8.0, (array.get(x, 1) - (0.50587619582349208)) / 0.25527170395620385))
+    z0 += v1 * (0.14562164415214526)
+    z1 += v1 * (-0.2107171976205803)
+    z2 += v1 * (0.065095550429097496)
+    float v2 = math.max(-8.0, math.min(8.0, (array.get(x, 2) - (-0.019836497772225264)) / 0.73495184746819064))
+    z0 += v2 * (0.22717142470255294)
+    z1 += v2 * (-0.19664671630393185)
+    z2 += v2 * (-0.030524706442044566)
+    float v3 = math.max(-8.0, math.min(8.0, (array.get(x, 3) - (0.99030110935634641)) / 0.79482928025338551))
+    z0 += v3 * (0.007182901164507146)
+    z1 += v3 * (0.059046619932694049)
+    z2 += v3 * (-0.066229520317363455)
+    float v4 = math.max(-8.0, math.min(8.0, (array.get(x, 4) - (-0.016076287777338893)) / 0.45849516546694974))
+    z0 += v4 * (0.073075511041737859)
+    z1 += v4 * (-0.040798023534962639)
+    z2 += v4 * (-0.032277490761485547)
+    float v5 = math.max(-8.0, math.min(8.0, (array.get(x, 5) - (2.7803023377266323)) / 1.2410047216905531))
+    z0 += v5 * (-0.25860906031042663)
+    z1 += v5 * (-0.14292501045757947)
+    z2 += v5 * (0.40151508109813894)
+    float largest = math.max(z0, math.max(z1, z2))
+    float e0 = math.exp(z0 - largest)
+    float e1 = math.exp(z1 - largest)
+    float e2 = math.exp(z2 - largest)
+    float total = e0 + e1 + e2
+    [e0 / total, e1 / total, e2 / total]
+
+f_projection(float ah, float al, float lh, float ll) =>
+    float amplitude = math.max(ah, lh) - math.min(al, ll)
+    float topHeight = ah <= lh ? ah - al : lh - ll
+    float bottomHeight = al >= ll ? ah - al : lh - ll
+    [math.min(ah, lh) - topHeight * 0.03 + amplitude, math.max(al, ll) + bottomHeight * 0.03 - amplitude]
+
+// Public H1 formulas: only [1] values feed the radar, never this open H1's final OHLC.
+// A feed gap starts a new indicator segment, matching the offline warmup policy.
+bool resetMath = na(time[1]) or time - time[1] != HOUR
+var int mathBars = 0
+mathBars := resetMath ? 1 : mathBars + 1
+f_segmentRma(float value, int length, bool reset) =>
+    var float last = na
+    var float seed = 0.0
+    var int count = 0
+    if reset or na(value)
+        last := na
+        seed := 0.0
+        count := 0
+    if not na(value)
+        if na(last)
+            seed += value
+            count += 1
+            if count == length
+                last := seed / length
+        else
+            last := (last * (length - 1) + value) / length
+    last
+float atr14 = f_segmentRma(resetMath ? high - low : ta.tr(true), 14, resetMath)
+[mt, mcTime, mh, ml, mclose] = request.security_lower_tf(syminfo.tickerid, "1", [time, time_close, high, low, close], ignore_invalid_timeframe=true, calc_bars_count=100000)
+
+int localHour = hour(time, TZ)
+bool identityOK = timeframe.in_seconds() == 3600 and syminfo.tickerid == "BINANCE:BTCUSDT" and chart.is_standard
+bool radarHour = identityOK and localHour == 5
+var float aHigh = na
+var float aLow = na
+var float aOpen = na
+var float aClose = na
+var int aCount = 0
+var int aLast = na
+var float lHigh = na
+var float lLow = na
+var float lOpen = na
+var float lClose = na
+var int lCount = 0
+var int lLast = na
+var bool chainOK = false
+
+// varip retains only the latest observed panel/log watermark across realtime H1 ticks.
+// It is NOT durable storage and does not survive reload; capture Pine Logs externally.
+varip int lastAvailable = na
+varip int lastEmitted = na
+varip int lastMinute = na
+varip bool lastDataOK = false
+varip float lastUpper = na
+varip float lastLower = na
+varip float lastNeither = na
+varip int closedMinutes = na
+
+if radarHour
+    // At execution of historical 05 H1, session vars still contain only 02/03/04.
+    bool sessionsOK = chainOK and aCount == 4 and lCount == 3 and lLast == time - HOUR and aLast < time
+    bool inputsOK = sessionsOK and not na(atr14[1]) and atr14[1] > 0 and aHigh > aLow
+    float partialHigh = lHigh
+    float partialLow = lLow
+    float price = lClose
+    int count = 0
+    bool prefixOK = true
+    int n = array.size(mt)
+    if n > 0
+        for i = 0 to n - 1
+            int t = array.get(mt, i)
+            int tc = array.get(mcTime, i)
+            // No 06:00 forecast; no open minute; historical cutoff is this H1 end.
+            int cutoff = barstate.isrealtime ? timenow : time_close
+            if tc < time_close and tc <= cutoff
+                prefixOK := prefixOK and t == time + count * MINUTE and tc == t + MINUTE
+                if prefixOK
+                    partialHigh := math.max(partialHigh, array.get(mh, i))
+                    partialLow := math.min(partialLow, array.get(ml, i))
+                    price := array.get(mclose, i)
+                    count += 1
+    int knownAt = time + count * MINUTE
+    int expected = barstate.isrealtime ? math.min(59, math.max(0, int(math.floor((timenow - time) / MINUTE)))) : 59
+    float ahWidth = aHigh - aLow
+    float combinedHigh = math.max(aHigh, partialHigh)
+    float combinedLow = math.min(aLow, partialLow)
+    array<float> x = array.from(count / 60.0, (price - combinedLow) / (combinedHigh - combinedLow), (price - lOpen) / ahWidth, (partialHigh - partialLow) / ahWidth, (aClose - aOpen) / ahWidth, (combinedHigh - combinedLow) / atr14[1])
+    bool finiteInputs = true
+    for v in x
+        finiteInputs := finiteInputs and not na(v)
+    bool valid = inputsOK and prefixOK and finiteInputs and count <= 59
+    if valid and (na(lastAvailable) or knownAt >= lastAvailable)
+        [pUpper, pLower, pNeither] = f_predict(x)
+        lastAvailable := knownAt
+        lastMinute := count
+        lastDataOK := count == expected
+        closedMinutes := count
+        lastUpper := MODEL_VALIDATED and lastDataOK ? pUpper : na
+        lastLower := MODEL_VALIDATED and lastDataOK ? pLower : na
+        lastNeither := MODEL_VALIDATED and lastDataOK ? pNeither : na
+        // Only the latest available record is emitted; no historical minute replay as live.
+        if barstate.isrealtime and logRealtime and lastDataOK and (na(lastEmitted) or knownAt > lastEmitted)
+            // Internal research forecasts only. Never rendered as validated percentages.
+            string probabilities = ",\"research_probabilities\":[" + str.tostring(pUpper, "#.############") + "," + str.tostring(pLower, "#.############") + "," + str.tostring(pNeither, "#.############") + "]"
+            string vector = ""
+            for v in x
+                vector += (str.length(vector) > 0 ? "," : "") + str.tostring(v, "#.############")
+            string payload = "IGOD_PRICE_RADAR_V1={\"protocol\":\"IGOD_KILLZONE_PRICE_FORWARD_V1\",\"protocol_hash\":\"" + PROTOCOL_HASH + "\",\"version\":\"" + MODEL_VERSION + "\",\"available_at\":" + str.tostring(knownAt) + ",\"emitted_at\":" + str.tostring(timenow) + ",\"minute\":" + str.tostring(count) + ",\"status\":\"EXPERIMENTAL_NOT_VALIDATED\",\"origin\":\"PINE_REALTIME_UNATTESTED\",\"features\":[" + vector + "]" + probabilities + "}"
+            log.info("{0}", payload)
+            lastEmitted := knownAt
+    else
+        lastDataOK := false
+
+// Commit CLOSED H1 state only AFTER the forecast block; critical anti-leakage ordering.
+if identityOK and barstate.isconfirmed
+    if localHour == 20
+        aHigh := high
+        aLow := low
+        aOpen := open
+        aClose := close
+        aCount := 1
+        aLast := time
+        lCount := 0
+        lHigh := na
+        lLow := na
+        chainOK := true
+    else
+        if not na(aLast) and time - time[1] != HOUR
+            chainOK := false
+        if localHour >= 21 and localHour <= 23
+            aHigh := math.max(aHigh, high)
+            aLow := math.min(aLow, low)
+            aClose := close
+            aCount += 1
+            aLast := time
+        if localHour >= 2 and localHour <= 5 and aCount == 4
+            if localHour == 2
+                lHigh := high
+                lLow := low
+                lOpen := open
+                lCount := 1
+            else
+                lHigh := math.max(lHigh, high)
+                lLow := math.min(lLow, low)
+                lCount += 1
+            lClose := close
+            lLast := time
+
+var table panel = table.new(position.top_right, 2, 12, bgcolor=color.rgb(13, 23, 35), border_width=1, border_color=color.rgb(43, 58, 72))
+if barstate.islast
+    table.set_position(panel, panelPosition)
+    table.clear(panel, 0, 0, 1, 11)
+    if not hideOutside or radarHour
+        color ink = color.rgb(226, 234, 241)
+        color muted = color.rgb(147, 163, 184)
+        table.cell(panel, 0, 0, "I-GOD KILLZONE RADAR", text_color=color.aqua)
+        table.cell(panel, 1, 0, "H1 · SPOT", text_color=muted)
+        bool showProb = MODEL_VALIDATED and lastDataOK and not na(lastUpper)
+        // Display tenths sum to exactly 100.0: conservative truncation + residual.
+        float upDisplay = showProb ? math.floor(lastUpper * 1000) / 10 : na
+        float downDisplay = showProb ? math.floor(lastLower * 1000) / 10 : na
+        table.cell(panel, 0, 1, "SUPERIOR PRIMERO", text_color=ink)
+        table.cell(panel, 1, 1, showProb ? str.tostring(upDisplay, "#.0") + " %" : "—", text_color=color.lime)
+        table.cell(panel, 0, 2, "INFERIOR PRIMERO", text_color=ink)
+        table.cell(panel, 1, 2, showProb ? str.tostring(downDisplay, "#.0") + " %" : "—", text_color=color.red)
+        table.cell(panel, 0, 3, "NINGUNO", text_color=ink)
+        table.cell(panel, 1, 3, showProb ? str.tostring(100 - upDisplay - downDisplay, "#.0") + " %" : "—", text_color=muted)
+        table.cell(panel, 0, 4, "Estado", text_color=muted)
+        table.cell(panel, 1, 4, MODEL_STATUS, text_color=color.orange)
+        table.cell(panel, 0, 5, "Datos", text_color=muted)
+        table.cell(panel, 1, 5, not identityOK ? "SOLO BINANCE:BTCUSDT H1" : lastDataOK and radarHour ? "COMPLETOS A TIMESTAMP" : "INCOMPLETOS / FUERA DE HORA", text_color=ink)
+        table.cell(panel, 0, 6, "Ultima informacion UTC", text_color=muted)
+        table.cell(panel, 1, 6, na(lastAvailable) ? "SIN PREDICCION VALIDA" : str.format_time(lastAvailable, "yyyy-MM-dd HH:mm", "UTC"), text_color=ink)
+        table.cell(panel, 0, 7, "Londres restante", text_color=muted)
+        table.cell(panel, 1, 7, radarHour and not na(lastMinute) ? str.tostring(60-lastMinute) + " min a datos" : "CERRADO", text_color=ink)
+        table.cell(panel, 0, 8, "Modelo", text_color=muted)
+        table.cell(panel, 1, 8, MODEL_VERSION, text_color=ink)
+        table.cell(panel, 0, 9, showProb ? "HIPOTESIS ESTADISTICA" : "SIN PROBABILIDADES VALIDADAS", text_color=color.orange)
+        table.cell(panel, 0, 10, "SHADOW ONLY · NO ORDERS", text_color=muted)
+        table.cell(panel, 0, 11, "TRADE AUTHORITY: NONE", text_color=muted)
