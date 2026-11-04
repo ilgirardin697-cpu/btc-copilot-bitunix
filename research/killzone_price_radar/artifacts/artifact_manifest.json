@@ -1,0 +1,30 @@
+{
+  "anchor_minutes.csv": {
+    "bytes": 1609,
+    "sha256": "fd59dd467a2ef0e3d2aefa6262ef1d92f7f7c5c8578d09905ff46b2a752583aa"
+  },
+  "frozen_STRUCTURE.json": {
+    "bytes": 999,
+    "sha256": "00d81d5871b425ec9291eef160da7a1add5c37c88812cb9a260c550deacb2538"
+  },
+  "historical_comparison.json": {
+    "bytes": 250169,
+    "sha256": "933eb3369ff3ef084abb39fd3837e66709f0745cfb7e1069c36cbf6e1d99f98d"
+  },
+  "monthly.csv": {
+    "bytes": 13238,
+    "sha256": "e4a1d661edd8cc5c6c639c153fb701da0702d4c0a1cf2284b65df6f5a706bda8"
+  },
+  "pine_parity_status.json": {
+    "bytes": 506,
+    "sha256": "df8768befc13c6631f39280b12359cf8b7dcaf476fd06c8d59f888c99aa75ca3"
+  },
+  "PRICE_RADAR_REPORT.md": {
+    "bytes": 5559,
+    "sha256": "1e5aec7e7a914ffed3140ea7f824efcfb97671bf6cebc5df48bfaad9b672d98a"
+  },
+  "prospective_status.json": {
+    "bytes": 284,
+    "sha256": "6da1e347decc3ab35ab7ec590e93fd77b68046afafec583ee67bf50a1ed827e1"
+  }
+}
