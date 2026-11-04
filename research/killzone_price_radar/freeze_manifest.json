@@ -1,0 +1,441 @@
+{
+  "parent_commit": "e10baa9dec9d9163ec54fea08e2a2cd36a9a50e2",
+  "model_sha256": "db59d952e6c79da87adb7a31cba41a6ee3a5879a8e0c57638336e58f7be6a6d9",
+  "prior_sha256": "a7f99b33b7fcbed7f2cd4c34c25ed5f5ddf1ad3a9af2adc0f799cdd9587ef893",
+  "protocol_sha256": "892ec9aa89c4b1984eab46d6c20d97704379e022671ddc34c68227131e164289",
+  "model_version": "KZ_PRICE_V1_db59d952e6c7",
+  "protected_parent_files": {
+    "research/alpha_arcanox_pine_v37/.gitattributes": {
+      "sha256": "c473a12c3f827dd0c8088cb2afef7560b353c5b7f4fae52c517c6b9b3f33d6f6",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/EVALUATION_PLAN.md": {
+      "sha256": "c9a4b0011a9981b0035ee8a13120eb17ff60d1eeb399b8bf8858b65d2ac7568c",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/OWNER_B_REVIEW_SPEC.json": {
+      "sha256": "6ae03fc0315cf5ad81d4bdb47690518140ebb8f21c6ea1893313f63261e127dc",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/PAPER_PROTOCOL.md": {
+      "sha256": "abf84a32ceeca6aa33eba76ea59849526d01ed15af3baf2bfb9cfb3b6f42c1b7",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/README.md": {
+      "sha256": "70e320ab2af2dc90fa84ec44deede1aab5dd2ea9383db1ca9125db7b9c376979",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/REPORT.md": {
+      "sha256": "5a27f3a604eaadfe8e4672d3ec862bd19c84936269105ba8cf5c9c683960e828",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/TESTING.md": {
+      "sha256": "103e3aa3d5b2aea2c98567dfa02199089c8a444d7d6f7d0976e5a5ce4804ad33",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/TESTING_REAL_20261103.md": {
+      "sha256": "a49ce5461fd778bc16efcf92d6b44231f580e8226c6e60d0fd5607ad6cb7d95f",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/__init__.py": {
+      "sha256": "8710680cf1ff941394f0b415cf6bd84e9c7fb377a498a29976acb151cae2a920",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/Killzone_H1_v3_7_Lite_DIAGNOSTIC.pine": {
+      "sha256": "ecbe00768909ec8f5a5915d011a9861c846462cfea252870bf3479070fd53f69",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/OWNER_B_64_REVIEW.md": {
+      "sha256": "b2c7e4c9e63c44b6be6838e29092d4c9530460713ff775e2d5ce0491659b97c6",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/REAL_TRADINGVIEW_PARITY_20261103.md": {
+      "sha256": "75bc9b0084053c5ce2fa42cff0b3cf2d93960c1056e704affd9b9daade18723b",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/asia_contains_london.svg": {
+      "sha256": "59f1b5584d4bcdcf69abc12c1a7640eaa4c8bb628e9e1a3f1c6dacefc5c6dcec",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/geometry_cases.json": {
+      "sha256": "584f661d5b551abc40475bcc42534ac6c190fec4fa7610cf918270707fbddf40",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/identical.svg": {
+      "sha256": "bdf6b9e8e28e97dc99b7ae048265a418066b18e07f7f1e8d3ac860a4123ce275",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/index.html": {
+      "sha256": "cb5b038faee17a20b0f4f02dc6fa089154d87a18ea95ea873439361164872f41",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/london_contains_asia.svg": {
+      "sha256": "fe745a8820fdd4f53b291474abd3f6740c1bc5a56347ecc6bcd9399dc887aa9a",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/overlapping.svg": {
+      "sha256": "dd384e059ab878100caff5186c3403c5036f4026239ef4d6416a660904a82c6d",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/owner_b_2026-11-02.svg": {
+      "sha256": "068f90bf6a088b65fee146e5fd774748da88652534a744c2d32156aa99f6a2d0",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/owner_b_2026-11-03.svg": {
+      "sha256": "ce5afed80ef3205e90ddc366bc62eae35d28ee3a8703b4844edef274a38a58c5",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/owner_b_64_review.json": {
+      "sha256": "f73deeec43fde2ddf240ce0055db8d67c79833dba8bc116986333d87574552e0",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/parity_cli_first_run_20261103.json": {
+      "sha256": "e7a585ff8f53f8e4f695492980d10e348a74e1c303d3cc8cba7ed14d928ab71a",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/parity_status.json": {
+      "sha256": "97535578794a818f9e03cfe96a8399da937d05542ee6484e5e48839d6dd551ae",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/public_mechanics.json": {
+      "sha256": "7e1e6c39b1de20fc3cc8d76dbd0dc76bf5ecff64fdc33b91aa2141c0d3faf502",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/real_evidence.html": {
+      "sha256": "aeb0c001f955b5caf7ca2fd218f2907ab9cc6a6640097c36af63c8be1d1c5367",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/real_tradingview_parity_20261103.json": {
+      "sha256": "25b172ed7dee138c6134d29df4b93903585015417a8fce589dc60735234a285e",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/source_audit.json": {
+      "sha256": "c6add004bf5a26344ea600434dbcbfe13cdb4002d0b1a9fecb7dfc06902749a8",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/staggered_asia_lower.svg": {
+      "sha256": "2962dd055566fcba5ac29efcc345c0a93cf8b43214504747d01dd2548d52526f",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/staggered_london_lower.svg": {
+      "sha256": "6ae665c8d2e78416b7a48d9e76b1c0822cd3b1b1e374bca25543b5742740e5a7",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/artifacts/zero_height.svg": {
+      "sha256": "2f70c22b2c792efc2477abdbef018224bc8e7f9d857eb0ebc485e89ba3be55a9",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/build.py": {
+      "sha256": "199c161f6cc091fdb12e249779bc83ed03227793a6d58f91306300031d5fc039",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/core.py": {
+      "sha256": "edccfdcbe61d9fc827321e84c653eedb0dfd9289c21168f6d62fbbf0e844879d",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/evidence.py": {
+      "sha256": "f1ec2afa44c8c764e25940695c003ea2be36d4a88a4000b8b64e0636b0907263",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/fixtures/protected_runtime_hashes.json": {
+      "sha256": "4723a265c84713e60c2483e66d1ce378bd19f91b98b29fd22c58ed46a8029cf6",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/fixtures/public_data_manifest.json": {
+      "sha256": "b303dbc0313999002962210055a30def01b8e12956825009350ecb03e4e2f580",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/fixtures/public_sessions_demo.csv": {
+      "sha256": "b8224074b45887bec8d91d4827e302c6322e4f93dcbddf6ef3d381a44ede1cdd",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/fixtures/tradingview_20261103/Killzone_PineLogs_64_registros_para_Codex.txt": {
+      "sha256": "3fc02a8fc12664591766df834c869b10d66cf54606ce12b5e9f87ce54b9d3097",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/fixtures/tradingview_20261103/Killzone_revision_datos_2026-11-03.json": {
+      "sha256": "a515fedc25841f59632bb20a86d11733bf9aca8cfd9f5a30d5716e54752b9db1",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/.gitattributes": {
+      "sha256": "84d1a567325dd259b9ff585abd5720ceb327e21363a267e95032bf3023b0dd5d",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/README.md": {
+      "sha256": "9fcf62a7d9e40b73bbca20eee4c099d72b79416a7eafbca39d125773b7dd247f",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/TESTING.md": {
+      "sha256": "a62a733e0f8da92897e55b334d97ecd937f993792ca0bf49b7a827b48448359c",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/__init__.py": {
+      "sha256": "666587692eb3bafbd5d1bdcba0bbab0b986cd0cd01305d1ae8a437049552539b",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/artifacts/KILLZONE_OWNER_B_HISTORY_12M.md": {
+      "sha256": "efbabd88434130addec560332eee99683b7066dc27d9c88a701bd06282413b4c",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/artifacts/STRESS_40X_NO_SL.md": {
+      "sha256": "29b28892b20cf9c749b7bdc5330548035794fffcfba3fb76292b287b015fe55a",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/artifacts/artifact_manifest.json": {
+      "sha256": "14aa6397ca342f11a59eb9bbc6d5b0857930da5eab144b3fcd2af8e2e19c991e",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/artifacts/cycles_OWNER_B.csv": {
+      "sha256": "b9b98b518f2223d06cc2d9af325f8d5c9e5674446bf319d65ed449d38138612f",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/artifacts/cycles_OWNER_B_CLOSE_ONLY_SENSITIVITY.csv": {
+      "sha256": "57342f251900e36824f24850a01cb66100a2bdab24685c94c8493e0b773e1eee",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/artifacts/equity.svg": {
+      "sha256": "239f77b8f4264b891c2b580c9470a597a613611ddf82475991be205ee612ba73",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/artifacts/first_LONG_loser.svg": {
+      "sha256": "63f77e89202f93428277128c7149f4c7425066647b685fe9607b6a566b9a48d6",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/artifacts/first_LONG_winner.svg": {
+      "sha256": "5f1aa98abd7b5e532c5d9414406be555599805db5567b80f8f302983a82f4590",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/artifacts/first_SHORT_loser.svg": {
+      "sha256": "417e458ad0fd22e6784ffe4575f760cf3e06c60dae56fdaf4fe178075e6e6814",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/artifacts/first_SHORT_winner.svg": {
+      "sha256": "050b2113ae18c5e6c9b38bad23af564a91f2687298a8e6d867fb22432df508d4",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/artifacts/first_result_before_dd_reporting_fix.json.gz": {
+      "sha256": "fe01d98f531ed66e60b2d12524a1e5988b9c2b16c74d01de295b74c0cde0a132",
+      "normalize_lf": false
+    },
+    "research/alpha_arcanox_pine_v37/history/artifacts/hourly_input.csv.gz": {
+      "sha256": "41f87066420c807f1f748d67cab7e30f9a1e3e89f8f91ecbdae8b2632ee371b6",
+      "normalize_lf": false
+    },
+    "research/alpha_arcanox_pine_v37/history/artifacts/monthly.csv": {
+      "sha256": "da9bbace6f1eccfd27bdc622df38fcbc9acf40b91db02837338b5769022dc7fd",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/artifacts/reporting_fix_audit.json": {
+      "sha256": "570f425dcea3eaff59e3fca1440cbbb956d15d37e87025535ec6cfa6a9f42c37",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/artifacts/stress_40x_status.json": {
+      "sha256": "0fbce3bc52ca176ba8683b5b88d89e130ffec03134dfb5d1838535a6027f1508",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/artifacts/study_results.json.gz": {
+      "sha256": "3920578bfe16cb71932c8e701f796e85445800a4dbf6612fb0bbec2b04b2712e",
+      "normalize_lf": false
+    },
+    "research/alpha_arcanox_pine_v37/history/artifacts/summary.json": {
+      "sha256": "16c0be65b784fb3a4b3176305054719d043dbb6db7af53632bfa1788aa7dc205",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/artifacts/trades_OWNER_B.csv": {
+      "sha256": "51450322a15d277fa9fd0b299121cb0345861a9cb04a536d890459f5416b7326",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/artifacts/trades_OWNER_B_CLOSE_ONLY_SENSITIVITY.csv": {
+      "sha256": "64637a7e68ba63908c695dfc6ce27eba90b545a25e9d8e2cd0a06d8154ec24bf",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/data.py": {
+      "sha256": "7eb37230a864492124ff30a6c65a9e2a27b4835352aa9bb2457ceadac9753eb9",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/download.py": {
+      "sha256": "182ead666c20db71518b653e561108ba918e8140adb66f4f33b1d328d447a315",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/evaluate.py": {
+      "sha256": "0e4f38852404cfac29888a0052f0ea36925d40b914be41ebe835962b49259896",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/report.py": {
+      "sha256": "cba585b4fc699fb1bf7151c401502962d4acd446540a10887e6c1eccc8e1c2c4",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/specification.json": {
+      "sha256": "23a236d03415438957f0ac4a820f668f87b2947916a9fd5a4fbe078b41e55cb3",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/stress.py": {
+      "sha256": "35e5e6f92f18b5ab45c67f29375893246dcfd1f9fdafa23a559539f2329a0279",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/stress_specification.json": {
+      "sha256": "8e11c9af1b3bfc9394536a3d3eace43150799d015b1f11c95c34597af9b44d60",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/history/test_history.py": {
+      "sha256": "dae180c09baf70e3790564d876ff2f4c5874c4528cea5226fdabe69218899ae0",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/paper_review.py": {
+      "sha256": "8336cade3502665ba86b646e8d1f80217d3c253844fe00d09bc8da1a37ce0443",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/parity.py": {
+      "sha256": "fbbc3357aa0769d9ba12936ca9b102cadb990786c31041d0e2d665e341a3c974",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/profiles.py": {
+      "sha256": "919a2b17090c6551c71e28271613a8a8dea99fe89e197c73348868f7810f3495",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/real_artifacts.py": {
+      "sha256": "42b7ec3929d3f4f5202d48518587f625b296b499945ce30b4f5423967e337799",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/replay.py": {
+      "sha256": "c19b66b42045ad6bc806bc97df90d0930d6b77b6bae8fb1a736cbcdf6a6a1a16",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/risk.py": {
+      "sha256": "a7314af5bc794defba0e9da21c3c3a05a0c339287d29caeaf21bfab7507ae474",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/source/Killzone_H1_v3_7_Lite.txt": {
+      "sha256": "058532c5c7964eefa3993b8aae761aef7598a542c7e43c7469ad0531f39e03a7",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/source_audit.py": {
+      "sha256": "98cea86b98aa2672d55a3fe7aa1e4cbcf113b47c63c760436d726c5189bf7a9c",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/test_pine.py": {
+      "sha256": "de73279db7b8665a4ac2b35d78bb92cfd7c215906fe28b8d1882a94b78e65bc9",
+      "normalize_lf": true
+    },
+    "research/alpha_arcanox_pine_v37/test_real_evidence.py": {
+      "sha256": "1e31bedf194e7e36b55b0e26532eba93b7b3f1bbd42ccd931953088e367c2b32",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/.gitattributes": {
+      "sha256": "7025762efbb90d8de43dedca7e8187350560f547788edca1b7db94cd503f06b9",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/I_GOD_Killzone_Probability_Radar.pine": {
+      "sha256": "e20ab163d32949d098393201601c3870bbd21eff1dedd2c023fe5ae444fa7c2f",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/README.md": {
+      "sha256": "345531ba48eb0733e90d70c75cb28c0effd313ca4fb6388bb12bf475e57c0d3d",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/TESTING.md": {
+      "sha256": "8e3964aec11cbeb9a19fe88552e965a6d403d9764fd793efa2861f1aa1247e53",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/TRADINGVIEW.md": {
+      "sha256": "f8ce162c197d285d002cffa798cc3ad3a3fabda2f11a5c5fd6553c7e832f762e",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/__init__.py": {
+      "sha256": "160056d7dafeea35870aac0c0a1c03b7a4baa51088f422b57ad34d0af963f88e",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/artifacts/MODEL_TRAINING_VALIDATION.md": {
+      "sha256": "965663433e44cad8d62dd463740f8d59e9dd34fa8c55b113b6c045f191e2b241",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/artifacts/artifact_manifest.json": {
+      "sha256": "d19e766ac0525c8c849f723c96e33f04411d76b389da1886207bff79ce0c3081",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/artifacts/closed_minute_examples.json": {
+      "sha256": "58154e1206a6e78d338b045d195b924a0455005e51afa80958703eccdea3f100",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/artifacts/cycles.csv": {
+      "sha256": "02c8190cea92d09f9d9b12818c60140e2e49c1833f33845a2c3e0c551409bf7d",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/artifacts/data_manifest.json": {
+      "sha256": "8703f5a80f7e3da22c550d177c2a22d18f5ad9c6258632b019ffb36324be7977",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/artifacts/example_INFERIOR_FIRST.svg": {
+      "sha256": "985f240bead528efe33d61d91cb67c85dfb11fcd6a48cf2783536b5b1a51b73b",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/artifacts/example_NEITHER.svg": {
+      "sha256": "f05d4189f9ff7bebdc048d82ab7bffae487c5112f80a3df648ca55865f4cd8f1",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/artifacts/example_SUPERIOR_FIRST.svg": {
+      "sha256": "49bb28c7264466626c7d8889d983d9c20973d05ac258040c4ee22309a0443462",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/artifacts/excluded_partial_archive_candles.json": {
+      "sha256": "9bb526ba8a60875cdb83bc28b73c4da0f41497dc5a7aac6cfa82e71a2935c13e",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/artifacts/features_and_labels.npz": {
+      "sha256": "26327467c4eb5e373f0c5ed959cf62a369849c24ee7fcfc4a4f2374182cc7149",
+      "normalize_lf": false
+    },
+    "research/killzone_probability_radar/artifacts/model_validation.json": {
+      "sha256": "99bacd24e36c0a474e5e3db92677ba5715ce7082ea15c9c27c2fc516a944a39e",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/artifacts/monthly.csv": {
+      "sha256": "0787d98a737aa771c8338b75cdf58059f2bba49e6b797ceb6756bc5b20a30226",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/artifacts/per_minute_test.csv": {
+      "sha256": "2f5c487a03d3b040467b7df347cfd54fe49d88b6b98f81b5c54821ba611b0b87",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/artifacts/pine_comparison.json": {
+      "sha256": "3d877e28bf2ef787c3cfd8aa7308d6af2df11dcdded34aa84780d7099d2f333e",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/build.py": {
+      "sha256": "5d9b2097d95a6bc232e89d2652372a9ba71753ee6582795a19e90a9b933f1cf7",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/data.py": {
+      "sha256": "e9db1fabb05e01ecb67b7036cd177f1cc6aa2dfd84a3813076b5ef6469cd7b8b",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/dataset.py": {
+      "sha256": "8bbad20d6f3869bf7cf04fa46b31d74bf766dac40b32133718b59f85ecbbcf5a",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/journal.py": {
+      "sha256": "d7625616a457e34177d42c24f4e336150d553a1d84909b3bb646bfc302154dc3",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/model.py": {
+      "sha256": "a00eaf7b49e9914ef69caab008aa2c0e46868f81f39a8c8ceacc38052098451b",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/parity.py": {
+      "sha256": "ef3175678caea77306ff14fb4fdc9870c42afef340c4e1d0d7170715d95afdc2",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/radar.template.pine": {
+      "sha256": "5b3af69e4e3c311540882855dbd6f91428e36994fd80c99d343cfdfea42fb6a8",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/specification.json": {
+      "sha256": "23e8d5ce83b0fae2ace74dcc1e789d27cb1e6764b513ecb059911268fb6edad1",
+      "normalize_lf": true
+    },
+    "research/killzone_probability_radar/test_radar.py": {
+      "sha256": "1482f53ceddd292c05b9bca5ac8c697dca9787392fff6c133f3a3256e50fff65",
+      "normalize_lf": true
+    }
+  }
+}
