@@ -17,7 +17,9 @@ jobs:
       - name: Compile isolated research
         run: python -m compileall -q research/killzone_optimal_entry
       - name: Frozen protocol, causality, fills and artifact integrity
-        run: python -m unittest research.killzone_optimal_entry.test_research -v
+        run: |
+          python -c "import numpy; from zoneinfo import ZoneInfo; ZoneInfo('America/New_York')"
+          python -m unittest research.killzone_optimal_entry.test_research -v
       - name: Guardian and ML RSI safety
         run: python mlrsi_safety_audit.py
       - name: Preserved V8, weekly protocol and readiness boundary

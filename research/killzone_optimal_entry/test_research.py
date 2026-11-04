@@ -8,7 +8,12 @@ import gzip
 import json
 from pathlib import Path
 import unittest
-import numpy as np
+try:
+    import numpy as np
+except ModuleNotFoundError as exc:
+    if exc.name != 'numpy':
+        raise
+    raise unittest.SkipTest('Research NumPy dependencies are installed and required by the dedicated offline workflow') from None
 
 from .data import HERE, ROOT, HOUR, MINUTE, NY, read_json, schedule, validate_rows, verify_hourly_aggregation, freeze_cycle, wall
 from .evaluate import block_indices, verify_freeze

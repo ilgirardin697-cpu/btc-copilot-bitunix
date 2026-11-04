@@ -18,6 +18,14 @@ The dedicated offline workflow is .github/workflows/killzone-optimal-entry.yml.
 Remote CI status must be read for the actual pushed HEAD; local success is not
 presented as remote workflow success.
 
+The first remote V8 dependency-free discovery exposed a research test import of
+NumPy in a job that intentionally installs no runtime dependencies. Only this
+new research test's import bootstrap was changed to SkipTest when NumPy is
+absent, matching existing repository conventions. The dedicated research job
+explicitly imports NumPy/timezone data before running all 49 tests, so it cannot
+silently pass by skipping. No V8 source, existing workflow or statistical rule
+was changed to address this integration failure.
+
 The SVG-only formatting pass removes Matplotlib trailing whitespace and uses
 text fonts. It does not change numerical inputs, trades, results or classifications.
 
