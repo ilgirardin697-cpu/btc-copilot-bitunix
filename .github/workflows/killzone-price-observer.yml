@@ -29,3 +29,42 @@ jobs:
         run: python -m unittest discover -v
       - name: Patch whitespace
         run: git diff --check HEAD^ HEAD
+  disabled-container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build isolated observer image
+        run: docker build -f igod_killzone_price_observer/deploy/Dockerfile -t price-observer-ci .
+      - name: Disabled startup without network, credentials or persistent storage
+        shell: bash
+        run: |
+          set -euo pipefail
+          trap 'docker rm -f price-observer-disabled >/dev/null 2>&1 || true' EXIT
+          docker run -d --name price-observer-disabled --network none --read-only --tmpfs /tmp -e PRICE_OBSERVER_ENABLED=false price-observer-ci
+          docker exec -i price-observer-disabled python - <<'PY'
+          import json
+          from pathlib import Path
+          import time
+          import urllib.request
+          opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+          for attempt in range(30):
+              try:
+                  with opener.open('http://127.0.0.1:8080/health', timeout=1) as response:
+                      assert response.status == 200
+                      health = json.load(response)
+                  break
+              except OSError:
+                  if attempt == 29:
+                      raise
+                  time.sleep(.5)
+          with opener.open('http://127.0.0.1:8080/status', timeout=1) as response:
+              status = json.load(response)
+          assert health['status'] == status['status'] == 'DISABLED'
+          assert status['journal_records'] == status['predictions'] == 0
+          assert status['probabilities_validated'] is False
+          assert status['trade_authority'] == 'NONE'
+          assert not Path('/price-observer-data').exists()
+          assert sorted(p.name for p in Path('/app').iterdir()) == ['igod_killzone_price_observer', 'requirements.txt']
+          print('DISABLED_CONTAINER_SMOKE_OK: no network, no volume, no production sources')
+          PY
+          test -z "$(docker logs price-observer-disabled 2>&1)"

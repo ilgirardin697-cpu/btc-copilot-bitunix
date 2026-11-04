@@ -1,0 +1,5 @@
+**
+!igod_killzone_price_observer/
+!igod_killzone_price_observer/**
+igod_killzone_price_observer/**/__pycache__/
+igod_killzone_price_observer/**/*.pyc

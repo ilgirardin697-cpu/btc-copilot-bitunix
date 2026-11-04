@@ -22,8 +22,12 @@
   They never count as live evidence, and no synthetic journal is shipped as forward.
 
 **Actual new prospective observations:0. Deployment:NOT PERFORMED.**
-Docker is unavailable locally; no image build or Railway runtime/mount/real API
-acceptance is claimed. Remote CI is reported only after checking the pushed HEAD.
+Docker is unavailable locally. The dedicated CI includes an image build and
+disabled smoke test with no network, credentials or volume and a read-only
+container filesystem. It requires private-loopback health/status, no data
+directory, no observer logs and no production sources in the image. Its result
+is reported only after checking the pushed HEAD. It is not a Railway runtime,
+persistent-mount, real API acceptance test or a prospective observation.
 Full local logs are ignored in research/cache/price_observer_checks; their hashes
 and the readiness/protocol proof are in validation.json. Actual account billing
 totals/IDs remain outside Git in the sanitized local read-only audit.

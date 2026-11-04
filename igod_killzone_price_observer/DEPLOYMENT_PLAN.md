@@ -32,6 +32,9 @@ No payment/customer identifiers or secret values are retained in this document.
   market-data, their APIs, tokens, volumes or state. No shared references.
 - No public domain, TCP proxy, static outbound IP, Telegram or exchange keys.
 - Image copies ONLY `igod_killzone_price_observer`, not the rest of I-GOD.
+  Its Dockerfile-specific ignore file also excludes unrelated build context.
+  CI builds the image and tests OFF startup without network, secrets or volume;
+  real Railway mount, connectivity and enabled-capture acceptance remain pending.
 - Start: `python -B -m igod_killzone_price_observer`; `PORT=8080`; private health
   `/health`; diagnostic `/status`; cached full `/report`.
 - New service source pinned to the independently reviewed observer commit.
