@@ -2,6 +2,7 @@ __pycache__/
 *.pyc
 /v8/
 /research/cache/
+/cache/killzone_radar_v1/
 /igod_mlrsi_state.json*
 /igod_mlrsi_events.jsonl
 /igod_mlrsi_cache_*.json*

@@ -1,0 +1,23 @@
+[
+  {
+    "archive": "BTCUSDT-1h-2021-12.zip",
+    "reason": "PARTIAL_ARCHIVE_CLOSE_TIME",
+    "open_time": 1640318400000,
+    "original_close_time": 1640321994362,
+    "original_unit": "ms"
+  },
+  {
+    "archive": "BTCUSDT-1h-2023-03.zip",
+    "reason": "PARTIAL_ARCHIVE_CLOSE_TIME",
+    "open_time": 1679659200000,
+    "original_close_time": 1679661581646,
+    "original_unit": "ms"
+  },
+  {
+    "archive": "BTCUSDT-1m-2023-03.zip",
+    "reason": "PARTIAL_ARCHIVE_CLOSE_TIME",
+    "open_time": 1679661540000,
+    "original_close_time": 1679661581646,
+    "original_unit": "ms"
+  }
+]
