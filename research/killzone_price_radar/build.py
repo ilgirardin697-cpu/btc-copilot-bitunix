@@ -32,7 +32,7 @@ def main():
     from .core import predict
     manifest=verify_freeze();m=read_json('frozen_PRICE.json')
     source=(HERE.parent/'killzone_probability_radar/radar.template.pine').read_text(encoding='utf-8')
-    source=source.replace('shorttitle="I-GOD KZ Radar"','shorttitle="I-GOD PRICE Radar"')
+    source=source.replace('shorttitle="I-GOD KZ Radar"','shorttitle="IGOD PRICE"')
     source=source.replace('// Independent research indicator. Original Killzone V3.7 Lite is not changed.',
         '// Frozen PRICE only, post-hoc choice. Original Killzone V3.7 Lite is not changed.')
     source=source.replace('const string MODEL_STATUS = "@@MODEL_STATUS@@"',

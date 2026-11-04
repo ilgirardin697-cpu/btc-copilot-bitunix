@@ -282,6 +282,7 @@ class ArchitectureTests(unittest.TestCase):
         p=(HERE/'I_GOD_Killzone_Probability_Radar.pine').read_text(encoding='utf-8')
         for forbidden in ('ta.sma','ta.dmi','adx14','plusDI','minusDI','bbwp','change4h','request.security('):self.assertNotIn(forbidden,p)
         self.assertIn('atr14[1]',p);self.assertIn('request.security_lower_tf',p)
+        self.assertIn('shorttitle="IGOD PRICE"',p)
         self.assertIn(pine_function(read_json('frozen_PRICE.json')),p)
 
     def test_Pine_publication_locked_and_logging_explicit(self):

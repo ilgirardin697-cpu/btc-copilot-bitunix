@@ -1,5 +1,5 @@
 //@version=6
-indicator("I-GOD Killzone Probability Radar", shorttitle="I-GOD PRICE Radar", overlay=true, max_bars_back=500)
+indicator("I-GOD Killzone Probability Radar", shorttitle="IGOD PRICE", overlay=true, max_bars_back=500)
 // Frozen PRICE only, post-hoc choice. Original Killzone V3.7 Lite is not changed.
 // BINANCE:BTCUSDT SPOT, standard candles, H1 only. No orders, alerts or webhooks.
 const string TZ = "America/New_York"
