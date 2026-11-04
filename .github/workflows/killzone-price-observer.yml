@@ -1,0 +1,70 @@
+name: Killzone PRICE independent observer
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  offline-observer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Existing dependencies plus observer timezone database
+        run: python -m pip install -r requirements.txt -r igod_killzone_price_observer/requirements.txt
+      - name: Mandatory dependencies and compilation
+        run: |
+          python -c "import numpy; from zoneinfo import ZoneInfo; ZoneInfo('America/New_York')"
+          python -m compileall -q igod_killzone_price_observer test_killzone_price_observer.py
+      - name: Frozen PRICE parity, real-time capture, durability and recovery fixtures
+        run: python -m unittest test_killzone_price_observer -v
+      - name: Preserve Guardian, ML RSI, V8, weekly protocol and readiness
+        run: |
+          python mlrsi_safety_audit.py
+          python test_bitman_weekly_boundary.py --require-v8 -v
+          python test_bitman_readiness_boundary.py --require-v8 -v
+      - name: Full regression with dependencies
+        run: python -m unittest discover -v
+      - name: Patch whitespace
+        run: git diff --check HEAD^ HEAD
+  disabled-container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build isolated observer image
+        run: docker build -f igod_killzone_price_observer/deploy/Dockerfile -t price-observer-ci .
+      - name: Disabled startup without network, credentials or persistent storage
+        shell: bash
+        run: |
+          set -euo pipefail
+          trap 'docker rm -f price-observer-disabled >/dev/null 2>&1 || true' EXIT
+          docker run -d --name price-observer-disabled --network none --read-only --tmpfs /tmp -e PRICE_OBSERVER_ENABLED=false price-observer-ci
+          docker exec -i price-observer-disabled python - <<'PY'
+          import json
+          from pathlib import Path
+          import time
+          import urllib.request
+          opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+          for attempt in range(30):
+              try:
+                  with opener.open('http://127.0.0.1:8080/health', timeout=1) as response:
+                      assert response.status == 200
+                      health = json.load(response)
+                  break
+              except OSError:
+                  if attempt == 29:
+                      raise
+                  time.sleep(.5)
+          with opener.open('http://127.0.0.1:8080/status', timeout=1) as response:
+              status = json.load(response)
+          assert health['status'] == status['status'] == 'DISABLED'
+          assert status['journal_records'] == status['predictions'] == 0
+          assert status['probabilities_validated'] is False
+          assert status['trade_authority'] == 'NONE'
+          assert not Path('/price-observer-data').exists()
+          assert sorted(p.name for p in Path('/app').iterdir()) == ['igod_killzone_price_observer', 'requirements.txt']
+          print('DISABLED_CONTAINER_SMOKE_OK: no network, no volume, no production sources')
+          PY
+          test -z "$(docker logs price-observer-disabled 2>&1)"
