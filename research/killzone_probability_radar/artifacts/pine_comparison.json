@@ -1,0 +1,10 @@
+{
+  "local_scalar_checks": 837,
+  "local_max_absolute_probability_error": 2.220446049250313e-16,
+  "local_status": "PASS",
+  "local_scope": "OFFLINE_ARITHMETIC_MIRROR_NOT_EXECUTED_PINE_NOT_INDEPENDENT_PARITY",
+  "actual_tradingview_records_compared": 0,
+  "actual_pine_compilation": "NOT_AVAILABLE_IN_THIS_ENVIRONMENT",
+  "actual_realtime_or_reload_test": "PENDING_OWNER_TRADINGVIEW_TEST",
+  "publication_gate": false
+}

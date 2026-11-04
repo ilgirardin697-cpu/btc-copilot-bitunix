@@ -1,0 +1,54 @@
+{
+  "closed_minute_examples.json": {
+    "bytes": 10178,
+    "sha256": "58154e1206a6e78d338b045d195b924a0455005e51afa80958703eccdea3f100"
+  },
+  "cycles.csv": {
+    "bytes": 268809,
+    "sha256": "02c8190cea92d09f9d9b12818c60140e2e49c1833f33845a2c3e0c551409bf7d"
+  },
+  "data_manifest.json": {
+    "bytes": 40006,
+    "sha256": "8703f5a80f7e3da22c550d177c2a22d18f5ad9c6258632b019ffb36324be7977"
+  },
+  "example_INFERIOR_FIRST.svg": {
+    "bytes": 4761,
+    "sha256": "985f240bead528efe33d61d91cb67c85dfb11fcd6a48cf2783536b5b1a51b73b"
+  },
+  "example_NEITHER.svg": {
+    "bytes": 4754,
+    "sha256": "f05d4189f9ff7bebdc048d82ab7bffae487c5112f80a3df648ca55865f4cd8f1"
+  },
+  "example_SUPERIOR_FIRST.svg": {
+    "bytes": 4765,
+    "sha256": "49bb28c7264466626c7d8889d983d9c20973d05ac258040c4ee22309a0443462"
+  },
+  "excluded_partial_archive_candles.json": {
+    "bytes": 585,
+    "sha256": "9bb526ba8a60875cdb83bc28b73c4da0f41497dc5a7aac6cfa82e71a2935c13e"
+  },
+  "features_and_labels.npz": {
+    "bytes": 2092885,
+    "sha256": "26327467c4eb5e373f0c5ed959cf62a369849c24ee7fcfc4a4f2374182cc7149"
+  },
+  "MODEL_TRAINING_VALIDATION.md": {
+    "bytes": 8677,
+    "sha256": "965663433e44cad8d62dd463740f8d59e9dd34fa8c55b113b6c045f191e2b241"
+  },
+  "model_validation.json": {
+    "bytes": 227923,
+    "sha256": "99bacd24e36c0a474e5e3db92677ba5715ce7082ea15c9c27c2fc516a944a39e"
+  },
+  "monthly.csv": {
+    "bytes": 22287,
+    "sha256": "0787d98a737aa771c8338b75cdf58059f2bba49e6b797ceb6756bc5b20a30226"
+  },
+  "per_minute_test.csv": {
+    "bytes": 16194,
+    "sha256": "2f5c487a03d3b040467b7df347cfd54fe49d88b6b98f81b5c54821ba611b0b87"
+  },
+  "pine_comparison.json": {
+    "bytes": 420,
+    "sha256": "3d877e28bf2ef787c3cfd8aa7308d6af2df11dcdded34aa84780d7099d2f333e"
+  }
+}

@@ -1,0 +1,27 @@
+name: Killzone Probability Radar offline audit
+on:
+  push:
+    paths:
+      - 'research/killzone_probability_radar/**'
+      - '.github/workflows/killzone-probability-radar.yml'
+  pull_request:
+    paths:
+      - 'research/killzone_probability_radar/**'
+      - '.github/workflows/killzone-probability-radar.yml'
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy requests tzdata
+      - run: python -m compileall -q research/killzone_probability_radar
+      - name: Prefix causality, DST, grouped scoring, publication gate, capture integrity and protected sources
+        run: python -m unittest research.killzone_probability_radar.test_radar -v
+      - run: git diff --check HEAD^ HEAD
