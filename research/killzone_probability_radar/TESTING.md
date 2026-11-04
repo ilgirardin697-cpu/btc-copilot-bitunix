@@ -29,6 +29,11 @@ CI dedicado: `Killzone Probability Radar offline audit`, sin red/datos de cuenta
 tests ni entrenamiento. Instala dependencias públicas, compila Python y valida artifacts.
 Los demás workflows se conservan y se verifican contra el HEAD publicado.
 
+El primer CI detectó que el workflow mínimo V8 no instala NumPy. Se corrigió
+únicamente el descubrimiento de la nueva suite: si faltan numpy/requests se declara
+SkipTest, como hacen los demás módulos de investigación. El workflow dedicado instala
+ambas dependencias y ejecuta las 51 pruebas completas. No se modifica V8 ni sus tests.
+
 NO comprobado aún: compilación Pine en TradingView, datos intrabar realtime reales,
 igualdad real del vector/features/probabilidades, retención efectiva de Pine Logs y recarga.
 `actual_tradingview_records_compared=0`, publicación deshabilitada. No se sustituyen

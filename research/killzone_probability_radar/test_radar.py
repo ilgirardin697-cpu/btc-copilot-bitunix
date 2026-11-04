@@ -10,7 +10,13 @@ from pathlib import Path
 import tempfile
 import unittest
 import zipfile
-import numpy as np
+try:
+    import numpy as np
+    import requests
+except ModuleNotFoundError as exc:
+    if exc.name not in ('numpy', 'requests'):
+        raise
+    raise unittest.SkipTest('Dedicated radar workflow installs numpy and requests; V8 stays dependency-free') from exc
 from .data import HERE, HOUR, MINUTE, archive_rows, protocol_hash
 from .dataset import build, features, label, schedule, stamp, window, contiguous, indicators
 from .model import fit, predict, softmax, losses, ci, calibration
