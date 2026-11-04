@@ -1,0 +1,15 @@
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+    "builder": "DOCKERFILE",
+    "dockerfilePath": "igod_killzone_price_observer/deploy/Dockerfile",
+    "watchPatterns": ["igod_killzone_price_observer/**"]
+  },
+  "deploy": {
+    "startCommand": "python -B -m igod_killzone_price_observer",
+    "healthcheckPath": "/health",
+    "healthcheckTimeout": 120,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 3
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "test_counts": {
+    "full": 1092,
+    "unit": 59,
+    "dependency_free": 172,
+    "weekly": 9,
+    "readiness": 7
+  },
+  "failed": 0,
+  "readiness_counts": {
+    "WAIT": 780,
+    "WATCH_LONG": 59,
+    "READY_LONG": 1,
+    "WATCH_SHORT": 59,
+    "READY_SHORT": 1
+  },
+  "readiness_result_sha256": "1ffcf53c6b056e7bdf3b780f1fc4ebce49616363a66467e573c5c1a2ef71f014",
+  "guardian_mlrsi_safety": "PASS",
+  "v8_frozen_refs": "PASS",
+  "protected_existing_files": 162,
+  "model_sha256": "db59d952e6c79da87adb7a31cba41a6ee3a5879a8e0c57638336e58f7be6a6d9",
+  "protocol_sha256": "fc69d323eda0d2ed369ae92d2de3e960d42148445c8ada361e8bf7036116e327",
+  "log_sha256": {
+    "dependency_free.log": "da674b2d6840d05a67e30e358df7320fb097fd78ea639f0c198da355e0a404dc",
+    "full.log": "54f01c6c15b599d280d0a56e840a553c0a03a713dfa931210079e8d9b385cd55",
+    "mlrsi.log": "6a785f10c6811b1e1df6e099ef7294a50e40da2129c49448a217e3e33d5f978b",
+    "readiness.log": "e626a1d2c6730646e9585958783451f141fce78799bf2cf85acce28d945bb272",
+    "unit.log": "78f0ac1233bc888b8fdf2348824f1884176afc852df422d907c8db711756ef61",
+    "weekly.log": "5a8ea8e2079c3d01c3e4848ee1f442a351d6dae5e76d7bd5616e4a457aa672fd"
+  },
+  "actual_new_forward_predictions": 0,
+  "actual_new_forward_outcomes": 0,
+  "real_tradingview_platform_parity": "NOT_CERTIFIED; ONLY_REUSED12_ACTUAL_INFERENCE_CHECKS",
+  "docker_image_built": false,
+  "railway_resources_created": 0,
+  "railway_resources_mutated": 0,
+  "deployed": false
+}

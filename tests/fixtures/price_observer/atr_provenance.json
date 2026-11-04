@@ -1,0 +1,7 @@
+{
+  "source_commit": "3d3ca0b417f473751281cadbf50b23472c298df9",
+  "source_path": "research/alpha_arcanox_pine_v37/history/artifacts/hourly_input.csv.gz",
+  "venue": "BINANCE_SPOT_BTCUSDT",
+  "role": "INDICATOR_WARMUP_REGRESSION_ONLY_NO_NEW_ENTRY_BACKTEST_OR_FORWARD_PREDICTIONS",
+  "sha256": "41f87066420c807f1f748d67cab7e30f9a1e3e89f8f91ecbdae8b2632ee371b6"
+}
