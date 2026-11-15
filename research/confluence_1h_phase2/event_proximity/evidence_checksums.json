@@ -1,0 +1,154 @@
+{
+  "acquisition.json": {
+    "bytes": 529,
+    "sha256": "8678b644451b1fee8a35521126b2d22d400b2e7f65a8676f306190e73e2d72a7"
+  },
+  "audit.py": {
+    "bytes": 8225,
+    "sha256": "22d2faa36a6afd2183d3770a8debdbd8a3dec052eaa1ac666735ed228648847a"
+  },
+  "context.py": {
+    "bytes": 2295,
+    "sha256": "57006f0eade3e02f87791615d3e7efe76c0d570bfe09bd53b78b09089ba78e38"
+  },
+  "detector.py": {
+    "bytes": 4551,
+    "sha256": "83cda3120e7637439fe6fa3e8edd9295de3d7c6c7632ed487b8f978935c1951d"
+  },
+  "EVENT_REVIEW.md": {
+    "bytes": 14430,
+    "sha256": "bc2a0c0935aae067de7fa7419cc19a3d9de15a550474562b8490020fbe0027d4"
+  },
+  "proposal.json": {
+    "bytes": 1789,
+    "sha256": "f6ff11a8d0db416719828009a1c13c62b2805c7953dca2e4dcef239102c7fc38"
+  },
+  "README.md": {
+    "bytes": 6073,
+    "sha256": "fba0cafbcb4417775b21cb0a46e216abb89a5afa4bcebb4556167fc94c70722b"
+  },
+  "review_protocol.json": {
+    "bytes": 1327,
+    "sha256": "1e83c773d4344e40891013bd307e285a63eeac642137bd705cb57b91ea0cc260"
+  },
+  "test_event_proximity.py": {
+    "bytes": 13019,
+    "sha256": "8b15e2c21d8a38718a5ce111d137ff456823122eb29a9b355aaa0e4cd021dd5b"
+  },
+  "validation.json": {
+    "bytes": 2086,
+    "sha256": "5be384732bd169fa96099948e5e7c6ea9e14f2e865480e71c184a616f7c68798"
+  },
+  "visual_evidence.json": {
+    "bytes": 1481,
+    "sha256": "10165d34f0395c4dcb8be82fcc0e72055eaaa84d796acaaf17f47fa08d09aa42"
+  },
+  "__init__.py": {
+    "bytes": 85,
+    "sha256": "af243e174c581233076daf2015773520667953fcaa50ab9d5ceaca39084fcfe6"
+  },
+  "artifacts/all_calendar_crosses.csv": {
+    "bytes": 30655,
+    "sha256": "6cab747f8d65a77d3d8867d5c995bdfcd1b9aa427d78c7b08f58daeae11e14d6"
+  },
+  "artifacts/calendar_1.png": {
+    "bytes": 134416,
+    "sha256": "cf3b558742f81251ec76ab5b0c91fb991f571732cdd8e14ee6fc9031141677b6"
+  },
+  "artifacts/calendar_2.png": {
+    "bytes": 133908,
+    "sha256": "27dfde7d290c8d7f0744bc28f6ac11e4f5aa1048ad7949bdfc3005e8c0b410ab"
+  },
+  "artifacts/calendar_3.png": {
+    "bytes": 144499,
+    "sha256": "8736bf4cd0c342318ddb389152715f41ecd2afdb3b2354d622e09644a2d6f0d0"
+  },
+  "artifacts/calendar_4.png": {
+    "bytes": 146102,
+    "sha256": "41ac527dddab022e4f441d8740ffb385796f5e1fad0f77589b2e0359ed493057"
+  },
+  "artifacts/calendar_5.png": {
+    "bytes": 138086,
+    "sha256": "02e0228f48201dd9575a31a9304af7a32d7e801cdc52843fb0ac5ee5fe00dfef"
+  },
+  "artifacts/calendar_6.png": {
+    "bytes": 141824,
+    "sha256": "9d912a51eebc738b3b9876219e849d310864359d31698eee14ba296fae022403"
+  },
+  "artifacts/calendar_7.png": {
+    "bytes": 150102,
+    "sha256": "206766add309f0b3cdb4d01c0f29d6b5fdafed39a389dea3dd310628703d6b31"
+  },
+  "artifacts/calendar_8.png": {
+    "bytes": 139232,
+    "sha256": "6ffa2e2ec4958fd744aafe2c31d930a80e36b66ebae0760684ed98e1b4f62703"
+  },
+  "artifacts/closed_higher_context.json": {
+    "bytes": 8171,
+    "sha256": "9f543b3f8a6d8489ebafc0b99a08bb01d8fc05bdedef4ef9e4e9c77db131fc8d"
+  },
+  "artifacts/descriptive_context_groups.json": {
+    "bytes": 2142,
+    "sha256": "2298c19ab0f1021e21ecd667c70d3f04c9745a7e035aeafc59c8f73ae0596ec0"
+  },
+  "artifacts/early_15nov.png": {
+    "bytes": 141460,
+    "sha256": "b058dcee82cb8a207c16f573bfb2dd5461a9b047788865b2be30345a12239cac"
+  },
+  "artifacts/late_15nov.png": {
+    "bytes": 134467,
+    "sha256": "18dfc06a2b68eba9fcf9029273eb3efac863aabc51db28e76f02d1a76017c592"
+  },
+  "artifacts/objective_examples.json": {
+    "bytes": 4616,
+    "sha256": "0da8baec70d0ca18d1f5f36f40998bf78002ddd465379174fe4507e749699892"
+  },
+  "artifacts/proximity_ledger.csv.gz": {
+    "bytes": 88061,
+    "sha256": "b3819b39769ee4c312ffad2a12f21c061030d4ef9cdbae832466bea366215fa5"
+  },
+  "artifacts/SPOT_00_08_madrid.csv": {
+    "bytes": 9360,
+    "sha256": "75ff5fcbbf9c11cd2e4cc6c40bddd90ce22acd7a3ac5fca63dceb062158dd9cb"
+  },
+  "artifacts/SPOT_exhaustion.csv": {
+    "bytes": 6523,
+    "sha256": "b823fca23ea8bf29019bff33ea5dcb58c83fcac1d36544577538ed433109deae"
+  },
+  "artifacts/summary.json": {
+    "bytes": 785,
+    "sha256": "e66557c89da37f425894d7c0e4f161390a0af67a0321833a9621db79d27270a3"
+  },
+  "artifacts/USDM_00_08_madrid.csv": {
+    "bytes": 9343,
+    "sha256": "70dceab9d1e6963fcd2e89e833352aba0775af3d9f74b8ea868e5690b13997d8"
+  },
+  "artifacts/visual_point_comparison.json": {
+    "bytes": 648,
+    "sha256": "bd2f99e20b471caa50aad1f8563b687db4056b8d551c0b3a12708879c56a50db"
+  },
+  "fixtures/SPOT_H1_CONTEXT.csv.gz": {
+    "bytes": 225248,
+    "sha256": "aab0255b474bfba82cec29460e2e1d08195982bf34cae82c1133b16ca59e45b9"
+  },
+  "fixtures/SPOT_H1_CONTEXT.json": {
+    "bytes": 10793,
+    "sha256": "5cbf1c9463296cbff2deef1494b5ba01991811ae6f7b9c1bb41845028870cecb"
+  },
+  "fixtures/SPOT_H1_FOCUS.csv.gz": {
+    "bytes": 41027,
+    "sha256": "960c8cf5becc0e3ccaba58e9cad9b6e1f1db956b7d8ac99f0af8302d1adf067d"
+  },
+  "fixtures/SPOT_H1_FOCUS.json": {
+    "bytes": 2342,
+    "sha256": "e32cc9bbfa683fed1d0805b9bfab98ee7e3cdb0fa88d8e52ce9898d20f4907e7"
+  },
+  "fixtures/USDM_H1_FOCUS.csv.gz": {
+    "bytes": 37351,
+    "sha256": "d464b901735cd0e4f34432f5effef1189ff710b0894184625d0b517f22b96aa1"
+  },
+  "fixtures/USDM_H1_FOCUS.json": {
+    "bytes": 1614,
+    "sha256": "22116cdd112047d6a15352af4a0d07fbabcaf504bce54f5a38cf320db21b28df"
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "UP:TRANSITION:UP:UP": {
+    "n": 4,
+    "same_direction": 2,
+    "opposite_direction": 2,
+    "flat": 0
+  },
+  "DOWN:UP:UP:UP": {
+    "n": 11,
+    "same_direction": 4,
+    "opposite_direction": 7,
+    "flat": 0
+  },
+  "UP:UP:UP:UP": {
+    "n": 9,
+    "same_direction": 6,
+    "opposite_direction": 3,
+    "flat": 0
+  },
+  "UP:DOWN:UP:UP": {
+    "n": 7,
+    "same_direction": 4,
+    "opposite_direction": 3,
+    "flat": 0
+  },
+  "DOWN:DOWN:UP:UP": {
+    "n": 5,
+    "same_direction": 3,
+    "opposite_direction": 2,
+    "flat": 0
+  },
+  "DOWN:TRANSITION:UP:UP": {
+    "n": 3,
+    "same_direction": 1,
+    "opposite_direction": 2,
+    "flat": 0
+  },
+  "DOWN:TRANSITION:TRANSITION:UP": {
+    "n": 3,
+    "same_direction": 2,
+    "opposite_direction": 1,
+    "flat": 0
+  },
+  "UP:TRANSITION:TRANSITION:UP": {
+    "n": 3,
+    "same_direction": 1,
+    "opposite_direction": 2,
+    "flat": 0
+  },
+  "UP:DOWN:TRANSITION:UP": {
+    "n": 5,
+    "same_direction": 0,
+    "opposite_direction": 5,
+    "flat": 0
+  },
+  "DOWN:DOWN:TRANSITION:UP": {
+    "n": 3,
+    "same_direction": 1,
+    "opposite_direction": 2,
+    "flat": 0
+  },
+  "DOWN:DOWN:DOWN:UP": {
+    "n": 22,
+    "same_direction": 11,
+    "opposite_direction": 11,
+    "flat": 0
+  },
+  "UP:DOWN:DOWN:UP": {
+    "n": 23,
+    "same_direction": 11,
+    "opposite_direction": 12,
+    "flat": 0
+  },
+  "DOWN:TRANSITION:DOWN:UP": {
+    "n": 2,
+    "same_direction": 1,
+    "opposite_direction": 1,
+    "flat": 0
+  },
+  "DOWN:UP:TRANSITION:UP": {
+    "n": 1,
+    "same_direction": 1,
+    "opposite_direction": 0,
+    "flat": 0
+  },
+  "UP:UP:DOWN:UP": {
+    "n": 2,
+    "same_direction": 1,
+    "opposite_direction": 1,
+    "flat": 0
+  },
+  "DOWN:UP:DOWN:UP": {
+    "n": 4,
+    "same_direction": 3,
+    "opposite_direction": 1,
+    "flat": 0
+  },
+  "UP:TRANSITION:DOWN:UP": {
+    "n": 1,
+    "same_direction": 1,
+    "opposite_direction": 0,
+    "flat": 0
+  },
+  "UP:DOWN:DOWN:TRANSITION": {
+    "n": 7,
+    "same_direction": 3,
+    "opposite_direction": 4,
+    "flat": 0
+  },
+  "DOWN:DOWN:DOWN:TRANSITION": {
+    "n": 7,
+    "same_direction": 2,
+    "opposite_direction": 5,
+    "flat": 0
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "source_type": "OWNER_REPORTED_EXTERNAL_VISUAL_COMPARISON",
+  "source_platform_as_named_by_owner": "TradingOne",
+  "screenshot_received_and_inspected_in_this_task": false,
+  "machine_readable_platform_records": 0,
+  "case_1": {
+    "venue_reported_by_owner": "BINANCE_SPOT",
+    "symbol": "BTCUSDT",
+    "timeframe": "1H",
+    "bar_open_madrid": "2026-11-15T02:00:00+01:00",
+    "bar_open_utc": "2026-11-15T01:00:00Z",
+    "bar_close_utc": "2026-11-15T02:00:00Z",
+    "earliest_available_madrid": "2026-11-15T03:00:00+01:00",
+    "observed_rounded_value": "-40.40",
+    "reported_decimal_places": 2,
+    "python_pececillos": "-40.39928839347632",
+    "python_tendencia": "-15.064153051502862",
+    "python_ma_trend": "-4.069550666696239",
+    "claim": "SUPPORTS_PECECILLOS_IDENTITY_FOR_THIS_POINT_NOT_COMPLETE_PARITY",
+    "original_visual_capture_time_and_closed_status": "NOT_INDEPENDENTLY_ATTESTED"
+  },
+  "case_2": {
+    "reported_time_madrid_approximate": "2026-11-15T14:00:00+01:00",
+    "description": "possible rebound exhaustion: pececillos slope weakens, AO color red, ADX28-29, BBWP88-to67; subsequent approximately1000USDT retreat from local high reported by owner",
+    "exact_bar_open_or_close": "TO_BE_DISTINGUISHED",
+    "external_numeric_parity": "NOT_ESTABLISHED",
+    "reported_future_price_retreat": "OWNER_OBSERVATION_NOT_A_TRADE_RESULT"
+  },
+  "overall_external_parity": "PARTIAL_VISUAL_SUPPORT_ONLY",
+  "trade_authority": "NONE"
+}

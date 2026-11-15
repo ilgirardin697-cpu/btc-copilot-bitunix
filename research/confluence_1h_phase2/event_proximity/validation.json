@@ -1,0 +1,76 @@
+{
+  "base_pr47": "4dcc5d94217b9b387fc69f93ad325e28aaf2a856",
+  "pre_measurement_commit": "dbaf7fbe8488dd148121b2f7407f9ce91c3c89fa",
+  "proposal_sha256": "f6ff11a8d0db416719828009a1c13c62b2805c7953dca2e4dcef239102c7fc38",
+  "checks": {
+    "display": {
+      "check": "display",
+      "returncode": 0,
+      "tests": 7,
+      "seconds": 2.01
+    },
+    "full": {
+      "check": "full",
+      "returncode": 0,
+      "tests": 1135,
+      "seconds": 208.22
+    },
+    "matrix": {
+      "check": "matrix",
+      "returncode": 0,
+      "tests": 50,
+      "seconds": 1.44
+    },
+    "minimal": {
+      "check": "minimal",
+      "returncode": 0,
+      "tests": 174,
+      "seconds": 10.47,
+      "skipped": 26
+    },
+    "mlrsi": {
+      "check": "mlrsi",
+      "returncode": 0,
+      "tests": null,
+      "seconds": 5.89
+    },
+    "unit": {
+      "check": "unit",
+      "returncode": 0,
+      "tests": 102,
+      "seconds": 15.11
+    },
+    "weekly": {
+      "check": "weekly",
+      "returncode": 0,
+      "tests": 9,
+      "seconds": 1.91
+    }
+  },
+  "new_tests": 30,
+  "global_tests": 1135,
+  "global_failed": 0,
+  "visual_external_owner_reported_points": 1,
+  "original_screenshots_inspected": 0,
+  "actual_platform_export_records": 0,
+  "full_platform_parity": false,
+  "new_backtests": 0,
+  "new_private_api_requests": 0,
+  "new_public_spot_get_requests": 2,
+  "additional_calendar_crosses": 122,
+  "real_forward_observations": 0,
+  "prior_pr_files_changed": 0,
+  "matrix_counts": {
+    "WAIT": 780,
+    "WATCH_LONG": 59,
+    "READY_LONG": 1,
+    "WATCH_SHORT": 59,
+    "READY_SHORT": 1
+  },
+  "matrix_hash": "1ffcf53c6b056e7bdf3b780f1fc4ebce49616363a66467e573c5c1a2ef71f014",
+  "protected_sources_and_weekly_protocol_unchanged": true,
+  "numerical_test_environment": "Python3.12 NumPy2.3.5 with installed tzdata path; plotting Python3.13 NumPy2.5.4 matplotlib3.11.2",
+  "ledger_identity_note": "Distinct cancelled bundles at one close have distinct token-content ID suffixes; no window, state, count or indicator change.",
+  "conclusion": "INCONCLUSO",
+  "trade_authority": "NONE"
+}

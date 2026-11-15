@@ -1,0 +1,15 @@
+{
+  "frozen_spec_commit": "dbaf7fbe8488dd148121b2f7407f9ce91c3c89fa",
+  "new_public_requests": 2,
+  "private_requests": 0,
+  "spot_overlap_rows": 1,
+  "archive_rest_overlap_rows": 1464,
+  "cached_archive_sha256_verified": 13,
+  "official_checksums_retrieved_in_this_task": 0,
+  "prior_manifest_claims_official_checksum_verified": true,
+  "historical_rest_receipt_attested": false,
+  "fresh_rest_receipt_attested": true,
+  "new_closed_hour_cutoff_ms": 1794754800000,
+  "no_tradingview_export": true,
+  "trade_authority": "NONE"
+}

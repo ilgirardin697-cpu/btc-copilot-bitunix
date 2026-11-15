@@ -1,0 +1,51 @@
+{
+  "venue": "BINANCE_USDM_PERPETUAL",
+  "symbol": "BTCUSDT",
+  "timeframe_seconds": 3600,
+  "rows": 1811,
+  "first_open_ms": 1788220800000,
+  "last_open_ms": 1794736800000,
+  "sha256": "d464b901735cd0e4f34432f5effef1189ff710b0894184625d0b517f22b96aa1",
+  "sources": [
+    {
+      "url": "https://fapi.binance.com/fapi/v1/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "1h",
+        "startTime": 1788220800000,
+        "endTime": 1794740399999,
+        "limit": 1000
+      },
+      "status": null,
+      "raw_sha256": "eb13b08fd93deda0cbb4151e999c744289f32c1dcad3fa9e2136794b74cd02be",
+      "bytes": 142140,
+      "received_at": null,
+      "file": "page_0.json",
+      "reused_original_response": true,
+      "recovery_read_at": "2026-11-15T11:33:28.994955+00:00",
+      "historical_receipt_attested": false
+    },
+    {
+      "url": "https://fapi.binance.com/fapi/v1/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "1h",
+        "startTime": 1791820800000,
+        "endTime": 1794740399999,
+        "limit": 1000
+      },
+      "status": null,
+      "raw_sha256": "2800115014ed9429985f8351bd0667e58742061f03651c2a15ebf5d5dfef872e",
+      "bytes": 115355,
+      "received_at": null,
+      "file": "page_1.json",
+      "reused_original_response": true,
+      "recovery_read_at": "2026-11-15T11:33:29.009992+00:00",
+      "historical_receipt_attested": false
+    }
+  ],
+  "source_time_units": "REST_ms_ARCHIVES_us_EXPLICIT_DIVISION_BY1000",
+  "closed_cutoff_ms": 1794754800000,
+  "phase2_source_prefix_preserved": false,
+  "actual_platform_export": false
+}
