@@ -1,0 +1,121 @@
+{
+  "base_pr46": "522201530c1b81453ea653fc8a1860b1b10eabaf",
+  "checks": {
+    "display": {
+      "check": "display",
+      "exit_code": 0,
+      "tests": 7,
+      "seconds": 1.55,
+      "command": [
+        "python.exe",
+        "test_bitman_readiness_boundary.py",
+        "--require-v8",
+        "-v"
+      ]
+    },
+    "full": {
+      "check": "full",
+      "exit_code": 0,
+      "tests": 1105,
+      "seconds": 155.39,
+      "command": [
+        "python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-v"
+      ]
+    },
+    "guardian": {
+      "check": "guardian",
+      "exit_code": 0,
+      "tests": 239,
+      "seconds": 9.01,
+      "command": [
+        "python.exe",
+        "-m",
+        "unittest",
+        "test_guardian_commands",
+        "test_trade_guardian",
+        "test_guardian_capital_v2",
+        "test_live_levels_canary",
+        "-v"
+      ]
+    },
+    "matrix": {
+      "check": "matrix",
+      "exit_code": 0,
+      "tests": 50,
+      "seconds": 0.88,
+      "command": [
+        "python.exe",
+        "-m",
+        "unittest",
+        "test_bitman_readiness",
+        "-v"
+      ]
+    },
+    "mlrsi": {
+      "check": "mlrsi",
+      "exit_code": 0,
+      "tests": null,
+      "seconds": 3.33,
+      "command": [
+        "python.exe",
+        "mlrsi_safety_audit.py"
+      ]
+    },
+    "unit": {
+      "check": "unit",
+      "exit_code": 0,
+      "tests": 72,
+      "seconds": 12.33,
+      "command": [
+        "python.exe",
+        "-m",
+        "unittest",
+        "test_confluence_1h_phase2",
+        "test_confluence_1h_research",
+        "-v"
+      ]
+    },
+    "weekly": {
+      "check": "weekly",
+      "exit_code": 0,
+      "tests": 9,
+      "seconds": 1.47,
+      "command": [
+        "python.exe",
+        "test_bitman_weekly_boundary.py",
+        "--require-v8",
+        "-v"
+      ]
+    }
+  },
+  "new_unit_tests": 40,
+  "full_passed": 1105,
+  "full_failed": 0,
+  "real_platform_exports_received": 0,
+  "real_platform_parity_tests": 0,
+  "actual_pine_compilation_performed": false,
+  "new_backtests_performed": 0,
+  "independent_supplied_synthetic_audits_executed": false,
+  "original_pr46_and_runtime_content_modified": false,
+  "original_indicators_reused_without_change": true,
+  "matrix_status_counts": {
+    "WAIT": 780,
+    "WATCH_LONG": 59,
+    "READY_LONG": 1,
+    "WATCH_SHORT": 59,
+    "READY_SHORT": 1
+  },
+  "matrix_result_hash": "1ffcf53c6b056e7bdf3b780f1fc4ebce49616363a66467e573c5c1a2ef71f014",
+  "protected_protocol_v1_unchanged": true,
+  "railway_accessed": false,
+  "bitunix_accessed": false,
+  "telegram_sent": false,
+  "orders": false,
+  "conclusion": "INCONCLUSO",
+  "trade_authority": "NONE",
+  "environment_note": "Python3.12 tests; PYTHONTZPATH points to installed tzdata. Plotting Python3.13 only. Initial direct unit run lacked tzdata: fixed runner environment, no source-formula changes."
+}
