@@ -169,6 +169,9 @@ son vacías, no registros sintéticos disfrazados de exportación.
 ## Siguiente especificación: aún no congelada
 
 Se ha predeclarado un **protocolo de comparación**, no una nueva estrategia.
+Los criterios numéricos iniciales preceden al replay local; la extensión al área
+azul se añadió después, durante esta fase, a petición expresa del propietario.
+El caso completo sigue siendo un diagnóstico POST-HOC, no un ensayo predeclarado.
 Mientras no esté comprobada la equivalencia y no se haya identificado el evento
 visual, `coincidence_window`, `entry` e `invalidation` permanecen sin asignar.
 Inventar ahora una ventana de 1–3 velas para capturar este caso sería escoger

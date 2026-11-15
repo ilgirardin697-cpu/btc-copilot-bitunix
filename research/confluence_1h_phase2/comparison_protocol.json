@@ -1,7 +1,10 @@
 {
   "version": "CONFLUENCE_SERIES_IDENTIFICATION_V1",
   "base_pr46": "522201530c1b81453ea653fc8a1860b1b10eabaf",
-  "declared_before_descriptive_replay": true,
+  "initial_comparison_criteria_declared_before_local_replay": true,
+  "blue_area_added_during_phase2_on_owner_source_clarification": true,
+  "study_type": "POST_HOC_DIAGNOSTIC_CASE_NOT_PREDECLARED_STRATEGY",
+  "profit_outcomes_evaluated": false,
   "indicator_lengths_changed": false,
   "new_strategies": 0,
   "predefined_comparisons": [

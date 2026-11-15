@@ -8,12 +8,12 @@
     "sha256": "36593ca9e04e7c26a1e32388a45202bafc45eaecff8f0013557af21d6663cdf8"
   },
   "comparison_protocol.json": {
-    "bytes": 1147,
-    "sha256": "27cd048f90888bd89e089d4198e97028031e4524bd517508336eed82f6d66047"
+    "bytes": 1347,
+    "sha256": "9426f7e2cebe93c97e1f4178f8f3fe5f492e38431d610028c91930a2e8c38689"
   },
   "CONFLUENCE_PHASE2.md": {
-    "bytes": 14240,
-    "sha256": "f2ac7e632374d219a962996ba4d8428817c60054b6a6a154691a9d37ebd292f6"
+    "bytes": 14490,
+    "sha256": "52062fb1dc98dd131523afd4c642aaf000d057590756554a01e000aaada45e15"
   },
   "describe.py": {
     "bytes": 3795,
