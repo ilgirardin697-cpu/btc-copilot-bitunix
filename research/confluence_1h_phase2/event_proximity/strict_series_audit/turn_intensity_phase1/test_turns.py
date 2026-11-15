@@ -73,6 +73,10 @@ class CausalTests(unittest.TestCase):
     def test_adx_never_supplies_down_direction_without_dmi(self):
         a,f,i=fixture(1,-1);f['plus_di'][:]=40
         self.assertFalse(any(e['pattern']==PATTERNS[1] and e['side']==-1 for e in detect(a,f)[0]))
+    def test_onset_allows_positive_and_negative_ao_without_selecting_zero_side(self):
+        for shift in (0,20):
+            a,f,i=fixture(1,-1);f['ao']+=shift
+            self.assertTrue(any(e['pattern']==PATTERNS[1] and e['side']==-1 for e in detect(a,f)[0]))
     def test_pececillos_slope_not_red_cross(self):
         a,f,i=fixture();f['red_line']=np.full(len(a),1000.)
         self.assertTrue(any(e['pattern']==PATTERNS[0] for e in detect(a,f)[0]))
@@ -113,6 +117,10 @@ class InferenceTests(unittest.TestCase):
     def test_small_sample_no_testable_even_favorable(self):
         r=assess([.2,.3],[1,2],0,30,100)
         self.assertEqual(r['classification'],'NO TESTABLE');self.assertEqual(r['p_for_holm'],1.)
+    def test_one_event_has_descriptive_mean_but_no_inference(self):
+        r=calendar_bootstrap([.02],[5],0,30)
+        self.assertEqual(r['mean'],.02);self.assertEqual(r['occupied_blocks'],1)
+        self.assertIsNone(r['ci']);self.assertEqual(r['effective_n'],0)
     def test_block_inference_deterministic_and_ess_never_above_n(self):
         values=np.tile([.02,.02,-.02,-.02],30);days=np.arange(120)
         a=calendar_bootstrap(values,days,0,120);b=calendar_bootstrap(values,days,0,120)
@@ -193,6 +201,40 @@ class StressAndIsolationTests(unittest.TestCase):
             raw=(HERE/'public_metadata'/f'{name}.json').read_bytes()
             self.assertEqual(receipt['method'],'GET');self.assertFalse(receipt['authentication'])
             self.assertEqual(receipt['sha256'],hashlib.sha256(raw).hexdigest())
+
+
+class ObservedEvidenceTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        import csv,gzip,io
+        cls.r=json.loads((HERE/'artifacts/results.json').read_text())
+        cls.rows=list(csv.DictReader(io.StringIO(gzip.decompress((HERE/'artifacts/outcomes.csv.gz').read_bytes()).decode())))
+    def test_six_primary_cells_and_none_promoted_by_raw_p(self):
+        self.assertEqual(len(self.r['primary']),6)
+        for row in self.r['primary']:
+            self.assertEqual((row['stratum'],row['horizon']),('Q75',12))
+            self.assertEqual(row['classification'],'NO TESTABLE')
+            self.assertEqual(row['holm_adjusted_p'],1)
+        self.assertEqual(self.r['raw_sources_checked'],153)
+    def test_all_intensities_and_horizons_retained_without_r_units(self):
+        self.assertEqual({r['stratum'] for r in self.rows},{'ALL','Q75','Q90'})
+        self.assertEqual({r['hours'] for r in self.rows},{'4','12','24'})
+        self.assertNotIn('net_r',self.rows[0]);self.assertIn('net_atr',self.rows[0])
+    def test_october_november_never_scored_and_12h_after_entry(self):
+        from datetime import datetime
+        for r in self.rows:
+            self.assertLess(r['signal_available'],'2026-10-01T00:00:00Z')
+            self.assertEqual(int(r['exit_at'])-int(r['entry_at']),int(r['hours'])*HOUR)
+            stamp=int(datetime.fromisoformat(r['signal_available'].replace('Z','+00:00')).timestamp()*1000)
+            self.assertEqual(stamp,int(r['entry_at']))
+    def test_power_targets_frozen_from_development_not_evaluation(self):
+        power=json.loads((HERE/'artifacts/power_frozen_from_development.json').read_text())
+        self.assertEqual(len(power),6)
+        for row in power:self.assertEqual(row['required_effective_n'],required_n(row['sigma']))
+        self.assertFalse(self.r['forward_running']);self.assertTrue(self.r['no_virgin_holdout'])
+    def test_favorable_and_unfavorable_cases_both_present_no_only_winners(self):
+        values=[float(r['net_fraction']) for r in self.rows]
+        self.assertTrue(any(v>0 for v in values));self.assertTrue(any(v<0 for v in values))
 
 
 if __name__=='__main__':unittest.main()

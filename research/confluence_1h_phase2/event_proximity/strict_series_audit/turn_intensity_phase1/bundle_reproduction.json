@@ -1,0 +1,19 @@
+{
+  "extracted_self_contained_tests": 26,
+  "returncode": 0,
+  "reproduced_byte_exact": [
+    "comparisons.csv",
+    "data_manifest.json",
+    "episodes.csv.gz",
+    "event_audit.csv.gz",
+    "matched_controls.csv.gz",
+    "monthly.csv",
+    "outcomes.csv.gz",
+    "p3_context_secondary.csv",
+    "power_frozen_from_development.json",
+    "results.json",
+    "sensitivity_ex_best.csv"
+  ],
+  "zip_sha256": "21f804194eac188c4451e6a11e80b32c15dcf563f876413f4afa09e6c1233e64",
+  "note": "Git-history/source-preservation tests require clone, not certified from ZIP"
+}

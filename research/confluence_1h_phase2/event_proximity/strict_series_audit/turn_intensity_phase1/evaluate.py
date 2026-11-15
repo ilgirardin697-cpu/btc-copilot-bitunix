@@ -140,6 +140,9 @@ def evaluate(cache, out):
                         stat = assess(diffs, days, int(a[start,0]//DAY), int(a[end-1,0]//DAY), minimum)
                         row = dict(stage=stage, pattern=pattern, side=side, stratum=stratum, horizon=h,
                                    valid_episodes=len(subset), matched=len(diffs), unmatched=len(subset)-len(diffs),
+                                   all_episode_net_mean=float(np.mean([get(e['i'],side,h)['net_fraction'] for e in subset])) if subset else None,
+                                   all_episode_missing_marks=sum(get(e['i'],side,h)['missing_marks'] for e in subset),
+                                   all_episode_boundary_settlements=sum(get(e['i'],side,h)['boundary_settlements'] for e in subset),
                                    net_mean=float(np.mean(net)) if net else None,
                                    net_median=float(np.median(net)) if net else None,
                                    net_atr_mean=float(np.mean(net_atr)) if net_atr else None, **stat)
@@ -155,7 +158,7 @@ def evaluate(cache, out):
                                                       excess_mean=float(np.mean([r['excess'] for r in kept])) if kept else None))
                     for m in matched:
                         if not m['matched']:
-                            control_rows.append(dict(stage=stage,pattern=pattern,side=side,stratum=stratum,**m))
+                            control_rows.append(dict(stage=stage,pattern=pattern,stratum=stratum,**m))
     if len(cells) != 6:
         raise ValueError('PRIMARY_SIX_CELL_FAMILY_MISSING')
     adjusted = holm([r['p_for_holm'] for r in cells])
@@ -179,7 +182,7 @@ def evaluate(cache, out):
             context.append(dict(event_id=e['event_id'],stage=stage,side=e['side'],four_h=e['four_h'],daily=e['daily'],
                                 aligned=bool(e['four_h']==e['side'] and e['daily']==e['side']),**get(e['i'],e['side'],12)))
     result = dict(protocol_version=p['version'], protocol_sha256=hashlib.sha256((HERE/'protocol.json').read_bytes()).hexdigest(),
-                  data_sha256=p['data']['npz_sha256'], data_rows=len(a), raw_sources_checked=len(manifest['sources']) if 'sources' in manifest else len(manifest.get('files',[])),
+                  data_sha256=p['data']['npz_sha256'], data_rows=len(a), raw_sources_checked=len(manifest['archives']),
                   no_virgin_holdout=True, forward_running=False, historical_events=len(events),
                   primary=cells, power=power, conclusion='NO TESTABLE' if not any(r['testable'] for r in cells) else 'INCONCLUSO',
                   phase2_management_backtest='NOT_RUN_PENDING_PHASE1_AND_SEPARATE_STOP_SPEC',

@@ -26,7 +26,10 @@ def calendar_bootstrap(values, days, first_day, last_day, replicates=2000):
     """Calendar7day moving blocks include days without observations."""
     x, days = np.asarray(values, float), np.asarray(days, int)
     if len(x) < 2 or not np.isfinite(x).all():
-        return dict(n=len(x), effective_n=0., ci=None, p=1., occupied_blocks=0)
+        return dict(n=len(x), effective_n=0., ci=None, p=1.,
+                    occupied_blocks=len(set((days-first_day)//7)),
+                    mean=float(np.mean(x)) if len(x) and np.isfinite(x).all() else None,
+                    median=float(np.median(x)) if len(x) and np.isfinite(x).all() else None)
     n_days = last_day-first_day+1
     sums, counts = np.zeros(n_days), np.zeros(n_days)
     for v, d in zip(x, days):

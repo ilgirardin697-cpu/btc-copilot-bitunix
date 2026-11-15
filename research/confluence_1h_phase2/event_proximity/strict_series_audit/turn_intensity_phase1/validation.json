@@ -1,0 +1,81 @@
+{
+  "checks": {
+    "display": {
+      "check": "display",
+      "returncode": 0,
+      "tests": 7,
+      "skipped": 0,
+      "seconds": 2.12
+    },
+    "full": {
+      "check": "full",
+      "returncode": 0,
+      "tests": 1197,
+      "skipped": 0,
+      "seconds": 214.3
+    },
+    "matrix": {
+      "check": "matrix",
+      "returncode": 0,
+      "tests": 50,
+      "skipped": 0,
+      "seconds": 1.09
+    },
+    "minimal": {
+      "check": "minimal",
+      "returncode": 0,
+      "tests": 176,
+      "skipped": 28,
+      "seconds": 8.75
+    },
+    "mlrsi": {
+      "check": "mlrsi",
+      "returncode": 0,
+      "tests": null,
+      "skipped": 0,
+      "seconds": 4.44
+    },
+    "unit": {
+      "check": "unit",
+      "returncode": 0,
+      "tests": 38,
+      "skipped": 0,
+      "seconds": 2.44
+    },
+    "weekly": {
+      "check": "weekly",
+      "returncode": 0,
+      "tests": 9,
+      "skipped": 0,
+      "seconds": 1.95
+    }
+  },
+  "compile": "PASS",
+  "diff_check": "PASS",
+  "protocol_commit": "a6b3cfb",
+  "pre_measurement_source_commit": "887317f",
+  "protocol_sha256": "3fcdbd8c5c50eda66e560def8c91326055fdea1a576acf8fa8ad356c3fdf1835",
+  "preserved_pr_heads": {
+    "46": "522201530c1b81453ea653fc8a1860b1b10eabaf",
+    "47": "4dcc5d94217b9b387fc69f93ad325e28aaf2a856",
+    "48": "384032d7917e354552c5842a74d3f3f72918ac34",
+    "49": "9793acff82388c5a60b59796af4c6fa765331129"
+  },
+  "readiness_counts": {
+    "WAIT": 780,
+    "WATCH_LONG": 59,
+    "WATCH_SHORT": 59,
+    "READY_LONG": 1,
+    "READY_SHORT": 1
+  },
+  "readiness_normalized_hash": "1ffcf53c6b056e7bdf3b780f1fc4ebce49616363a66467e573c5c1a2ef71f014",
+  "no_railway_mutations": true,
+  "no_private_exchange_calls": true,
+  "public_unsigned_bitunix_gets": 2,
+  "no_orders": true,
+  "no_telegram": true,
+  "no_forward_capture": true,
+  "phase2_management_backtest_run": false,
+  "original_data_sources": 153,
+  "trade_authority": "NONE"
+}
