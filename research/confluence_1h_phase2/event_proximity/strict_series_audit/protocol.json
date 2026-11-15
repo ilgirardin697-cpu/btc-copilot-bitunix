@@ -1,0 +1,41 @@
+{
+  "protocol": "CONFLUENCE_STRICT_SERIES_F4A_V0",
+  "scope": "ONLY_BASE_TENDENCIA_VS_PECECILLOS_NO_PARAMETER_SEARCH",
+  "parent_pr46": "522201530c1b81453ea653fc8a1860b1b10eabaf",
+  "parent_pr47": "4dcc5d94217b9b387fc69f93ad325e28aaf2a856",
+  "parent_pr48": "384032d7917e354552c5842a74d3f3f72918ac34",
+  "motivation": "POST_HOC_VISUAL_SERIES_IDENTIFICATION_OWNER_REPORTED_POINT_AND_SECOND_AUDIT_FINDING; NOT_INDEPENDENT_SELECTION",
+  "variants": {
+    "BASE": "original signals(features) with tendencia/kon_trend and original EMA15(tendencia)",
+    "PECECILLOS": "same function; shallow copy features then replace kon_trend input with minnows/pececillos ONLY; keep kon_signal original EMA15(tendencia); prior sign refers to pececillos"
+  },
+  "preserved": ["ADX14/14 lagged decline adx[t-1]<adx[t-2] and adx[t-2]>40", "AO5/34 negative and two rising slopes LONG; positive and two falling SHORT", "literal supplied BBWP7/prior100 >85", "previous sign on crossed series", "ATR14 and SL1.5ATR", "TP2R and3R co-primary", "entry nextH1open", "time exit24completed bars at nextopen", "fees0.001/side", "adverse slip0.0005/side", "actual original funding rates and mark missing-data bounds", "one simultaneous position per book", "original risk1percent, initial200USDT and no leverage multiplier"],
+  "data": {
+    "venue": "BINANCE_USDM_PERPETUAL",
+    "symbol": "BTCUSDT",
+    "warmup_start": "2022-09-01T00:00:00Z",
+    "evaluation_start": "2022-11-01T00:00:00Z",
+    "end_exclusive": "2026-11-01T00:00:00Z",
+    "npz_sha256": "5b2544c9bf353cedb77a07781ffe9e6202b12513c0c10f3d25bca67756a4825a",
+    "loader": "UNCHANGED_PR46_data.load_VERIFY_ALL153_RAW_INPUT_HASHES",
+    "imputation_or_new_acquisition": false
+  },
+  "evaluation": {
+    "primary": "FULL COMBINED book, one position; targets reported separately, never sum independent target books",
+    "secondary_books": ["LONG_ONLY", "SHORT_ONLY"],
+    "split_and_folds": "original70/30 development/test with24h embargo/end purge; same four fixed WF windows; no new holdout claim",
+    "yearly": "entry-year attribution and separate calendar equity path drawdown; no independent annual reset",
+    "controls": "unchanged PR46 random_controls,200 trials month/side/closed4H-SMA200 regime matched; FULL and TEST; candidate matches not necessarily executed count",
+    "uncertainty": "unchanged PR46 ratio_ci,2000 calendar7day block replicates,97.5percent co-primary target intervals; no p-values from overlapping bars",
+    "small_sample": "INCONCLUSO below original minimum60TEST combined or30TEST side; always report n and exact funding limitations",
+    "funding": "CONSERVATIVE_BOUND and OPTIMISTIC_MARK_BOUND reported separately; exact net only if every used mark verified and no timing ambiguity",
+    "no_optimization": "No neighbors, no new windows or indicators, no context selection, no parameter or target winner",
+    "november_incident": "15Nov2026 Spot andUSDM separate post-hoc signal/first-next-open verification only; no immature or Spot-short PnL; excluded from main sample"
+  },
+  "audit_bundle": "byte-exact8requestedPR48files plus F4A source/spec/results/tests/report, unchangedPR46dependencies, publicmarketcache with raw hashes; no secrets",
+  "conclusion_allowed": ["INCONCLUSO", "NO EDGE", "PROMETEDOR PERO NO VALIDADO"],
+  "historical_holdout": "NO_VIRGIN_HOLDOUT",
+  "full_external_platform_parity": "NOT_CERTIFIED_ONE_OWNER_REPORTED_ROUNDED_VISUAL_POINT",
+  "trade_authority": "NONE",
+  "prohibited": ["orders", "private exchange APIs", "Railway", "Telegram", "production changes", "prior PR changes", "merge", "deploy"]
+}
