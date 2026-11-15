@@ -1,0 +1,8 @@
+{
+  "format": "EXPLICIT_LF_IN_TEXT_WRITERS",
+  "pre_and_post_normalization_numeric_files": 10,
+  "normalized_original_bytes_equal_final_bytes": true,
+  "strategy_parameters_changed": false,
+  "decisions_changed": false,
+  "pnl_changed": false
+}

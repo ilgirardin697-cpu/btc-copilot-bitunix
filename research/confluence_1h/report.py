@@ -115,7 +115,7 @@ def render(out=None):
         'Falta paridad real del Pine y una muestra prospectiva adecuada. No se afirma que un parecido visual de indicadores garantice una entrada rentable. Las reglas no se recalibran con este histórico.',
         'Guardian V2, V8, ML RSI, la capa de operabilidad, market-data, Telegram, Railway y BITMAN_WEEKLY_FORWARD_V1 permanecen intactos. Ningún módulo productivo importa este laboratorio. Sin merge ni deploy.',
         '', '**SHADOW ONLY. TRADE AUTHORITY: NONE.**','']
-    (out/'IGOD_CONFLUENCE_1H_RESEARCH.md').write_text('\n'.join(lines),encoding='utf-8')
+    (out/'IGOD_CONFLUENCE_1H_RESEARCH.md').write_text('\n'.join(lines),encoding='utf-8',newline='\n')
     json_write(out/'artifact_checksums.json',{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in out.iterdir() if p.is_file() and p.name!='artifact_checksums.json'})
 
 

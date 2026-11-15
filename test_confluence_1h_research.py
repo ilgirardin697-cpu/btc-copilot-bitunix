@@ -1,10 +1,12 @@
 """Offline synthetic unit fixtures; never evidence of profitability or Pine execution."""
 import ast
+import gzip
 from dataclasses import replace
 import hashlib
 import json
 from pathlib import Path
 import subprocess
+import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -180,6 +182,13 @@ class StatisticsAndParityTests(unittest.TestCase):
 
     def test_empty_real_log_set_cannot_certify_parity(self):
         self.assertEqual(compare([],bars(150))['parity_status'],'NO_ACTUAL_RECORDS')
+        from research.confluence_1h.evaluate import json_write,csv_write
+        with tempfile.TemporaryDirectory() as folder:
+            p=Path(folder)
+            csv_write(p/'sample.csv',[dict(n=1)])
+            json_write(p/'sample.json',dict(n=1))
+            self.assertEqual((p/'sample.csv').read_bytes(),b'n\n1\n')
+            self.assertNotIn(b'\r',(p/'sample.json').read_bytes())
 
 
 class SafetyTests(unittest.TestCase):
@@ -189,6 +198,12 @@ class SafetyTests(unittest.TestCase):
         for name,expected in m['protected_git_sha256'].items():
             raw=subprocess.check_output(['git','show','HEAD:'+name],cwd=ROOT)
             self.assertEqual(hashlib.sha256(raw).hexdigest(),expected,name)
+        evidence=LAB/'artifacts'
+        if (evidence/'artifact_checksums.json').exists():
+            for name,digest in json.loads((evidence/'artifact_checksums.json').read_text()).items():
+                path=evidence/name
+                raw=path.read_bytes() if path.exists() else gzip.decompress((evidence/(name+'.gz')).read_bytes())
+                self.assertEqual(hashlib.sha256(raw).hexdigest(),digest,name)
 
     def test_production_has_no_new_research_dependency(self):
         m=json.loads((LAB/'source_manifest.json').read_text())

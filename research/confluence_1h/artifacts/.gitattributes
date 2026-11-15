@@ -1,0 +1,4 @@
+# Writers explicitly emit LF, so stored bytes and checksums agree on all OSes.
+* text eol=lf
+*.gz binary
+*.png binary

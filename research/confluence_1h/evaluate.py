@@ -22,16 +22,16 @@ from .diagnostics import gate_funnel,rejection_plots
 
 
 def json_write(path,value):
-    path.write_text(json.dumps(value,indent=2,allow_nan=False)+'\n',encoding='utf-8')
+    path.write_text(json.dumps(value,indent=2,allow_nan=False)+'\n',encoding='utf-8',newline='\n')
 
 
 def csv_write(path,rows):
     if not rows:
         header=('target_r,book,window,signal_open,available_at,side,entry_time,exit_bar_open,entry,exit,stop,target,qty_btc,net_usdt,net_r,reason' if path.name.startswith('trades') else 'status,reason')
-        path.write_text(header+'\n',encoding='utf-8');return
+        path.write_text(header+'\n',encoding='utf-8',newline='\n');return
     fields=list(dict.fromkeys(k for r in rows for k in r))
     with path.open('w',encoding='utf-8',newline='') as f:
-        w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(rows)
+        w=csv.DictWriter(f,fieldnames=fields,lineterminator='\n');w.writeheader();w.writerows(rows)
 
 
 def gz_write(path,rows):

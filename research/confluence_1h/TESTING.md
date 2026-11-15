@@ -10,6 +10,9 @@
   READY_LONG1, READY_SHORT1; SHA normalizado `1ffcf53c6b056e7bdf3b780f1fc4ebce49616363a66467e573c5c1a2ef71f014`.
 - Diez artifacts numéricos reproducidos byte a byte, sin red, nuevos parámetros
   ni nuevas observaciones. Los hashes están en artifacts/reproducibility.json.
+- 33 hashes verificados leyendo los bytes desde Git. Salidas LF explícitas;
+  comprobación adicional demuestra que normalizar CRLF no cambia valores,
+  decisiones ni PnL. El test de artifacts también funciona sin CSV sin comprimir.
 - Compilación y ejecución real Pine: NO realizadas. Logs reales:0.
 - Datos del incidente recibidos públicamente y calculados causalmente;
   observación post-hoc, nunca evidencia forward o un outcome24h fabricado.

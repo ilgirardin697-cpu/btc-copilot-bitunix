@@ -1785,22 +1785,22 @@
   "no_trade_zero_equity_change": "MECHANICAL_NO_ACTIVITY_NOT_EVIDENCE_OF_SAFETY_OR_PROFITABILITY",
   "python": "3.13.7",
   "numpy": "2.5.4",
-  "implementation_commit_at_run": "048dc5cb1254ed7f3c51ed53936704760254b286",
+  "implementation_commit_at_run": "93ced43edd7c55c5083b35492f1519480bcbba75",
   "source_sha_note": "Run commit is a source reference; uncommitted implementation/source hashes are captured below before results are versioned.",
   "source_sha256": {
     "compare_pine.py": "b7fc6015eee72bcd2fb5fab0ceb1876065b5099643c2ad8c2116d349d771e3d1",
     "data.py": "72a7e6d7844dc49df33a3a331dc564a7bfb4d571ff53a81d3c0beda8d8e0902b",
     "diagnostics.py": "bc3eccdb1bdee040d28160dfcc04e2a91b6e5c37b5428076548e5d5483c8155f",
     "engine.py": "8de0bdf778e51e05f8c146a33fd0a08c0be6e7b67c035362b6d2683c8a28168e",
-    "evaluate.py": "5d54617c8a62d36332a6162e3e66d1213cecc408f1f905ce829270ad93964940",
+    "evaluate.py": "9fe9309f4063a41cc9575baee4169b2dc6fe96e4e947bd5d3f8e29079b142389",
     "incident.py": "fbd178eaaf835767df991c49698525a8adcd99f3edc2f947bc346240af66a9a5",
     "indicators.py": "4309d799b56bb8ae257d1d060f420312c4f97e3d027b2c1a550eae8bd08331ec",
     "reference.py": "d8ab3cd4a56a7051a2d7761beef2cc90a7318f3d9ce79af897dbcdded0b1e373",
-    "report.py": "922c044ab6b816663e82b036c91c5daf0033eb0bfa96a2c8d12e56832861516b",
+    "report.py": "b44cf32d9eec168a9b270deaf9ecbd0c55751f2036d05ff8a92ec2140635e11e",
     "statistics.py": "b6059fd88be25893cdf37831ab143312742d014be65dfa06d21005ad21458d15",
     "__init__.py": "5212d7e7b68270fa87499cd2fa4ee7afdf638ab7750db37ccedc361a94747172"
   },
-  "generated_at": "2026-11-15T11:55:15.749776+00:00",
+  "generated_at": "2026-11-15T12:06:31.391409+00:00",
   "trade_authority": "NONE",
   "deployed": false
 }
