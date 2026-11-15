@@ -1,0 +1,75 @@
+{
+  "venue": "BINANCE_SPOT",
+  "symbol": "BTCUSDT",
+  "timeframe_seconds": 3600,
+  "rows": 1815,
+  "first_open_ms": 1788220800000,
+  "last_open_ms": 1794751200000,
+  "sha256": "960c8cf5becc0e3ccaba58e9cad9b6e1f1db956b7d8ac99f0af8302d1adf067d",
+  "sources": [
+    {
+      "url": "https://api.binance.com/api/v3/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "1h",
+        "startTime": 1788220800000,
+        "endTime": 1794740399999,
+        "limit": 1000
+      },
+      "status": null,
+      "raw_sha256": "4ba4eca5bda02caba911c0acd7203cf0f3507971c316a220062f6acf8f735967",
+      "bytes": 178496,
+      "received_at": null,
+      "file": "page_0.json",
+      "reused_original_response": true,
+      "recovery_read_at": "2026-11-15T11:33:30.912004+00:00",
+      "historical_receipt_attested": false
+    },
+    {
+      "url": "https://api.binance.com/api/v3/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "1h",
+        "startTime": 1791820800000,
+        "endTime": 1794740399999,
+        "limit": 1000
+      },
+      "status": null,
+      "raw_sha256": "5650c044041084d394836e0cebfc005d730ea75f28c5464bcb16820435fa4909",
+      "bytes": 144819,
+      "received_at": null,
+      "file": "page_1.json",
+      "reused_original_response": true,
+      "recovery_read_at": "2026-11-15T11:33:30.930711+00:00",
+      "historical_receipt_attested": false
+    },
+    {
+      "url": "https://api.binance.com/api/v3/time",
+      "params": {},
+      "status": 200,
+      "bytes": 28,
+      "sha256": "6ff3ae87c0427f5e9d00dd4b7cd36582e4e11acdb709c18e73d306c2ee916546",
+      "file": "time.json",
+      "received_at": "2026-11-15T15:26:30.095068+00:00"
+    },
+    {
+      "url": "https://api.binance.com/api/v3/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "1h",
+        "startTime": 1794736800000,
+        "endTime": 1794754799999,
+        "limit": 1000
+      },
+      "status": 200,
+      "bytes": 897,
+      "sha256": "c095c61856eee159e797ddb353a9ba0728acfcac8067ef3bcb4089ef1b37edc8",
+      "file": "klines.json",
+      "received_at": "2026-11-15T15:26:30.574325+00:00"
+    }
+  ],
+  "source_time_units": "REST_ms_ARCHIVES_us_EXPLICIT_DIVISION_BY1000",
+  "closed_cutoff_ms": 1794754800000,
+  "phase2_source_prefix_preserved": true,
+  "actual_platform_export": false
+}

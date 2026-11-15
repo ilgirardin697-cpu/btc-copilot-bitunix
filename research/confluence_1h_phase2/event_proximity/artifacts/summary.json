@@ -1,0 +1,30 @@
+{
+  "calendar_range": [
+    "2026-10-01T00:00:00Z",
+    "2026-11-15T00:00:00Z"
+  ],
+  "days": 45,
+  "all_pececillos_crosses": 122,
+  "cross_directions": {
+    "UP": 61,
+    "DOWN": 61
+  },
+  "descriptive_outcomes": {
+    "SAME_DIRECTION_CLOSE": 58,
+    "OPPOSITE_DIRECTION_CLOSE": 64,
+    "FLAT": 0,
+    "CENSORED": 0
+  },
+  "proposal_pececillos_proximities": 40,
+  "proximity_contexts": {
+    "PEAK_DECELERATION": 32,
+    "TROUGH_BUILDING": 8
+  },
+  "hypothesis_by_year_or_regime": "NO_INFERENCE; SMALL POST_HOC_DESCRIPTION_ONLY",
+  "last_available_at": "2026-11-15T15:00:00Z",
+  "proposal_sha256": "f6ff11a8d0db416719828009a1c13c62b2805c7953dca2e4dcef239102c7fc38",
+  "new_backtests": 0,
+  "tradingview_exports": 0,
+  "complete_platform_parity": false,
+  "trade_authority": "NONE"
+}

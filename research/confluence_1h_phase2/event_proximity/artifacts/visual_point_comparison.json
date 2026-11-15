@@ -1,0 +1,22 @@
+{
+  "evidence_type": "OWNER_REPORTED_EXTERNAL_VISUAL_POINT_NOT_CERTIFIED",
+  "bar_open_utc": "2026-11-15T01:00:00Z",
+  "earliest_available_at": "2026-11-15T02:00:00Z",
+  "observed": "-40.40",
+  "values": {
+    "pececillos": -40.39928839347632,
+    "tendencia": -15.064153051502862,
+    "tiburones": -16.931725237090735,
+    "ma_trend": -4.069550666696239
+  },
+  "rounded_two_decimals": {
+    "pececillos": "-40.40",
+    "tendencia": "-15.06",
+    "tiburones": "-16.93",
+    "ma_trend": "-4.07"
+  },
+  "pececillos_absolute_error": 0.00071160652368,
+  "raw_platform_records": 0,
+  "complete_parity": false,
+  "inspected_original_screenshot": false
+}
