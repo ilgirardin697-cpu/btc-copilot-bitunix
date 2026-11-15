@@ -1,0 +1,56 @@
+[
+  {
+    "fallback_used": false,
+    "minimum_effect": 0.001,
+    "paired_development_n": 3,
+    "pattern": "P1_PEAK_EXHAUSTION",
+    "required_effective_n": 5478,
+    "side": 1,
+    "sigma": 0.022873560190168684
+  },
+  {
+    "fallback_used": false,
+    "minimum_effect": 0.001,
+    "paired_development_n": 2,
+    "pattern": "P1_PEAK_EXHAUSTION",
+    "required_effective_n": 396,
+    "side": -1,
+    "sigma": 0.006149894731843799
+  },
+  {
+    "fallback_used": false,
+    "minimum_effect": 0.001,
+    "paired_development_n": 2,
+    "pattern": "P2_TROUGH_ONSET",
+    "required_effective_n": 42655,
+    "side": 1,
+    "sigma": 0.06383026967933104
+  },
+  {
+    "fallback_used": false,
+    "minimum_effect": 0.001,
+    "paired_development_n": 4,
+    "pattern": "P2_TROUGH_ONSET",
+    "required_effective_n": 15014,
+    "side": -1,
+    "sigma": 0.03786944128780261
+  },
+  {
+    "fallback_used": false,
+    "minimum_effect": 0.001,
+    "paired_development_n": 5,
+    "pattern": "P3_FAILED_RECOVERY",
+    "required_effective_n": 3313,
+    "side": 1,
+    "sigma": 0.017786500727830338
+  },
+  {
+    "fallback_used": false,
+    "minimum_effect": 0.001,
+    "paired_development_n": 7,
+    "pattern": "P3_FAILED_RECOVERY",
+    "required_effective_n": 3059,
+    "side": -1,
+    "sigma": 0.01709192845409941
+  }
+]

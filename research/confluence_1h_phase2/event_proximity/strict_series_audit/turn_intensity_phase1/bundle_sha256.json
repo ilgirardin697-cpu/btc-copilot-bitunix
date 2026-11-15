@@ -1,0 +1,8 @@
+{
+  "path": "research/confluence_1h_phase2/event_proximity/strict_series_audit/turn_intensity_phase1/audit_bundle/IGOD_ADX_AO_TURNS_PHASE1.zip",
+  "bytes": 6319678,
+  "sha256": "21f804194eac188c4451e6a11e80b32c15dcf563f876413f4afa09e6c1233e64",
+  "members": 345,
+  "reproducible": "fixed ZIP timestamps, all source members SHA256 manifested",
+  "trade_authority": "NONE"
+}

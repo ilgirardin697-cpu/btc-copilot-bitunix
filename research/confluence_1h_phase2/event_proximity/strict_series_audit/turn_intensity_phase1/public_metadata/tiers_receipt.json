@@ -1,0 +1,10 @@
+{
+  "url": "https://fapi.bitunix.com/api/v1/futures/position/get_position_tiers?symbol=BTCUSDT",
+  "method": "GET",
+  "authentication": false,
+  "status": 200,
+  "received_at": "2026-11-15T18:14:30.228870+00:00",
+  "bytes": 1367,
+  "sha256": "baccdba1ccd5973ba746b45d8ef806c3e3da5f0157cb2c6d5825e1f91c502379",
+  "interpretation": "CURRENT_PUBLIC_METADATA_NOT_HISTORICAL_BITUNIX_OBSERVATIONS"
+}

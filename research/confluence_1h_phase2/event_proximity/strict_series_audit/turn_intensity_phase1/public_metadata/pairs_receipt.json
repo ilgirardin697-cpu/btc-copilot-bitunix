@@ -1,0 +1,10 @@
+{
+  "url": "https://fapi.bitunix.com/api/v1/futures/market/trading_pairs?symbols=BTCUSDT",
+  "method": "GET",
+  "authentication": false,
+  "status": 200,
+  "received_at": "2026-11-15T18:14:29.882903+00:00",
+  "bytes": 485,
+  "sha256": "2513f49f1463c216592c324b3df7d08897f8503dc03560b2957d91b84bd0f6f4",
+  "interpretation": "CURRENT_PUBLIC_METADATA_NOT_HISTORICAL_BITUNIX_OBSERVATIONS"
+}
