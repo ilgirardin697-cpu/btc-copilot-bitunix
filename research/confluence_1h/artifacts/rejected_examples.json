@@ -1,0 +1,29 @@
+{
+  "selection": "POST_HOC_DIAGNOSTIC_FIRST_CHRONOLOGICAL_NO_OUTCOME_SELECTION",
+  "examples": [
+    {
+      "side": "LONG",
+      "selection_rule": "FIRST_CROSS",
+      "signal_candle_open": "2022-11-08T16:00:00Z",
+      "available_at": "2022-11-08T17:00:00Z",
+      "accepted": false,
+      "not_a_historical_trade": true
+    },
+    {
+      "side": "SHORT",
+      "selection_rule": "FIRST_CROSS",
+      "signal_candle_open": "2022-11-01T13:00:00Z",
+      "available_at": "2022-11-01T14:00:00Z",
+      "accepted": false,
+      "not_a_historical_trade": true
+    },
+    {
+      "side": "SHORT",
+      "selection_rule": "FIRST_PRE_BBWP_REJECTION",
+      "signal_candle_open": "2023-01-13T05:00:00Z",
+      "available_at": "2023-01-13T06:00:00Z",
+      "accepted": false,
+      "not_a_historical_trade": true
+    }
+  ]
+}

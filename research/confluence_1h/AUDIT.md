@@ -3,6 +3,24 @@
 Las fuentes recibidas se conservan sin modificar. El ZIP **no** se aceptó como
 una implementación correcta por defecto. No se ejecuta su optimizador.
 
+## Repositorio: cálculos reutilizables y límites
+
+| Componente existente revisado | Reutilización razonable |
+|---|---|
+| `bitman_manual/frozen/indicators.py` | AO5/34, Wilder RMA, ATR14 y tendencia pública Koncorde como referencia matemática; su BBWP no tiene la misma convención de empates que el adjunto |
+| `bitman_manual/frozen/core.py` | Alineación causal y régimen SMA200 del último4H cerrado; no se usa su decisión como una entrada nueva |
+| `bitman_manual/frozen/market.py` | Validación y agregación de bloques completos, sin imputación |
+| `guardian_signals.py` | Contraste ATR14 y separación de pivote/instante de confirmación; no se ejecuta su cliente ni se añade ML RSI al experimento |
+| `main.py` Manual Copilot | Arquitectura de análisis/representación separada de permisos; sus parámetros no se importan como reglas de esta estrategia |
+| `trend_v8.py` y referencias V8 | Closed-candle/estado/idempotencia como garantías existentes; no se reutilizan señales o ejecución V8 |
+| `research/early_breakout_artifacts/EARLY_BREAKOUT_RESULTS.md` | Evidencia negativa NO EDGE; no se adoptan sus parámetros elegidos como edge |
+
+Se hace inventario de los módulos productivos mediante AST y hashes, además
+de revisar las fórmulas relevantes. Esto no se presenta como una nueva auditoría
+operativa de una cuenta o del estado desplegado en Railway. No se leen secretos,
+posiciones privadas ni órdenes. El port queda aislado bajo research para no
+cambiar kernels congelados que tienen convenciones de arranque/ranking propias.
+
 ## Fórmulas verificables y alcance
 
 | Cálculo | Fuente adjunta / port auditado | Hallazgo |

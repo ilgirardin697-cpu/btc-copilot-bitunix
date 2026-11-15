@@ -1,0 +1,131 @@
+{
+  "local_independent_scalar": {
+    "ao": {
+      "n": 967,
+      "max_absolute_difference": 1.0913936421275139e-11,
+      "same_availability": true,
+      "passed": true
+    },
+    "adx": {
+      "n": 973,
+      "max_absolute_difference": 4.263256414560601e-14,
+      "same_availability": true,
+      "passed": true
+    },
+    "plus_di": {
+      "n": 986,
+      "max_absolute_difference": 2.842170943040401e-14,
+      "same_availability": true,
+      "passed": true
+    },
+    "minus_di": {
+      "n": 986,
+      "max_absolute_difference": 3.552713678800501e-14,
+      "same_availability": true,
+      "passed": true
+    },
+    "atr": {
+      "n": 987,
+      "max_absolute_difference": 1.7053025658242404e-13,
+      "same_availability": true,
+      "passed": true
+    },
+    "rsi": {
+      "n": 986,
+      "max_absolute_difference": 3.552713678800501e-14,
+      "same_availability": true,
+      "passed": true
+    },
+    "mfi": {
+      "n": 987,
+      "max_absolute_difference": 2.842170943040401e-14,
+      "same_availability": true,
+      "passed": true
+    },
+    "boll": {
+      "n": 976,
+      "max_absolute_difference": 4.0039083160081645e-12,
+      "same_availability": true,
+      "passed": true
+    },
+    "stoch": {
+      "n": 978,
+      "max_absolute_difference": 2.842170943040401e-14,
+      "same_availability": true,
+      "passed": true
+    },
+    "kon_trend": {
+      "n": 976,
+      "max_absolute_difference": 1.9966250874858815e-12,
+      "same_availability": true,
+      "passed": true
+    },
+    "kon_signal": {
+      "n": 976,
+      "max_absolute_difference": 3.836930773104541e-13,
+      "same_availability": true,
+      "passed": true
+    },
+    "bbwp": {
+      "n": 992,
+      "max_absolute_difference": 0.0,
+      "same_availability": true,
+      "passed": true
+    }
+  },
+  "actual_tradingview_records": 0,
+  "tradingview_compiled": false,
+  "real_python_pine_parity": "NOT_VERIFIED_NO_ACTUAL_LOGS",
+  "bitman_private_parity": "NOT_PROVEN",
+  "source": "SUPPLIED_PUBLIC_DEFAULTS_MPL2; AO5_34_DMI14_14_ATR14",
+  "warning": "LOCAL_REFERENCE_IS_NOT_PINE_EXECUTION_OR_INDEPENDENT_MARKET_EVIDENCE",
+  "supplied_zip_comparison": {
+    "indicator_differences": {
+      "kon_trend": {
+        "max_absolute_difference": 4.1395356831230856e-07,
+        "different_after_warmup": 847,
+        "different_availability": 0
+      },
+      "kon_signal": {
+        "max_absolute_difference": 1.0969926478310299e-07,
+        "different_after_warmup": 422,
+        "different_availability": 0
+      },
+      "adx": {
+        "max_absolute_difference": 9.237055564881302e-14,
+        "different_after_warmup": 0,
+        "different_availability": 0
+      },
+      "plus_di": {
+        "max_absolute_difference": 0.3923381417693168,
+        "different_after_warmup": 0,
+        "different_availability": 0
+      },
+      "minus_di": {
+        "max_absolute_difference": 0.9150691240872604,
+        "different_after_warmup": 0,
+        "different_availability": 0
+      },
+      "ao": {
+        "max_absolute_difference": 5.820766091346741e-11,
+        "different_after_warmup": 0,
+        "different_availability": 0
+      },
+      "bbwp": {
+        "max_absolute_difference": 50.0,
+        "different_after_warmup": 8,
+        "different_availability": 1
+      },
+      "atr": {
+        "max_absolute_difference": 1.5916157281026244e-12,
+        "different_after_warmup": 0,
+        "different_availability": 0
+      }
+    },
+    "long_flags_changed": 0,
+    "short_flags_changed": 0,
+    "selection_function_run": false,
+    "original_backtestingpy_run": false,
+    "explanation": "Original index-rank ties and DMI first-TR seed differ; original driver also searches18 settings, omits funding and entry fees in open equity; its optional broker comparison has explicitly different brackets/time exits."
+  }
+}

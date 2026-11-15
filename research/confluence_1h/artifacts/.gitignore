@@ -1,0 +1,3 @@
+# Full uncompressed local CSVs are reproducible and supplied in CSV.GZ form.
+/signals_all.csv
+/equity_all.csv
