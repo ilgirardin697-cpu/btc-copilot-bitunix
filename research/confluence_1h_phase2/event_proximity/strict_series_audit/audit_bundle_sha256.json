@@ -1,0 +1,86 @@
+{
+  "file": "audit_bundle/IGOD_F4A_CLAUDE.zip",
+  "bytes": 12125845,
+  "sha256": "24e5e1554750a67f560705f28171ebdf7f36225e983adb283d83d52a5bf8501f",
+  "files": 405,
+  "requested_pr48_byte_exact": {
+    "detector.py": {
+      "bytes": 4551,
+      "sha256": "83cda3120e7637439fe6fa3e8edd9295de3d7c6c7632ed487b8f978935c1951d",
+      "origin_commit": "384032d7917e354552c5842a74d3f3f72918ac34"
+    },
+    "README.md": {
+      "bytes": 6073,
+      "sha256": "fba0cafbcb4417775b21cb0a46e216abb89a5afa4bcebb4556167fc94c70722b",
+      "origin_commit": "384032d7917e354552c5842a74d3f3f72918ac34"
+    },
+    "proposal.json": {
+      "bytes": 1789,
+      "sha256": "f6ff11a8d0db416719828009a1c13c62b2805c7953dca2e4dcef239102c7fc38",
+      "origin_commit": "384032d7917e354552c5842a74d3f3f72918ac34"
+    },
+    "review_protocol.json": {
+      "bytes": 1327,
+      "sha256": "1e83c773d4344e40891013bd307e285a63eeac642137bd705cb57b91ea0cc260",
+      "origin_commit": "384032d7917e354552c5842a74d3f3f72918ac34"
+    },
+    "artifacts/proximity_ledger.csv.gz": {
+      "bytes": 88061,
+      "sha256": "b3819b39769ee4c312ffad2a12f21c061030d4ef9cdbae832466bea366215fa5",
+      "origin_commit": "384032d7917e354552c5842a74d3f3f72918ac34"
+    },
+    "artifacts/all_calendar_crosses.csv": {
+      "bytes": 30655,
+      "sha256": "6cab747f8d65a77d3d8867d5c995bdfcd1b9aa427d78c7b08f58daeae11e14d6",
+      "origin_commit": "384032d7917e354552c5842a74d3f3f72918ac34"
+    },
+    "test_event_proximity.py": {
+      "bytes": 13019,
+      "sha256": "8b15e2c21d8a38718a5ce111d137ff456823122eb29a9b355aaa0e4cd021dd5b",
+      "origin_commit": "384032d7917e354552c5842a74d3f3f72918ac34"
+    },
+    "validation.json": {
+      "bytes": 2086,
+      "sha256": "5be384732bd169fa96099948e5e7c6ea9e14f2e865480e71c184a616f7c68798",
+      "origin_commit": "384032d7917e354552c5842a74d3f3f72918ac34"
+    }
+  },
+  "zip_integrity_verified": true,
+  "delivered_to_claude": false,
+  "bundle_smoke_checks": {
+    "verify": {
+      "returncode": 0
+    },
+    "numerical": {
+      "returncode": 0
+    },
+    "reproduce": {
+      "returncode": 0
+    }
+  },
+  "numerical_tests_passed": 20,
+  "byte_exact_reproduced_artifacts": [
+    "annual.csv",
+    "data_manifest.json",
+    "equity.csv.gz",
+    "funding_bounds.csv",
+    "metrics.csv",
+    "november_incident.json",
+    "random_controls.csv.gz",
+    "results.json",
+    "signals_all.csv.gz",
+    "signal_dispositions.csv",
+    "signal_funnel.csv",
+    "trades_all.csv"
+  ],
+  "reproduced_main_signals": {
+    "BASE": {
+      "long": 0,
+      "short": 0
+    },
+    "PECECILLOS": {
+      "long": 3,
+      "short": 4
+    }
+  }
+}
