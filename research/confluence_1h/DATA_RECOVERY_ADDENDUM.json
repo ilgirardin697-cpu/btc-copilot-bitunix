@@ -1,0 +1,9 @@
+{
+  "stage": "AFTER_RAW_DATA_ACQUISITION_BEFORE_ANY_INDICATOR_SIGNAL_OR_OUTCOME_EVALUATION",
+  "reason": "Official monthly markPriceKlines omit 2023-02-24 and 2026-06-29, 24 hours each. Trade-price primary klines are continuous.",
+  "allowed_recovery": "Fetch only the two official Binance Vision DAILY USD-M markPriceKlines H1 archives and official SHA256 CHECKSUMs for these exact dates. No different venue, interpolation, trade-price substitution or synthetic mark.",
+  "dates": ["2023-02-24","2026-06-29"],
+  "failure": "Missing/invalid daily archive or remaining required mark/funding gap blocks net evaluation. Never assume zero funding.",
+  "rules_costs_parameters": "UNCHANGED",
+  "retrospective_source_caveat": "Archives read now, not historical publication-time attestation; raw monthly omissions and daily evidence retained. No virgin holdout."
+}

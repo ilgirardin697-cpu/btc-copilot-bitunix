@@ -1,0 +1,19 @@
+{
+  "status": "BYTE_IDENTICAL_NUMERIC_ARTIFACTS",
+  "files": {
+    "signals_all.csv.gz": "c24a3244df110548324d3af2cd2d964af87a7391e0f23c1f2639d9eed01fa081",
+    "equity_all.csv.gz": "604d2fde276ddbbf7a5ecdd836a02bf4cf6880398b9bde4e8d28f7ec386bb7d4",
+    "metrics.csv": "f0a053078a8e4ca3072fb2b4e1289577fbe0d00319990be89ec0a4e027e9f5b2",
+    "trades_all.csv": "2b9807df1a3e477d2ad5a23f735822d563310fc78ef06b7f9c3fe6e5208e3f20",
+    "sensitivity_trades.csv": "f2418ee182d721b46bdb1998e5ae419ec79f859cad24b8a4813e86b5c7968b88",
+    "signal_funnel.csv": "a5621418a6d261148f270525a866343b325d4357f333a479367859bdc08dd173",
+    "signal_dispositions.csv": "5a52db93a2107f568efee5e08d78f3ab6d3f95ccc1c1ef294360d6248b47fdcd",
+    "random_controls.csv": "7106eccfa17ada8dda066769cef793f4bc49316e05ea6a3069a47901600f357b",
+    "sensitivity.csv": "0b5dc6400e59031630e5865ebbde7d86b67286674b582a63df46847062b9d197",
+    "year_side_regime.csv": "34c3462a80cf68dd0f8c7310c8e55d48921b3a60558a8244753cc5a74b1e1149"
+  },
+  "rerun_new_parameters": false,
+  "network_requests": 0,
+  "actual_pine_parity": false,
+  "new_forward_evidence": false
+}

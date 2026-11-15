@@ -1,0 +1,115 @@
+//@version=5
+strategy("I-GOD Confluencia 1H · SHADOW RESEARCH v1", overlay=true,
+     initial_capital=200, currency=currency.USD, pyramiding=0,
+     commission_type=strategy.commission.percent, commission_value=0.1,
+     slippage=3000, margin_long=100, margin_short=100,
+     process_orders_on_close=false, calc_on_every_tick=false,
+     max_lines_count=500, max_labels_count=500)
+
+// WARNING: slippage=3000 * syminfo.mintick = fixed PRICE, not exact 0.05%.
+// On BTCUSDT tick 0.01, this equals 30 USDT (~0.05% near BTC 60,000).
+// Compare Python exact-percentage friction model before drawing conclusions.
+// Koncorde yellow/brown trend and red EMA signal are reproduced from the
+// supplied "Koncorde 3.0 — BITMAN PROXY" public-source adaptation.
+// Not proven identical to any proprietary Bitman / Koncorde indicator.
+
+adxThreshold = input.float(40.0, "ADX max. previo >", minval=1)
+bbwpThreshold = input.float(85.0, "BBWP >", minval=0, maxval=100)
+bbwpBasisLen = input.int(7, "BBWP SMA", minval=2)
+bbwpLookback = input.int(100, "BBWP ventanas anteriores", minval=10, maxval=600)
+atrMult = input.float(1.5, "Stop ATR múltiplo", minval=0.1)
+targetR = input.float(2.0, "Take Profit R (2 o 3)", minval=0.5)
+maxHoldingBars = input.int(24, "Máx. velas abiertas", minval=1)
+riskPercent = input.float(1.0, "Riesgo máximo % capital", minval=0.1, maxval=2.0)
+maxNotionalX = input.float(1.0, "Máx. nocional / capital (1 = sin apalancar)", minval=0.1, maxval=2.0)
+showVerticals = input.bool(true, "Marcar señales con línea vertical")
+
+// Exact main Koncorde proxy trend inputs: ohlc4, hlc3; RSI/MFI14,
+// BB(25,2), Stochastic(21) smoothed SMA3; red EMA15.
+sourceTrend = ohlc4
+rsiK = ta.rsi(sourceTrend, 14)
+mfiK = ta.mfi(hlc3, 14)
+baseK = ta.sma(sourceTrend, 25)
+devK = 2.0 * ta.stdev(sourceTrend, 25)
+oscBBK = devK != 0 ? (sourceTrend - baseK) / (2.0 * devK) * 100.0 : na
+loK = ta.lowest(low, 21)
+hiK = ta.highest(high, 21)
+stochKRaw = hiK > loK ? 100.0 * (sourceTrend - loK) / (hiK - loK) : na
+stochK = ta.sma(stochKRaw, 3)
+konTrend = (rsiK + mfiK + oscBBK + stochK / 3.0) / 2.0
+konSignal = ta.ema(konTrend, 15)
+konLong = ta.crossover(konTrend, konSignal) and konTrend[1] < 0
+konShort = ta.crossunder(konTrend, konSignal) and konTrend[1] > 0
+
+// ADX: ta.dmi() returns +DI, -DI and ADX. Both length/smoothing = 14.
+[plusDI, minusDI, adx] = ta.dmi(14, 14)
+adxTurn = adx[1] < adx[2] and adx[2] > adxThreshold
+
+// Awesome Oscillator: SMA5(hl2) - SMA34(hl2)
+ao = ta.sma(hl2, 5) - ta.sma(hl2, 34)
+aoLong = ao < 0 and ao > ao[1] and ao[1] > ao[2]
+aoShort = ao > 0 and ao < ao[1] and ao[1] < ao[2]
+
+// BBWP supplied source: SMA basis 7, lookback 100 previous values,
+// percentile = 100 * count(previous BB widths <= current) / previous count.
+// Exact ranking logic; no future bars. Width factor 2 cancels in percentile.
+bbwpBasis = ta.sma(close, bbwpBasisLen)
+bbwpBBW = bbwpBasis != 0 ? 2.0 * ta.stdev(close, bbwpBasisLen) / bbwpBasis : na
+float below = 0.0
+float valid = 0.0
+for j = 1 to bbwpLookback
+    float prev = bbwpBBW[j]
+    if not na(prev)
+        valid += 1
+        if prev <= bbwpBBW
+            below += 1
+bbwp = valid > 0 and not na(bbwpBBW) ? 100.0 * below / valid : na
+
+atr = ta.atr(14)
+ready = barstate.isconfirmed and timeframe.period == "60" and not na(atr) and not na(bbwp)
+longSignal = ready and konLong and adxTurn and aoLong and bbwp > bbwpThreshold
+shortSignal = ready and konShort and adxTurn and aoShort and bbwp > bbwpThreshold
+
+// Plot all raw signals (even if a trade is open); don't retroactively relocate.
+plotshape(longSignal, title="LONG signal close", style=shape.triangleup,
+     location=location.belowbar, color=color.lime, size=size.tiny, text="L")
+plotshape(shortSignal, title="SHORT signal close", style=shape.triangledown,
+     location=location.abovebar, color=color.red, size=size.tiny, text="S")
+if showVerticals and (longSignal or shortSignal)
+    line.new(bar_index, low, bar_index, high, extend=extend.both,
+         color=longSignal ? color.new(color.lime, 50) : color.new(color.red, 50),
+         style=line.style_dotted, width=1)
+
+// A market order placed on the signal close fills at NEXT bar's open.
+// exit loss/profit in ticks is relative to actual entry fill in TradingView.
+// Fractional BTC sizing, risk based on ATR and estimated two-sided friction.
+// 0.003 ~= commissions (0.1%*2) + slippage (0.05%*2), cost proxy only.
+if strategy.position_size == 0 and strategy.opentrades == 0 and (longSignal or shortSignal)
+    float stopDistance = atrMult * atr
+    float approxLossPerBTC = stopDistance + close * 0.003
+    float maxByRisk = strategy.equity * riskPercent / 100.0 / approxLossPerBTC
+    float maxByNotional = strategy.equity * maxNotionalX / close
+    float qtyBTC = math.min(maxByRisk, maxByNotional)
+    if qtyBTC > 0 and stopDistance > syminfo.mintick
+        int stopTicks = math.max(1, int(math.round(stopDistance / syminfo.mintick)))
+        int tpTicks = math.max(1, int(math.round(targetR * stopDistance / syminfo.mintick)))
+        if longSignal
+            strategy.entry("Long", strategy.long, qty=qtyBTC)
+            strategy.exit("Long SL/TP", from_entry="Long", loss=stopTicks, profit=tpTicks)
+        else
+            strategy.entry("Short", strategy.short, qty=qtyBTC)
+            strategy.exit("Short SL/TP", from_entry="Short", loss=stopTicks, profit=tpTicks)
+
+// Time exit at the CLOSE of the 24th held bar (entry bar counts as 1).
+// TradingView supports 'immediately' for a same-close market exit, but its
+// simulated close may not be achievable as assumed in the historical model.
+if strategy.opentrades > 0
+    int startedBar = strategy.opentrades.entry_bar_index(0)
+    if bar_index - startedBar + 1 >= maxHoldingBars
+        if strategy.position_size > 0
+            strategy.close("Long", comment="24h", immediately=true)
+        if strategy.position_size < 0
+            strategy.close("Short", comment="24h", immediately=true)
+
+alertcondition(longSignal, title="I-GOD Research LONG", message="I-GOD Research 1H LONG condition closed; NO REAL TRADE AUTHORITY")
+alertcondition(shortSignal, title="I-GOD Research SHORT", message="I-GOD Research 1H SHORT condition closed; NO REAL TRADE AUTHORITY")

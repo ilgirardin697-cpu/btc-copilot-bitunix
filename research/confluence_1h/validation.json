@@ -1,0 +1,69 @@
+{
+  "checks": {
+    "unit": {
+      "tests": 32,
+      "failed": 0,
+      "seconds": 8.591
+    },
+    "full": {
+      "tests": 1065,
+      "failed": 0,
+      "seconds": 218.19
+    },
+    "weekly": {
+      "tests": 9,
+      "failed": 0,
+      "seconds": 1.416
+    },
+    "readiness": {
+      "tests": 7,
+      "failed": 0,
+      "seconds": 1.41
+    }
+  },
+  "supplied_synthetic_tests": {
+    "tests": 4,
+    "failed": 0
+  },
+  "guardian_mlrsi_safety": "PASS",
+  "v8_frozen_refs": "PASS",
+  "protected_existing_files": 151,
+  "readiness_counts": {
+    "WAIT": 780,
+    "WATCH_LONG": 59,
+    "READY_LONG": 1,
+    "WATCH_SHORT": 59,
+    "READY_SHORT": 1
+  },
+  "readiness_normalized_sha256": "1ffcf53c6b056e7bdf3b780f1fc4ebce49616363a66467e573c5c1a2ef71f014",
+  "weekly_protocol_files_unchanged": true,
+  "protocol_sha256": "8562b94976abaad64bb49e7d46cb2fe94ee546e3d81cfb5b8b5511c8739519e5",
+  "reproducible_numeric_artifacts": 10,
+  "artifact_hashes_verified_in_git": 33,
+  "text_outputs": "EXPLICIT_LF; NO_NUMERIC_CHANGE_FROM_ORIGINAL_CRLF_OUTPUTS",
+  "secret_pattern_findings": 0,
+  "actual_pine_records": 0,
+  "pine_compilation": "NOT_PERFORMED_NO_AUTHENTICATED_EDITOR_TOOL",
+  "real_pine_parity": "NOT_VERIFIED",
+  "new_forward_observations": 0,
+  "railway_mutations": 0,
+  "deployed": false,
+  "real_orders": 0,
+  "trade_authority": "NONE",
+  "earlier_environment_failures": [
+    "PYTHON3_13_AST_HASH_DIFFERENCES_REPRODUCED_ON_UNCHANGED_BASE; NO_REFREEZE",
+    "EMBEDDED_PYTHON3_12_REDUCED_CHILD_IMPORT_PATH_NOT_CI_ENVIRONMENT",
+    "NEW_REPORT_PROSE_HIT_RESERVED_WORD_CANARY; PROSE_REPHRASED; GUARD_UNCHANGED"
+  ],
+  "log_sha256": {
+    "evaluate.log": "bd1fd281bbd311af2c580ead1b02f8afb0ff59f89c46ee48cd2610cb2f82debd",
+    "full.log": "fcb9d420fe37312405025e90125b9b066c4fed67ab9f510f051e24d1b539aed2",
+    "full_previous_environment_attempt.log": "29407adbfe8f04c65dcfc75df3c99c342d5f2d518f4c09bf8a75d7c0c5a489ea",
+    "full_py313.log": "78ea18b1061ea47c71ac2c11f61b20cd809adb62ab951307038b3793b02e6b11",
+    "mlrsi.log": "6a785f10c6811b1e1df6e099ef7294a50e40da2129c49448a217e3e33d5f978b",
+    "readiness.log": "d5a51a17db9176cb8fd604f77ad080925e94106cee53812d191e7f71958bac0e",
+    "supplied_four_tests.log": "1978a208c997a55b3c2fbdeff8efa8eaebc0b5fdddc41e3c55235bb85da2002d",
+    "unit.log": "0f2657e9276ac4041a9603bae46c3e2e7a26ba0c39af4cd7fc40153126e3bfc1",
+    "weekly.log": "5f5b3ac0f6835e90d10f0f795b834f7c86c7b8d57797436f5e89b375dea8dc29"
+  }
+}

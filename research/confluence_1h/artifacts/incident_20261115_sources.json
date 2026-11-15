@@ -1,0 +1,122 @@
+{
+  "label": "POST_HOC_OBSERVATION_NOT_IN_VALIDATION",
+  "requested_time": "2026-11-15T02:00:00+01:00",
+  "utc": "2026-11-15T01:00:00Z",
+  "no_retuning": true,
+  "full24h_outcome": "NOT_EVALUATED_IMMATURE",
+  "venues": [
+    {
+      "venue": "BINANCE_USDM_PERPETUAL",
+      "status": "REAL_PUBLIC_CLOSED_BARS",
+      "symbol": "BTCUSDT",
+      "end_exclusive": "2026-11-15T11:00:00Z",
+      "sources": [
+        {
+          "url": "https://fapi.binance.com/fapi/v1/time",
+          "params": {},
+          "status": null,
+          "raw_sha256": "ed11e78c8ab60e72e8b6ff20c69cb361fa94d568a37171ffe88f2098037a3c8a",
+          "bytes": 28,
+          "received_at": null,
+          "file": "server_time.json",
+          "reused_original_response": true,
+          "recovery_read_at": "2026-11-15T11:33:28.977815+00:00",
+          "historical_receipt_attested": false
+        },
+        {
+          "url": "https://fapi.binance.com/fapi/v1/klines",
+          "params": {
+            "symbol": "BTCUSDT",
+            "interval": "1h",
+            "startTime": 1788220800000,
+            "endTime": 1794740399999,
+            "limit": 1000
+          },
+          "status": null,
+          "raw_sha256": "eb13b08fd93deda0cbb4151e999c744289f32c1dcad3fa9e2136794b74cd02be",
+          "bytes": 142140,
+          "received_at": null,
+          "file": "page_0.json",
+          "reused_original_response": true,
+          "recovery_read_at": "2026-11-15T11:33:28.994955+00:00",
+          "historical_receipt_attested": false
+        },
+        {
+          "url": "https://fapi.binance.com/fapi/v1/klines",
+          "params": {
+            "symbol": "BTCUSDT",
+            "interval": "1h",
+            "startTime": 1791820800000,
+            "endTime": 1794740399999,
+            "limit": 1000
+          },
+          "status": null,
+          "raw_sha256": "2800115014ed9429985f8351bd0667e58742061f03651c2a15ebf5d5dfef872e",
+          "bytes": 115355,
+          "received_at": null,
+          "file": "page_1.json",
+          "reused_original_response": true,
+          "recovery_read_at": "2026-11-15T11:33:29.009992+00:00",
+          "historical_receipt_attested": false
+        }
+      ]
+    },
+    {
+      "venue": "BINANCE_SPOT",
+      "status": "REAL_PUBLIC_CLOSED_BARS",
+      "symbol": "BTCUSDT",
+      "end_exclusive": "2026-11-15T11:00:00Z",
+      "sources": [
+        {
+          "url": "https://api.binance.com/api/v3/time",
+          "params": {},
+          "status": null,
+          "raw_sha256": "2a8a3ae254abb3ed58f1b0e942732c1d05ee0d90ac0517054e91b12061d28d6d",
+          "bytes": 28,
+          "received_at": null,
+          "file": "server_time.json",
+          "reused_original_response": true,
+          "recovery_read_at": "2026-11-15T11:33:30.898302+00:00",
+          "historical_receipt_attested": false
+        },
+        {
+          "url": "https://api.binance.com/api/v3/klines",
+          "params": {
+            "symbol": "BTCUSDT",
+            "interval": "1h",
+            "startTime": 1788220800000,
+            "endTime": 1794740399999,
+            "limit": 1000
+          },
+          "status": null,
+          "raw_sha256": "4ba4eca5bda02caba911c0acd7203cf0f3507971c316a220062f6acf8f735967",
+          "bytes": 178496,
+          "received_at": null,
+          "file": "page_0.json",
+          "reused_original_response": true,
+          "recovery_read_at": "2026-11-15T11:33:30.912004+00:00",
+          "historical_receipt_attested": false
+        },
+        {
+          "url": "https://api.binance.com/api/v3/klines",
+          "params": {
+            "symbol": "BTCUSDT",
+            "interval": "1h",
+            "startTime": 1791820800000,
+            "endTime": 1794740399999,
+            "limit": 1000
+          },
+          "status": null,
+          "raw_sha256": "5650c044041084d394836e0cebfc005d730ea75f28c5464bcb16820435fa4909",
+          "bytes": 144819,
+          "received_at": null,
+          "file": "page_1.json",
+          "reused_original_response": true,
+          "recovery_read_at": "2026-11-15T11:33:30.930711+00:00",
+          "historical_receipt_attested": false
+        }
+      ]
+    }
+  ],
+  "full_signal_rows": []
+}

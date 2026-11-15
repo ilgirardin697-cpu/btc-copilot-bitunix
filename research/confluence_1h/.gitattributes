@@ -1,0 +1,5 @@
+* text eol=lf
+# Supplied reference assets are byte-exact, including their original whitespace.
+reference_sources/* -text -whitespace
+*.gz binary
+*.png binary

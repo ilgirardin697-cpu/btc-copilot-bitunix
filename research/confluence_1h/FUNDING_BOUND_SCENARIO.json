@@ -1,0 +1,9 @@
+{
+  "stage": "BEFORE_ANY_INDICATOR_SIGNAL_OR_OUTCOME_EVALUATION",
+  "actual_source_finding": "All 4383 official archive funding rates match the public REST timestamps/rates, but 1093 REST markPrice fields are empty in the earlier history. Exact settlement mark is not verifiable for these rows.",
+  "strict_exact_net": "BLOCKED_WHERE_A_REQUIRED_MARK_IS_EMPTY; never report an invented exact funding price or silently zero funding.",
+  "additional_uncertainty_scenario": "Use official same-venue H1 mark high/low of the actual settlement bar only to bound a missing mark. Conservative: maximize funding debit/minimize credit. Optimistic-mark sensitivity: opposite bound. Keep the original missing marker and flag every affected trade. These are scenario results, not exact historical settlement PnL.",
+  "timing": "Use actual millisecond funding timestamps. For a possible intrabar exit before/after settlement, conservatively charge a positive debit and omit uncertain credit. Open exits before later-in-bar funding. Keep ambiguity counts.",
+  "decisions": "Funding is never an entry feature and no future rate/mark is used in sizing. All entry/stop/target/indicator thresholds remain frozen. Negative or low-sample results do not cause retuning.",
+  "reporting": "Full-period exact funding net remains null if any required mark missing. Show scenario totals separately and give the fixed final30pct exact-source status independently. No retrospective historical holdout claim."
+}
