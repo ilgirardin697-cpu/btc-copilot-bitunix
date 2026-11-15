@@ -26,6 +26,11 @@ Los fixtures terminan antes de cualquier evolución posterior al intervalo de
 diagnóstico. Los generadores de precios sintéticos de los tests no son evidencia
 externa ni backtests nuevos.
 
+El workflow ligero de V8 no instala dependencias: solo en ese entorno el módulo
+research se omite si no existe NumPy, como ya sucede con PR #46. El nuevo workflow
+dedicado exige explícitamente NumPy y tzdata antes de ejecutar los 40 tests; una
+dependencia ausente no puede hacer pasar silenciosamente su auditoría.
+
 ## Comparar una exportación real
 
 No se ha recibido ninguna exportación de TradingOne. El ZIP independiente contiene

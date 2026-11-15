@@ -17,7 +17,7 @@
       "check": "full",
       "exit_code": 0,
       "tests": 1105,
-      "seconds": 155.39,
+      "seconds": 188.09,
       "command": [
         "python.exe",
         "-m",
@@ -55,6 +55,22 @@
         "-v"
       ]
     },
+    "minimal": {
+      "check": "minimal",
+      "exit_code": 0,
+      "tests": 173,
+      "seconds": 7.95,
+      "command": [
+        "python.exe",
+        "-S",
+        "-m",
+        "unittest",
+        "discover",
+        "-v"
+      ],
+      "skipped": 25,
+      "note": "Dependency-free discovery, not a substitute for the 1105-test full environment"
+    },
     "mlrsi": {
       "check": "mlrsi",
       "exit_code": 0,
@@ -69,7 +85,7 @@
       "check": "unit",
       "exit_code": 0,
       "tests": 72,
-      "seconds": 12.33,
+      "seconds": 10.12,
       "command": [
         "python.exe",
         "-m",
@@ -117,5 +133,5 @@
   "orders": false,
   "conclusion": "INCONCLUSO",
   "trade_authority": "NONE",
-  "environment_note": "Python3.12 tests; PYTHONTZPATH points to installed tzdata. Plotting Python3.13 only. Initial direct unit run lacked tzdata: fixed runner environment, no source-formula changes."
+  "environment_note": "Python3.12 tests; PYTHONTZPATH points to installed tzdata. Plotting Python3.13 only. Initial direct unit run lacked tzdata: fixed runner environment. Initial remote dependency-free V8 discovery failed because new tests imported NumPy unconditionally: new research module now follows existing optional-dependency discovery convention; dedicated CI explicitly requires NumPy before running all40 tests. No V8 or indicator source changes."
 }

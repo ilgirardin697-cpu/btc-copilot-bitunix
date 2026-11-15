@@ -9,7 +9,10 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
-import numpy as np
+try:
+    import numpy as np
+except ImportError as error:
+    raise unittest.SkipTest('NumPy required and enforced by dedicated series-parity CI') from error
 
 from research.confluence_1h.indicators import calculate, signals, smooth
 from research.confluence_1h_phase2.compare import (SETTINGS, REQUIRED, compare, load_market,

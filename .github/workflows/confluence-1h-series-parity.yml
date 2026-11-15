@@ -17,7 +17,7 @@ jobs:
       - name: Compile and check timezone availability
         run: |
           python -m compileall -q research/confluence_1h_phase2 test_confluence_1h_phase2.py
-          python -c "from zoneinfo import ZoneInfo; ZoneInfo('Europe/Madrid')"
+          python -c "import numpy; from zoneinfo import ZoneInfo; ZoneInfo('Europe/Madrid')"
       - name: Three areas, crossings, slopes, zeros, timestamps, no self-certified parity
         run: python -m unittest test_confluence_1h_phase2 test_confluence_1h_research -v
       - name: Previous protections and frozen protocols
