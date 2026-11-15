@@ -1,0 +1,2 @@
+# Preserve the binary audit package independently of inherited text defaults.
+audit_bundle/*.zip -text -diff

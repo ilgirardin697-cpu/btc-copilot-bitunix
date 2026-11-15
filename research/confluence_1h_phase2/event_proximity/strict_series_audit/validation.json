@@ -1,0 +1,96 @@
+{
+  "checks": {
+    "display": {
+      "check": "display",
+      "returncode": 0,
+      "tests": 7,
+      "skipped": 0,
+      "seconds": 2.3
+    },
+    "full": {
+      "check": "full",
+      "returncode": 0,
+      "tests": 1159,
+      "skipped": 0,
+      "seconds": 228.42
+    },
+    "matrix": {
+      "check": "matrix",
+      "returncode": 0,
+      "tests": 50,
+      "skipped": 0,
+      "seconds": 1.25
+    },
+    "minimal": {
+      "check": "minimal",
+      "returncode": 0,
+      "tests": 175,
+      "skipped": 27,
+      "seconds": 8.5
+    },
+    "mlrsi": {
+      "check": "mlrsi",
+      "returncode": 0,
+      "tests": null,
+      "skipped": 0,
+      "seconds": 5.97
+    },
+    "unit": {
+      "check": "unit",
+      "returncode": 0,
+      "tests": 56,
+      "skipped": 0,
+      "seconds": 14.86
+    },
+    "weekly": {
+      "check": "weekly",
+      "returncode": 0,
+      "tests": 9,
+      "skipped": 0,
+      "seconds": 2.12
+    }
+  },
+  "new_tests": 24,
+  "global_tests": 1159,
+  "global_failed": 0,
+  "prior_prs_unchanged": {
+    "46": "522201530c1b81453ea653fc8a1860b1b10eabaf",
+    "47": "4dcc5d94217b9b387fc69f93ad325e28aaf2a856",
+    "48": "384032d7917e354552c5842a74d3f3f72918ac34"
+  },
+  "protocol_freeze": "e626d46d278f115947a5ae69a2e8b6999401a272",
+  "code_before_results": "55b904af8950f8651b7eb8ee9700b1ca6e86c740",
+  "protocol_sha256": "59d72126409f2882bc0dbdda1ef5719ad2530be1132e7d7eb10007b2dbcbe99d",
+  "original_data_sha256": "5b2544c9bf353cedb77a07781ffe9e6202b12513c0c10f3d25bca67756a4825a",
+  "base_signals": {
+    "LONG": 0,
+    "SHORT": 0
+  },
+  "pececillos_signals": {
+    "LONG": 3,
+    "SHORT": 4
+  },
+  "combined_unique_opportunities": 7,
+  "combined_operations_per_target": 7,
+  "actual_pine_export_rows": 0,
+  "full_platform_parity": false,
+  "november_main_performance_scored": false,
+  "unchanged_engine_and_costs": true,
+  "new_windows_or_filters": false,
+  "matrix_counts": {
+    "WAIT": 780,
+    "WATCH_LONG": 59,
+    "READY_LONG": 1,
+    "WATCH_SHORT": 59,
+    "READY_SHORT": 1
+  },
+  "matrix_hash": "1ffcf53c6b056e7bdf3b780f1fc4ebce49616363a66467e573c5c1a2ef71f014",
+  "raw_public_data_checked": 153,
+  "new_market_network_requests": 0,
+  "private_api_requests": 0,
+  "railway_changes": false,
+  "orders": false,
+  "telegram_sent": false,
+  "conclusion": "INCONCLUSO",
+  "trade_authority": "NONE"
+}

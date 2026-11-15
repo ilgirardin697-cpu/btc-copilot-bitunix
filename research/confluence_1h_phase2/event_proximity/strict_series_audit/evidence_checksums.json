@@ -1,0 +1,106 @@
+{
+  ".gitattributes": {
+    "bytes": 109,
+    "sha256": "e5e4a38761eaad957fd0fdce768673f6c8554809f7f475de86683d866da3fc72"
+  },
+  "audit_bundle_sha256.json": {
+    "bytes": 2626,
+    "sha256": "520fb6a9d723d2679a4290edb06b79e9d3d6345e8a90cbc7da65ab52e168f6d8"
+  },
+  "evaluate.py": {
+    "bytes": 12584,
+    "sha256": "dcb5ceb99707acb90b2b1249f0dd7ac9c6a644a90741fc2680b0bfcabb94c550"
+  },
+  "F4A_RESULTS.md": {
+    "bytes": 12023,
+    "sha256": "b4e4504be246acc4e405df042a8ca361e35b92c312c5de77819a75680243bec0"
+  },
+  "plots.py": {
+    "bytes": 3001,
+    "sha256": "bbc22337c6eee0e64e4dbc71a924c73a9bb90727a07d67708b13761ac6280c6c"
+  },
+  "protocol.json": {
+    "bytes": 3598,
+    "sha256": "59d72126409f2882bc0dbdda1ef5719ad2530be1132e7d7eb10007b2dbcbe99d"
+  },
+  "README.md": {
+    "bytes": 5388,
+    "sha256": "2d095191444ff83bedd75d78dec22e2250eb0f4854fa317bab415a0aa2c25547"
+  },
+  "test_strict_series.py": {
+    "bytes": 12183,
+    "sha256": "aeb3e45451c5294862cc48487132530bdeee9adb42f98a8947da695dfde128aa"
+  },
+  "validation.json": {
+    "bytes": 2341,
+    "sha256": "727d7f8928b6a425cc5ad8c65358eb9091ce44d398ec67c0fc1bd3b1d9650ef0"
+  },
+  "variants.py": {
+    "bytes": 449,
+    "sha256": "41390dbe1b5fb291620877ca8d9d7fc7154aade7269c47c9c1e6da4850f606bf"
+  },
+  "__init__.py": {
+    "bytes": 85,
+    "sha256": "14695e13acbe3737d3951cb0ad6f54c43b74e2bd832a2447598926cd7e76b8df"
+  },
+  "artifacts/all_seven_trades.png": {
+    "bytes": 51533,
+    "sha256": "0d83108363334d1c0c806155f2169e0e59381a220ae5f74e9d095c7517188ffd"
+  },
+  "artifacts/annual.csv": {
+    "bytes": 13219,
+    "sha256": "9a80c96bd1cbb56937680ed407abb0a77b76ec7f55a1aa0b1b97745d1983dcaf"
+  },
+  "artifacts/comparison_equity.png": {
+    "bytes": 132726,
+    "sha256": "b20a629145ecd7f751814a6ffec60947a0d2757c0dc8ce6f8734ef35c587b788"
+  },
+  "artifacts/data_manifest.json": {
+    "bytes": 89618,
+    "sha256": "7684737b5b4195494f4348da7a38b0c82f5730513f13daa3802b0851659f47c2"
+  },
+  "artifacts/equity.csv.gz": {
+    "bytes": 763775,
+    "sha256": "7ceaa7db8f93d459c9b881221387b2f97a6fb90e979925cef43e3d4569cf87a1"
+  },
+  "artifacts/funding_bounds.csv": {
+    "bytes": 3122,
+    "sha256": "d2ec0232ed54bad113b5283e6911f1a4cd9ac5b3770356c6f6a903d7c15ef8f9"
+  },
+  "artifacts/metrics.csv": {
+    "bytes": 27540,
+    "sha256": "1f1d5132d3f787681526270954050acfde7d9d9316797717f05326e2220f560b"
+  },
+  "artifacts/november_incident.json": {
+    "bytes": 4418,
+    "sha256": "73587f3d3b01f322e8b38a0bd308c166282faa7518e30a6d67ab2f88e5fc94ef"
+  },
+  "artifacts/random_controls.csv.gz": {
+    "bytes": 221216,
+    "sha256": "7d5f2f10dce21ce177b682abef6776add64ecd53e9331a0d0950652750a0ed37"
+  },
+  "artifacts/results.json": {
+    "bytes": 28751,
+    "sha256": "8d0758eea3f54626fe0a26c9c87e11991171dc07e08bb6f3466ca498528e91f7"
+  },
+  "artifacts/signals_all.csv.gz": {
+    "bytes": 4845308,
+    "sha256": "ac62742e6534ee56df1e8170d44845d5f5adf7fde15ffe6b95d563db2b0bec71"
+  },
+  "artifacts/signal_dispositions.csv": {
+    "bytes": 5412,
+    "sha256": "0efc76bd92b436d0cd0ceb58c700e3fb298d2ed911b420b1886030f4ac1ca5aa"
+  },
+  "artifacts/signal_funnel.csv": {
+    "bytes": 4164,
+    "sha256": "3423b449afc6de5494080e40d61b91055174c290656575f66a95bb86ef8e3f00"
+  },
+  "artifacts/trades_all.csv": {
+    "bytes": 30305,
+    "sha256": "1213b8d333c58b8ff37572b40290110eefdcc15e47a9252477d4e5f14b2c5fb4"
+  },
+  "audit_bundle/IGOD_F4A_CLAUDE.zip": {
+    "bytes": 12125845,
+    "sha256": "24e5e1554750a67f560705f28171ebdf7f36225e983adb283d83d52a5bf8501f"
+  }
+}
