@@ -1,0 +1,86 @@
+===== audit1_parity =====
+kon_trend    max|diff| (after 0 warm-up bars) = 2.842e-14
+kon_signal   max|diff| (after 0 warm-up bars) = 6.277e-01
+kon_signal   max|diff| (after 200 warm-up bars) = 2.529e-10
+adx          max|diff| (after 0 warm-up bars) = 6.395e-14
+plus_di      max|diff| (after 0 warm-up bars) = 0.000e+00
+ao           max|diff| (after 0 warm-up bars) = 0.000e+00
+bbwp         max|diff| (after 0 warm-up bars) = 0.000e+00
+
+===== audit2_struct =====
+(1) prefix-truncation test: 15 cut points, mismatches = 0; total signals in sample = 7
+(2) max |z| of last point in a 25-sample window (population stdev) = 4.899 -> |osc_bb| <= 122.5
+    tendencia min = (0 + 0 - 122.5 + 0)/2 = -61.2 ; max = (100+100+122.5+33.3)/2 = 177.9
+(3) synthetic no-edge, 35,064 bars each:
+ seed  mean  p05   min   max  pct_below0  crossUp_all  LONG_cross_prev_neg  crossDn_all  SHORT_cross_prev_pos
+    1  58.2  2.9 -24.7 141.4         3.7         2477                   64         2476                  2472
+    2  58.2  2.7 -27.4 142.4         3.6         2485                   67         2485                  2483
+    3  58.5  3.7 -27.1 146.4         3.3         2415                   66         2416                  2414
+    4  58.4  3.3 -28.4 144.5         3.4         2431                   56         2431                  2431
+    5  58.7  3.0 -28.9 146.1         3.6         2404                   62         2404                  2403
+    6  57.8  3.6 -29.5 142.7         3.3         2485                   50         2485                  2479
+    7  58.3  3.3 -27.1 145.3         3.4         2517                   60         2517                  2516
+    8  58.2  3.2 -27.4 144.6         3.4         2407                   66         2406                  2403
+    mean ratio SHORT/LONG after sign filter: 39.9
+
+===== audit3_funnel =====
+(A) relaxed rule signals in sample: 49
+    prefix signal mismatches over 44 cuts = 0
+    engine trades closed before cut: full=34 prefix=34 ; identical entries=True
+(B) funnel on no-edge synthetic (L/S = LONG/SHORT; 1=cross+sign, 2=+ADX, 3=+AO, 4=+BBWP>85):
+ seed  L1  L2  L3  L4   S1  S2  S3  S4  adx_gt40_pct  bbwp_gt85_pct
+    1  64   1   1   0 2472  57  13   0           8.0           16.5
+    2  67   2   1   1 2483  51   8   0           6.3           16.5
+    3  66   4   0   0 2414  42  11   1           6.9           16.4
+    4  56   1   1   0 2431  48   9   0           7.0           16.7
+    5  62   2   0   0 2403  50  17   2           7.3           16.7
+    6  50   1   1   0 2479  62  11   0           6.3           16.4
+    7  60   3   1   0 2516  55   5   1           6.7           16.5
+    8  66   1   0   0 2403  50  14   0           7.3           16.5
+    sums over 8 seeds: {'L1': 491, 'L2': 15, 'L3': 5, 'L4': 1, 'S1': 19601, 'S2': 415, 'S3': 88, 'S4': 4}
+
+===== audit4_null =====
+ RR                         modelo  trades  ATR_pct  win_pct  exp_R  se_R  stop_pct  tp_pct  time_pct  sd_R
+2.0         costes 0.1%+0.05%/lado    2400     0.74     32.4 -0.267 0.020      60.3    20.0      19.7  0.96
+2.0                     sin costes    2400     0.74     37.6 -0.031 0.026      56.9    22.3      20.8  1.25
+2.0 perp realista 0.05%+0.01%/lado    2400     0.74     35.2 -0.152 0.023      59.2    21.8      19.1  1.13
+3.0         costes 0.1%+0.05%/lado    2400     0.74     30.7 -0.273 0.021      61.4     8.9      29.7  1.04
+3.0                     sin costes    2400     0.74     34.9 -0.080 0.027      59.6     8.1      32.2  1.33
+3.0 perp realista 0.05%+0.01%/lado    2400     0.74     34.2 -0.141 0.025      59.5     9.2      31.2  1.22
+
+Win rate de equilibrio (sin salidas por tiempo): p* = (1+c)/(RR+1), c = coste ida y vuelta / distancia stop
+ ATR=0.4% stop=0.60% coste_rt=0.30% -> c=0.50R | p*(2R)=50.0%  p*(3R)=37.5%
+ ATR=0.4% stop=0.60% coste_rt=0.12% -> c=0.20R | p*(2R)=40.0%  p*(3R)=30.0%
+ ATR=0.6% stop=0.90% coste_rt=0.30% -> c=0.33R | p*(2R)=44.4%  p*(3R)=33.3%
+ ATR=0.6% stop=0.90% coste_rt=0.12% -> c=0.13R | p*(2R)=37.8%  p*(3R)=28.3%
+ ATR=0.8% stop=1.20% coste_rt=0.30% -> c=0.25R | p*(2R)=41.7%  p*(3R)=31.2%
+ ATR=0.8% stop=1.20% coste_rt=0.12% -> c=0.10R | p*(2R)=36.7%  p*(3R)=27.5%
+
+Trades necesarios (sd≈1.5R, alfa 5% unilateral, potencia 80%):
+  ventaja +0.30R/trade -> n≈155
+  ventaja +0.20R/trade -> n≈348
+  ventaja +0.10R/trade -> n≈1,391
+  ventaja +0.05R/trade -> n≈5,564
+
+===== audit5_indep =====
+Spearman medio (6 semillas, datos SIN ventaja, mismo precio => dependencia puramente estructural):
+                  kon_trend  kon_minus_signal    ao  d_ao   adx  d_adx  bbwp  ret_6h  abs_ret_6h
+kon_trend              1.00              0.63  0.83  0.44  0.01   0.02 -0.00    0.69       -0.00
+kon_minus_signal       0.63              1.00  0.17  0.82 -0.00   0.02  0.00    0.78        0.00
+ao                     0.83              0.17  1.00  0.05  0.02   0.01 -0.00    0.39       -0.00
+d_ao                   0.44              0.82  0.05  1.00 -0.00   0.02  0.00    0.82        0.00
+adx                    0.01             -0.00  0.02 -0.00  1.00   0.06  0.12    0.00        0.17
+bbwp                  -0.00              0.00 -0.00  0.00  0.12   0.21  1.00   -0.00        0.70
+
+Lift condicional (media):
+P_aoL                     0.188
+P_aoL_given_cross         0.207
+P_adxturn                 0.035
+P_adxturn_given_cross     0.020
+P_bbwp85                  0.166
+P_bbwp85_given_adxturn    0.129
+  ventaja +0.30R/trade (sd≈1.1R del motor) -> n≈83 trades
+  ventaja +0.20R/trade (sd≈1.1R del motor) -> n≈187 trades
+  ventaja +0.10R/trade (sd≈1.1R del motor) -> n≈748 trades
+  ventaja +0.05R/trade (sd≈1.1R del motor) -> n≈2,992 trades
+

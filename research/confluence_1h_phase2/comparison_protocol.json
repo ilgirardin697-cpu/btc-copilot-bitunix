@@ -1,0 +1,35 @@
+{
+  "version": "CONFLUENCE_SERIES_IDENTIFICATION_V1",
+  "base_pr46": "522201530c1b81453ea653fc8a1860b1b10eabaf",
+  "initial_comparison_criteria_declared_before_local_replay": true,
+  "blue_area_added_during_phase2_on_owner_source_clarification": true,
+  "study_type": "POST_HOC_DIAGNOSTIC_CASE_NOT_PREDECLARED_STRATEGY",
+  "profit_outcomes_evaluated": false,
+  "indicator_lengths_changed": false,
+  "new_strategies": 0,
+  "predefined_comparisons": [
+    "pececillos_vs_ma_trend",
+    "tendencia_vs_ma_trend",
+    "tiburones_vs_ma_trend",
+    "each_area_slope_turn",
+    "each_area_zero_cross"
+  ],
+  "criteria": [
+    "exact_market_and_OHLCV",
+    "explicit_timestamps_and_closed_bars",
+    "settings_and_seed_prefix",
+    "max_abs_error_1e-7_full_precision_or_half_declared_quantum_plus_1e-7",
+    "no_fitted_time_shift_or_affine_rescaling",
+    "rounding_tied_crosses_UNDETERMINED",
+    "manual_named_line_identity_review_not_color",
+    "no_profit_or_future_return_selection"
+  ],
+  "new_strategy_specification": "BLOCKED_UNTIL_EXTERNAL_PARITY_AND_VISUAL_SERIES_IDENTIFICATION",
+  "coincidence_window": null,
+  "entry": null,
+  "invalidation": null,
+  "new_backtests": 0,
+  "historical_validation": "NO_VIRGIN_HOLDOUT",
+  "trade_authority": "NONE",
+  "source_update": "OWNER_CONFIRMED_ORIGINAL_PINE_NAMES; visual color not a unique identity"
+}

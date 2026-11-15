@@ -1,0 +1,74 @@
+// MPL-2.0. Public supplied OskarGallard/Blai5 adaptation, NOT proprietary parity.
+// Diagnostic reference for Pine-compatible platforms. TradingOne identity UNCONFIRMED.
+//@version=6
+indicator("I-GOD Koncorde THREE SERIES - reference only", overlay=false)
+emitLogs = input.bool(false, "Closed-bar diagnostic logs, no alerts")
+logFrom = input.time(timestamp("14 Nov 2026 00:00 +0000"), "From UTC")
+logUntil = input.time(timestamp("16 Nov 2026 00:00 +0000"), "Until UTC exclusive")
+var int historyStart = time
+p = ohlc4
+rsiK = ta.rsi(p, 14)
+mfiK = ta.mfi(hlc3, 14)
+basisK = ta.sma(p, 25)
+sigmaK = ta.stdev(p, 25)
+bollK = sigmaK != 0 ? 100 * (p - basisK) / (4 * sigmaK) : na
+loK = ta.lowest(low, 21)
+hiK = ta.highest(high, 21)
+stochK = ta.sma(hiK > loK ? 100 * (p - loK) / (hiK - loK) : na, 3)
+konTrend = (rsiK + mfiK + bollK + stochK / 3) / 2
+konSignal = ta.ema(konTrend, 15)
+pviEma = ta.ema(ta.pvi, 15)
+nviEma = ta.ema(ta.nvi, 15)
+pviSpan = ta.highest(pviEma, 90) - ta.lowest(pviEma, 90)
+nviSpan = ta.highest(nviEma, 90) - ta.lowest(nviEma, 90)
+minnows = pviSpan != 0 ? konTrend + (ta.pvi - pviEma) * 100 / pviSpan : na
+sharks = nviSpan != 0 ? (ta.nvi - nviEma) * 100 / nviSpan : na
+[plusDI, minusDI, adx] = ta.dmi(14, 14)
+atr = ta.atr(14)
+ao = ta.sma(hl2, 5) - ta.sma(hl2, 34)
+
+f_bbwp() =>
+    var array<float> raw = array.new_float()
+    var array<float> sorted = array.new_float()
+    width = 2 * ta.stdev(close, 7) / ta.sma(close, 7)
+    float result = na
+    if bar_index >= 7 and not na(width)
+        if array.size(sorted) > 0
+            result := array.binary_search_rightmost(sorted, width) * 100.0 / array.size(sorted)
+        array.push(raw, width)
+        array.insert(sorted, array.binary_search_rightmost(sorted, width), width)
+        if array.size(raw) > 100
+            old = array.shift(raw)
+            array.remove(sorted, array.binary_search_rightmost(sorted, old))
+    result
+
+bbwp = f_bbwp()
+
+// Red average is EMA(tendencia), NOT EMA(pececillos).
+plot(minnows, "pececillos - Verde / Lineav", color=color.green)
+plot(konTrend, "tendencia - Marron / Lmarron", color=color.brown)
+plot(sharks, "tiburones - Azul / Lazul", color=color.blue)
+plot(konSignal, "ma_trend - Media", color=color.red)
+hline(0)
+plot(adx, "ADX14/14", display=display.data_window)
+plot(plusDI, "plus_di", display=display.data_window)
+plot(minusDI, "minus_di", display=display.data_window)
+plot(ao, "AO5/34", display=display.data_window)
+plot(atr, "ATR14", display=display.data_window)
+plot(bbwp, "BBWP7/100 supplied literal", display=display.data_window)
+plot(ta.pvi, "PVI", display=display.data_window)
+plot(pviEma, "PVI EMA15", display=display.data_window)
+plot(pviSpan != 0 ? (ta.pvi-pviEma)*100/pviSpan : na, "PVI oscillator", display=display.data_window)
+f_num(float x) => na(x) ? "null" : str.tostring(x, "#.###############")
+if emitLogs and barstate.isconfirmed and timeframe.period == "60" and time >= logFrom and time < logUntil
+    string payload = '{"full_ticker":"' + syminfo.tickerid + '","time":' + str.tostring(time) + ',"available_at":' + str.tostring(time_close)
+    payload += ',"emitted_at":' + str.tostring(timenow) + ',"indicator_history_start_open_ms":' + str.tostring(historyStart)
+    payload += ',"confirmed":true,"historical_recalculation":' + (barstate.ishistory ? "true" : "false")
+    payload += ',"settings_id":"KONCORDE_SUPPLIED_DEFAULTS_V1","open":' + f_num(open) + ',"high":' + f_num(high) + ',"low":' + f_num(low) + ',"close":' + f_num(close) + ',"volume":' + f_num(volume)
+    payload += ',"pececillos":' + f_num(minnows) + ',"tendencia":' + f_num(konTrend) + ',"tiburones":' + f_num(sharks) + ',"ma_trend":' + f_num(konSignal)
+    payload += ',"adx":' + f_num(adx) + ',"plus_di":' + f_num(plusDI) + ',"minus_di":' + f_num(minusDI) + ',"ao":' + f_num(ao) + ',"atr":' + f_num(atr)
+    payload += ',"pvi":' + f_num(ta.pvi) + ',"pvi_ema":' + f_num(pviEma) + ',"pvi_osc":' + f_num(pviSpan != 0 ? (ta.pvi-pviEma)*100/pviSpan : na) + '}'
+    log.info("IGOD_KONCORDE_SERIES_V1=" + payload)
+// Historical timenow is the replay execution clock, NOT historical live emission.
+// No signals, strategy, orders, alerts, broker integration or venue substitution.
+// SHADOW ONLY. TRADE AUTHORITY: NONE.

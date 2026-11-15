@@ -1,0 +1,48 @@
+{
+  "filename": "IGOD_auditoria_independiente.zip",
+  "bytes": 20105,
+  "sha256": "757330bbc908dfe65ab1c0d35f1fe42252d0ff4fe3d56819564d4dbf22580d8d",
+  "members": {
+    "audit1_parity.py": {
+      "bytes": 3582,
+      "sha256": "4cced42974390a2cb64bb029e7b021402e6a9d589e3031d27bbc1d1505c10748"
+    },
+    "igod_confluencia_backtest.py": {
+      "bytes": 26843,
+      "sha256": "18fd838843ceef71869f9ae2bec10bde4139c89b1fae3d3b7f18f46b60c35f7b"
+    },
+    "audit2_struct.py": {
+      "bytes": 2219,
+      "sha256": "3f3bde77a11c8e5e3f3bda56e107cc98ba1e21d0b9ac3f24a0fa0d0a387a2586"
+    },
+    "LEEME.md": {
+      "bytes": 1173,
+      "sha256": "77cb3ceb447190ececcd5ce8bfc9dd599bf6788f5bbaab413a52d81d97ae3284"
+    },
+    "salida_auditoria.log": {
+      "bytes": 5646,
+      "sha256": "f8e047f76bd5a43d65d7c0551b48b86ff102d6c8479c2ffeb4960e10ed87fd84"
+    },
+    "audit3_funnel.py": {
+      "bytes": 2355,
+      "sha256": "7801a101bb636fe2ff68af5df79d3463d99e39c82ff2a3471ed265a9c6e9f2ba"
+    },
+    "synth.py": {
+      "bytes": 1035,
+      "sha256": "a5b83bef8576530e1ead5ea4dae45dd1b9aeb3775382035db915d58231c04c99"
+    },
+    "audit4_null.py": {
+      "bytes": 2427,
+      "sha256": "885b10e88aa7653f81369560294dde5c2012fad499a1687187e72accba46b2fb"
+    },
+    "audit5_indep.py": {
+      "bytes": 1661,
+      "sha256": "6a5ee9f831a591a1d848c6dcffba4b0652ea1ef34756c9d3bc22b891dfa20b52"
+    }
+  },
+  "copied_driver_identical_to_original_package": true,
+  "real_platform_exports": 0,
+  "independent_btc_research_replication": false,
+  "supplied_results_type": "SYNTHETIC_ONLY_NOT_MARKET_PARITY",
+  "scripts_executed_in_phase2": false
+}

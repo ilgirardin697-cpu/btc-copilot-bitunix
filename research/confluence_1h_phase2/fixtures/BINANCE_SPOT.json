@@ -1,0 +1,54 @@
+{
+  "venue": "BINANCE_SPOT",
+  "symbol": "BTCUSDT",
+  "timeframe_seconds": 3600,
+  "rows": 1805,
+  "first_open_ms": 1788220800000,
+  "last_open_ms": 1794715200000,
+  "sha256": "46499813f27c0c8309b63967f3d07e46a7d611558b60b74b9fd7783e70e1fa4a",
+  "decompressed_sha256": "96bc2d03b465eadfdc38d560a3bfc5f8bd985971113910096ffc494b2a8c2cf5",
+  "source_research_head": "522201530c1b81453ea653fc8a1860b1b10eabaf",
+  "provenance": "PREEXISTING_PUBLIC_BINANCE_REST_RESPONSE_LOCAL_CHECKSUM_NOT_OFFICIAL_ARCHIVE_CHECKSUM",
+  "sources": [
+    {
+      "url": "https://api.binance.com/api/v3/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "1h",
+        "startTime": 1788220800000,
+        "endTime": 1794740399999,
+        "limit": 1000
+      },
+      "status": null,
+      "raw_sha256": "4ba4eca5bda02caba911c0acd7203cf0f3507971c316a220062f6acf8f735967",
+      "bytes": 178496,
+      "received_at": null,
+      "file": "page_0.json",
+      "reused_original_response": true,
+      "recovery_read_at": "2026-11-15T11:33:30.912004+00:00",
+      "historical_receipt_attested": false
+    },
+    {
+      "url": "https://api.binance.com/api/v3/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "1h",
+        "startTime": 1791820800000,
+        "endTime": 1794740399999,
+        "limit": 1000
+      },
+      "status": null,
+      "raw_sha256": "5650c044041084d394836e0cebfc005d730ea75f28c5464bcb16820435fa4909",
+      "bytes": 144819,
+      "received_at": null,
+      "file": "page_1.json",
+      "reused_original_response": true,
+      "recovery_read_at": "2026-11-15T11:33:30.930711+00:00",
+      "historical_receipt_attested": false
+    }
+  ],
+  "historical_receipt_attested": false,
+  "platform_export": false,
+  "initialization_parity_with_platform": "UNKNOWN",
+  "purpose": "DESCRIPTIVE_COMPONENTS_ONLY_NO_OUTCOMES"
+}

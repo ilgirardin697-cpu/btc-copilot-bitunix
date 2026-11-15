@@ -1,0 +1,7 @@
+# Stable research checksums across Windows/Linux; supplied evidence stays exact.
+* text eol=lf
+*.gz -text -diff
+*.png -text -diff
+*.csv text eol=lf
+independent_audit_README.txt -text -diff
+independent_audit_supplied_output.txt -text -diff

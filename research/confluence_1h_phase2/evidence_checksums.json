@@ -1,0 +1,94 @@
+{
+  ".gitattributes": {
+    "bytes": 239,
+    "sha256": "58b7ede0c45d791db1cb892abc45e6bd75aca2d515c581a0b73b58ed7a3cf722"
+  },
+  "compare.py": {
+    "bytes": 13816,
+    "sha256": "36593ca9e04e7c26a1e32388a45202bafc45eaecff8f0013557af21d6663cdf8"
+  },
+  "comparison_protocol.json": {
+    "bytes": 1347,
+    "sha256": "9426f7e2cebe93c97e1f4178f8f3fe5f492e38431d610028c91930a2e8c38689"
+  },
+  "CONFLUENCE_PHASE2.md": {
+    "bytes": 14490,
+    "sha256": "52062fb1dc98dd131523afd4c642aaf000d057590756554a01e000aaada45e15"
+  },
+  "describe.py": {
+    "bytes": 3795,
+    "sha256": "0ac87e9369f58a342e6290394cf05f1be1716e0d676311d9ac2ae25bff8ec4d1"
+  },
+  "export_metadata.template.json": {
+    "bytes": 1573,
+    "sha256": "3bf395b118bef4918775a4603764eb8415d82cfb7acc1a48cc2b54da735c72ce"
+  },
+  "export_rows.template.csv": {
+    "bytes": 134,
+    "sha256": "761f3b2657ade3c89736e6ae3635c9c5e6729dc7c7c663b979376afea8f59eb0"
+  },
+  "independent_audit_manifest.json": {
+    "bytes": 1637,
+    "sha256": "35919888de1e3eaa17300490bbc87a84773a1dee6a540067bbf2b374837c639d"
+  },
+  "independent_audit_README.txt": {
+    "bytes": 1173,
+    "sha256": "77cb3ceb447190ececcd5ce8bfc9dd599bf6788f5bbaab413a52d81d97ae3284"
+  },
+  "independent_audit_supplied_output.txt": {
+    "bytes": 5646,
+    "sha256": "f8e047f76bd5a43d65d7c0551b48b86ff102d6c8479c2ffeb4960e10ed87fd84"
+  },
+  "I_GOD_Koncorde_Three_Series.pine": {
+    "bytes": 4216,
+    "sha256": "3ab818ab7019066f722d256edac8a2e980a0b5ff79c76ac90758e8a75cc4755b"
+  },
+  "README.md": {
+    "bytes": 5921,
+    "sha256": "76368a44de4603ec05410844e5e5d4355bdc18a9ffb8cf89b859d77acbe19138"
+  },
+  "semantics.py": {
+    "bytes": 4113,
+    "sha256": "5e9945dba88d90f6767e4eb9e328d980f5162b1de4952bf0c06a07bd9b3b1abf"
+  },
+  "validation.json": {
+    "bytes": 3498,
+    "sha256": "fbf417df9b69ca48e5c4f22dc2bfed438c110fa7f7427cae458c672d97f182be"
+  },
+  "__init__.py": {
+    "bytes": 81,
+    "sha256": "0d78c4c5f8a4c9f0ff1fcc2c89f2ef61f55a8290bf2c5646bf7fc12c41f310f6"
+  },
+  "artifacts/BINANCE_SPOT_focus.csv": {
+    "bytes": 6628,
+    "sha256": "2db544f9b989e5c48fd8ea172031fd378c45db030e5ac16574a85ef8ad6e8eb2"
+  },
+  "artifacts/BINANCE_SPOT_series.png": {
+    "bytes": 213974,
+    "sha256": "d3a63629a366a3eb21083f53943a7d86a45211d5e65b0899ce168355539002eb"
+  },
+  "artifacts/BINANCE_USDM_PERPETUAL_focus.csv": {
+    "bytes": 6663,
+    "sha256": "68786c1c7ef1f6abae88b6eea50a65b18355172da0d763bd2f63e992246fd577"
+  },
+  "artifacts/BINANCE_USDM_PERPETUAL_series.png": {
+    "bytes": 212658,
+    "sha256": "3d9d29ed711894cdff06bb9bb8ddabb9e9784da0ac55c88b3981ec120f01cdf9"
+  },
+  "fixtures/BINANCE_SPOT.csv.gz": {
+    "bytes": 40794,
+    "sha256": "46499813f27c0c8309b63967f3d07e46a7d611558b60b74b9fd7783e70e1fa4a"
+  },
+  "fixtures/BINANCE_SPOT.json": {
+    "bytes": 1858,
+    "sha256": "9c1cb49d0b26e27b2ca4a972fcef96cca785d3658b06da13f63ab8a2f8152c04"
+  },
+  "fixtures/BINANCE_USDM_PERPETUAL.csv.gz": {
+    "bytes": 37221,
+    "sha256": "047d47bf906c8a14a5282d12e3d88b9247856b8041729a5debfa25871b840108"
+  },
+  "fixtures/BINANCE_USDM_PERPETUAL.json": {
+    "bytes": 1872,
+    "sha256": "40b44eb6d67447f358b8ddaf940b3eb675ba0c48954524b25c5584d199c90bc3"
+  }
+}

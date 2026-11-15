@@ -1,0 +1,29 @@
+name: Confluence H1 series and timing parity
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  diagnostic-only:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Existing dependencies and research array library
+        run: python -m pip install -r requirements.txt -r research/confluence_1h/requirements-research.txt
+      - name: Compile and check timezone availability
+        run: |
+          python -m compileall -q research/confluence_1h_phase2 test_confluence_1h_phase2.py
+          python -c "import numpy; from zoneinfo import ZoneInfo; ZoneInfo('Europe/Madrid')"
+      - name: Three areas, crossings, slopes, zeros, timestamps, no self-certified parity
+        run: python -m unittest test_confluence_1h_phase2 test_confluence_1h_research -v
+      - name: Previous protections and frozen protocols
+        run: |
+          python mlrsi_safety_audit.py
+          python test_bitman_weekly_boundary.py --require-v8 -v
+          python test_bitman_readiness_boundary.py --require-v8 -v
+      - name: Whitespace
+        run: git diff --check HEAD^ HEAD
