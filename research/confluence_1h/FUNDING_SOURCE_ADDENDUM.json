@@ -1,0 +1,8 @@
+{
+  "stage": "AFTER_ARCHIVE_SCHEMA_AUDIT_BEFORE_ANY_SIGNAL_OR_OUTCOME_EVALUATION",
+  "finding": "1657 of 4383 official funding records have settlement timestamps a few milliseconds after the hour. An hourly mark open is not an exact observed settlement mark.",
+  "preferred_source": "Unauthenticated official GET https://fapi.binance.com/fapi/v1/fundingRate, BTCUSDT, bounded start/end, limit<=1000; original responses and SHA256 retained. Require exact timestamp and rate correspondence to all monthly archive records and a finite positive markPrice. No proxy or venue switch.",
+  "if_unavailable": "Net test remains blocked. Gross-only diagnostics may be reported explicitly as not an executable net strategy. Never set missing funding to zero or silently use a trade price.",
+  "settlement_accounting": "Use actual funding timestamp. Charge positive payable funding if a position could be active during that H1 bar; uncertain same-bar funding credits are omitted. Entry at a strictly later timestamp is not charged. Exits exactly at bar open precede later funding. Preserve ambiguous funding treatment in each trade.",
+  "overrides": "Only the funding data source and millisecond settlement accounting in protocol.execution.funding; all signal/exit/cost/risk thresholds unchanged. No outcomes have been viewed."
+}
