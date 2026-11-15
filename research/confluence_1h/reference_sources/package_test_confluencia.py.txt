@@ -1,0 +1,63 @@
+"""Small, synthetic causality/booking tests; NOT trading evidence."""
+import unittest
+import numpy as np
+import pandas as pd
+from igod_confluencia_backtest import Params, make_signals, simulate, compute_indicators
+
+
+class ConfluenceTests(unittest.TestCase):
+    def setUp(self):
+        ix = pd.date_range('2026-01-01', periods=30, freq='h', tz='UTC')
+        self.bars = pd.DataFrame({'open': 100.0, 'high': 101.0, 'low': 99.0,
+                                  'close': 100.0, 'volume': 100.0}, index=ix)
+        self.ind = pd.DataFrame({'atr': 10., 'bbwp': 90.,
+            'adx': 41., 'ao': -2., 'kon_trend': -1., 'kon_signal': 0.}, index=ix)
+        self.sig = pd.DataFrame(False, index=ix, columns=['long','short'])
+
+    def test_signal_close_next_open_and_stop_first(self):
+        self.sig.iloc[1,0] = True
+        self.bars.iloc[2, self.bars.columns.get_loc('high')] = 140.0
+        self.bars.iloc[2, self.bars.columns.get_loc('low')] = 80.0
+        t, e = simulate(self.bars, self.ind, self.sig, Params())
+        self.assertEqual(len(t),1)
+        self.assertEqual(t.iloc[0]['signal_time'], self.bars.index[1])
+        self.assertEqual(t.iloc[0]['entry_time'], self.bars.index[2])
+        self.assertEqual(t.iloc[0]['exit_time'], self.bars.index[2])
+        self.assertEqual(t.iloc[0]['reason'], 'STOP_AMBIGUOUS_BOTH')
+        self.assertLess(t.iloc[0]['net_usdt'],0)
+
+    def test_time_exit_counts_entry_bar_as_one(self):
+        self.sig.iloc[1,0] = True
+        t,e = simulate(self.bars, self.ind, self.sig, Params())
+        self.assertEqual(len(t),1)
+        self.assertEqual(t.iloc[0]['reason'],'TIME_24H')
+        self.assertEqual(t.iloc[0]['bars_held'],24)
+        self.assertEqual(t.iloc[0]['exit_time'],self.bars.index[25])
+
+    def test_no_future_candles_affect_old_signals(self):
+        # Crafted Koncorde cross on candle 4, ADX turns after high on candle2,
+        # AO negative rising two candles and BBWP >85.
+        i=self.ind.copy()
+        i['kon_trend']=[-4,-3,-2,-2,1]+[1]*25
+        i['kon_signal']=[0]*30
+        i['adx']=[10,20,45,42,39]+[33]*25
+        i['ao']=[-5,-4,-3,-2,-1]+[0]*25
+        a=make_signals(i,Params())
+        self.assertTrue(bool(a.iloc[4]['long']))
+        i.iloc[10:,i.columns.get_loc('adx')]=1000.0
+        b=make_signals(i,Params())
+        pd.testing.assert_frame_equal(a.iloc[:9], b.iloc[:9])
+
+    def test_indicator_prefix_is_causal(self):
+        rs=np.random.default_rng(1)
+        n=800
+        ix=pd.date_range('2026-01-01', periods=n, freq='h', tz='UTC')
+        c=10000*np.exp(np.cumsum(rs.normal(0,.004,n)))
+        o=np.r_[c[0],c[:-1]]
+        bar=pd.DataFrame({'open':o,'high':np.maximum(o,c)*1.002,
+            'low':np.minimum(o,c)*.998,'close':c,'volume':rs.uniform(100,500,n)},index=ix)
+        full=compute_indicators(bar)
+        short=compute_indicators(bar.iloc[:600])
+        pd.testing.assert_frame_equal(full.iloc[:600],short,check_exact=False,rtol=1e-10,atol=1e-9)
+
+if __name__=='__main__': unittest.main()

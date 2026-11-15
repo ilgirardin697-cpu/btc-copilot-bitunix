@@ -1,0 +1,537 @@
+#!/usr/bin/env python3
+"""I-GOD Confluencia BTCUSDT 1H — reproducible, read-only research.
+
+Run on chronological closed 1H Binance spot bars (not trading account data).
+Primary simulation is a transparent OHLC event engine with next-open entries,
+entry-relative bracket levels, conservative same-bar fills and explicit fees.
+Optional --check-backtesting runs an approximate independent FractionalBacktest
+from backtesting.py; see README for its *known non-parity* assumptions.
+
+No real exchange orders, keys, credentials or live execution are used.
+"""
+from __future__ import annotations
+import argparse
+import io
+import itertools
+import json
+import pathlib
+import urllib.request
+import zipfile
+from dataclasses import dataclass, replace
+
+import numpy as np
+import pandas as pd
+
+HOURS_YEAR = 24 * 365.25
+BINANCE_FIELDS = ["open_time", "open", "high", "low", "close", "volume", "close_time",
+                  "quote_volume", "trades", "taker_base", "taker_quote", "ignore"]
+
+
+def _numeric(ser):
+    return pd.to_numeric(ser, errors="raise").astype(float)
+
+
+def normalize_bars(df: pd.DataFrame) -> pd.DataFrame:
+    """Accept Binance kline format or OHLCV CSV with timestamp/open_time."""
+    data = df.copy()
+    data.columns = [str(c).strip().lower() for c in data.columns]
+    rename = {"timestamp": "open_time", "date": "open_time", "datetime": "open_time", "time": "open_time"}
+    data = data.rename(columns={k: v for k, v in rename.items() if k in data and "open_time" not in data})
+    required = ("open_time", "open", "high", "low", "close", "volume")
+    if any(k not in data.columns for k in required):
+        raise ValueError("Required columns: open_time, open, high, low, close, volume")
+    t = data["open_time"]
+    if pd.api.types.is_numeric_dtype(t) or t.astype(str).str.fullmatch(r"\d+").all():
+        times = pd.to_numeric(t, errors="raise")
+        # Binance spot archives switched from milliseconds to microseconds in 2025.
+        med = float(times.median())
+        unit = "us" if med > 1e14 else "ms" if med > 1e11 else "s"
+        dates = pd.to_datetime(times, unit=unit, utc=True)
+    else:
+        dates = pd.to_datetime(t, utc=True, errors="raise")
+    bars = pd.DataFrame(index=pd.DatetimeIndex(dates, name="open_time"))
+    for key in required[1:]:
+        bars[key] = _numeric(data[key]).to_numpy()
+    bars = bars.sort_index()
+    if bars.index.has_duplicates:
+        raise ValueError("Duplicated candle open timestamps; never silently deduplicate")
+    if not (bars.index.minute == 0).all() or not (bars.index.second == 0).all():
+        raise ValueError("Timestamps must be Binance 1H candle OPEN times (UTC)")
+    if not (bars.index.to_series().diff().dropna() == pd.Timedelta(hours=1)).all():
+        raise ValueError("A candle is missing (or repeated). Refusing to backtest with gaps")
+    if not np.isfinite(bars.to_numpy()).all():
+        raise ValueError("NaN or infinite OHLCV values")
+    if not ((bars["high"] >= bars[["open", "close", "low"]].max(axis=1)) &
+            (bars["low"] <= bars[["open", "close", "high"]].min(axis=1)) &
+            (bars["low"] > 0) & (bars["volume"] >= 0)).all():
+        raise ValueError("Invalid OHLCV candle")
+    if len(bars) < 24 * 365 * 2:
+        raise ValueError("At least 2 years of consecutive hourly bars are required")
+    return bars
+
+
+def get_binance_months(start: str, end: str, cache: pathlib.Path) -> pd.DataFrame:
+    """Download monthly historical public Binance SPOT BTCUSDT 1h files.
+
+    Date range must comprise finished UTC months; no account API, no trading.
+    Sources: https://data.binance.vision/?prefix=data/spot/monthly/klines/BTCUSDT/1h/
+    """
+    cache.mkdir(parents=True, exist_ok=True)
+    dates = pd.period_range(start[:7], end[:7], freq="M")
+    parts = []
+    for month in dates:
+        stamp = str(month)
+        file = cache / f"BTCUSDT-1h-{stamp}.zip"
+        if not file.exists():
+            url = ("https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/"
+                   f"BTCUSDT-1h-{stamp}.zip")
+            print("Downloading", url, flush=True)
+            req = urllib.request.Request(url, headers={"User-Agent": "I-GOD-Research/1.0"})
+            with urllib.request.urlopen(req, timeout=40) as resp:
+                contents = resp.read()
+            if len(contents) < 1000 or not zipfile.is_zipfile(io.BytesIO(contents)):
+                raise ValueError(f"Archive missing/corrupt: {stamp}")
+            file.write_bytes(contents)
+        with zipfile.ZipFile(file) as z:
+            csvs = [name for name in z.namelist() if name.endswith(".csv")]
+            if len(csvs) != 1:
+                raise ValueError(f"Unexpected archive: {file}")
+            with z.open(csvs[0]) as f:
+                part = pd.read_csv(f, header=None, names=BINANCE_FIELDS)
+            # Some archives include a literal header row.
+            if str(part.iloc[0]["open_time"]).lower() in ("open_time", "open time"):
+                part = part.iloc[1:]
+            parts.append(part)
+    return normalize_bars(pd.concat(parts, ignore_index=True))
+
+
+def rma(values, n: int):
+    """Wilder RMA, seeded at SMA of the first n consecutive finite observations."""
+    x = np.asarray(values, dtype=float)
+    out = np.full(len(x), np.nan)
+    initialized = False
+    buf = []
+    last = np.nan
+    for i, val in enumerate(x):
+        if not np.isfinite(val):
+            if not initialized:
+                buf = []
+            continue
+        if not initialized:
+            buf.append(val)
+            if len(buf) == n:
+                last = float(np.mean(buf))
+                out[i] = last
+                initialized = True
+        else:
+            last = (last * (n - 1) + float(val)) / n
+            out[i] = last
+    return pd.Series(out)
+
+
+def ema(values, n: int):
+    """Pine-like EMA starting from the first non-NaN source value."""
+    return pd.Series(values, dtype=float).ewm(span=n, adjust=False, ignore_na=True).mean()
+
+
+def rsi(values, n=14):
+    x = pd.Series(values, dtype=float)
+    delta = x.diff()
+    up = rma(delta.clip(lower=0).to_numpy(), n)
+    down = rma((-delta).clip(lower=0).to_numpy(), n)
+    result = 100 * up / (up + down)
+    result = result.where(~((up == 0) & (down == 0)), 50.0)
+    result = result.where(down != 0, 100.0)
+    result = result.where(up != 0, 0.0)
+    return result
+
+
+def mfi(price, volume, n=14):
+    p = pd.Series(price, dtype=float)
+    vol = pd.Series(volume, dtype=float)
+    raw = p * vol
+    change = p.diff()
+    pos = raw.where(change > 0, 0.0).rolling(n, min_periods=n).sum()
+    neg = raw.where(change < 0, 0.0).rolling(n, min_periods=n).sum()
+    value = 100 * pos / (pos + neg)
+    value = value.where(neg != 0, 100.0).where(pos != 0, 0.0)
+    value = value.where(~((pos == 0) & (neg == 0)), 50.0)
+    return value
+
+
+def compute_indicators(bars: pd.DataFrame, bbwp_basis_len=7, bbwp_lookback=100):
+    h, l, c, o, v = (bars[k].reset_index(drop=True) for k in ("high", "low", "close", "open", "volume"))
+    n = len(c)
+    price = (o + h + l + c) / 4  # exact Koncorde tprice=ohlc4
+    mfi_price = (h + l + c) / 3
+    rsi_val = rsi(price, 14)
+    mfi_val = mfi(mfi_price, v, 14)
+    basis = price.rolling(25, min_periods=25).mean()
+    sigma = price.rolling(25, min_periods=25).std(ddof=0)
+    bbosc = (price - basis) / (4.0 * sigma) * 100  # upper-lower = 4*sigma
+    lows = l.rolling(21, min_periods=21).min()
+    highs = h.rolling(21, min_periods=21).max()
+    stoch = (100 * (price - lows) / (highs - lows)).rolling(3, min_periods=3).mean()
+    trend = (rsi_val + mfi_val + bbosc + stoch / 3.0) / 2.0
+    signal = ema(trend, 15)
+
+    tr = pd.concat([h - l, (h - c.shift(1)).abs(), (l - c.shift(1)).abs()], axis=1).max(axis=1)
+    atr = rma(tr.to_numpy(), 14)
+    upmove, downmove = h.diff(), -l.diff()
+    plus = upmove.where((upmove > downmove) & (upmove > 0), 0.0)
+    minus = downmove.where((downmove > upmove) & (downmove > 0), 0.0)
+    plus.iloc[0] = np.nan
+    minus.iloc[0] = np.nan
+    sm_plus = rma(plus.to_numpy(), 14)
+    sm_minus = rma(minus.to_numpy(), 14)
+    plus_di = 100 * sm_plus / atr
+    minus_di = 100 * sm_minus / atr
+    dx = 100 * (plus_di - minus_di).abs() / (plus_di + minus_di)
+    adx = rma(dx.to_numpy(), 14)
+
+    mid = (h + l) / 2
+    ao = mid.rolling(5, min_periods=5).mean() - mid.rolling(34, min_periods=34).mean()
+    bbase = c.rolling(bbwp_basis_len, min_periods=bbwp_basis_len).mean()
+    bbw = 2.0 * c.rolling(bbwp_basis_len, min_periods=bbwp_basis_len).std(ddof=0) / bbase
+    # The supplied BBWP ranks current width vs the PRIOR N widths, not including current.
+    widths = bbw.to_numpy()
+    bbwp = np.full(n, np.nan)
+    for i in range(bbwp_basis_len, n):
+        prior = widths[max(0, i-bbwp_lookback):i]
+        prior = prior[np.isfinite(prior)]
+        if len(prior) and np.isfinite(widths[i]):
+            bbwp[i] = 100 * np.count_nonzero(prior <= widths[i]) / len(prior)
+
+    x = pd.DataFrame({"kon_trend": trend, "kon_signal": signal,
+                      "adx": adx, "plus_di": plus_di, "minus_di": minus_di,
+                      "ao": ao, "bbwp": bbwp, "atr": atr})
+    x.index = bars.index
+    return x
+
+
+@dataclass(frozen=True)
+class Params:
+    adx_threshold: float = 40.0
+    bbwp_threshold: float = 85.0
+    rr: float = 2.0
+    atr_mult: float = 1.5
+    max_holding_bars: int = 24
+    risk_fraction: float = 0.01
+    max_notional_multiple: float = 1.0
+    fee: float = 0.001      # 0.1% PER SIDE
+    slippage: float = 0.0005  # 0.05% PER SIDE
+
+
+def make_signals(indicators: pd.DataFrame, params: Params):
+    k, ks, a, ao, b = (indicators[x] for x in ("kon_trend", "kon_signal", "adx", "ao", "bbwp"))
+    cross_up = (k > ks) & (k.shift(1) <= ks.shift(1)) & (k.shift(1) < 0)
+    cross_down = (k < ks) & (k.shift(1) >= ks.shift(1)) & (k.shift(1) > 0)
+    turn = (a.shift(1) < a.shift(2)) & (a.shift(2) > params.adx_threshold)
+    long = cross_up & turn & (ao < 0) & (ao > ao.shift(1)) & (ao.shift(1) > ao.shift(2)) & (b > params.bbwp_threshold)
+    short = cross_down & turn & (ao > 0) & (ao < ao.shift(1)) & (ao.shift(1) < ao.shift(2)) & (b > params.bbwp_threshold)
+    return pd.DataFrame({"long": long.fillna(False), "short": short.fillna(False)}, index=indicators.index)
+
+
+def _exit_fill(raw, side, slip):
+    return float(raw) * (1.0 - side * slip)
+
+
+def simulate(bars, ind, signals, p: Params, initial=200.0, start=0, end=None, *, force_exit_last=True):
+    """Process intrabar on OHLC, assuming SL first for same-bar SL+TP.
+
+    start/end specify SIGNAL/CANDLE evaluation interval. Indicator history comes
+    from precomputed prior bars. No trade is inherited from before start.
+    """
+    end = len(bars) if end is None else min(end, len(bars))
+    if end - start < 3:
+        return pd.DataFrame(), pd.DataFrame(columns=["equity"], dtype=float)
+    op = bars["open"].to_numpy()
+    hi = bars["high"].to_numpy()
+    lo = bars["low"].to_numpy()
+    cl = bars["close"].to_numpy()
+    vol = ind["atr"].to_numpy()
+    longs = signals["long"].to_numpy(dtype=bool)
+    shorts = signals["short"].to_numpy(dtype=bool)
+    cash = float(initial)
+    equity_curve, records = [], []
+    trade = None
+    pending = 0
+    pending_atr = np.nan
+    for i in range(start, end):
+        # Order issued at previous candle CLOSE; fill now at next OPEN.
+        if pending and trade is None and np.isfinite(pending_atr) and pending_atr > 0:
+            side = int(pending)
+            entry = float(op[i]) * (1.0 + side*p.slippage)
+            distance = float(pending_atr) * p.atr_mult
+            # Conservative estimated maximum loss includes both-side friction.
+            friction_per_btc = entry * (2*p.fee+2*p.slippage)
+            qty = min(cash*p.risk_fraction/(distance+friction_per_btc),
+                      cash*p.max_notional_multiple/entry)
+            if qty > 0 and entry > distance*(side==1):
+                trade = {"entry_i": i, "signal_i": i-1, "side": side,
+                         "entry": entry, "qty": qty, "dist": distance,
+                         "stop": entry-side*distance,
+                         "target": entry+side*p.rr*distance,
+                         "risk_budget": qty*(distance+friction_per_btc),
+                         "start_cash": cash}
+        pending = 0
+        if trade:
+            side = trade["side"]
+            # Gaps beyond stop are filled at OPEN, never at more favorable stop.
+            stop_hit = (lo[i] <= trade["stop"] if side==1 else hi[i] >= trade["stop"])
+            tp_hit = (hi[i] >= trade["target"] if side==1 else lo[i] <= trade["target"])
+            exit_raw, reason = None, ""
+            if stop_hit:
+                if side==1:
+                    exit_raw = min(trade["stop"], op[i])
+                else:
+                    exit_raw = max(trade["stop"], op[i])
+                reason = "STOP" if not tp_hit else "STOP_AMBIGUOUS_BOTH"
+            elif tp_hit:
+                exit_raw, reason = trade["target"], "TAKE_PROFIT"
+            elif i-trade["entry_i"]+1 >= p.max_holding_bars:
+                exit_raw, reason = float(cl[i]), "TIME_24H"
+            elif i == end-1 and force_exit_last:
+                exit_raw, reason = float(cl[i]), "PERIOD_END"
+            if exit_raw is not None:
+                exit_px = _exit_fill(exit_raw, side, p.slippage)
+                gross = side*trade["qty"]*(exit_px-trade["entry"])
+                costs = p.fee*trade["qty"]*(trade["entry"]+exit_px)
+                net = gross-costs
+                cash += net
+                records.append({"signal_time": bars.index[trade["signal_i"]],
+                                "entry_time": bars.index[trade["entry_i"]],
+                                "exit_time": bars.index[i],
+                                "side": "LONG" if side==1 else "SHORT",
+                                "entry": trade["entry"], "exit": exit_px,
+                                "stop": trade["stop"], "target": trade["target"],
+                                "qty_btc": trade["qty"], "net_usdt": net,
+                                "net_r": net/trade["risk_budget"],
+                                "equity_at_entry": trade["start_cash"],
+                                "reason": reason, "bars_held": i-trade["entry_i"]+1})
+                trade = None
+        # A new signal at CLOSE is eligible for the NEXT OPEN, not this candle.
+        if trade is None and i+1 < end and np.isfinite(vol[i]) and (longs[i] or shorts[i]):
+            pending = 1 if longs[i] else -1
+            pending_atr = vol[i]
+        marked = cash if trade is None else cash + trade["qty"] * trade["side"] * (cl[i]-trade["entry"])
+        equity_curve.append((bars.index[i], marked))
+    deals = pd.DataFrame.from_records(records)
+    equity = pd.DataFrame(equity_curve, columns=["time", "equity"]).set_index("time")
+    return deals, equity
+
+
+def metrics(trades, equity, initial=200.0):
+    if equity.empty:
+        return dict(trades=0, win_rate=np.nan, expectancy_r=np.nan, profit_factor=np.nan,
+                    max_drawdown_pct=np.nan, sharpe=np.nan, return_pct=np.nan)
+    if trades.empty:
+        count, winrate, exp_r, pf = 0, np.nan, np.nan, np.nan
+    else:
+        pnl = trades["net_usdt"]
+        gains, losses = pnl[pnl > 0].sum(), -pnl[pnl < 0].sum()
+        count, winrate, exp_r = len(trades), 100*(pnl > 0).mean(), trades["net_r"].mean()
+        pf = float(gains/losses) if losses > 0 else float("inf") if gains > 0 else np.nan
+    e = equity["equity"]
+    d = 100 * (e / e.cummax() - 1)
+    returns = e.pct_change().replace([np.inf, -np.inf], np.nan).dropna()
+    sharpe = (np.sqrt(HOURS_YEAR)*returns.mean()/returns.std(ddof=1)) if len(returns)>2 and returns.std(ddof=1)>0 else np.nan
+    return dict(trades=count, win_rate=winrate, expectancy_r=exp_r,
+                profit_factor=pf, max_drawdown_pct=float(d.min()),
+                sharpe=float(sharpe), return_pct=100*(float(e.iloc[-1])/initial-1))
+
+
+def _choose(bars, ind, start, end, base: Params):
+    # Predeclared small grid, no ML and no selection on OOS data.
+    attempts = []
+    for adx, bbwp, rr in itertools.product([35.0,40.0,45.0], [80.0,85.0,90.0], [2.0,3.0]):
+        p = replace(base, adx_threshold=adx, bbwp_threshold=bbwp, rr=rr)
+        sig = make_signals(ind, p)
+        trades, curve = simulate(bars, ind, sig, p, start=start, end=end, initial=200.0)
+        m = metrics(trades, curve)
+        # Insist on sample size: if all candidates too small, keep defaults.
+        score = m["expectancy_r"] if m["trades"] >= 20 and np.isfinite(m["expectancy_r"]) else -1e9
+        attempts.append(dict(adx=adx, bbwp=bbwp, rr=rr, score=score, **m))
+    ordered = sorted(attempts, key=lambda x: (-x["score"], abs(x["adx"]-40), abs(x["bbwp"]-85), abs(x["rr"]-2)))
+    selected = ordered[0]
+    if selected["score"] == -1e9:
+        print("WARNING: <20 training trades for all variants; selecting original 40/85/2R (NO OPTIMIZATION).")
+        selected = next(x for x in attempts if x["adx"] == 40 and x["bbwp"] == 85 and x["rr"] == 2)
+    return replace(base, adx_threshold=selected["adx"], bbwp_threshold=selected["bbwp"], rr=selected["rr"]), pd.DataFrame(attempts)
+
+
+def random_baselines(bars, ind, p, start, end, observed, trials=200, seed=20261115):
+    """Same bars, same side ratio, same stop/TP/costs. Random signal timing.
+    Candidate count matched, executed count may differ because overlapping trades
+    are forbidden. BOTH counts are reported; this is not a price-path permutation test.
+    """
+    rng = np.random.default_rng(seed)
+    n_long = int((observed["long"].iloc[start:end]).sum())
+    n_short = int((observed["short"].iloc[start:end]).sum())
+    eligible = np.flatnonzero(np.isfinite(ind["atr"].to_numpy()) & np.isfinite(ind["bbwp"].to_numpy()))
+    eligible = eligible[(eligible >= start) & (eligible < end-1)]
+    if n_long+n_short > len(eligible):
+        raise ValueError("More candidates than candles")
+    rows = []
+    for run in range(trials):
+        chosen = rng.choice(eligible, size=n_long+n_short, replace=False)
+        rng.shuffle(chosen)
+        s = pd.DataFrame(False, index=bars.index, columns=["long", "short"])
+        s.iloc[chosen[:n_long], 0] = True
+        s.iloc[chosen[n_long:], 1] = True
+        deals, curve = simulate(bars, ind, s, p, start=start, end=end)
+        rows.append(dict(trial=run+1, candidates=n_long+n_short, **metrics(deals, curve)))
+    return pd.DataFrame(rows)
+
+
+def _report(label, p, deals, curve):
+    result = metrics(deals, curve)
+    print(f"{label}: {p} -> " + ", ".join(f"{k}: {v:.3f}" if isinstance(v, float) else f"{k}: {v}"
+                                        for k,v in result.items()))
+    return result
+
+
+def run_all(bars, out: pathlib.Path, *, random_trials=200, check_backtesting=False):
+    out.mkdir(parents=True, exist_ok=True)
+    ind = compute_indicators(bars)
+    n = len(bars)
+    cut = int(n*0.70)
+    base = Params()
+    print(f"Dataset {bars.index[0]} to {bars.index[-1]} ({n:,} CLOSED 1H bars)")
+    print(f"IS = {len(bars.iloc[:cut]):,} (70%), OOS = {len(bars.iloc[cut:]):,} (30%)")
+    chosen, sensitivity = _choose(bars, ind, 0, cut, base)
+    sensitivity.to_csv(out/"sensitivity_in_sample.csv", index=False)
+    print("Selected IS-only", chosen)
+    sig = make_signals(ind, chosen)
+    selected_flags = sig.copy()
+    selected_flags["adx"] = ind["adx"]
+    selected_flags["ao"] = ind["ao"]
+    selected_flags["bbwp"] = ind["bbwp"]
+    selected_flags["kon_trend"] = ind["kon_trend"]
+    selected_flags["kon_signal"] = ind["kon_signal"]
+    selected_flags["atr"] = ind["atr"]
+    selected_flags.to_csv(out/"signals_all.csv", index_label="open_time_utc")
+    train_deals, train_curve = simulate(bars, ind, sig, chosen, start=0, end=cut)
+    _report("IS (not proof)", chosen, train_deals, train_curve)
+    oos_deals, oos_curve = simulate(bars, ind, sig, chosen, start=cut, end=n)
+    observed = _report("OOS (holdout)", chosen, oos_deals, oos_curve)
+    oos_deals.to_csv(out/"oos_trades.csv", index=False)
+    oos_curve.to_csv(out/"oos_equity.csv", index_label="open_time_utc")
+
+    # Four walk-forward expanding-train / following validation folds WITHIN
+    # first 70% only; OOS final 30% stays untouched by training decisions.
+    folds = []
+    borders = [int(n*x) for x in [0.30, 0.40, 0.50, 0.60, 0.70]]
+    for j in range(4):
+        train_end, test_end = borders[j], borders[j+1]
+        wp, _ = _choose(bars, ind, 0, train_end, base)
+        ws = make_signals(ind, wp)
+        wt, wc = simulate(bars, ind, ws, wp, start=train_end, end=test_end)
+        folds.append(dict(fold=j+1, train_end=str(bars.index[train_end-1]),
+                          test_start=str(bars.index[train_end]), test_end=str(bars.index[test_end-1]),
+                          adx=wp.adx_threshold, bbwp=wp.bbwp_threshold, rr=wp.rr, **metrics(wt,wc)))
+    walk = pd.DataFrame(folds)
+    walk.to_csv(out/"walkforward_four_folds.csv", index=False)
+    print("\nWalk-forward (all folds inside the development 70%):\n",walk.to_string(index=False))
+
+    randoms = random_baselines(bars, ind, chosen, cut, n, sig, trials=random_trials)
+    randoms.to_csv(out/"random_baselines.csv", index=False)
+    arr = randoms["expectancy_r"].dropna()
+    if np.isfinite(observed["expectancy_r"]) and len(arr):
+        # Upper tail: where greater random expectancy means strategy is worse.
+        p_value = (1 + int(np.sum(arr >= observed["expectancy_r"]))) / (1 + len(arr))
+        print(f"Random baselines mean expectancy: {arr.mean():.3f} R, "
+              f"median: {arr.median():.3f} R. Conservative p_upper~{p_value:.3f}")
+        print("Random accepted trades mean:", randoms["trades"].mean(),
+              "; strategy OOS accepted trades:", observed["trades"])
+    if check_backtesting:
+        independent_backtestingpy(bars, ind, sig, chosen, start=cut)
+    (out/"metadata.json").write_text(json.dumps({
+        "strategy":"I-GOD Confluencia · Konkorde BITMAN proxy, ADX14, AO, BBWP",
+        "research_only": True,
+        "input":"BINANCE BTCUSDT 1H SPOT", "from":str(bars.index[0]), "to":str(bars.index[-1]),
+        "final_oos_start":str(bars.index[cut]), "walkforward_only_inside_is":True,
+        "selected_IS":chosen.__dict__, "same_bar_sl_tp":"STOP_FIRST", "entry":"NEXT_OPEN",
+        "time_exit":"24TH_BAR_CLOSE", "last_open_trade":"FORCED_CLOSED_AT_PERIOD_END_WITH_PERIOD_END_LABEL",
+        "fees_per_side":chosen.fee, "slippage_per_side":chosen.slippage,
+        "funding_model":"NOT INCLUDED", "liquidation_model":"NOT INCLUDED",
+        "exact_proprietary_koncorde_parity":"NOT PROVEN"}, indent=2), encoding="utf-8")
+    print("\nArtifacts:",out.resolve())
+
+
+def independent_backtestingpy(bars, ind, signals, p, start):
+    """OPTIONAL APPROXIMATE broker-engine cross-check; NOT exact parity.
+
+    backtesting.py's initial order-linked fixed absolute bracket prices are
+    anchored to SIGNAL CLOSE, rather than actual next-open fill. Fractional
+    units require FractionalBacktest. Stop/gap/time-exit semantics differ.
+    """
+    try:
+        from backtesting import Strategy
+        from backtesting.lib import FractionalBacktest
+    except ImportError as exc:
+        raise RuntimeError("Install: pip install 'backtesting>=0.6.3'") from exc
+    # Include warm-up context; prohibit signal entries before OOS cutoff.
+    window = bars.copy()
+    dataframe = window.rename(columns={"open":"Open","high":"High","low":"Low","close":"Close","volume":"Volume"})
+    allowed_long = signals["long"].copy()
+    allowed_short = signals["short"].copy()
+    allowed_long.iloc[:start] = False
+    allowed_short.iloc[:start] = False
+    info = ind.copy()
+
+    class BTConfluence(Strategy):
+        def init(self):
+            self.lflag = self.I(lambda: allowed_long.to_numpy(dtype=float), name="LONG", overlay=False)
+            self.sflag = self.I(lambda: allowed_short.to_numpy(dtype=float), name="SHORT", overlay=False)
+            self.atrx = self.I(lambda: info["atr"].to_numpy() * 1e-8, name="ATR", overlay=False)
+        def next(self):
+            n = len(self.data)-1
+            for t in self.trades:
+                if n - t.entry_bar + 1 >= p.max_holding_bars:
+                    t.close()  # Executes next OPEN, different from primary model.
+            if self.position or self.orders or n < start or n >= len(window)-1:
+                return
+            dist = float(self.atrx[-1]) * p.atr_mult
+            if not np.isfinite(dist) or dist <= 0:
+                return
+            close = float(self.data.Close[-1])
+            frac = min(0.98, p.risk_fraction*close/(dist + 2*(p.fee+p.slippage)*close))
+            # FractionalBacktest internally scales close prices; these bracket
+            # prices are in the same internal scaled currency units.
+            if bool(self.lflag[-1]):
+                self.buy(size=frac, sl=close-dist, tp=close+p.rr*dist)
+            elif bool(self.sflag[-1]):
+                self.sell(size=frac, sl=close+dist, tp=close-p.rr*dist)
+
+    bt = FractionalBacktest(dataframe, BTConfluence, cash=200, commission=p.fee,
+                            spread=2*p.slippage, margin=1.0,
+                            trade_on_close=False, exclusive_orders=True,
+                            fractional_unit=1e-8, finalize_trades=True)
+    stats = bt.run()
+    print("\nBACKTESTING.PY APPROX CHECK (full-history equity; signals only OOS):")
+    for k in ("# Trades", "Win Rate [%]", "Profit Factor", "Max. Drawdown [%]", "Sharpe Ratio"):
+        print(k, stats.get(k))
+    print("WARNING: This cross-check is not numerically identical to exact event model.")
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--csv", type=pathlib.Path, help="CSV with continuous Binance 1H OHLCV")
+    source.add_argument("--download", action="store_true", help="Public Binance monthly SPOT archives")
+    parser.add_argument("--start", default="2023-01", help="First FINISHED UTC month for --download")
+    parser.add_argument("--end", default="2026-10", help="Last FINISHED UTC month for --download")
+    parser.add_argument("--cache", type=pathlib.Path, default=pathlib.Path("binance_cache"))
+    parser.add_argument("--out", type=pathlib.Path, default=pathlib.Path("results_confluencia"))
+    parser.add_argument("--random-trials", type=int, default=200)
+    parser.add_argument("--check-backtesting", action="store_true", help="Optional APPROX independent FractionalBacktest")
+    args = parser.parse_args()
+    if args.random_trials < 10:
+        parser.error("Use at least 10 random controls")
+    bars = get_binance_months(args.start, args.end, args.cache) if args.download else normalize_bars(pd.read_csv(args.csv))
+    run_all(bars, args.out, random_trials=args.random_trials, check_backtesting=args.check_backtesting)
+
+
+if __name__ == "__main__":
+    main()

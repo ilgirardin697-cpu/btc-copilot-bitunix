@@ -1,0 +1,4 @@
+* text eol=lf
+reference_sources/* -text
+*.gz binary
+*.png binary
