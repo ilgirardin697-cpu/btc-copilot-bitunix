@@ -1,0 +1,18 @@
+{
+  "type": "POST_HOC_DESCRIPTIVE_FALSIFICATION_NOT_BACKTEST",
+  "declared_before_additional_case_measurement": true,
+  "source": "BTCUSDT BINANCE_SPOT H1 public closed bars",
+  "additional_cases_open_from_utc": "2026-10-01T00:00:00Z",
+  "additional_cases_open_until_exclusive_utc": "2026-11-15T00:00:00Z",
+  "selection": "all pececillos-red crosses, both directions, in fixed calendar range; no sampling by favorable outcome",
+  "descriptive_horizon_closed_bars": 4,
+  "outcome_definition": "change in close after four subsequent completed H1 bars; diagnostic only, no executable entry, fees or profitability claim",
+  "examples": "first two chronologically per cross side and favorable/unfavorable/flat terminal change; full population retained",
+  "missing_future": "CENSORED, never zero or negative by default",
+  "proximity": "run the single fixed proposal alongside raw crosses; do not tune its window or select ADX context by outcomes",
+  "primary_diagnostic_cases_excluded_from_comparative_selection": ["2026-11-15 early recovery", "2026-11-15 approximately 14:00 Madrid exhaustion"],
+  "higher_timeframe_context": "UTC 4H/1D, Monday00UTC 1W; only complete groups available at each H1 close; AO sign/slope and DMI shown separately",
+  "holdout": "NO_VIRGIN_HOLDOUT",
+  "new_backtests": 0,
+  "trade_authority": "NONE"
+}
