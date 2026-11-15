@@ -69,6 +69,8 @@ plot(atr, "ATR14", display=display.data_window)
 f_num(float x) => na(x) ? "null" : str.tostring(x, "#.###############")
 if emitLogs and barstate.isconfirmed and timeframe.period == "60" and time >= logFrom and time < logUntil
     string payload = '{"ticker":"' + syminfo.tickerid + '","timeframe":"60","open_time":' + str.tostring(time) + ',"available_at":' + str.tostring(time_close)
+    payload += ',"open":' + f_num(open) + ',"high":' + f_num(high) + ',"low":' + f_num(low) + ',"close":' + f_num(close) + ',"volume":' + f_num(volume)
+    payload += ',"adx_threshold":' + f_num(adxThreshold) + ',"bbwp_threshold":' + f_num(bbwpThreshold)
     payload += ',"kon_trend":' + f_num(konTrend) + ',"kon_signal":' + f_num(konSignal) + ',"adx":' + f_num(adx) + ',"plus_di":' + f_num(plusDI) + ',"minus_di":' + f_num(minusDI)
     payload += ',"ao":' + f_num(ao) + ',"bbwp":' + f_num(bbwp) + ',"atr":' + f_num(atr) + ',"long":' + (longSignal ? "true" : "false") + ',"short":' + (shortSignal ? "true" : "false") + '}'
     log.info("IGOD_CONFLUENCE_AUDIT_V0=" + payload)

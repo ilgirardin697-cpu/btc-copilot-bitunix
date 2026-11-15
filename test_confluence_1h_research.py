@@ -17,6 +17,8 @@ from research.confluence_1h import indicators as ind
 from research.confluence_1h.data import HOUR,decode_klines,stamp
 from research.confluence_1h.engine import Assumptions,simulate,metrics
 from research.confluence_1h.reference import calculate_scalar
+from research.confluence_1h.statistics import block_indices,ratio_ci,daily
+from research.confluence_1h.compare_pine import compare
 
 ROOT=Path(__file__).resolve().parent;LAB=ROOT/'research/confluence_1h'
 
@@ -153,6 +155,33 @@ class EngineTests(unittest.TestCase):
         self.assertEqual(m['n'],0);self.assertIsNone(m['expectancy_r']);self.assertIsNone(m['profit_factor'])
 
 
+class StatisticsAndParityTests(unittest.TestCase):
+    def test_block_bootstrap_deterministic_and_seven_day_contiguous(self):
+        x=block_indices(31);np.testing.assert_array_equal(x,block_indices(31))
+        np.testing.assert_array_equal(x[:,:7],(x[:,:1]+np.arange(7))%31)
+
+    def test_no_events_no_confidence_interval(self):
+        r=ratio_ci(np.zeros(100),np.zeros(100))
+        self.assertIsNone(r['ci']);self.assertEqual(r['valid_replicates'],0)
+
+    def test_zero_event_days_remain_in_denominator(self):
+        a=bars(24*30);r,c=daily([dict(entry_i=3,net_r=1.)],a,0,len(a))
+        self.assertEqual(len(c),30);self.assertEqual(c.sum(),1);self.assertEqual((c==0).sum(),29)
+
+    def test_perfect_local_fixture_comparison_is_not_real_pine_evidence(self):
+        a=bars(200);f=ind.calculate(a);s=ind.signals(f);i=150
+        row=dict(ticker='BINANCE:BTCUSDT.P',timeframe='60',open_time=int(a[i,0]),available_at=int(a[i,0])+HOUR,
+            adx_threshold=40,bbwp_threshold=85,long=bool(s['long'][i]),short=bool(s['short'][i]))
+        row.update({k:float(f[k][i]) for k in ('kon_trend','kon_signal','adx','plus_di','minus_di','ao','bbwp','atr')})
+        row.update({k:float(a[i,j]) for k,j in [('open',1),('high',2),('low',3),('close',4),('volume',5)]})
+        self.assertEqual(compare([row],a)['passed'],1)
+        row['ticker']='BINANCE:BTCUSDT'
+        with self.assertRaises(ValueError):compare([row],a)
+
+    def test_empty_real_log_set_cannot_certify_parity(self):
+        self.assertEqual(compare([],bars(150))['parity_status'],'NO_ACTUAL_RECORDS')
+
+
 class SafetyTests(unittest.TestCase):
     def test_source_references_and_base_files_unchanged(self):
         m=json.loads((LAB/'source_manifest.json').read_text())
@@ -184,6 +213,8 @@ class SafetyTests(unittest.TestCase):
     def test_bad_raw_timestamps_rejected(self):
         row=['0','100','101','99','100','1','3599999','0','0','0','0','0']
         self.assertEqual(len(decode_klines([row])),1)
+        numeric_first=row.copy();numeric_first[0]=0
+        self.assertEqual(len(decode_klines([numeric_first])),1)
         with self.assertRaises(ValueError):decode_klines([row,row])
         row[6]='3600000'
         with self.assertRaises(ValueError):decode_klines([row])

@@ -18,6 +18,7 @@ from .engine import Assumptions,simulate,metrics
 from .indicators import calculate,signals,regime
 from .reference import calculate_scalar
 from .statistics import daily,ratio_ci,random_controls
+from .diagnostics import gate_funnel,rejection_plots
 
 
 def json_write(path,value):
@@ -25,7 +26,9 @@ def json_write(path,value):
 
 
 def csv_write(path,rows):
-    if not rows: path.write_text('NO_RECORDS\n',encoding='utf-8');return
+    if not rows:
+        header=('target_r,book,window,signal_open,available_at,side,entry_time,exit_bar_open,entry,exit,stop,target,qty_btc,net_usdt,net_r,reason' if path.name.startswith('trades') else 'status,reason')
+        path.write_text(header+'\n',encoding='utf-8');return
     fields=list(dict.fromkeys(k for r in rows for k in r))
     with path.open('w',encoding='utf-8',newline='') as f:
         w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(rows)
@@ -106,7 +109,10 @@ def evaluate(cache,out):
         allsignals.append(row)
     csv_write(out/'signals_all.csv',allsignals)
     gz_write(out/'signals_all.jsonl.gz',allsignals)
-    results=[];ledger=[];equity_rows=[];decisions=[];random_rows=[];slices=[];sensitivity=[];curves={}
+    csv_write(out/'signal_funnel.csv',gate_funnel(bars,f,sig,start,end))
+    rejection_examples=rejection_plots(bars,f,sig,start,end,out)
+    json_write(out/'rejected_examples.json',dict(selection='POST_HOC_DIAGNOSTIC_FIRST_CHRONOLOGICAL_NO_OUTCOME_SELECTION',examples=rejection_examples))
+    results=[];ledger=[];equity_rows=[];decisions=[];random_rows=[];slices=[];sensitivity=[];curves={};sensitivity_ledger=[]
     for target in (2.,3.):
         p=Assumptions(target_r=target)
         for side,book in ((0,'COMBINED'),(1,'LONG_ONLY'),(-1,'SHORT_ONLY')):
@@ -115,8 +121,8 @@ def evaluate(cache,out):
                 m=metrics(trades,eq);ds,dc=daily(trades,bars,lo,hi);ci=ratio_ci(ds,dc)
                 row=dict(target_r=target,book=book,window=name,from_utc=iso(bars[lo,0]),end_exclusive=iso(bars[hi-1,0]+HOUR),
                     candidate_signals=len(notes),net_r_ci97_5=ci['ci'],bootstrap_valid_replicates=ci['valid_replicates'],
-                    exact_funding_mark_source_status='ALL_TRADED_MARKS_VERIFIED' if not m['funding_missing_marks_used'] else 'POINT_NET_BLOCKED_SCENARIO_BOUND_ONLY',
-                    exact_net_usdt=m['net_usdt'] if not m['funding_missing_marks_used'] and not m['funding_timing_ambiguities'] else None,
+                    exact_funding_mark_source_status=('NO_TRADES_NO_PERFORMANCE_ESTIMATE' if not m['n'] else 'ALL_TRADED_MARKS_VERIFIED' if not m['funding_missing_marks_used'] else 'POINT_NET_BLOCKED_SCENARIO_BOUND_ONLY'),
+                    exact_net_usdt=m['net_usdt'] if m['n'] and not m['funding_missing_marks_used'] and not m['funding_timing_ambiguities'] else None,
                     funding_mode=p.funding_mode,classification=classification(m,ci,side),**m)
                 if name=='TEST':
                     controls,refdaily=random_controls(bars,f,sig,r,funding,lo,hi,side,p)
@@ -136,7 +142,8 @@ def evaluate(cache,out):
                 if name=='FULL':
                     for grouping in ('year','side','regime'):
                         labels=[iso(bars[t['entry_i'],0])[:4] if grouping=='year' else str(t['side']) if grouping=='side' else str(int(r[t['signal_i']])) for t in trades]
-                        for key in sorted(set(labels)):
+                        keys=sorted(set(iso(t)[:4] for t in bars[lo:hi,0])) if grouping=='year' else ['-1','1'] if grouping=='side' else ['-1','0','1']
+                        for key in keys:
                             subset=[t for t,label in zip(trades,labels) if label==key]
                             slices.append(dict(target_r=target,book=book,grouping=grouping,value=key,
                                 assignment='ENTRY_YEAR_OR_SIGNAL_CAUSAL_REGIME; TRADE_ATTRIBUTION_NOT_A_NEW_PORTFOLIO',
@@ -150,6 +157,7 @@ def evaluate(cache,out):
                     lo,hi=windows[name]
                     trades,_,_=simulate(bars,f['atr'],ss['long'],ss['short'],funding,lo,hi,side,p,False)
                     sensitivity.append(dict(target_r=target,book=book,window=name,variant=label,**metrics(trades,None,hours=hi-lo)))
+                    sensitivity_ledger.extend(dict(target_r=target,book=book,window=name,variant=label,**t) for t in trades)
             lo,hi=windows['TEST'];stress=replace(p,fee=.0015,slippage=.001)
             trades,eq,_=simulate(bars,f['atr'],sig['long'],sig['short'],funding,lo,hi,side,stress)
             sensitivity.append(dict(target_r=target,book=book,window='TEST',variant='COST_STRESS_15_10_BPS',**metrics(trades,eq)))
@@ -173,13 +181,18 @@ def evaluate(cache,out):
     csv_write(out/'metrics.csv',[{k:json.dumps(v) if isinstance(v,(list,dict)) else v for k,v in x.items()} for x in results])
     csv_write(out/'trades_all.csv',ledger);gz_write(out/'trades_all.jsonl.gz',ledger)
     csv_write(out/'signal_dispositions.csv',decisions);csv_write(out/'equity_all.csv',equity_rows)
+    for filename in ('signals_all.csv','equity_all.csv'):
+        (out/(filename+'.gz')).write_bytes(gzip.compress((out/filename).read_bytes(),mtime=0))
     csv_write(out/'random_controls.csv',random_rows);csv_write(out/'sensitivity.csv',sensitivity);csv_write(out/'year_side_regime.csv',slices)
+    csv_write(out/'sensitivity_trades.csv',sensitivity_ledger)
     summary=dict(protocol=protocol['protocol'],protocol_sha256=manifest['protocol_sha256'],
         freeze_commit='4896dee9b9ae4bc28c05e479562a1511f48cd972',
         data_addenda_commits=['fe29923bf3fa5f4b1a59d95566e77d0f1feae3ce','a077a0b','85ec9ba'],
         evaluation_bars=n,warmup_bars=start,split_at_utc=iso(bars[cut,0]),long_signals=int(sig['long'][start:].sum()),
         short_signals=int(sig['short'][start:].sum()),metrics=results,
         evidence='RETROSPECTIVE_NO_VIRGIN_HOLDOUT',actual_forward_events=0,actual_pine_logs=0,
+        outcome_distribution_status='NOT_ESTIMABLE_NO_PRIMARY_TRADES' if not ledger else 'AVAILABLE_IN_TRADE_CSV',
+        no_trade_zero_equity_change='MECHANICAL_NO_ACTIVITY_NOT_EVIDENCE_OF_SAFETY_OR_PROFITABILITY',
         python=platform.python_version(),numpy=np.__version__,implementation_commit_at_run=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
         source_sha_note='Run commit is a source reference; uncommitted implementation/source hashes are captured below before results are versioned.',
         source_sha256={p.name:hashlib.sha256(p.read_bytes().replace(b'\r\n',b'\n')).hexdigest() for p in HERE.glob('*.py')},

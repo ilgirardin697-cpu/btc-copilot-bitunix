@@ -1,0 +1,31 @@
+name: Confluence 1H offline research audit
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  offline-research:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Research dependencies, never deployment
+        run: python -m pip install -r requirements.txt -r research/confluence_1h/requirements-research.txt
+      - name: Mandatory dependencies and compilation
+        run: |
+          python -c "import numpy,pandas,matplotlib,requests; from zoneinfo import ZoneInfo; ZoneInfo('Europe/Madrid')"
+          python -m compileall -q research/confluence_1h test_confluence_1h_research.py
+      - name: Public-formula reference, chronology, costs, uncertainty, isolation
+        run: python -m unittest test_confluence_1h_research -v
+      - name: Protected risk, execution, V8, ML RSI and frozen weekly protocol
+        run: |
+          python mlrsi_safety_audit.py
+          python test_bitman_weekly_boundary.py --require-v8 -v
+          python test_bitman_readiness_boundary.py --require-v8 -v
+      - name: Full regression, no market downloads or strategy selection
+        run: python -m unittest discover -v
+      - name: Whitespace
+        run: git diff --check HEAD^ HEAD

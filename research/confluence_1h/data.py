@@ -64,7 +64,7 @@ def acquire(cache,family,month,frequency='monthly'):
 def decode_klines(rows,allow_gaps=False):
     data=[]
     for r in rows:
-        if r[0].lower() in ('open_time','open time'):continue
+        if str(r[0]).lower() in ('open_time','open time'):continue
         if len(r)!=12:raise ValueError('KLINE_NOT12')
         t,closed=int(r[0]),int(r[6])
         if t%HOUR or closed!=t+HOUR-1:raise ValueError('USDM_H1_TIMESTAMP_OR_CLOSE')
