@@ -1,0 +1,16 @@
+{
+  "url": "https://fapi.binance.com/fapi/v1/klines",
+  "params": {
+    "symbol": "BTCUSDT",
+    "interval": "1h",
+    "startTime": 1794729600000,
+    "endTime": 1794779999999,
+    "limit": 1000
+  },
+  "status": 200,
+  "received_at": "2026-11-15T22:27:03.431272+00:00",
+  "bytes": 2007,
+  "sha256": "355b6d73d7e0197d5c53d8563e54d197d8fa70202fe6f21b6522618236093b48",
+  "authentication": false,
+  "method": "GET"
+}

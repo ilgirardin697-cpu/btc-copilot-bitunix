@@ -1,0 +1,45 @@
+{
+  "venue": "BINANCE_SPOT",
+  "symbol": "BTCUSDT",
+  "timeframe": "1H_CLOSED",
+  "rows": 1822,
+  "first_open_ms": 1788220800000,
+  "last_open_ms": 1794776400000,
+  "closed_cutoff_ms": 1794780000000,
+  "sha256": "5a9bb5fd5fc4d58e88dd976ad0f4210c21dd1c8f891ed8bb38b680d351c4b480",
+  "old_fixture_sha256": "960c8cf5becc0e3ccaba58e9cad9b6e1f1db956b7d8ac99f0af8302d1adf067d",
+  "old_fixture": "research/confluence_1h_phase2/event_proximity/fixtures/SPOT_H1_FOCUS.csv.gz",
+  "old_receipt_limit": "Older response bytes/hash retained; original first-retrieval HTTP receipt not attested",
+  "new_receipts": [
+    {
+      "url": "https://api.binance.com/api/v3/time",
+      "params": {},
+      "status": 200,
+      "received_at": "2026-11-15T22:27:02.070586+00:00",
+      "bytes": 28,
+      "sha256": "41e3126cee8335aae6f426c0f6f9f0dcfa150302bd8f835597efd30c5409cb47",
+      "authentication": false,
+      "method": "GET"
+    },
+    {
+      "url": "https://api.binance.com/api/v3/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "1h",
+        "startTime": 1794744000000,
+        "endTime": 1794779999999,
+        "limit": 1000
+      },
+      "status": 200,
+      "received_at": "2026-11-15T22:27:02.464165+00:00",
+      "bytes": 1793,
+      "sha256": "d9f2d3970fa7eaaa19d164bb53b2375f4f2f845f8d652c04647a92e83d21571c",
+      "authentication": false,
+      "method": "GET"
+    }
+  ],
+  "unchanged_overlap_rows": 3,
+  "lookahead": false,
+  "diagnostic_preobserved": true,
+  "forward_capture": false
+}

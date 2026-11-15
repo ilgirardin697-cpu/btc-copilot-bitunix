@@ -1,0 +1,5 @@
+*.zip -text -diff
+*.png -text -diff
+*.gz -text -diff
+*.csv text eol=lf
+*.json text eol=lf
