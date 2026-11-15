@@ -1,0 +1,76 @@
+// MPL-2.0. Default Koncorde math: supplied OskarGallard/Blai5 public adaptation.
+// BBWP: supplied The_Caretaker v6, literal rightmost-index semantics retained.
+// Diagnostic indicator only. NOT a trading strategy or private Bitman replica.
+//@version=6
+indicator("I-GOD Confluence H1 — offline audit reference", overlay=true, max_lines_count=500)
+adxThreshold = input.float(40, "Lagged ADX threshold")
+bbwpThreshold = input.float(85, "BBWP threshold")
+emitLogs = input.bool(false, "Diagnostic closed-bar Pine Logs")
+logFrom = input.time(timestamp("14 Nov 2026 00:00 +0000"), "Log from UTC")
+logUntil = input.time(timestamp("16 Nov 2026 00:00 +0000"), "Log until UTC exclusive")
+
+p = ohlc4
+rsiK = ta.rsi(p, 14)
+mfiK = ta.mfi(hlc3, 14)
+basisK = ta.sma(p, 25)
+sigmaK = ta.stdev(p, 25)
+bollK = sigmaK != 0 ? 100 * (p - basisK) / (4 * sigmaK) : na
+loK = ta.lowest(low, 21)
+hiK = ta.highest(high, 21)
+stochK = ta.sma(hiK > loK ? 100 * (p - loK) / (hiK - loK) : na, 3)
+konTrend = (rsiK + mfiK + bollK + stochK / 3) / 2
+konSignal = ta.ema(konTrend, 15)
+pviEma = ta.ema(ta.pvi, 15)
+nviEma = ta.ema(ta.nvi, 15)
+pviSpan = ta.highest(pviEma, 90) - ta.lowest(pviEma, 90)
+nviSpan = ta.highest(nviEma, 90) - ta.lowest(nviEma, 90)
+minnows = pviSpan != 0 ? konTrend + (ta.pvi - pviEma) * 100 / pviSpan : na
+sharks = nviSpan != 0 ? (ta.nvi - nviEma) * 100 / nviSpan : na
+[plusDI, minusDI, adx] = ta.dmi(14, 14)
+atr = ta.atr(14)
+ao = ta.sma(hl2, 5) - ta.sma(hl2, 34)
+
+f_bbwp() =>
+    var array<float> raw = array.new_float()
+    var array<float> sorted = array.new_float()
+    width = 2 * ta.stdev(close, 7) / ta.sma(close, 7)
+    float result = na
+    if bar_index >= 7 and not na(width)
+        if array.size(sorted) > 0
+            result := array.binary_search_rightmost(sorted, width) * 100.0 / array.size(sorted)
+        array.push(raw, width)
+        array.insert(sorted, array.binary_search_rightmost(sorted, width), width)
+        if array.size(raw) > 100
+            old = array.shift(raw)
+            array.remove(sorted, array.binary_search_rightmost(sorted, old))
+    result
+
+bbwp = f_bbwp()
+crossUp = ta.crossover(konTrend, konSignal)
+crossDown = ta.crossunder(konTrend, konSignal)
+adxDecline = adx[1] < adx[2] and adx[2] > adxThreshold
+longSignal = barstate.isconfirmed and timeframe.period == "60" and crossUp and konTrend[1] < 0 and adxDecline and ao < 0 and ao > ao[1] and ao[1] > ao[2] and bbwp > bbwpThreshold and not na(atr)
+shortSignal = barstate.isconfirmed and timeframe.period == "60" and crossDown and konTrend[1] > 0 and adxDecline and ao > 0 and ao < ao[1] and ao[1] < ao[2] and bbwp > bbwpThreshold and not na(atr)
+plotshape(longSignal, "Research LONG", shape.triangleup, location.belowbar, color.lime, text="L", size=size.tiny)
+plotshape(shortSignal, "Research SHORT", shape.triangledown, location.abovebar, color.red, text="S", size=size.tiny)
+if longSignal or shortSignal
+    line.new(bar_index, low, bar_index, high, extend=extend.both, color=longSignal ? color.new(color.lime, 65) : color.new(color.red, 65))
+plot(konTrend, "Koncorde trend", display=display.data_window)
+plot(konSignal, "Koncorde EMA15", display=display.data_window)
+plot(minnows, "Koncorde minnows", display=display.data_window)
+plot(sharks, "Koncorde sharks", display=display.data_window)
+plot(adx, "ADX14/14", display=display.data_window)
+plot(plusDI, "+DI14", display=display.data_window)
+plot(minusDI, "-DI14", display=display.data_window)
+plot(ao, "AO5/34", display=display.data_window)
+plot(bbwp, "Literal BBWP7/100", display=display.data_window)
+plot(atr, "ATR14", display=display.data_window)
+
+f_num(float x) => na(x) ? "null" : str.tostring(x, "#.###############")
+if emitLogs and barstate.isconfirmed and timeframe.period == "60" and time >= logFrom and time < logUntil
+    string payload = '{"ticker":"' + syminfo.tickerid + '","timeframe":"60","open_time":' + str.tostring(time) + ',"available_at":' + str.tostring(time_close)
+    payload += ',"kon_trend":' + f_num(konTrend) + ',"kon_signal":' + f_num(konSignal) + ',"adx":' + f_num(adx) + ',"plus_di":' + f_num(plusDI) + ',"minus_di":' + f_num(minusDI)
+    payload += ',"ao":' + f_num(ao) + ',"bbwp":' + f_num(bbwp) + ',"atr":' + f_num(atr) + ',"long":' + (longSignal ? "true" : "false") + ',"short":' + (shortSignal ? "true" : "false") + '}'
+    log.info("IGOD_CONFLUENCE_AUDIT_V0=" + payload)
+// No strategy.*, alert(), broker integration, permissions or execution path.
+// SHADOW ONLY. TRADE AUTHORITY: NONE.
