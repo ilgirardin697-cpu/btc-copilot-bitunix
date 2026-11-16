@@ -1,0 +1,162 @@
+{
+  "base": "3fcfc793f1db1c37dd9a3e905c9e7e1368f0c544",
+  "branch": "confluence-forward-shadow-spec",
+  "registry_version": "IGOD_H1_FORWARD_AUDIT_V1",
+  "registry_sha256": "6619b8ad176737de7b75c8d297ae7ab14b771879b8ad969161ba6b155ad325b9",
+  "activation": null,
+  "continuous_capture": false,
+  "prospective_observations": 0,
+  "new_historical_backtests": 0,
+  "test_data": "SYNTHETIC_ONLY; original checked-in historical artifacts read by existing regression tests, no new optimization",
+  "checks": {
+    "unit": {
+      "check": "unit",
+      "returncode": 0,
+      "tests": 63,
+      "skipped": 0,
+      "seconds": 409.83,
+      "failed": 0
+    },
+    "full": {
+      "check": "full_final",
+      "returncode": 0,
+      "tests": 1290,
+      "skipped": 0,
+      "seconds": 746.95,
+      "failed": 0
+    },
+    "compile": {
+      "check": "compile",
+      "returncode": 0,
+      "tests": null,
+      "skipped": 0,
+      "seconds": 0.53,
+      "failed": 0
+    },
+    "mlrsi": {
+      "check": "mlrsi",
+      "returncode": 0,
+      "tests": null,
+      "skipped": 0,
+      "seconds": 6.17,
+      "failed": 0
+    },
+    "weekly": {
+      "check": "weekly",
+      "returncode": 0,
+      "tests": 9,
+      "skipped": 0,
+      "seconds": 3.61,
+      "failed": 0
+    },
+    "display": {
+      "check": "display",
+      "returncode": 0,
+      "tests": 7,
+      "skipped": 0,
+      "seconds": 4.41,
+      "failed": 0
+    },
+    "matrix": {
+      "check": "matrix",
+      "returncode": 0,
+      "tests": 50,
+      "skipped": 0,
+      "seconds": 2.34,
+      "failed": 0
+    }
+  },
+  "readiness": {
+    "approved_commit": "1875f91e0c8515c267129c6e9cf8ccc6bc4306fa",
+    "source_sha256": "f0cd37aa3ff80c049f12215e3243fcc4af6300e43caccd006c8ab3a3c0f40e21",
+    "combinations": 900,
+    "status_counts": {
+      "WAIT": 780,
+      "WATCH_LONG": 59,
+      "READY_LONG": 1,
+      "WATCH_SHORT": 59,
+      "READY_SHORT": 1
+    },
+    "normalized_results_sha256": "1ffcf53c6b056e7bdf3b780f1fc4ebce49616363a66467e573c5c1a2ef71f014"
+  },
+  "frozen_weekly_v1": "d4fe75fce89e8f248123409c293b1114f9af2eb16b8aee5572b40802a54aefe8",
+  "old_prs": "46-51 unchanged; parent51 independently read OPEN/DRAFT at the approved head",
+  "runtime_changes": false,
+  "railway_access": false,
+  "bitunix_access": false,
+  "telegram_sent": false,
+  "collector_or_scheduler_implemented": false,
+  "trade_authority": "NONE",
+  "workflows_expected": [
+    "Manual Bitman read-only command",
+    "Bitman Market Data",
+    "Bitman operability gate",
+    "Bitman weekly forward observer",
+    "Confluence 1H offline research audit",
+    "Confluence H1 series and timing parity",
+    "Early Breakout public SHADOW research",
+    "Guardian capital protection V2",
+    "I-GOD daily plan and single-bot router",
+    "Passive ML RSI MTF observer",
+    "I-GOD Trade Guardian audit",
+    "V8 SHADOW checks"
+  ],
+  "ci": "pending push; verify final PR head separately, never assume success",
+  "initial_global_run": {
+    "check": "full",
+    "returncode": 1,
+    "tests": 1289,
+    "skipped": 0,
+    "seconds": 407.27
+  },
+  "initial_failed_existing_tests": [
+    "test_bitman_manual.PublicAndWorkerTests.test_real_child_protocol_invalid_request_no_network",
+    "test_bitman_weekly_logging.ActualWorkerBoundary.test_logging_does_not_change_any_journal_bytes_or_result"
+  ],
+  "subprocess_reproduction": [
+    {
+      "worktree": "confluence_forward_worktree",
+      "repeat": 1,
+      "returncode": 0,
+      "seconds": 11.69
+    },
+    {
+      "worktree": "confluence_forward_worktree",
+      "repeat": 2,
+      "returncode": 0,
+      "seconds": 9.34
+    },
+    {
+      "worktree": "confluence_forward_worktree",
+      "repeat": 3,
+      "returncode": 0,
+      "seconds": 9.22
+    },
+    {
+      "worktree": "confluence_f1b_worktree",
+      "repeat": 1,
+      "returncode": 0,
+      "seconds": 9.41
+    },
+    {
+      "worktree": "confluence_f1b_worktree",
+      "repeat": 2,
+      "returncode": 0,
+      "seconds": 9.47
+    },
+    {
+      "worktree": "confluence_f1b_worktree",
+      "repeat": 3,
+      "returncode": 1,
+      "seconds": 1528.25
+    }
+  ],
+  "limitations": [
+    "No prospective samples or profitability result.",
+    "Strict semantic replay requires reviewed/pinned numerical environment.",
+    "Hash chain needs external trusted checkpoints/backups, not WORM.",
+    "Independent collector/storage/clock/load review and separate activation approval still required.",
+    "Windows deep compileall temporary pyc exceeded MAX_PATH; source compilation passed in memory.",
+    "Initial global run had two existing subprocess failures. Both passed3/3 on new branch; unchanged baseline also timed out after a25min wall-clock discontinuity. Final global result is listed separately."
+  ]
+}

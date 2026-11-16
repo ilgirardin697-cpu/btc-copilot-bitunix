@@ -1,0 +1,9 @@
+{
+  "file": "audit_bundle.zip",
+  "sha256": "e54020eaa78c5f9d59e49c14f12d1d56ad7742c44ac8890135618ec26fd9dc71",
+  "bytes": 79467,
+  "entries": 28,
+  "inner_hashes_verified": true,
+  "contains_forward_data": false,
+  "reproduction_requires": "full repository at this branch with base git history; no credentials"
+}
