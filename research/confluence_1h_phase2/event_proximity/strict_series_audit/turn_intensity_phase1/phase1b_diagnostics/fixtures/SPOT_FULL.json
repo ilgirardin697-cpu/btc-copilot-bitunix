@@ -1,0 +1,37 @@
+{
+  "venue": "BINANCE_SPOT",
+  "rows": 1823,
+  "sha256": "e4ce4157354be93316c609af59bee1cc81900581e4708b80d39190e04d82fb30",
+  "previous_fixture_sha256": "5a9bb5fd5fc4d58e88dd976ad0f4210c21dd1c8f891ed8bb38b680d351c4b480",
+  "requested_last_close_ms": 1794783600000,
+  "actual_received_at": "2026-11-16T07:38:31.888057+00:00",
+  "new_receipts": [
+    {
+      "url": "https://api.binance.com/api/v3/time",
+      "params": {},
+      "status": 200,
+      "received_at": "2026-11-16T07:38:31.452671+00:00",
+      "bytes": 28,
+      "sha256": "8fb51f2dc3b192bb6ad982f3e7a37c50a1890cfbf70fc8708b092bfbb5bf26be",
+      "authentication": false,
+      "method": "GET"
+    },
+    {
+      "url": "https://api.binance.com/api/v3/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "1h",
+        "startTime": 1794780000000,
+        "endTime": 1794783599999,
+        "limit": 1
+      },
+      "status": 200,
+      "received_at": "2026-11-16T07:38:31.888057+00:00",
+      "bytes": 179,
+      "sha256": "dae35a3b7eb240983dda0d1dc78f3cea5c8dc244633fe2accc75d32e6d770984",
+      "authentication": false,
+      "method": "GET"
+    }
+  ],
+  "purpose": "COMPLETE_LAST_REQUESTED_HOUR_ONLY; INITIAL_SNAPSHOT_PRESERVED; NO_FORWARD_EVIDENCE"
+}

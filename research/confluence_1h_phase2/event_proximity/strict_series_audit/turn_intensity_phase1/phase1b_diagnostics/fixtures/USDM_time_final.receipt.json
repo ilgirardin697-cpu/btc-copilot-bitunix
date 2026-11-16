@@ -1,0 +1,10 @@
+{
+  "url": "https://fapi.binance.com/fapi/v1/time",
+  "params": {},
+  "status": 200,
+  "received_at": "2026-11-16T07:38:32.400661+00:00",
+  "bytes": 28,
+  "sha256": "4ebd214add2807ac54c13f845ad963f2e599f74a5d282e9ae4cf6d2773c1738c",
+  "authentication": false,
+  "method": "GET"
+}

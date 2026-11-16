@@ -1,0 +1,7 @@
+{
+  "path": "research/confluence_1h_phase2/event_proximity/strict_series_audit/turn_intensity_phase1/phase1b_diagnostics/F1B_AUDIT.zip",
+  "bytes": 9470259,
+  "sha256": "b6507347119617f6e8ac352ad9ed7585a771fd8147d70d4cf80eac184af48057",
+  "members": 421,
+  "interpretation": "Fixed archive timestamps are packaging metadata, never observation timestamps"
+}

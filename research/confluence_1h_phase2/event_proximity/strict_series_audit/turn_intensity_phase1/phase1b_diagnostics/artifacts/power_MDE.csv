@@ -1,0 +1,19 @@
+pattern,side,development_matched_n,sigma_sample_ddof1,variance,MDE_pp,required_effective_n,primary_unchanged,fallback_used,unit,note
+P1_PEAK_EXHAUSTION,1,3,0.022873560190168684,0.0005231997557732696,0.1,5478,True,False,net_fraction,Plug-in variance from2-7 sparse development pairs is very uncertain; sensitivity does not replace primary
+P1_PEAK_EXHAUSTION,1,3,0.022873560190168684,0.0005231997557732696,0.3,609,False,False,net_fraction,Plug-in variance from2-7 sparse development pairs is very uncertain; sensitivity does not replace primary
+P1_PEAK_EXHAUSTION,1,3,0.022873560190168684,0.0005231997557732696,0.5,220,False,False,net_fraction,Plug-in variance from2-7 sparse development pairs is very uncertain; sensitivity does not replace primary
+P1_PEAK_EXHAUSTION,-1,2,0.006149894731843799,3.782120521276011e-05,0.1,396,True,False,net_fraction,Plug-in variance from2-7 sparse development pairs is very uncertain; sensitivity does not replace primary
+P1_PEAK_EXHAUSTION,-1,2,0.006149894731843799,3.782120521276011e-05,0.3,44,False,False,net_fraction,Plug-in variance from2-7 sparse development pairs is very uncertain; sensitivity does not replace primary
+P1_PEAK_EXHAUSTION,-1,2,0.006149894731843799,3.782120521276011e-05,0.5,16,False,False,net_fraction,Plug-in variance from2-7 sparse development pairs is very uncertain; sensitivity does not replace primary
+P2_TROUGH_ONSET,1,2,0.06383026967933104,0.004074303327336128,0.1,42655,True,False,net_fraction,Plug-in variance from2-7 sparse development pairs is very uncertain; sensitivity does not replace primary
+P2_TROUGH_ONSET,1,2,0.06383026967933104,0.004074303327336128,0.3,4740,False,False,net_fraction,Plug-in variance from2-7 sparse development pairs is very uncertain; sensitivity does not replace primary
+P2_TROUGH_ONSET,1,2,0.06383026967933104,0.004074303327336128,0.5,1707,False,False,net_fraction,Plug-in variance from2-7 sparse development pairs is very uncertain; sensitivity does not replace primary
+P2_TROUGH_ONSET,-1,4,0.03786944128780261,0.0014340945834503292,0.1,15014,True,False,net_fraction,Plug-in variance from2-7 sparse development pairs is very uncertain; sensitivity does not replace primary
+P2_TROUGH_ONSET,-1,4,0.03786944128780261,0.0014340945834503292,0.3,1669,False,False,net_fraction,Plug-in variance from2-7 sparse development pairs is very uncertain; sensitivity does not replace primary
+P2_TROUGH_ONSET,-1,4,0.03786944128780261,0.0014340945834503292,0.5,601,False,False,net_fraction,Plug-in variance from2-7 sparse development pairs is very uncertain; sensitivity does not replace primary
+P3_FAILED_RECOVERY,1,5,0.017786500727830338,0.00031635960814110914,0.1,3313,True,False,net_fraction,Plug-in variance from2-7 sparse development pairs is very uncertain; sensitivity does not replace primary
+P3_FAILED_RECOVERY,1,5,0.017786500727830338,0.00031635960814110914,0.3,369,False,False,net_fraction,Plug-in variance from2-7 sparse development pairs is very uncertain; sensitivity does not replace primary
+P3_FAILED_RECOVERY,1,5,0.017786500727830338,0.00031635960814110914,0.5,133,False,False,net_fraction,Plug-in variance from2-7 sparse development pairs is very uncertain; sensitivity does not replace primary
+P3_FAILED_RECOVERY,-1,7,0.01709192845409941,0.00029213401828005303,0.1,3059,True,False,net_fraction,Plug-in variance from2-7 sparse development pairs is very uncertain; sensitivity does not replace primary
+P3_FAILED_RECOVERY,-1,7,0.01709192845409941,0.00029213401828005303,0.3,340,False,False,net_fraction,Plug-in variance from2-7 sparse development pairs is very uncertain; sensitivity does not replace primary
+P3_FAILED_RECOVERY,-1,7,0.01709192845409941,0.00029213401828005303,0.5,123,False,False,net_fraction,Plug-in variance from2-7 sparse development pairs is very uncertain; sensitivity does not replace primary

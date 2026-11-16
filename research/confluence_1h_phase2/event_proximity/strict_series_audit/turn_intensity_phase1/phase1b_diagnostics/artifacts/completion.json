@@ -1,0 +1,88 @@
+{
+  "earlier_capture_preserved": true,
+  "interpretation": "LATER_HISTORICAL_COMPLETION_NOT_FORWARD",
+  "last_close": "2026-11-15T23:00:00Z",
+  "new_sources": [
+    {
+      "actual_received_at": "2026-11-16T07:38:31.888057+00:00",
+      "new_receipts": [
+        {
+          "authentication": false,
+          "bytes": 28,
+          "method": "GET",
+          "params": {},
+          "received_at": "2026-11-16T07:38:31.452671+00:00",
+          "sha256": "8fb51f2dc3b192bb6ad982f3e7a37c50a1890cfbf70fc8708b092bfbb5bf26be",
+          "status": 200,
+          "url": "https://api.binance.com/api/v3/time"
+        },
+        {
+          "authentication": false,
+          "bytes": 179,
+          "method": "GET",
+          "params": {
+            "endTime": 1794783599999,
+            "interval": "1h",
+            "limit": 1,
+            "startTime": 1794780000000,
+            "symbol": "BTCUSDT"
+          },
+          "received_at": "2026-11-16T07:38:31.888057+00:00",
+          "sha256": "dae35a3b7eb240983dda0d1dc78f3cea5c8dc244633fe2accc75d32e6d770984",
+          "status": 200,
+          "url": "https://api.binance.com/api/v3/klines"
+        }
+      ],
+      "previous_fixture_sha256": "5a9bb5fd5fc4d58e88dd976ad0f4210c21dd1c8f891ed8bb38b680d351c4b480",
+      "purpose": "COMPLETE_LAST_REQUESTED_HOUR_ONLY; INITIAL_SNAPSHOT_PRESERVED; NO_FORWARD_EVIDENCE",
+      "requested_last_close_ms": 1794783600000,
+      "rows": 1823,
+      "sha256": "e4ce4157354be93316c609af59bee1cc81900581e4708b80d39190e04d82fb30",
+      "venue": "BINANCE_SPOT"
+    },
+    {
+      "actual_received_at": "2026-11-16T07:38:32.838429+00:00",
+      "new_receipts": [
+        {
+          "authentication": false,
+          "bytes": 28,
+          "method": "GET",
+          "params": {},
+          "received_at": "2026-11-16T07:38:32.400661+00:00",
+          "sha256": "4ebd214add2807ac54c13f845ad963f2e599f74a5d282e9ae4cf6d2773c1738c",
+          "status": 200,
+          "url": "https://fapi.binance.com/fapi/v1/time"
+        },
+        {
+          "authentication": false,
+          "bytes": 144,
+          "method": "GET",
+          "params": {
+            "endTime": 1794783599999,
+            "interval": "1h",
+            "limit": 1,
+            "startTime": 1794780000000,
+            "symbol": "BTCUSDT"
+          },
+          "received_at": "2026-11-16T07:38:32.838429+00:00",
+          "sha256": "4598fdc8642063d1948a5035e4d4a809f74c321c011d75d69bc1418323800320",
+          "status": 200,
+          "url": "https://fapi.binance.com/fapi/v1/klines"
+        }
+      ],
+      "previous_fixture_sha256": "9321e3902c7a7517e5e7a2fc92fac726fe687770d3390ce6c7d56a910033cc75",
+      "purpose": "COMPLETE_LAST_REQUESTED_HOUR_ONLY; INITIAL_SNAPSHOT_PRESERVED; NO_FORWARD_EVIDENCE",
+      "requested_last_close_ms": 1794783600000,
+      "rows": 1823,
+      "sha256": "f1398b3e172b6a99ecb9d08852510303668110581ed99118016a5530c229d30c",
+      "venue": "BINANCE_USDM_PERPETUAL"
+    }
+  ],
+  "no_rule_change": true,
+  "old_events_preserved": true,
+  "rows": 192,
+  "rows_per_venue": {
+    "SPOT": 96,
+    "USDM": 96
+  }
+}
