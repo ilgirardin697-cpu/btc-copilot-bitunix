@@ -1,0 +1,28 @@
+{
+  "base": "9f307fd9feda6279253c0a0813d49b47d3f1d9b2",
+  "source_hashes": {
+    "__init__.py": "3bde7b097de3d8cb1cbc3a432ffb558e54d30e3250d3056733b8c69d3d8b0da9",
+    "benchmark.py": "250b5602785bb50aa77ab28ab4a48011d423fc3c27edf12535c29faef587ffb2",
+    "codec.py": "f763507b686d5e923816d598163502507db52b14a07cb979da7aeb20ef416098",
+    "core.py": "09e872f11c67e54ac8fa05d20dc74a8336862daffb563ce9ba11ac0cd37c1580",
+    "incremental.py": "47fecfa466cad653e8ca6f9b61bfc4a4a30570bd75308ec5047685e46b9b3bd8",
+    "integrity.py": "e81d56c1be54e2933699ea0874f2d9a0b017dfd6d92d2526935d4c7155127d83",
+    "ledger.py": "89f9bbff6e1b6f94e76fa4b75c08770cfce4be67701277ae6b6c792637951feb",
+    "manifest.json": "f2947259d9f556b807be7ce9e715254b3e6a040828aeb1b920979c6341b863a2",
+    "market.py": "f6b508e1eb7ba4f63cbf259acc7c3702a17cafefdbf5ba385237193b5f7f1fea",
+    "planning.py": "1c49834aaccdcbf6b8ba0f389d43801987f585097381e17eb758bb043a99cc23",
+    "policy.json": "6cdaf244670d6b36d454417b6395d28deb94a02c454641df5bb8c1dd1545d2e9",
+    "power.json": "e3355c3a272ee507941ed688cbd54c7cd7db7e455202bac03a644d4cebf07d71",
+    "README.md": "6464954858fdd2e14186bf16a4fbbf023ec196460d2641e1181b953eeffe6f91",
+    "registry.py": "f09d0058bece150b7ecf1d7b259a17947c202e754d09a893252e53fcb346fb69",
+    "REPORT.md": "4582d2d59289317e3892ffa2b59f76f54b4fdb3e988f61f20921148fffa3bb44",
+    "results/gates.csv": "aa6634bac6fd2509ab652ee0d379451dc717bc9cfbc80cf06c5fcb379a6d4a57",
+    "results/load_8760.csv": "acbcc1c841af458ef152bfe4d9df46806b2c1a8c15a29eef8804a38af1d5aee7",
+    "results/load_8760.json": "e50357b53807d2d2d4b132fe4adf959a21c1b4a99e26ee0e49b35edaa1c6d10b",
+    "results/power.csv": "a8d1ef2da4935d70a45e4c653efdda4384aedf79918bf335a4f3d6748698aee0",
+    "statistics.py": "a22baffbc04952c0244bcead2cb72801c10695c847f19ecdb0f66ded88a00a47",
+    "test_v2.py": "d8d65310494327f8d65c6bdb30acc4c01d47873fc6a1cb4f7d2a1d1269fcca73",
+    "validation.json": "70b5f96cdc16333c9d91b0e3ff7f0e9ae129660a7527e02cad281c193ecb6ee4",
+    "volume_probe.py": "ffab5c6bcdbb440702cf11221b6ec2fb12dcd7adcca22160803685c2837b1315"
+  }
+}
