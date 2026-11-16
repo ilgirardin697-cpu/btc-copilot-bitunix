@@ -1,0 +1,10 @@
+{
+  "url": "https://api.binance.com/api/v3/time",
+  "params": {},
+  "status": 200,
+  "received_at": "2026-11-15T22:27:02.070586+00:00",
+  "bytes": 28,
+  "sha256": "41e3126cee8335aae6f426c0f6f9f0dcfa150302bd8f835597efd30c5409cb47",
+  "authentication": false,
+  "method": "GET"
+}

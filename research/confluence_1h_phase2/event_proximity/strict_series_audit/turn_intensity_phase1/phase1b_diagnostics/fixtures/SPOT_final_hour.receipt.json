@@ -1,0 +1,16 @@
+{
+  "url": "https://api.binance.com/api/v3/klines",
+  "params": {
+    "symbol": "BTCUSDT",
+    "interval": "1h",
+    "startTime": 1794780000000,
+    "endTime": 1794783599999,
+    "limit": 1
+  },
+  "status": 200,
+  "received_at": "2026-11-16T07:38:31.888057+00:00",
+  "bytes": 179,
+  "sha256": "dae35a3b7eb240983dda0d1dc78f3cea5c8dc244633fe2accc75d32e6d770984",
+  "authentication": false,
+  "method": "GET"
+}

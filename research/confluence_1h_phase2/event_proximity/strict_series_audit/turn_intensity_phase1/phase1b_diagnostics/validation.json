@@ -1,0 +1,109 @@
+{
+  "checks": {
+    "display": {
+      "check": "display",
+      "returncode": 0,
+      "tests": 7,
+      "skipped": 0,
+      "seconds": 2.2
+    },
+    "evaluate": {
+      "check": "evaluate",
+      "returncode": 0,
+      "tests": null,
+      "skipped": 0,
+      "seconds": 62.41
+    },
+    "full": {
+      "check": "full",
+      "returncode": 0,
+      "tests": 1227,
+      "skipped": 0,
+      "seconds": 219.86
+    },
+    "matrix": {
+      "check": "matrix",
+      "returncode": 0,
+      "tests": 50,
+      "skipped": 0,
+      "seconds": 1.12
+    },
+    "minimal": {
+      "check": "minimal",
+      "returncode": 0,
+      "tests": 177,
+      "skipped": 29,
+      "seconds": 8.12
+    },
+    "mlrsi": {
+      "check": "mlrsi",
+      "returncode": 0,
+      "tests": null,
+      "skipped": 0,
+      "seconds": 3.97
+    },
+    "report": {
+      "check": "report",
+      "returncode": 0,
+      "tests": null,
+      "skipped": 0,
+      "seconds": 2.97
+    },
+    "tail": {
+      "check": "tail",
+      "returncode": 0,
+      "tests": null,
+      "skipped": 0,
+      "seconds": 7.05
+    },
+    "unit": {
+      "check": "unit",
+      "returncode": 0,
+      "tests": 30,
+      "skipped": 0,
+      "seconds": 4.48
+    },
+    "weekly": {
+      "check": "weekly",
+      "returncode": 0,
+      "tests": 9,
+      "skipped": 0,
+      "seconds": 1.98
+    }
+  },
+  "new_tests": 30,
+  "global_tests": 1227,
+  "global_failed": 0,
+  "global_skipped": 0,
+  "reference_commit": "a48af422f485554dd28ee8da45a3cf1aa0a01929",
+  "diagnostic_plan_commit": "da9cd29",
+  "original_protocol_sha256": "3fcdbd8c5c50eda66e560def8c91326055fdea1a576acf8fa8ad356c3fdf1835",
+  "detector_source_sha256": "5f3bba638bf262ab286f02832545f2ef131eecaa4bc4eb9120c3286ba6b374c1",
+  "initial_november_rows": 190,
+  "completed_november_rows": 192,
+  "initial_capture_preserved": true,
+  "readiness_counts": {
+    "WAIT": 780,
+    "WATCH_LONG": 59,
+    "WATCH_SHORT": 59,
+    "READY_LONG": 1,
+    "READY_SHORT": 1
+  },
+  "readiness_hash": "1ffcf53c6b056e7bdf3b780f1fc4ebce49616363a66467e573c5c1a2ef71f014",
+  "weekly_protocol_hash": "d4fe75fce89e8f248123409c293b1114f9af2eb16b8aee5572b40802a54aefe8",
+  "public_binance_successful_gets": 8,
+  "private_api_calls": 0,
+  "railway_mutations": 0,
+  "orders": 0,
+  "telegram_messages": 0,
+  "source_or_rule_changes": 0,
+  "phase2_manager": false,
+  "conclusion": "DIAGNOSIS_ONLY; PR50_NO_TESTABLE_UNCHANGED",
+  "limitations": [
+    "Preobserved November cases; no independent validation",
+    "Original historical receipt times not attested",
+    "DNS initially failed after overnight resume; retry unchanged host succeeded",
+    "Full1224-test intermediate run included a long suspension; fresh final1227-test run completed normally"
+  ],
+  "trade_authority": "NONE"
+}

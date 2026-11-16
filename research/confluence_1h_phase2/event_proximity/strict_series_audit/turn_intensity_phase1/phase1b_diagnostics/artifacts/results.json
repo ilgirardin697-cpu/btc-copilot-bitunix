@@ -1,0 +1,115 @@
+{
+  "conservative_costs_identical": true,
+  "delay_rows": 160,
+  "development_sigma_identical": true,
+  "frozen_detector_sha256": "5f3bba638bf262ab286f02832545f2ef131eecaa4bc4eb9120c3286ba6b374c1",
+  "history_rows": 36528,
+  "new_history_since2019": false,
+  "new_strategy_variants": 0,
+  "no_forward_validation": true,
+  "november_rows": 190,
+  "november_sources": [
+    {
+      "closed_cutoff_ms": 1794780000000,
+      "diagnostic_preobserved": true,
+      "first_open_ms": 1788220800000,
+      "forward_capture": false,
+      "last_open_ms": 1794776400000,
+      "lookahead": false,
+      "new_receipts": [
+        {
+          "authentication": false,
+          "bytes": 28,
+          "method": "GET",
+          "params": {},
+          "received_at": "2026-11-15T22:27:02.070586+00:00",
+          "sha256": "41e3126cee8335aae6f426c0f6f9f0dcfa150302bd8f835597efd30c5409cb47",
+          "status": 200,
+          "url": "https://api.binance.com/api/v3/time"
+        },
+        {
+          "authentication": false,
+          "bytes": 1793,
+          "method": "GET",
+          "params": {
+            "endTime": 1794779999999,
+            "interval": "1h",
+            "limit": 1000,
+            "startTime": 1794744000000,
+            "symbol": "BTCUSDT"
+          },
+          "received_at": "2026-11-15T22:27:02.464165+00:00",
+          "sha256": "d9f2d3970fa7eaaa19d164bb53b2375f4f2f845f8d652c04647a92e83d21571c",
+          "status": 200,
+          "url": "https://api.binance.com/api/v3/klines"
+        }
+      ],
+      "old_fixture": "research/confluence_1h_phase2/event_proximity/fixtures/SPOT_H1_FOCUS.csv.gz",
+      "old_fixture_sha256": "960c8cf5becc0e3ccaba58e9cad9b6e1f1db956b7d8ac99f0af8302d1adf067d",
+      "old_receipt_limit": "Older response bytes/hash retained; original first-retrieval HTTP receipt not attested",
+      "rows": 1822,
+      "sha256": "5a9bb5fd5fc4d58e88dd976ad0f4210c21dd1c8f891ed8bb38b680d351c4b480",
+      "symbol": "BTCUSDT",
+      "timeframe": "1H_CLOSED",
+      "unchanged_overlap_rows": 3,
+      "venue": "BINANCE_SPOT"
+    },
+    {
+      "closed_cutoff_ms": 1794780000000,
+      "diagnostic_preobserved": true,
+      "first_open_ms": 1788220800000,
+      "forward_capture": false,
+      "last_open_ms": 1794776400000,
+      "lookahead": false,
+      "new_receipts": [
+        {
+          "authentication": false,
+          "bytes": 28,
+          "method": "GET",
+          "params": {},
+          "received_at": "2026-11-15T22:27:03.041685+00:00",
+          "sha256": "9b1d0f139c6c5eb694ac382cc9c3121ab8331d1ac769c6d4408b80b598aaea3d",
+          "status": 200,
+          "url": "https://fapi.binance.com/fapi/v1/time"
+        },
+        {
+          "authentication": false,
+          "bytes": 2007,
+          "method": "GET",
+          "params": {
+            "endTime": 1794779999999,
+            "interval": "1h",
+            "limit": 1000,
+            "startTime": 1794729600000,
+            "symbol": "BTCUSDT"
+          },
+          "received_at": "2026-11-15T22:27:03.431272+00:00",
+          "sha256": "355b6d73d7e0197d5c53d8563e54d197d8fa70202fe6f21b6522618236093b48",
+          "status": 200,
+          "url": "https://fapi.binance.com/fapi/v1/klines"
+        }
+      ],
+      "old_fixture": "research/confluence_1h_phase2/event_proximity/fixtures/USDM_H1_FOCUS.csv.gz",
+      "old_fixture_sha256": "d464b901735cd0e4f34432f5effef1189ff710b0894184625d0b517f22b96aa1",
+      "old_receipt_limit": "Older response bytes/hash retained; original first-retrieval HTTP receipt not attested",
+      "rows": 1822,
+      "sha256": "9321e3902c7a7517e5e7a2fc92fac726fe687770d3390ce6c7d56a910033cc75",
+      "symbol": "BTCUSDT",
+      "timeframe": "1H_CLOSED",
+      "unchanged_overlap_rows": 3,
+      "venue": "BINANCE_USDM_PERPETUAL"
+    }
+  ],
+  "original_conclusion": "NO TESTABLE",
+  "original_live_emissions_available": false,
+  "original_protocol_sha256": "3fcdbd8c5c50eda66e560def8c91326055fdea1a576acf8fa8ad356c3fdf1835",
+  "phase2_management": false,
+  "primary_power_identical": true,
+  "published_counts_identical": true,
+  "raw_market_sources_checked": 153,
+  "reference_commit": "a48af422f485554dd28ee8da45a3cf1aa0a01929",
+  "trace_events_identical": true,
+  "trace_rows": 218946,
+  "trade_authority": "NONE",
+  "version": "IGOD_TURN_DIAGNOSTICS_PHASE1B_V1"
+}

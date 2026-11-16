@@ -1,0 +1,45 @@
+{
+  "venue": "BINANCE_USDM_PERPETUAL",
+  "symbol": "BTCUSDT",
+  "timeframe": "1H_CLOSED",
+  "rows": 1822,
+  "first_open_ms": 1788220800000,
+  "last_open_ms": 1794776400000,
+  "closed_cutoff_ms": 1794780000000,
+  "sha256": "9321e3902c7a7517e5e7a2fc92fac726fe687770d3390ce6c7d56a910033cc75",
+  "old_fixture_sha256": "d464b901735cd0e4f34432f5effef1189ff710b0894184625d0b517f22b96aa1",
+  "old_fixture": "research/confluence_1h_phase2/event_proximity/fixtures/USDM_H1_FOCUS.csv.gz",
+  "old_receipt_limit": "Older response bytes/hash retained; original first-retrieval HTTP receipt not attested",
+  "new_receipts": [
+    {
+      "url": "https://fapi.binance.com/fapi/v1/time",
+      "params": {},
+      "status": 200,
+      "received_at": "2026-11-15T22:27:03.041685+00:00",
+      "bytes": 28,
+      "sha256": "9b1d0f139c6c5eb694ac382cc9c3121ab8331d1ac769c6d4408b80b598aaea3d",
+      "authentication": false,
+      "method": "GET"
+    },
+    {
+      "url": "https://fapi.binance.com/fapi/v1/klines",
+      "params": {
+        "symbol": "BTCUSDT",
+        "interval": "1h",
+        "startTime": 1794729600000,
+        "endTime": 1794779999999,
+        "limit": 1000
+      },
+      "status": 200,
+      "received_at": "2026-11-15T22:27:03.431272+00:00",
+      "bytes": 2007,
+      "sha256": "355b6d73d7e0197d5c53d8563e54d197d8fa70202fe6f21b6522618236093b48",
+      "authentication": false,
+      "method": "GET"
+    }
+  ],
+  "unchanged_overlap_rows": 3,
+  "lookahead": false,
+  "diagnostic_preobserved": true,
+  "forward_capture": false
+}

@@ -1,0 +1,25 @@
+{
+  "standalone_tests": 29,
+  "failed": 0,
+  "numeric_artifacts_byte_exact": [
+    "completion.json",
+    "cost_rows.csv.gz",
+    "cost_summary.csv",
+    "delay.csv",
+    "delay_full.csv",
+    "dev_variance.csv",
+    "early_turns.csv",
+    "funnel.csv",
+    "nov15_0500.json",
+    "nov_trace.csv.gz",
+    "november.csv",
+    "november_full.csv",
+    "opportunities.csv.gz",
+    "power_MDE.csv",
+    "results.json",
+    "trace.csv.gz"
+  ],
+  "report_and_cases_byte_exact": true,
+  "zip_sha256": "b6507347119617f6e8ac352ad9ed7585a771fd8147d70d4cf80eac184af48057",
+  "excluded": "Only Git-history preservation test; requires full clone"
+}
