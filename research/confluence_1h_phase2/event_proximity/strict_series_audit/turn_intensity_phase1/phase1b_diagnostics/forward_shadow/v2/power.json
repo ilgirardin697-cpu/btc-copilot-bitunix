@@ -1,0 +1,30 @@
+{
+  "version": "INCLUSIVE_CENSUS_POWER_V2",
+  "source": {
+    "dataset_sha256": "5b2544c9bf353cedb77a07781ffe9e6202b12513c0c10f3d25bca67756a4825a",
+    "warmup_first_open": 1661990400000,
+    "sample_start": "2022-11-01T00:00:00Z",
+    "sample_end_exclusive": "2025-01-01T00:00:00Z",
+    "last_open": 1735686000000,
+    "hours": 18995,
+    "role": "DEVELOPMENT_NOISE_PLANNING_ONLY; no signal ranking, no outcomes2025+",
+    "venue": "BINANCE_USDM_PERPETUAL"
+  },
+  "development_residual_sigma": [
+    0.01703994625523474,
+    0.01710846660532593
+  ],
+  "planning_sigma": 0.04,
+  "conditional_required_effective_n": 16751,
+  "mde_fraction": 0.001,
+  "alpha": 0.05,
+  "power": 0.8,
+  "minimum_occupied_blocks": 20,
+  "dependence": "future ESS uses joint event+baseline bootstrap; raw labels never count as independent n",
+  "limitation": "historical marginal noise proxy plus predeclared4pp stress floor; not a guaranteed future/event-conditional variance bound",
+  "theoretical_annual_event_limit_per_contrast": 351,
+  "leap_year_event_limit_per_contrast": 352,
+  "confirmatory_power_feasible_in_fixed_12months": false,
+  "selection_or_profitability_evidence": false,
+  "prospective_samples": 0
+}

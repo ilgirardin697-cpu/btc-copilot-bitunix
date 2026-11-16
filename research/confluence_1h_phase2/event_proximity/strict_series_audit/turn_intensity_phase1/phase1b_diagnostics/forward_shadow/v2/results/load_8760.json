@@ -1,0 +1,85 @@
+{
+  "technical_only": true,
+  "market_or_profitability_evidence": false,
+  "mode": "OFFLINE_TEST",
+  "prospective_observations": 0,
+  "registry_hash": "df5476bbd984dd7f2dd23d52eaa956c9adc0429b7f785782a880cf4de99e4c10",
+  "input_sha256": "097bfeac4cd1692c0a4e845293551874b9ff05661a144420519d55c542289a45",
+  "input_rows": 14760,
+  "hours": 8760,
+  "python": "3.12.12 (main, Oct 10 2025, 12:42:57)  [GCC UCRT 15.2.0 64 bit (AMD64)]",
+  "numpy": "2.3.5",
+  "started_at_utc": "2026-11-16T22:08:34.922262+00:00",
+  "wall_seconds": 461.1616900996305,
+  "cpu_seconds": 298.78125,
+  "peak_rss_bytes": 217968640,
+  "measurements": [
+    {
+      "hours": 2190,
+      "wall_seconds": 106.04296359978616,
+      "cpu_seconds": 65.109375,
+      "peak_rss_bytes": 105283584,
+      "storage_bytes": 71402312,
+      "records": 17613,
+      "recovery_seconds": 9.404385599773377,
+      "unresolved_jobs": 61,
+      "cost_attempts": 13036
+    },
+    {
+      "hours": 4380,
+      "wall_seconds": 209.47845269972458,
+      "cpu_seconds": 129.015625,
+      "peak_rss_bytes": 152354816,
+      "storage_bytes": 156619158,
+      "records": 35311,
+      "recovery_seconds": 12.607667999807745,
+      "unresolved_jobs": 79,
+      "cost_attempts": 26158
+    },
+    {
+      "hours": 8760,
+      "wall_seconds": 445.8911164999008,
+      "cpu_seconds": 284.046875,
+      "peak_rss_bytes": 217968640,
+      "storage_bytes": 365837066,
+      "records": 70780,
+      "recovery_seconds": 28.95777720026672,
+      "unresolved_jobs": 43,
+      "cost_attempts": 52474
+    }
+  ],
+  "recoveries": [
+    {
+      "hours": 2190,
+      "seconds": 9.404385599773377,
+      "exact_state": true
+    },
+    {
+      "hours": 4380,
+      "seconds": 12.607667999807745,
+      "exact_state": true
+    },
+    {
+      "hours": 8760,
+      "seconds": 28.95777720026672,
+      "exact_state": true
+    }
+  ],
+  "indicator_arrays_exact": 78,
+  "MTF_exact": true,
+  "TURN22_PR50_exact": true,
+  "TURN11_PR52_exact": true,
+  "latency_seconds": {
+    "mean": 0.028028547295452132,
+    "p95": 0.04049155982211232,
+    "maximum": 0.19576819986104965
+  },
+  "counts": {
+    "hours": 8760,
+    "events": 740,
+    "price": 26237,
+    "net": 26237,
+    "unknown": 0,
+    "cost_attempts": 52474
+  }
+}

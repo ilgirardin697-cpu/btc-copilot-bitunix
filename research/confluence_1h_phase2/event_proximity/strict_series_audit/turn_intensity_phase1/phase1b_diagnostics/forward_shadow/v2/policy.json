@@ -1,0 +1,61 @@
+{
+  "registry": "IGOD_H1_FORWARD_AUDIT_V2",
+  "status": "PREPARED_NOT_ACTIVATED",
+  "enabled_default": false,
+  "cohort_start": null,
+  "cohort_end": null,
+  "duration": "12 calendar months; date must be sealed separately before activation",
+  "coverage_basis": "confirmation close timestamps in [start,end), one expected H1 close per UTC hour",
+  "coverage_minimum": 0.95,
+  "timely_ms": 300000,
+  "pre_activation_tokens": "Record every unchanged model emission; primary excludes events with any token or AO vertex before actual session activation, including child sessions. Never alter emitter/cooldown.",
+  "revisions": "Append original/correction bytes and field deltas with request/receipt/record timestamps; flag affected results DISPUTED; never overwrite or reselect the favorable vintage. Reviewed child session links parent tip and corrected technical prefix; cohort never resets.",
+  "funding": {
+    "terminal_wait_hours": 48,
+    "retry": "Only on new funding coverage generation or fixed deadline; UNKNOWN terminal when incomplete. Later official corrections append amendments/disputes, never silently reopen primary results."
+  },
+  "checkpoint": {
+    "every_closed_hours": 168,
+    "format": "explicit allowlisted JSON plus float64 NPZ allow_pickle=false; no pickle",
+    "untrusted": "validate chain and blobs; checkpoint hash is a journal commitment; external anchor required before production fast restore"
+  },
+  "integrity": {
+    "backup_hours": 24,
+    "versioned": true,
+    "external_anchor_hours": 24,
+    "anchor_outside_writer_volume": true,
+    "single_writer": true,
+    "real_volume_probe": "NOT RUN; separate infrastructure authorization required"
+  },
+  "statistical": {
+    "primary": "TURN22 Q75,12H,three patterns and mirrors,six contrasts",
+    "exploratory": [
+      "TURN11",
+      "ALL",
+      "Q90",
+      "4H",
+      "24H",
+      "comparative facts"
+    ],
+    "alpha": 0.05,
+    "mde_fraction": 0.001,
+    "power": 0.8,
+    "minimum_blocks": 20,
+    "bootstrap_days": 7,
+    "replicates": 2000,
+    "seed": 20261116,
+    "min_valid_replicates_fraction": 0.95,
+    "minimum_baseline_cell_hours": 24,
+    "planning_sigma_floor": 0.04,
+    "planning_rule": "sigma=max(0.04,2*largest development inclusive-regime residual SD across LONG/SHORT); conditional effective-n planning, never a guaranteed future variance bound",
+    "planning_period": [
+      "2022-11-01T00:00:00Z",
+      "2025-01-01T00:00:00Z"
+    ],
+    "historical_status": "INSPECTED_DATA_PLANNING_ONLY_NO_VIRGIN_HOLDOUT",
+    "baseline": "all eligible hours including events/neighbors; same side/month/closed4H regime/causal volatility tercile",
+    "bootstrap": "resample complete calendar7day blocks jointly for hourly outcomes, all event labels and baseline; recompute cell means in each replicate",
+    "untestable": "p=1 in Holm family; no promotion of exploratory cases; no outcome-driven extension"
+  },
+  "authority": "NONE"
+}
