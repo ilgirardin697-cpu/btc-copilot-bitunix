@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "research/confluence_1h/indicators.py": "4309d799b56bb8ae257d1d060f420312c4f97e3d027b2c1a550eae8bd08331ec",
+    "research/confluence_1h_phase2/event_proximity/strict_series_audit/turn_intensity_phase1/detect.py": "5f3bba638bf262ab286f02832545f2ef131eecaa4bc4eb9120c3286ba6b374c1",
+    "research/confluence_1h_phase2/event_proximity/strict_series_audit/turn_intensity_phase1/evaluate.py": "f232cf2deb9265e0f40a1be8e0665c60b0999b33d1e48d1ba101eb6b25c05e8c",
+    "research/confluence_1h_phase2/event_proximity/strict_series_audit/turn_intensity_phase1/outcomes.py": "4767b7e34a5f51db6ab8cc7c971f8d4cf81c7f68de682172e3f3638ed561b91c",
+    "research/confluence_1h_phase2/event_proximity/strict_series_audit/turn_intensity_phase1/protocol.json": "3fcdbd8c5c50eda66e560def8c91326055fdea1a576acf8fa8ad356c3fdf1835"
+  },
+  "files": {
+    "journal.py": "2a7c9256ae0ae5b02293c05c3bd12f5865749ddc212460893d4c968e17d1dbf8",
+    "market.py": "6294897958050c8b324a4b5c2e97da723bc53a839767266c000ca1be8fb6e009",
+    "models.py": "f944a9d4b8103bb7f197006cf57363305778858811b22b4361ac7eecf1800bf3",
+    "observations.py": "a836a2a896b225db2bc93cb41fc1b1bebeb8f8809af8aa5b870b4978b374e5ee",
+    "observer.py": "9693665073769d48a2cad7c45b00d505d5b4dfc791a7f59c59a52927b5813d5a",
+    "protocol.py": "365522942709c2a9134fb0bd71e4679ebfc8e1b9f2b58216f31677e59eb9a1ee",
+    "protocols.json": "ccf798063ba244454f2f9b6a7331f19378b99a07404b04c9862056193cf68694",
+    "report.py": "8d152a018ae07f5cc80c7794cbd96693bc8a35a54ed4aa94dbb64eef67d4e0bf"
+  },
+  "schema_version": 1,
+  "version": "IGOD_H1_FORWARD_AUDIT_V1"
+}

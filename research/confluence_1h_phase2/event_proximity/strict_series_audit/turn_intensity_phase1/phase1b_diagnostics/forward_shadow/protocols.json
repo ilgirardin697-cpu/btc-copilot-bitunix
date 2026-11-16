@@ -1,0 +1,148 @@
+{
+  "registry_version": "IGOD_H1_FORWARD_AUDIT_V1",
+  "schema_version": 1,
+  "status": "PREPARED_NOT_ACTIVATED",
+  "authority": "NONE",
+  "venue": "BINANCE_USDM_PERPETUAL",
+  "symbol": "BTCUSDT",
+  "timeframe": "1H_CLOSED",
+  "source_reference": "PR51 3fcfc793f1db1c37dd9a3e905c9e7e1368f0c544; PR50 a48af422f485554dd28ee8da45a3cf1aa0a01929",
+  "profiles": {
+    "TURN22_FORWARD_V1": {
+      "slopes_each_side": 2,
+      "status": "FROZEN_PR50_RULES_NOT_VALIDATED",
+      "primary": "Q75 /12h /six pattern-side contrasts with Holm"
+    },
+    "TURN11_EXPLORATORY_V1": {
+      "slopes_each_side": 1,
+      "status": "EXPLORATORY_NO_RELIABLE_INCREMENTAL_EDGE",
+      "primary": null,
+      "only_adaptations": [
+        "one opposing then one confirming slope",
+        "ADX vertex i-1 instead of i-2",
+        "ADX curvature last1 vs preceding1 slope",
+        "AO/pececillos post-turn magnitude over1 slope",
+        "AO sign span P1 last2 /P3 last3 values instead of last4/last5",
+        "minimum valid streak3 instead of5"
+      ],
+      "preserved": [
+        "three patterns and mirrors",
+        "AO sign and current alignment",
+        "DMI gate only P2",
+        "2h token coincidence and expiry",
+        "25h cooldown before intensity",
+        "720 earlier-hour midranks",
+        "ALL/Q75/Q90 cutoffs",
+        "fees/slippage and evaluation criteria"
+      ]
+    }
+  },
+  "collection": {
+    "enabled_default": false,
+    "minimum_seed_hours": 6000,
+    "on_time_lag_ms": 300000,
+    "seed": "public closed OHLCV only; historical events/outcomes never enter forward sample",
+    "first_eligible_bar": "open >= first UTC hour boundary strictly after activation timestamp",
+    "receipt": "original bytes, public URL/query, request start, receive UTC, exchange time, HTTP status and hash",
+    "recovery": "chronological, actual late receipt preserved, forward_eligible false when late; never fabricate original emissions",
+    "price_revision": "append revision notice and degrade; never rewrite first vintage",
+    "storage": "future independent volume; no shared Guardian or weekly-journal storage",
+    "activation": "separate human approval and collector review required; no scheduler/network transport included"
+  },
+  "outcomes": {
+    "hours": [
+      4,
+      12,
+      24
+    ],
+    "primary_hours": 12,
+    "reference": "frozen hypothetical next-H1 open after confirmation, with .0005 adverse slip; not an observed fill",
+    "exit": "H1 open reference+horizon, adverse .0005; known only when that H1 closes",
+    "fee_per_side": 0.001,
+    "units": [
+      "price_fraction",
+      "net_fraction_if_funding_complete",
+      "ATR_normalized"
+    ],
+    "no_stops_or_R": true,
+    "actual_capture_latency": "record whether reference time precedes recorded prediction; never claim that open was executable",
+    "funding": "separate original public USD-M receipts with full range coverage; missing coverage/mark => net UNKNOWN, not zero. Price outcome can precede separately appended costed outcome.",
+    "boundary_funding": "retain original conservative/optimistic settlement ordering bounds; exact null when ambiguous"
+  },
+  "baseline": {
+    "population": "every closed eligible observed H1, both directional price labels, including event hours and neighboring periods",
+    "match": [
+      "same venue",
+      "same side",
+      "calendar month",
+      "closed4H close vs SMA200",
+      "causal ATR/close720h-rank tercile",
+      "same capture-timeliness class"
+    ],
+    "event_exclusion": false,
+    "primary_unit": "unique observation_id, never summed pattern claims",
+    "overlap": "same-time side group plus fixed UTC7day bootstrap blocks; cross-profile/pattern duplicates retained as labels, not independent samples",
+    "coverage": "all expected hours, missing and late rows reported; no minimum-result-based selection",
+    "inference": "descriptive until predeclared cohort maturity; six22 Holm comparisons unchanged;11 and sidecar exploratory, no automatic strategy validation",
+    "power_caveat": "New inclusive baseline changes the paired-excess estimand and its variance. Do not transplant legacy sigma or claim adequate power from raw event count. No performance-dependent sample extension."
+  },
+  "comparative": {
+    "version": "OBSERVATIONAL_FACTS_V1",
+    "cannot_change_model_emissions": true,
+    "external_context": "Owner-supplied summary of another chat/Telegram; no direct transcript access, no certified numerical labels or training outcomes",
+    "atomics": [
+      "AO/ADX slope turns separately,1+1 and2+2",
+      "pececillos slope",
+      "pececillos crosses EMA15(tendencia)",
+      "zero crosses explicitly named AO/pececillos/tendencia/tiburones/ma_trend",
+      "BBWP level and slope/turn independent"
+    ],
+    "mtf": [
+      "1W",
+      "1D",
+      "4H",
+      "1H"
+    ],
+    "mtf_definition": "closed-complete UTC buckets, weeklyMonday00; public indicator facts and close/SMA200 proxy, NOT original Direction Engine; incomplete warmup UNKNOWN",
+    "structure": {
+      "version": "CAUSAL_PRICE_FACTS_V1",
+      "lookback_hours": 20,
+      "pending_expiry_hours": 4,
+      "breakout": "closed close strictly outside prior20H high/low, levels exclude current",
+      "recovery": "cross back over frozen broken level within4 closed bars",
+      "rejection": "wick crosses prior20H level while entire closed body returns inside",
+      "failed_rebound": "after recovery, crosses back across same frozen level within4 bars; symmetric failed pullback"
+    },
+    "watch_states": {
+      "WATCH_SHORT": "AO<0, -DI>+DI, and AO slope<0 or fresh structural downside break",
+      "WATCH_REBOUND": "AO<0 and AO slope>0 and pececillos slope>0; observation against negative AO context",
+      "WATCH_SHORT_REENTRY": "a WATCH_REBOUND in preceding4h, then AO<0 and AO/pececillos slopes<0 with -DI>+DI; precedence over WATCH_SHORT",
+      "otherwise": null,
+      "meaning": "observational labels, not instructions, never part of22/11 gates"
+    },
+    "parameters_status": "explicit new unvalidated measurement conventions; no fit to15Nov or historical returns"
+  },
+  "cohort": {
+    "historical_2022_2026": "NO_VIRGIN_HOLDOUT_NOT_FORWARD",
+    "activation": null,
+    "capture_running": false,
+    "planned_22_window": [
+      "2026-11-17T00:00:00Z",
+      "2027-11-17T00:00:00Z"
+    ],
+    "dates_cannot_shift_silently": true,
+    "duration": "fixed12 months, final read after endpoint+24h+closed-data delay; coverage checks only before final",
+    "minimum_coverage": 0.95,
+    "sample_target": "Legacy22 development effective-n targets are planning references and minimum floors, not a calibrated power guarantee for the new inclusive-census contrast; independent final inference review required. Insufficient => NO TESTABLE.",
+    "no_automatic_optimization": true,
+    "statistical_constants": {
+      "mde_net_fraction": 0.001,
+      "alpha": 0.05,
+      "holm_family_size": 6,
+      "power_goal": 0.8,
+      "minimum_occupied_7day_blocks": 20,
+      "bootstrap_replicates": 2000,
+      "seed": 20261115
+    }
+  }
+}
