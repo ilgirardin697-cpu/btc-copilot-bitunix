@@ -1,0 +1,38 @@
+{
+  "base": "9f307fd9feda6279253c0a0813d49b47d3f1d9b2",
+  "branch": "confluence-public-collector-preparation",
+  "new_tests": 18,
+  "failed": 0,
+  "unit_seconds": 3.0271335002034903,
+  "real_network_requests": 0,
+  "prospective_observations": 0,
+  "enabled": false,
+  "production_changes": false,
+  "global_regression": "Existing12 workflows on final PR head; verify after push. No unexecuted pass claim.",
+  "trade_authority": "NONE",
+  "runtime": {
+    "python": "3.12.12",
+    "numpy": "2.3.5",
+    "enabled": false,
+    "network_allowed": false,
+    "observer_connected": false,
+    "scheduler_installed": false,
+    "publication_wait_seconds": 60,
+    "publication_wait_status": "PROVISIONAL_NOT_MEASURED_ON_REAL_ENDPOINT",
+    "revision_measurement_offsets_seconds": [
+      0,
+      15,
+      30,
+      60,
+      120,
+      240
+    ],
+    "minimum_revision_measurement_hours": 48,
+    "live_revision_measurements": 0,
+    "source": "BTCUSDT BINANCE_USDM_PERPETUAL",
+    "authority": "NONE"
+  },
+  "publication_measurements_real": 0,
+  "continuous_capture_qualification": "NOT_QUALIFIED",
+  "observer_connection": false
+}

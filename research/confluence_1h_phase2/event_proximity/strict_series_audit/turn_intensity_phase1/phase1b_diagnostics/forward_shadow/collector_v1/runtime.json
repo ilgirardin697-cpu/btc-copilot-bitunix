@@ -1,0 +1,15 @@
+{
+  "python": "3.12.12",
+  "numpy": "2.3.5",
+  "enabled": false,
+  "network_allowed": false,
+  "observer_connected": false,
+  "scheduler_installed": false,
+  "publication_wait_seconds": 60,
+  "publication_wait_status": "PROVISIONAL_NOT_MEASURED_ON_REAL_ENDPOINT",
+  "revision_measurement_offsets_seconds": [0,15,30,60,120,240],
+  "minimum_revision_measurement_hours": 48,
+  "live_revision_measurements": 0,
+  "source": "BTCUSDT BINANCE_USDM_PERPETUAL",
+  "authority": "NONE"
+}

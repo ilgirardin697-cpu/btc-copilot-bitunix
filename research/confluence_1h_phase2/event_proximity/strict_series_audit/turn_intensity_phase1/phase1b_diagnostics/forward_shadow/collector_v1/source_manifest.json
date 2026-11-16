@@ -1,0 +1,17 @@
+{
+  "base": "9f307fd9feda6279253c0a0813d49b47d3f1d9b2",
+  "source_hashes": {
+    "__init__.py": "68715f4be89a36e95e6697799164517040c8f86f321134f324a68fe2e1cfbf67",
+    "__main__.py": "ba040b08329e7a9bd5b9281761c8c83304ebc00e11ea6f5da7393b34344e0ca5",
+    "client.py": "c0073f275902528c23a4dd9b3f993cd8728cd94bf063655adc1f0bb47a4ebcf4",
+    "qualification.py": "472587b772717495fd76e34b22c5bfd6d3093195a33ba7f45a741d32bd9e8c67",
+    "README.md": "1d2e92900701725bd03dfbaa39debce55f80e83fc1ee9dcb4ea60f2faf085121",
+    "REPORT.md": "00a45d8b882964d1beb7f02dad6d32311ac23412d7a718044e58c85e52367fd2",
+    "requirements.txt": "7bd6b8946940b79948c548c8048e545684b91c8edc9444d8dfc0c8f76a97c0a7",
+    "results/qualification.csv": "6d3ad8fa9168ee2449221fe22bc4519825c50dbbf75160cc3697eee7e2b43259",
+    "runtime.json": "429c18b7703910d98d8058b9269e677caeda018faca7eafb5fba7219cccb96cf",
+    "spool.py": "345a275703cf6aa57dd4527b9fae139e118089e3a1a4c527a5d756945109d6cc",
+    "test_collector.py": "4f6039a7667c53a2c2c6f7cfdedb35a6c565720a749d1ed3290414ee1b6bdfc3",
+    "validation.json": "48601283c35b06c205d93a78b93c10cb8f0f16267303c3b99cbb982efc889257"
+  }
+}
