@@ -1,0 +1,38 @@
+{
+  "checks": {
+    "unit": {
+      "mode": "unit",
+      "returncode": 0,
+      "tests": 26,
+      "seconds": 3.4319886001758277
+    },
+    "full": {
+      "mode": "full",
+      "returncode": 0,
+      "tests": 1383,
+      "seconds": 929.8818295998499
+    },
+    "audits": {
+      "mode": "audits",
+      "returncode": 0,
+      "tests": null,
+      "seconds": 7.857192900031805
+    },
+    "weekly": {
+      "mode": "weekly",
+      "returncode": 0,
+      "tests": 9,
+      "seconds": 3.6934395995922387
+    },
+    "boundary": {
+      "mode": "boundary",
+      "returncode": 0,
+      "tests": 7,
+      "seconds": 4.990796099882573
+    }
+  },
+  "source_json_unchanged": true,
+  "parent_profiles_and_runtime_unchanged": true,
+  "profit_backtest": false,
+  "external_tradingone_numeric_parity": false
+}

@@ -1,0 +1,14 @@
+{
+  "bull_average": 339.1357819419788,
+  "bear_average": -569.311458287239,
+  "bull_maximum": 2995.5707213459245,
+  "bear_minimum": -6431.211557900984,
+  "wave_ratio_average": 0.5956946360473077,
+  "wave_ratio_maximum": 0.4657863754560762,
+  "dominance_average": -230.17567634526023,
+  "dominance_maximum": -3435.6408365550596,
+  "current_raw_wave": -9595.718296062369,
+  "current_ratio_average": -16.854953745232663,
+  "current_ratio_maximum": -1.4920545234239215,
+  "current_wave_color": "RED"
+}

@@ -1,0 +1,10 @@
+{
+  "reference_commit": "a678a75",
+  "source_sha256": {
+    "backquant.py": "f8151b045d4235e736cd76e957978c6f04faa1623b774c2fb0755972e0bade34",
+    "profile.py": "79aab4593d90b322d8ed7ef36cb9254d867aafbf07ab671ceec71c795336f479",
+    "study.py": "e4878fe5d5cf9a43ac54539ffa83cb85921adf9c735f14b8e5278f7b04ea9b7b"
+  },
+  "existing_v1_protocol_untouched": true,
+  "not_a_trading_strategy_protocol": true
+}

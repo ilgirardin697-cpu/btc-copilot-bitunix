@@ -1,0 +1,6 @@
+{
+  "n": 44,
+  "extra_one_closed_bar_max_abs_ml_value_difference": 0.0,
+  "extra_one_closed_bar_max_abs_upper_difference": 0.00020601405715581222,
+  "note": "Predeclared initialization diagnostic, not fitting actual TradingOne prefix or outputs"
+}

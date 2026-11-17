@@ -1,0 +1,25 @@
+profile_field,reference,window,n,max_abs_error,mean_abs_error,slope_sign_agreement_pct,turns_profile,turns_reference,turn_direction_same_hour,note
+ao,igod_ao,FOCUS_16_17,44,0.0,0.0,100.0,13,13,13,common Spot H1 input; not deployed-bot or platform observations
+ao,igod_ao,COMMON_VALID_WARMED,2899,0.0,0.0,100.0,519,519,519,common Spot H1 input; not deployed-bot or platform observations
+adx,igod_adx,FOCUS_16_17,44,3.197442310920451e-14,1.1263717231651588e-14,100.0,5,5,5,common Spot H1 input; not deployed-bot or platform observations
+adx,igod_adx,COMMON_VALID_WARMED,2899,4.973799150320701e-14,1.1018130564910522e-14,100.0,474,474,474,common Spot H1 input; not deployed-bot or platform observations
+plus_di,igod_plus_di,FOCUS_16_17,44,1.0658141036401503e-14,4.844609562000683e-15,100.0,20,20,20,common Spot H1 input; not deployed-bot or platform observations
+plus_di,igod_plus_di,COMMON_VALID_WARMED,2899,2.7820945547318843e-10,7.547430160056047e-13,100.0,1234,1234,1234,common Spot H1 input; not deployed-bot or platform observations
+minus_di,igod_minus_di,FOCUS_16_17,44,1.4210854715202004e-14,5.81353147440082e-15,100.0,20,20,20,common Spot H1 input; not deployed-bot or platform observations
+minus_di,igod_minus_di,COMMON_VALID_WARMED,2899,1.169802033018641e-10,5.64802430420041e-13,100.0,1202,1202,1202,common Spot H1 input; not deployed-bot or platform observations
+roja,igod_red,FOCUS_16_17,44,2.1316282072803006e-14,7.428401328401047e-15,100.0,9,9,9,common Spot H1 input; not deployed-bot or platform observations
+roja,igod_red,COMMON_VALID_WARMED,2899,4.263256414560601e-14,7.118524848957394e-15,100.0,375,375,375,common Spot H1 input; not deployed-bot or platform observations
+pececillos,igod_mountain,FOCUS_16_17,44,9.596359010839663,4.215537705045477,93.18181818181817,21,15,15,"pececillos/mountain deliberately DIFFERENT series, not an error tolerance test"
+pececillos,igod_mountain,COMMON_VALID_WARMED,2899,169.26170053645558,14.820292437207149,91.06588478785788,1068,1084,843,"pececillos/mountain deliberately DIFFERENT series, not an error tolerance test"
+bbwp,igod_bbwp7,FOCUS_16_17,44,61.66666666666667,15.905844155844154,56.81818181818182,14,20,5,common Spot H1 input; not deployed-bot or platform observations
+bbwp,igod_bbwp7,COMMON_VALID_WARMED,2899,87.42857142857143,18.267421168766457,52.9837875129355,801,1082,266,common Spot H1 input; not deployed-bot or platform observations
+bbwp,research_bbwp7,FOCUS_16_17,44,61.66666666666667,15.905844155844154,56.81818181818182,14,20,5,common Spot H1 input; not deployed-bot or platform observations
+bbwp,research_bbwp7,COMMON_VALID_WARMED,2899,87.42857142857143,18.267421168766457,52.9837875129355,801,1082,266,common Spot H1 input; not deployed-bot or platform observations
+bbwp,daily_bbwp13,FOCUS_16_17,44,0.0,0.0,100.0,14,14,14,common Spot H1 input; not deployed-bot or platform observations
+bbwp,daily_bbwp13,COMMON_VALID_WARMED,2899,0.0,0.0,100.0,801,801,801,common Spot H1 input; not deployed-bot or platform observations
+bbwp_signal,daily_bbwp_signal,FOCUS_16_17,44,0.0,0.0,100.0,7,7,7,common Spot H1 input; not deployed-bot or platform observations
+bbwp_signal,daily_bbwp_signal,COMMON_VALID_WARMED,2899,0.0,0.0,100.0,388,388,388,common Spot H1 input; not deployed-bot or platform observations
+ml_value,igod_ml29,FOCUS_16_17,44,2.8284519293328643,0.6846409568887828,84.0909090909091,13,17,9,common Spot H1 input; not deployed-bot or platform observations
+ml_value,igod_ml29,COMMON_VALID_WARMED,2899,4.602654003841984,0.7808950369568515,80.95895136253881,641,785,257,common Spot H1 input; not deployed-bot or platform observations
+ml_value,ema27_smoothing_only,FOCUS_16_17,44,2.6267304305544954,0.5859273715096218,84.0909090909091,13,17,9,common Spot H1 input; not deployed-bot or platform observations
+ml_value,ema27_smoothing_only,COMMON_VALID_WARMED,2899,4.228598903507724,0.6641242949654873,80.82097274922387,641,785,254,common Spot H1 input; not deployed-bot or platform observations

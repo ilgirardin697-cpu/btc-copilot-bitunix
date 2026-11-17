@@ -1,0 +1,32 @@
+{
+  "profile": "TRADINGONE_V2",
+  "source_json_sha256": "516783defe6d16fd926c350f6bfdcd3cec9d6550b0d8230aa9d7036115015ac9",
+  "primary_closed_rows": 3199,
+  "history_first_open": "2026-07-07T12:00:00Z",
+  "last_closed_available": "2026-11-17T19:00:00Z",
+  "focus_rows": 44,
+  "focus_first_open": "2026-11-15T23:00:00Z",
+  "focus_last_open": "2026-11-17T18:00:00Z",
+  "ml_profile_vs_igod_color_agreement_pct": 90.9090909090909,
+  "ml_colors_different": 4,
+  "reload_vs_session_color_changes": 0,
+  "reload_vs_session_upper_max_abs_difference": 0.25451542931432414,
+  "same_prefix_repeat_exact": true,
+  "provisional_rollback_pass": true,
+  "actual_fixed_anchor_prefix_checks": 8,
+  "chart_load_anchor": 3199,
+  "session_load_anchor": 3155,
+  "session_load_known_available": "2026-11-15T23:00:00Z",
+  "old_first_bar_extra_initialization": "separate predeclared diagnostic only; no fit selection",
+  "external_tradingone_numeric_records": 0,
+  "platform_numeric_parity": "NOT_CERTIFIED",
+  "kernel_assumptions": [
+    "PineV5 NA conditions and percentile array behavior",
+    "all-NA array.indexof initial case",
+    "HMA5 integer half2/sqrt2",
+    "Pine dynamic speed expression read-before-write history",
+    "gradient channel rounding and renderer overrides"
+  ],
+  "profit_or_trade_results_computed": false,
+  "production_queried": false
+}
