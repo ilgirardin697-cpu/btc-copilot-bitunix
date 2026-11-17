@@ -68,6 +68,12 @@ class ExecutionTests(unittest.TestCase):
     def test_h1_both_stop_first(self):
         a=bars();a[1,2:4]=[101,98]
         t=execute(a)['trades'][0];self.assertFalse(t['tp1']);self.assertEqual(t['ambiguous_h1'],1)
+    def test_TP_in_confirmation_candle_never_counts(self):
+        a=bars();a[0,2]=110
+        self.assertFalse(execute(a)['trades'][0]['tp1'])
+    def test_short_both_stop_first(self):
+        a=bars();a[1,2:4]=[102,99]
+        t=execute(a,-1)['trades'][0];self.assertFalse(t['tp1']);self.assertAlmostEqual(t['net_R'],-1)
     def make_minutes(self,a,stop_first=False,same=False):
         m=np.tile(a[1],(60,1));m[:,0]=a[1,0]+np.arange(60)*60000;m[:,1:5]=100;m[:,5]=1
         m[0,1:5]=[100,101,98 if same else 99.5,100]
