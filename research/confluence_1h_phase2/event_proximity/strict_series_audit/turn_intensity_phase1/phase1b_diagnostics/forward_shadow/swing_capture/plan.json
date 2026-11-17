@@ -1,0 +1,65 @@
+{
+  "study": "IGOD_CONFLUENCE_SWING_CAPTURE_V0",
+  "mode": "OFFLINE_EXPLORATORY_SHADOW_ONLY",
+  "authority": "NONE",
+  "base": "9f307fd9feda6279253c0a0813d49b47d3f1d9b2",
+  "freeze": "Commit this plan before inspecting diagnostic16Nov or computing trade results. Never overwrite it to improve outcomes.",
+  "signals": {
+    "timeframe": "1H CLOSED; audited PR46 mathematical indicators unchanged",
+    "AO": "strict1+1 slope turn, side*(AO[t]-AO[t-1])>0 and side*(AO[t-1]-AO[t-2])<0; no zero-sign gate",
+    "Konkorde": "same strict1+1 turn of pececillos; red remains EMA15(tendencia) and is recorded, not a gate",
+    "ADX": "strict1+1 turn either direction; record peak/trough, level and DMI; never use ADX slope as trade direction",
+    "BBWP": "slope now>0 with previous<=0, or now<0 with previous>=0; either turn direction allowed and annotated, not directional",
+    "window_hours": 2,
+    "tokens": "one latest token per indicator. Expire age>2. Clear token when its current slope no longer has the stored sign. New opposing turn replaces it. Emit only when four valid tokens coexist and AO/pececillos agree. Consume all four. No resurrection, persistent-state signals, Q75, zero cross,2+2 or extra cooldown.",
+    "invalid_data": "clear pending on a gap or nonfinite/invalid OHLCV/indicator; no invented candles",
+    "context": "record last fully closed4H/1D/Monday00UTC1W AO sign/slope, DMI, BBWP and price-vs-SMA200 when available; no context filter",
+    "raw_signals": "all signals retained including failed/pending attempts and skipped/rejected entries"
+  },
+  "management": {
+    "tp1_price_fractions": [0.005,0.01,0.02],
+    "stop_atr_multipliers": [1.5,2.5],
+    "risk_equity_fractions": [0.005,0.01],
+    "partial_fraction": 0.5,
+    "trailing_atr_multiplier": 1.5,
+    "ATR": "audited ATR14, initial value known at signal close; subsequent trailing uses most recent closed H1 ATR14",
+    "entry": "next H1 open reference plus adverse0.0005 slippage; idealized first-open availability, not observed executable fill. Signal not queued. One open position. If already open at beginning of entry hour, skip signal even if it closes later that hour. Ignore opposite signals, no automatic reversal.",
+    "initial_stop": "entry fill minus side*stop_multiple*signal_ATR; not widened",
+    "TP1": "entry fill*(1+side*tp_fraction). Trigger market reduction50%, adverse exit slippage; favorable gap does not improve target fill.",
+    "stop_execution": "adverse gap: open instead of stop; otherwise stop level, then adverse slippage. All fills incur fees.",
+    "break_even": "after TP1, solve net-zero on remaining slice including allocated entry fee, prospective exit fee/slippage and cumulative conservative funding per remaining BTC. Do not spend TP1 profit to loosen stop. Net-zero is a level calculation, not a guarantee under gaps/future funding.",
+    "trailing": "after TP1 only, highest closed-execution-bar high since entry minus1.5*latest closed H1 ATR for LONG; inverse for SHORT. Ratchet against existing stop and net-BE. Update at H1 close, effective next H1. Never use a still-open H1 extreme/ATR to move its own stop.",
+    "within_bar": "new BE/trailing not active inside TP1 H1 candle. With verified same-venue1m, resolve existing stop versus TP1 chronological first-hit. If both touched in same1m or minute data absent/inconsistent, adverse stop first. Initial stop remains for residual until next H1. No favorable intrabar ordering assumed.",
+    "exit": "remaining SL/BE/trail, or forced market last available study H1 close; no additional time-stop/TP2/parameter search. End-of-data exits separately identified.",
+    "sizing": "equity*risk divided by loss per BTC to slipped initial stop plus entry/exit commissions. Future funding/gaps may exceed planned risk; publish overshoots. Require entry notional plus entry fee<=equity (fully collateralized1x). Otherwise reject LEVERAGE_REQUIRED; do not truncate size and call it constant risk. No real exchange size/minimum/fill feasibility certification.",
+    "capital": "independent initial10000USDT per scenario; chronological remaining equity, no capital reset/addition. Stops protect before liquidation; no liquidation-based exit. Ledger insolvent stops new allocations.",
+    "costs": "fee0.001 per fill side, adverse slippage0.0005 per fill, inherited conservative assumptions not personal Bitunix fee. Exactly12 primary configurations; no selection of a winning configuration as validated."
+  },
+  "funding": {
+    "source": "existing actual Binance USD-M settlements and mark/high-low bounds; never call them Bitunix flows",
+    "position": "remaining BTC at funding boundary, before intrahour TP1. At exact entry/open-gap exit boundary include zero as ordering alternative, charge worst cost. Missing exact marks retain audited mark H1 low/high bounds.",
+    "availability": "book cashflow bounds at completed H1 close, not before using its mark high/low. No new entry after another position existed at beginning of same H1. BE updated only then; no future mark bound can affect intrahour sizing/stop.",
+    "accounting": "conservative upper funding cost drives primary cash ledger, accumulated per-BTC flow solves runner BE. Preserve lower/upper cost and exactness flags. Net-upper is conditional on same quantities/fills, not an alternative execution policy. Unknown bounds fail closed."
+  },
+  "history": {
+    "venue": "BINANCE_USDM_PERPETUAL",
+    "symbol": "BTCUSDT",
+    "data_sha256": "5b2544c9bf353cedb77a07781ffe9e6202b12513c0c10f3d25bca67756a4825a",
+    "warmup_first_open": "2022-09-01T00:00:00Z",
+    "study_first_signal_close": "2022-11-01T00:00:00Z",
+    "study_last_exclusive": "2026-11-01T00:00:00Z",
+    "intrabar": "one-off official Binance Vision USD-M BTCUSDT1m monthly2022-11..2026-10, verified checksums. Use only complete contiguous60 rows matching audited H1 OHLC and volume(sum tolerance1e-6+1e-12 relative). Missing/revised/mismatched hour falls back to documented H1 adverse ordering, never substitute Spot. Same resolver used in real-signal and reference runs.",
+    "diagnostic": "16Nov2026 around23Madrid is already-selected visual diagnostic, not validation. Check nearby closed hours and open-vs-close interpretation. Same-venue public historical GET only, sufficient warmup. Ticker/image parity unverified without actual export/capture; do not tune the detector to it.",
+    "split": "all four years already examined; no virgin holdout and no forward validation"
+  },
+  "references": {
+    "replicates": 100,
+    "first_seed": 2026111700,
+    "match": "raw-signal count by side/calendar month/closed4H price-vs-SMA200/causal ATR-price prior720 tercile",
+    "universe": "all eligible closed H1 hours including actual signals and their neighbors, no event exclusion or embargo. No outcomes in sampling.",
+    "selection": "fixed seed, without replacement per side/cell. Retrospective comparisons, not live reference strategies. Opposite directions sampled on same hour: skip collision rather than pick winner. Same one-position, risk/capital constraints, costs, funding and management engine as signals. Publish differences in executed counts/exposure.",
+    "inference": "empirical5/50/95 percentiles across100 matched-reference runs are descriptive reference dispersion, not confidence intervals/p-values or independent100 market histories. No Holm/confirmatory claim, ranking or optimization."
+  },
+  "metrics": ["raw_signals","rejections","LONG_SHORT","win_rate","mean_win_loss","net_expectancy_USDT_and_planned_R","profit_factor","equity_close_drawdown","losing_streak","TP1_hit","BE_armed_exit","trailing_armed_exit","initial_stop_exit","end_of_data","costs_funding_bounds","MFE_MAE","years","regimes","phase_ADX_BBWP","reference_counts_exposure"],
+  "decision": "historical exploratory only. Report all12 configurations in fixed order; no historical configuration may be labelled validated. No observer/collector/service, live orders, production change, merge or deploy."
+}
