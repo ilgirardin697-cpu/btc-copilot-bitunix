@@ -1,0 +1,44 @@
+{
+  "id": "IGOD_TURN_LATENCY_DIAGNOSTIC_V1",
+  "base": "9616b50c7eb34d27bdb33cde14ead31e0340daa4",
+  "scope": "OFFLINE DESCRIPTIVE ONLY; not a strategy, backtest, observer or predictive validation",
+  "freeze": "Commit before computing historical event summaries. Already observed November examples are contaminated diagnostics, not parameter-selection or validation data.",
+  "history": {
+    "data_sha256": "5b2544c9bf353cedb77a07781ffe9e6202b12513c0c10f3d25bca67756a4825a",
+    "venue": "BINANCE_USDM_PERPETUAL",
+    "symbol": "BTCUSDT",
+    "timeframe": "1H CLOSED",
+    "available_from_utc": "2022-11-01T00:00:00Z",
+    "available_before_utc": "2026-11-01T00:00:00Z",
+    "warmup_from_utc": "2022-09-01T00:00:00Z"
+  },
+  "series": {
+    "AO": "unchanged audited SMA5(HL2)-SMA34(HL2)",
+    "ADX": "unchanged audited DMI14, ADX RMA14; plus/minus DI recorded; not direction",
+    "PECECILLOS": "unchanged public BITMAN PROXY; red=EMA15(tendencia), not EMA(pececillos); tendencia, sharks and red logged separately",
+    "BBWP_7_100": "unchanged audited literal supplied The_Caretaker source: SMA(close,7), population stdev, BBW=2*stdev/SMA; prior100 width rank, rightmost-index/ties and warmup as source",
+    "BBWP_13_252": "same literal rank formula, basis13/lookback252; explicitly separate requested settings comparison, not replacement/correction of historical7/100 nor certified TradingOne settings",
+    "platform_parity": "NOT ESTABLISHED without same-feed closed-bar export, indicator identity/settings/source and initialization prefix; owner-reported one rounded Spot pececillos point is partial visual evidence only"
+  },
+  "causal_events": {
+    "slope": "d[t]=x[t]-x[t-1]",
+    "acceleration": "a[t]=d[t]-d[t-1]; second difference, not prediction",
+    "prealert": "same nonzero sign of d[t-1] and d[t], abs(d[t])<abs(d[t-1]); first bar of each uninterrupted deceleration run only. Expected indicator slope=-sign(d[t]). No magnitude threshold, Q75, zero crossing or price/context gate.",
+    "confirmation": "strict1+1 reversal: d[t-1]*d[t]<0, first available at close[t]. Also count confirmations without any prior prealert.",
+    "prealert_resolution": "within next2 closed hours: first strict reversal confirms; flat slope invalidates; renewed same-side acceleration/equal magnitude invalidates; otherwise expire at end of2h. End-of-file before full resolution is censored. No resurrection or repeated alert during uninterrupted deceleration.",
+    "confirmation_instability": "first zero slope or reverse slope in next2 closed hours is recorded as locally unstable, not a price/trade invalidation. End-of-file is censored.",
+    "gap": "gap/nonfinite resets all pending; first3 consecutive finite closes required again",
+    "window_rationale": "2h fixed inherited temporal proximity from PR55; not selected on this example. A diagnostic definition of false prealert, not universal false-signal rate. No other expiry optimization.",
+    "direction": "AO/pececillos anticipated slope provides descriptive UP/DOWN hypothesis. ADX/BBWP only describe rising/falling strength/volatility; price distances for BOTH UP and DOWN are retained, never infer market side from these alone."
+  },
+  "price_timing": {
+    "known_anchor": "at prealert freeze lowest low for UP / highest high for DOWN since beginning of current uninterrupted indicator-slope leg, including prealert bar. Leg starts at preceding bar of first same-sign slope. This is an already known reference, NOT a true future swing vertex or an executable entry.",
+    "consumed": "signed close-to-frozen-known-anchor percent at prealert and confirmation; close drift prealert->confirmation; delay hours; next-open price references after each, not guaranteed fills",
+    "remaining": "descriptive favorable/adverse excursion from each close to common endpoint prealert+4h. Exclude signal's own bar. Same endpoint for fair timing comparison; end-of-file incomplete outcomes missing, never zero.",
+    "share": "consumed distance divided by maximum anchor-to-favorable-extreme up to common4h endpoint. Explicit ex-post descriptive denominator, never detector input; negative values retained, no clipping or best-vertex selection.",
+    "false_prealerts": "publish all resolutions: confirmed, reacceleration, flat, expiry, bad data and censored. These measure indicator-turn reliability ONLY, not profitable entries.",
+    "management": "NONE: no trades, stops, targets, costs, sizing or equity results; PR55 results unchanged"
+  },
+  "outputs": "all hourly values/differences; prealert lifecycle; all confirmation episodes; false prealerts; counts/delays/price-distance distributions; separate BBWP settings comparison; November availability table; tests/hashes/source audit",
+  "restrictions": "No indicator changes, no tuning, no new combinations, no production/Guardian/V8/MLRSI/Railway/Bitunix/Telegram mutation, no orders, no infrastructure, merge or deploy. SHADOW ONLY. TRADE AUTHORITY NONE."
+}
