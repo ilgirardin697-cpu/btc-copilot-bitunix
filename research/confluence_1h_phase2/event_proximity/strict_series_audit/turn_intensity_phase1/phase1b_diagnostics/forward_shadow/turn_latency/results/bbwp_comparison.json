@@ -1,0 +1,9 @@
+{
+  "n": 35064,
+  "exact_level_matches": 283,
+  "mean_absolute_level_difference": 18.296544368755182,
+  "median_absolute_level_difference": 14.682539682539682,
+  "pearson_level_correlation": 0.6860239377196092,
+  "slope_sign_agreement_pct": 53.37668263746293,
+  "note": "two different settings, never an external platform comparison; no optimized time shift"
+}
