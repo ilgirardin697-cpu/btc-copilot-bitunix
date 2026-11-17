@@ -1,0 +1,12 @@
+{
+  "source": "study.py",
+  "created_at": "2026-11-17T10:29:37.001335+00:00",
+  "previous_sha256": "50129592cd246ea0ebca83720ada100231941a0fcff78518885dd5811aea8587",
+  "corrected_sha256": "f27a75b7d316c113fa1c05b4999f52077f05d325bc6ae32bbefe1fd42a916404",
+  "before_trade_results": true,
+  "reason": "CSV audit records have heterogeneous keys; export union of columns without dropping any field. First attempt stopped at audit export before trade simulation.",
+  "detector_unchanged": true,
+  "simulator_unchanged": true,
+  "plan_unchanged": true,
+  "old_seal_preserved": true
+}

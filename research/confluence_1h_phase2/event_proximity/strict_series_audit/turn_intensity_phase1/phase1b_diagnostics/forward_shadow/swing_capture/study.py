@@ -23,17 +23,22 @@ def checksum(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def sourcehash(path):return hashlib.sha256(path.read_bytes().replace(b'\r\n',b'\n')).hexdigest()
 def verify_seal():
     seal=json.loads((HERE/'seal.json').read_text());assert seal['plan_hash']==plan_hash()
-    for name,value in seal['sources'].items():assert sourcehash(HERE/name)==value,('SEALED_SOURCE_CHANGED',name)
+    expected=dict(seal['sources']);amendment=HERE/'export_amendment.json'
+    if amendment.exists():
+        fix=json.loads(amendment.read_text());assert fix['source']=='study.py' and fix['previous_sha256']==expected['study.py'] and fix['before_trade_results'] is True
+        expected['study.py']=fix['corrected_sha256'];seal=dict(seal,transparent_export_amendment=fix)
+    for name,value in expected.items():assert sourcehash(HERE/name)==value,('SEALED_SOURCE_CHANGED',name)
     for name,value in seal['audited_sources'].items():assert sourcehash(HERE.parents[7]/name)==value,('AUDITED_FORMULA_CHANGED',name)
     return seal
 def csvrow(row):return {k:json.dumps(clean(v),sort_keys=True) if isinstance(v,(dict,list)) else clean(v) for k,v in row.items()}
 def write_csv(path,rows):
-    it=iter(rows);first=next(it,None)
-    if first is None:path.write_text('',newline='\n');return
+    rows=list(rows)
+    if not rows:path.write_text('',newline='\n');return
+    columns=list(dict.fromkeys(k for row in rows for k in row))
     op=gzip.open if path.suffix=='.gz' else open
     with op(path,'wt',encoding='utf-8',newline='') as f:
-        w=csv.DictWriter(f,fieldnames=list(first),lineterminator='\n');w.writeheader();w.writerow(csvrow(first))
-        for row in it:w.writerow(csvrow(row))
+        w=csv.DictWriter(f,fieldnames=columns,lineterminator='\n');w.writeheader()
+        for row in rows:w.writerow(csvrow(row))
 def aggregate(a,size):
     offset=4*24*H if size==7*24*H else 0;ids=((a[:,0]-offset)//size).astype(int);out=[]
     for key in np.unique(ids):

@@ -129,6 +129,13 @@ class ExecutionTests(unittest.TestCase):
         self.assertEqual(r['summary']['counts']['collision'],2);self.assertEqual(r['trades'],[])
 
 class ReferenceTests(unittest.TestCase):
+    def test_export_retains_heterogeneous_audit_columns(self):
+        import tempfile,csv
+        from .study import write_csv
+        with tempfile.TemporaryDirectory() as td:
+            p=Path(td)/'audit.csv';write_csv(p,[dict(i=1,status='CONFIRMED',tokens={'ao':1}),dict(i=2,status='EXPIRED',indicator='ao',token={'i':1})])
+            with p.open(newline='') as f:rows=list(csv.DictReader(f))
+            self.assertEqual(len(rows),2);self.assertEqual(rows[1]['indicator'],'ao');self.assertEqual(json.loads(rows[0]['tokens']),{'ao':1})
     def test_inclusive_matched_reference_deterministic(self):
         from .study import reference
         cell=[('2023-01',1,0)]*10;ss=[signal(0),signal(3,-1),signal(6)]
