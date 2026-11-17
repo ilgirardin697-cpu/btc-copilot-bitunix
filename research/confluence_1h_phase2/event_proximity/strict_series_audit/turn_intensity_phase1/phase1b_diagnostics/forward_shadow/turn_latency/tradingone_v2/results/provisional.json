@@ -1,0 +1,22 @@
+{
+  "source": "REAL_PUBLIC_FORMING_CANDLE",
+  "received_at": "2026-11-17T19:28:26.292086+00:00",
+  "open_time": "2026-11-17T19:00:00Z",
+  "closed": false,
+  "not_platform_observation": true,
+  "committed_state_unchanged": true,
+  "expected_available_at": "2026-11-17T20:00:00Z",
+  "values": {
+    "ao": -694.606176470581,
+    "ao_slope": -245.10711764705047,
+    "adx": 17.63668295567939,
+    "pececillos": 9.661007471506425,
+    "bbwp": 78.17460317460318,
+    "bbwp_signal": 71.11111111111111,
+    "ml_value": 42.23111502245929,
+    "ml_color": "RED",
+    "tsa_trend": 65378.44716606757,
+    "tsa_speed": -9698.635418092548
+  },
+  "warning": "one actual public partial H1; future close unknown; not a live TradingOne execution or continuous capture"
+}

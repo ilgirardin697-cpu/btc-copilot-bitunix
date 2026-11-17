@@ -1,0 +1,9 @@
+*.py text eol=lf
+*.md text eol=lf
+*.pine text eol=lf
+profile.json text eol=lf
+source_manifest.json text eol=lf
+data/*.json -text
+data/*.gz -text
+results/*.csv text eol=lf
+*.zip -text

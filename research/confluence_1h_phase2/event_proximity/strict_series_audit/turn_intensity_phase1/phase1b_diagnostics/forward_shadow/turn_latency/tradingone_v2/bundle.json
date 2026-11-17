@@ -1,0 +1,6 @@
+{
+  "sha256": "0ad8fa9125a45b0f4bb5a68b8ec039698d356b04f1ca7c8a3cf56a3b012eb81e",
+  "bytes": 2552682,
+  "includes": "six supplied original Pine scripts, active settings, public raw Spot responses/receipts, normalized bars, port, all comparison CSV, report/figures and test logs",
+  "input_json_sha256": "516783defe6d16fd926c350f6bfdcd3cec9d6550b0d8230aa9d7036115015ac9"
+}

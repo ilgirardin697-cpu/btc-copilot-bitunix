@@ -1,0 +1,104 @@
+[
+  {
+    "url": "https://data-api.binance.vision/api/v3/time",
+    "params": {},
+    "request_sent_at": "2026-11-17T19:28:21.198146+00:00",
+    "response_received_at": "2026-11-17T19:28:23.216437+00:00",
+    "http_status": 200,
+    "content_type": "application/json;charset=UTF-8",
+    "bytes": 28,
+    "sha256": "fea2471f5e42bbc95a56a92a4b7a26318ce68a41e63a8f95e6795d4c26e615d0",
+    "file": "server_time.json",
+    "source": "BINANCE_SPOT_PUBLIC_REST"
+  },
+  {
+    "url": "https://data-api.binance.vision/api/v3/klines",
+    "params": {
+      "symbol": "BTCUSDT",
+      "interval": "1h",
+      "startTime": 1783422000000,
+      "endTime": 1794941999999,
+      "limit": 1000
+    },
+    "request_sent_at": "2026-11-17T19:28:23.219441+00:00",
+    "response_received_at": "2026-11-17T19:28:24.568283+00:00",
+    "http_status": 200,
+    "content_type": "application/json;charset=UTF-8",
+    "bytes": 178037,
+    "sha256": "7200b797bba38b972ed76b725cfb5a60deb838e56ac1f961947c74b06472f253",
+    "file": "page_0.json",
+    "source": "BINANCE_SPOT_PUBLIC_REST"
+  },
+  {
+    "url": "https://data-api.binance.vision/api/v3/klines",
+    "params": {
+      "symbol": "BTCUSDT",
+      "interval": "1h",
+      "startTime": 1787022000000,
+      "endTime": 1794941999999,
+      "limit": 1000
+    },
+    "request_sent_at": "2026-11-17T19:28:24.575465+00:00",
+    "response_received_at": "2026-11-17T19:28:24.952714+00:00",
+    "http_status": 200,
+    "content_type": "application/json;charset=UTF-8",
+    "bytes": 178717,
+    "sha256": "d1a45e656bb3475cf11d21d62c7def136cc6b13f873a18b582c021fd5c971af4",
+    "file": "page_1.json",
+    "source": "BINANCE_SPOT_PUBLIC_REST"
+  },
+  {
+    "url": "https://data-api.binance.vision/api/v3/klines",
+    "params": {
+      "symbol": "BTCUSDT",
+      "interval": "1h",
+      "startTime": 1790622000000,
+      "endTime": 1794941999999,
+      "limit": 1000
+    },
+    "request_sent_at": "2026-11-17T19:28:24.963488+00:00",
+    "response_received_at": "2026-11-17T19:28:25.341829+00:00",
+    "http_status": 200,
+    "content_type": "application/json;charset=UTF-8",
+    "bytes": 178394,
+    "sha256": "d05bd1ce6e8e2f2d36b25ccbd196e243d257e7c9c57d0d922277af73f0163771",
+    "file": "page_2.json",
+    "source": "BINANCE_SPOT_PUBLIC_REST"
+  },
+  {
+    "url": "https://data-api.binance.vision/api/v3/klines",
+    "params": {
+      "symbol": "BTCUSDT",
+      "interval": "1h",
+      "startTime": 1794222000000,
+      "endTime": 1794941999999,
+      "limit": 1000
+    },
+    "request_sent_at": "2026-11-17T19:28:25.351512+00:00",
+    "response_received_at": "2026-11-17T19:28:25.687215+00:00",
+    "http_status": 200,
+    "content_type": "application/json;charset=UTF-8",
+    "bytes": 35877,
+    "sha256": "c4b8f66a18e3fe23277ee2667d45be429b831b6bf4c3d41c6d5469eaf8a1a53b",
+    "file": "page_3.json",
+    "source": "BINANCE_SPOT_PUBLIC_REST"
+  },
+  {
+    "url": "https://data-api.binance.vision/api/v3/klines",
+    "params": {
+      "symbol": "BTCUSDT",
+      "interval": "1h",
+      "startTime": 1794942000000,
+      "endTime": 1794945599999,
+      "limit": 1
+    },
+    "request_sent_at": "2026-11-17T19:28:25.940442+00:00",
+    "response_received_at": "2026-11-17T19:28:26.292086+00:00",
+    "http_status": 200,
+    "content_type": "application/json;charset=UTF-8",
+    "bytes": 178,
+    "sha256": "9cfcb04d23635ef442b0010080a9cb498cb2354da92d234a5ae96758e25b75a0",
+    "file": "forming.json",
+    "source": "BINANCE_SPOT_PUBLIC_REST"
+  }
+]
