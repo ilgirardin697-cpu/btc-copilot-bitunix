@@ -1,0 +1,86 @@
+{
+  "protocol_sha256": "d5f711cc0ebb6de47d5fb802c64a5b4929dfb7e28200a392a5e61771661a2a2f",
+  "data_sha256": "5b2544c9bf353cedb77a07781ffe9e6202b12513c0c10f3d25bca67756a4825a",
+  "diagnostic_sha256": "e5cb4c2bd439b74066846e4a8076cc1c1aeea1e4fc91cb433810b51a77ea29e8",
+  "history_hours": 35064,
+  "prefix_checks": [
+    {
+      "series": "ao",
+      "cut": 1000,
+      "exact": true
+    },
+    {
+      "series": "ao",
+      "cut": 16000,
+      "exact": true
+    },
+    {
+      "series": "ao",
+      "cut": 36526,
+      "exact": true
+    },
+    {
+      "series": "adx",
+      "cut": 1000,
+      "exact": true
+    },
+    {
+      "series": "adx",
+      "cut": 16000,
+      "exact": true
+    },
+    {
+      "series": "adx",
+      "cut": 36526,
+      "exact": true
+    },
+    {
+      "series": "pececillos",
+      "cut": 1000,
+      "exact": true
+    },
+    {
+      "series": "pececillos",
+      "cut": 16000,
+      "exact": true
+    },
+    {
+      "series": "pececillos",
+      "cut": 36526,
+      "exact": true
+    },
+    {
+      "series": "bbwp_7_100",
+      "cut": 1000,
+      "exact": true
+    },
+    {
+      "series": "bbwp_7_100",
+      "cut": 16000,
+      "exact": true
+    },
+    {
+      "series": "bbwp_7_100",
+      "cut": 36526,
+      "exact": true
+    },
+    {
+      "series": "bbwp_13_252",
+      "cut": 1000,
+      "exact": true
+    },
+    {
+      "series": "bbwp_13_252",
+      "cut": 16000,
+      "exact": true
+    },
+    {
+      "series": "bbwp_13_252",
+      "cut": 36526,
+      "exact": true
+    }
+  ],
+  "full_formula_sources_unchanged": true,
+  "no_trade_results_calculated": true,
+  "original_pr55_untouched": true
+}

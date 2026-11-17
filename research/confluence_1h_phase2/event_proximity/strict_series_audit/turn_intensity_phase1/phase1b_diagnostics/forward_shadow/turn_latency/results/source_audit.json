@@ -1,0 +1,49 @@
+{
+  "platform": "TradingOne",
+  "external_machine_readable_records": 0,
+  "external_parity": "NOT_ESTABLISHED",
+  "source_defaults": {
+    "bbwp_basis": 7,
+    "bbwp_lookback": 100,
+    "bbwp_ma": "SMA",
+    "bbwp_source": "close"
+  },
+  "requested_comparison": {
+    "bbwp_basis": 13,
+    "bbwp_lookback": 252,
+    "status": "SEPARATE_SETTINGS_NOT_CERTIFIED_AS_PLATFORM"
+  },
+  "audited_python_sha256": "4309d799b56bb8ae257d1d060f420312c4f97e3d027b2c1a550eae8bd08331ec",
+  "supplied_bbwp_sha256": "30c54a684d576d9937964e1cdc547bb7cea4c67bceeec7749b2ad1d855a2c799",
+  "supplied_koncorde_sha256": "0ec23aff606373510eac925deb5f0d6f0182a73d5b97ec7a00a13ebabc063444",
+  "previous_visual_point": {
+    "venue_reported_by_owner": "BINANCE_SPOT",
+    "symbol": "BTCUSDT",
+    "timeframe": "1H",
+    "bar_open_madrid": "2026-11-15T02:00:00+01:00",
+    "bar_open_utc": "2026-11-15T01:00:00Z",
+    "bar_close_utc": "2026-11-15T02:00:00Z",
+    "earliest_available_madrid": "2026-11-15T03:00:00+01:00",
+    "observed_rounded_value": "-40.40",
+    "reported_decimal_places": 2,
+    "python_pececillos": "-40.39928839347632",
+    "python_tendencia": "-15.064153051502862",
+    "python_ma_trend": "-4.069550666696239",
+    "claim": "SUPPORTS_PECECILLOS_IDENTITY_FOR_THIS_POINT_NOT_COMPLETE_PARITY",
+    "original_visual_capture_time_and_closed_status": "NOT_INDEPENDENTLY_ATTESTED"
+  },
+  "series_status": {
+    "AO": "PUBLIC_FORMULA_REUSED_EXTERNAL_PARITY_NOT_ESTABLISHED",
+    "ADX_DMI": "PUBLIC_FORMULA_REUSED_EXTERNAL_PARITY_NOT_ESTABLISHED",
+    "KONCORDE": "PUBLIC_FORMULA_REUSED_EXTERNAL_PARITY_NOT_ESTABLISHED",
+    "BBWP": "PUBLIC_FORMULA_REUSED_EXTERNAL_PARITY_NOT_ESTABLISHED"
+  },
+  "missing": [
+    "real named-series closed-bar export",
+    "full ticker/venue",
+    "indicator identities/version and actual inputs",
+    "same OHLCV/volume and initialization prefix",
+    "open/close/available timestamp meanings and precision"
+  ],
+  "caution": "one rounded owner-reported Spot pececillos point supports identity only; no synthetic test is independent platform evidence"
+}

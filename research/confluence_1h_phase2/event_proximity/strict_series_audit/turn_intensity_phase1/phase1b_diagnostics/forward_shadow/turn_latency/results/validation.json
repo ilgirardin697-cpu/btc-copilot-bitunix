@@ -1,0 +1,42 @@
+{
+  "technical_tests_not_external_parity": true,
+  "prealert_rows": 40532,
+  "confirmed_turn_rows": 43558,
+  "summaries_reconciled": true,
+  "available_times_checked": true,
+  "all_old_sources_unchanged": true,
+  "checks": {
+    "unit": {
+      "mode": "unit",
+      "returncode": 0,
+      "tests": 28,
+      "seconds": 1.8263395000249147
+    },
+    "full": {
+      "mode": "full",
+      "returncode": 0,
+      "tests": 1357,
+      "seconds": 394.4604258001782
+    },
+    "audits": {
+      "mode": "audits",
+      "returncode": 0,
+      "tests": null,
+      "seconds": 5.1001997999846935
+    },
+    "weekly": {
+      "mode": "weekly",
+      "returncode": 0,
+      "tests": 9,
+      "seconds": 2.520000500138849
+    },
+    "boundary": {
+      "mode": "boundary",
+      "returncode": 0,
+      "tests": 7,
+      "seconds": 3.061803000047803
+    }
+  },
+  "no_historical_trade_results_computed": true,
+  "pr55_no_edge_unchanged": true
+}

@@ -1,0 +1,12 @@
+{
+  "platform": "TradingOne",
+  "source_kind": null,
+  "venue": null,
+  "full_ticker": null,
+  "history_first_open_ms": null,
+  "market_sha256": null,
+  "indicator_identities_reviewed": false,
+  "settings": null,
+  "decimal_places": {},
+  "instructions": "Complete only independently verified facts. Canonical CSV columns named explicitly; timestamps integer UTC milliseconds for bar open and exclusive close. Need real original series, including both BBWP settings if claiming both. Same venue/prefix market NPZ with bars[t,o,h,l,c,base_volume]. No guessing settings or labeling a Python self-export as platform evidence."
+}
