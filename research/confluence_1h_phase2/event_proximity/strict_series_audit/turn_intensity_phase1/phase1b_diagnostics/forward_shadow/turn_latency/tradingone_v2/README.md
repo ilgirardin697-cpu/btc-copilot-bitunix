@@ -4,6 +4,8 @@
 
 Los seis originales y sus licencias están en `sources/`; `profile.json` conserva los inputs ACTIVOS del JSON2.3.21, no sus defaults. Se declara referencia en commit `a678a75`. No OPT. No cambios en resultados/indicadores/protocolos anteriores ni módulos productivos.
 
+Los espacios finales de los Pine recibidos se conservan como evidencia de fuente, con una excepción de whitespace limitada a esos seis assets. Los archivos Python y metadatos nuevos mantienen la comprobación normal. Solo se normalizan finales de línea de metadatos locales; los bytes de las respuestas HTTP no se alteran.
+
 ## Ejecutar sin red
 
 Python3.12 y NumPy2.3.5; matplotlib solo para gráficos y tzdata para Madrid. Desde raíz del repo, PowerShell:
