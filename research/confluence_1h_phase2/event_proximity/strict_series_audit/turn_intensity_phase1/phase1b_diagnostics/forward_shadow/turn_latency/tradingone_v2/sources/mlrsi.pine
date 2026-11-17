@@ -1,0 +1,161 @@
+// This Pine Script™ code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © BackQuant
+//@version=5
+import TradingView/ta/7 as ta
+
+indicator(
+ "Machine Learning RSI [BackQuant]", 
+ "ML RSI [BackQuant]", 
+ overlay = false, 
+ max_labels_count = 500, 
+ timeframe ="", 
+ timeframe_gaps = true
+ )
+
+// Define Groups
+const string rsi_g = "Relative Strength Index"
+const string ml_t = "Machine Learning Thresholds"
+const string opt_ = "ML Optimization"
+const string ui = "UI Settings"
+
+                // User Inputs 
+// RSI Settings     
+series float src = input.source(close, "Calculation Source", group =rsi_g, inline ="X")
+simple int   rsiLength = input.int(14, "RSI Length", minval = 2, group =rsi_g, inline ="X")
+simple bool  smooth = input.bool(true, "Smooth RSI?", group =rsi_g, inline = "smt")
+string       maType = input.string("Ema", "Moving Average Type",options = ["SMA", "Hull", "Ema", "Wma", "Dema", "RMA", "LINREG", "TEMA", "ALMA", "T3"], group =rsi_g, inline = "smt")
+simple int   smoothP = input.int(4, "Smoothing Period", group =rsi_g)
+simple int   sig = input.int(6, "Sigma for ALMA", group = rsi_g, tooltip = "this is only used if the ALMA is choosen in the Moving Average Type Input")
+
+// Machine Learning Thresholding Settings
+simple int   minThresh = input.int(10, "Threshold Range Min", inline = "thresh", group = ml_t)
+simple int   maxThresh = input.int(90, "Max", inline = "thresh", group = ml_t)
+simple int   step = input.int(5, "Step", inline = "thresh", group = ml_t)
+// Optimization Settings 
+simple float perfAlpha = input.float(10, "Performance Memory", minval = 2,tooltip = "controls the weighting of past data or the smoothness of calculations.", group = opt_)
+simple int   maxIter = input.int(1000, "Max Clustering Steps", group =opt_)
+simple int   maxData = input.int(3000, "Max Data Points", group =opt_)
+// UI Settings 
+simple bool  showthres = input.bool(true, "Show Threshold Lines?", group = ui)
+simple bool  paintCandles = input.bool(false, "Color Bars According to Trend?", group = ui)
+int          linew = input.int(3, "Signal Line Width", 1,4,1, group = ui)
+color        longcol = input.color(#00ff00, "Long Colour", group = ui, inline = "xxxx")
+color        shortcol= input.color(#ff0000, "Short Colour", group = ui, inline = "xxxx")
+color        neucol = input.color(color.gray, "Neutral Colour", group = ui)
+
+// MA Function
+ma(src, len, type, almaSig) =>
+    switch type
+        "SMA" => ta.sma(src, len)
+        "Hull" => ta.hma(src, len)
+        "Ema" => ta.ema(src, len)
+        "Wma" => ta.wma(src, len)
+        "Dema" => ta.dema(src, len)
+        "RMA" => ta.rma(src, len)
+        "LINREG"=> ta.linreg(src, len, 0)
+        "TEMA" => ta.tema(src, len)
+        "ALMA" => ta.alma(src, len, 0, almaSig)
+        "T3" => ta.t3(src,len, 0.7)
+
+
+// Calculate RSI
+rsi = ta.rsi(src, rsiLength)
+// Smooth?
+if smooth == true
+    rsi:=ma(rsi, smoothP, maType, sig)
+
+// Populate threshold array
+var factors = array.new_float(0)
+if barstate.isfirst
+    for i = minThresh to maxThresh by step
+        array.push(factors, i)
+
+// Clustering for RSI
+var rsi_values = array.new_float(0)
+if last_bar_index - bar_index <= maxData
+    array.push(rsi_values, rsi)
+
+var centroids = array.new_float(3)
+if array.size(rsi_values) > 3
+    array.set(centroids, 0, array.percentile_linear_interpolation(rsi_values, 25))
+    array.set(centroids, 1, array.percentile_linear_interpolation(rsi_values, 50))
+    array.set(centroids, 2, array.percentile_linear_interpolation(rsi_values, 75))
+
+// Initialize clusters
+var cluster1 = array.new_float(0)
+var cluster2 = array.new_float(0)
+var cluster3 = array.new_float(0)
+
+// Function to compare two arrays
+f_arrays_equal(arr1, arr2) =>
+    if array.size(arr1) != array.size(arr2)
+        false
+    else
+        all_equal = true
+        for i = 0 to array.size(arr1) - 1
+            if array.get(arr1, i) != array.get(arr2, i)
+                all_equal := false
+                break
+        all_equal
+
+for _ = 0 to maxIter
+    // Reset clusters at each iteration
+    cluster1 := array.new_float(0)
+    cluster2 := array.new_float(0)
+    cluster3 := array.new_float(0)
+
+    for value in rsi_values
+        distances = array.new_float(3)
+        for centroid in centroids
+            array.push(distances, math.abs(value - centroid))
+        idx = array.indexof(distances, array.min(distances))
+        if idx == 0
+            array.push(cluster1, value)
+        else if idx == 1
+            array.push(cluster2, value)
+        else
+            array.push(cluster3, value)
+
+    // Update centroids
+    new_centroids = array.new_float(3)
+    array.push(new_centroids, array.avg(cluster1))
+    array.push(new_centroids, array.avg(cluster2))
+    array.push(new_centroids, array.avg(cluster3))
+    
+    if f_arrays_equal(new_centroids, centroids)
+        break
+    centroids := new_centroids
+
+// Dynamic thresholds
+long_S = array.get(centroids, 2)
+short_S = array.get(centroids, 0)
+
+// Cluster plotting arrays
+var float cluster1_plot = na
+var float cluster2_plot = na
+var float cluster3_plot = na
+
+if not na(rsi)
+    distances = array.new_float(3)
+    for centroid in centroids
+        array.push(distances, math.abs(rsi - centroid))
+    idx = array.indexof(distances, array.min(distances))
+    cluster1_plot := idx == 0 ? rsi : na
+    cluster2_plot := idx == 1 ? rsi : na
+    cluster3_plot := idx == 2 ? rsi : na
+
+// --- Visualization ---
+col = rsi > long_S ? longcol : rsi < short_S ? shortcol : neucol
+
+plot(rsi, "RSI", color=col, linewidth = linew)  // Main RSI line
+
+// Dynamic thresholds via Machine Learning
+plot(showthres?long_S:na, "Long ML Threshold", color=longcol)
+plot(showthres?short_S:na, "Short ML Threshold", color=shortcol)
+
+// Plot RSI values in clusters
+plot(cluster1_plot, "Cluster 1", color=color.green, linewidth=2, style=plot.style_circles)
+plot(cluster2_plot, "Cluster 2", color=color.orange, linewidth=2, style=plot.style_circles)
+plot(cluster3_plot, "Cluster 3", color=color.red, linewidth=2, style=plot.style_circles)
+
+barcolor(paintCandles?col:na)

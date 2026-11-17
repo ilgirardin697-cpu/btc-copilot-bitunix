@@ -1,0 +1,432 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// Base calculation logic (RSI+MFI+BB+Stoch trend / PVI+NVI sharks-minnows) adapted from the public
+// "Koncorde Plus" script by OskarGallard, itself an open adaptation of the classic Blai5 Koncorde formula.
+// Visual style (3 overlapping filled layers + red signal line: Montaña/Prado/Agua/Señal) rebuilt to match
+// the "Koncorde 2.0" look, based only on the publicly visible chart appearance — no proprietary code used.
+
+//@version=6
+indicator('Koncorde 3.0 — BITMAN PROXY', 'Koncorde BITMAN', overlay = false)
+
+// BITMAN PROXY PROFILE
+// Use the chart on 1W for the weekly oscillator/volatility reading discussed in the Bitman video.
+// Koncorde math is kept at the classic public settings:
+// RSI/MFI 14 | BB 25 x 2 | Koncorde trend MA EMA 15 | PVI/NVI EMA 15 | MinMax 90/90.
+// IMPORTANT: exact private Bitman indicator parity is NOT PROVEN.
+// The extra MA statistics panel and its alerts are disabled by default to keep the view focused.
+//
+// ============================================================================
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
+f_getPriceValue(_htf) =>
+    var value = 0.
+    if ta.change(time(_htf)) != 0
+        value := close[1]
+        value
+    value
+
+f_crossingLevel(_curret, _level) =>
+    _level > _curret and _level < _curret[1] or _level < _curret and _level > _curret[1]
+
+alarm(_cond, _message, _htfUser, _oncePerBarClose) =>
+    if _cond
+        alert(_message + '\n' + syminfo.ticker + ' Price (' + str.tostring(close, format.mintick) + '), Timeframe ' + _htfUser + '\n')
+        if _oncePerBarClose
+            alert(_message + '\n' + syminfo.ticker + ' Price (' + str.tostring(close, format.mintick) + '), Timeframe ' + _htfUser + '\n', alert.freq_once_per_bar_close)
+
+enhanced_vwma(_series, _length, _vol) =>
+    vmp = _series * _vol
+    VWMA = math.sum(vmp, _length) / math.sum(_vol, _length)
+    VWMA
+
+// VAMA - Volume Adjusted Moving Average of @allanster
+vama(_src, _len, _fct, _rul, _nvb) =>
+    tvb = 0
+    tvb := _nvb == 0 ? nz(tvb[1]) + 1 : _nvb
+    tvs = _nvb == 0 ? ta.cum(volume) : math.sum(volume, _nvb)
+    v2i = volume / (tvs / tvb * _fct)
+    wtd = _src * v2i
+    nmb = 1
+    wtdSumB = 0.0
+    v2iSumB = 0.0
+    for i = 1 to _len * 10 by 1
+        strict = _rul ? false : i == _len
+        wtdSumB := wtdSumB + nz(wtd[i - 1])
+        v2iSumB := v2iSumB + nz(v2i[i - 1])
+        if v2iSumB >= _len or strict
+            break
+        nmb := nmb + 1
+        nmb
+    vama = (wtdSumB - (v2iSumB - _len) * _src[nmb]) / _len
+    vama
+
+// JMA - Jurik Moving Average of @everget
+jma(src, length, power, phase) =>
+    phaseRatio = phase < -100 ? 0.5 : phase > 100 ? 2.5 : phase / 100 + 1.5
+    beta = 0.45 * (length - 1) / (0.45 * (length - 1) + 2)
+    alpha = math.pow(beta, power)
+    Jma = 0.0
+    e0 = 0.0
+    e0 := (1 - alpha) * src + alpha * nz(e0[1])
+    e1 = 0.0
+    e1 := (src - e0) * (1 - beta) + beta * nz(e1[1])
+    e2 = 0.0
+    e2 := (e0 + phaseRatio * e1 - nz(Jma[1])) * math.pow(1 - alpha, 2) + math.pow(alpha, 2) * nz(e2[1])
+    Jma := e2 + nz(Jma[1])
+    Jma
+
+// ALMA - Arnaud Legoux Moving Average of @kurtsmock
+enhanced_alma(_series, _length, _offset, _sigma) =>
+    length = int(_length)
+    numerator = 0.0
+    denominator = 0.0
+    m = _offset * (length - 1)
+    s = length / _sigma
+    for i = 0 to length - 1 by 1
+        weight = math.exp(-((i - m) * (i - m)) / (2 * s * s))
+        numerator := numerator + weight * _series[length - 1 - i]
+        denominator := denominator + weight
+        denominator
+    numerator / denominator
+
+// RSS_WMA of @RedKTrader
+f_LazyLine(_data, _length) =>
+    w1 = 0
+    w2 = 0
+    w3 = 0
+    L1 = 0.0
+    L2 = 0.0
+    L3 = 0.0
+    w = _length / 3
+    if _length > 2
+        w2 := math.round(w)
+        w1 := math.round((_length - w2) / 2)
+        w3 := int((_length - w2) / 2)
+        L1 := ta.wma(_data, w1)
+        L2 := ta.wma(L1, w2)
+        L3 := ta.wma(L2, w3)
+        L3
+    else
+        L3 := _data
+        L3
+    L3
+
+// T3 Moving Average - Tim Tillson
+f_t3(src, len) =>
+    x1 = ta.ema(src, len)
+    x2 = ta.ema(x1, len)
+    x3 = ta.ema(x2, len)
+    x4 = ta.ema(x3, len)
+    x5 = ta.ema(x4, len)
+    x6 = ta.ema(x5, len)
+    b = 0.7
+    c1 = -math.pow(b, 3)
+    c2 = 3 * math.pow(b, 2) + 3 * math.pow(b, 3)
+    c3 = -6 * math.pow(b, 2) - 3 * b - 3 * math.pow(b, 3)
+    c4 = 1 + 3 * b + math.pow(b, 3) + 3 * math.pow(b, 2)
+    c1 * x6 + c2 * x5 + c3 * x4 + c4 * x3
+
+// Ehlers 2 Pole Super Smoother
+f_2pss(_src, _length) =>
+    var _a0 = math.sqrt(2) * math.pi / _length
+    var _a1 = math.exp(-_a0)
+    var _b0 = 2 * _a1 * math.cos(_a0)
+    var _c2 = -math.pow(_a1, 2)
+    var _c1 = _b0
+    var _c0 = 1 - _c1 - _c2
+    var _2pss = 0.0
+    _src1 = nz(_src[1], _src)
+    _src2 = nz(_src[2], _src1)
+    _2pss := _c0 * _src + _c1 * nz(_2pss[1], _src1) + _c2 * nz(_2pss[2], _src2)
+    _2pss
+
+// VIDYA by Tushar Chande
+VIDYA(src, length) =>
+    valpha = 2 / (length + 1)
+    vud1 = src > src[1] ? src - src[1] : 0
+    vdd1 = src < src[1] ? src[1] - src : 0
+    vUD = math.sum(vud1, 9)
+    vDD = math.sum(vdd1, 9)
+    vCMO = nz((vUD - vDD) / (vUD + vDD))
+    VAR = 0.0
+    VAR := nz(valpha * math.abs(vCMO) * src) + (1 - valpha * math.abs(vCMO)) * nz(VAR[1])
+    VAR
+
+// Ultimate Smoother - TASC 2024/04
+UltimateSmoother(float src, int period) =>
+    float a1 = math.exp(-1.414 * math.pi / period)
+    float c2 = 2.0 * a1 * math.cos(1.414 * math.pi / period)
+    float c3 = -a1 * a1
+    float c1 = (1.0 + c2 - c3) / 4.0
+    float us = src
+    if bar_index >= 4
+        us := (1.0 - c1) * src + (2.0 * c1 - c2) * src[1] - (c1 + c3) * src[2] + c2 * nz(us[1]) + c3 * nz(us[2])
+        us
+    us
+
+ma(_type, _source, _length, _vol) =>
+    switch _type
+        'SMA' => ta.sma(_source, _length)
+        'EMA' => ta.ema(_source, _length)
+        'WMA' => ta.wma(_source, _length)
+        'VWMA' => enhanced_vwma(_source, _length, _vol)
+        'LSMA' => ta.linreg(_source, _length, 0)
+        'ALMA' => enhanced_alma(_source, _length, 0.85, 6)
+        'HMA' => ta.hma(_source, _length)
+        'VAMA' => vama(_source, _length, 0.67, true, 0)
+        'JMA' => jma(_source, _length, 2, 50)
+        'Wilder' =>
+            wild = _source
+            wild := nz(wild[1]) + (_source - nz(wild[1])) / _length
+            wild
+        'RSS_WMA' => f_LazyLine(_source, _length)
+        'D_SMA' => ta.sma(ta.sma(_source, _length), _length)
+        'D_EMA' => ta.ema(ta.ema(_source, _length), _length)
+        'D_WMA' => ta.wma(ta.wma(_source, _length), _length)
+        'T3' => f_t3(_source, _length)
+        'Ultimate Smoother' => UltimateSmoother(_source, _length)
+        'Smooth LSMA' =>
+            lsma = ta.linreg(_source, _length, 0)
+            slsma = lsma - (lsma - ta.linreg(lsma, _length, 0))
+            slsma
+        '2Pole Super Smoother' => f_2pss(_source, _length)
+        'D_T3' => f_t3(f_t3(_source, _length), _length)
+        'VIDYA' => VIDYA(_source, _length)
+
+f_bb(source, length, _mult) =>
+    basis = ta.sma(source, length)
+    dev = _mult * ta.stdev(source, length)
+    upper = basis + dev
+    lower = basis - dev
+    avg_up_low = math.avg(upper, lower)
+    diff_up_low = upper - lower
+    (source - avg_up_low) / diff_up_low * 100
+
+f_stoch(src, length, smoothFastD) =>
+    ll = ta.lowest(low, length)
+    hh = ta.highest(high, length)
+    k = 100 * (src - ll) / (hh - ll)
+    ta.sma(k, smoothFastD)
+
+// ============================================================================
+// INPUTS — COLORS (matches Koncorde 2.0 Style panel: Cero / Verde / Marron / Azul / Lmarron / Lineav / Lazul / Media / Cero)
+// ============================================================================
+g_style = '⎆⎆ Koncorde Colors'
+col_cero1 = input.color(color.new(#131722, 100), 'Cero', inline = 'c0', group = g_style)
+col_verde = input.color(color.new(#05FF68, 55), 'Verde (Prado / minnows)', inline = 'c1', group = g_style)
+col_marron = input.color(color.new(#FFCC99, 55), 'Marron (Montaña / trend)', inline = 'c2', group = g_style)
+col_azul = input.color(color.new(#38F5E9, 55), 'Azul (Agua / sharks)', inline = 'c3', group = g_style)
+col_lmarron = input.color(#8D4925, 'Lmarron (trend line)', inline = 'c4', group = g_style)
+col_lineav = input.color(#009929, 'Lineav (minnows line)', inline = 'c5', group = g_style)
+col_lazul = input.color(#0E55FF, 'Lazul (sharks line)', inline = 'c6', group = g_style)
+col_media = input.color(#FF001E, 'Media (Señal)', inline = 'c7', group = g_style)
+col_cero2 = input.color(color.new(#131722, 100), 'Cero', inline = 'c8', group = g_style)
+
+show_K = input.bool(true, '⏩ Show Koncorde', group = g_style)
+
+// ============================================================================
+// INPUTS — KONCORDE TREND (RSI + MFI + BB + STOCH)
+// ============================================================================
+g_trend = 'Koncorde Trend'
+tprice = input.source(ohlc4, 'RSI, BB & Stoch Source', group = g_trend)
+srcMfi = input.source(hlc3, 'MFI Source', group = g_trend)
+len_mfi_rsi = input.int(14, 'MFI & RSI Length', 1, group = g_trend)
+length_bb = input.int(25, 'BB Length', 1, inline = 'bb', group = g_trend)
+mult_bb = input.float(2.0, 'BB Multiplier', 1, inline = 'bb', group = g_trend)
+length_ma01 = input.int(15, 'MA Length', 1, inline = 'ma1', group = g_trend)
+type_ma01 = input.string('EMA', 'Type', inline = 'ma1', group = g_trend, options = ['2Pole Super Smoother', 'Ultimate Smoother', 'Smooth LSMA', 'T3', 'VIDYA', 'SMA', 'EMA', 'Wilder', 'WMA', 'VWMA', 'ALMA', 'LSMA', 'HMA', 'VAMA', 'JMA', 'RSS_WMA'])
+
+// ============================================================================
+// INPUTS — KONCORDE VOLUME (PVI / NVI)
+// ============================================================================
+g_vol = 'Koncorde Volume'
+m_pvi_nvi = input.int(15, 'PVI & NVI Length', 1, group = g_vol)
+longitudPVI = input.int(90, 'Min-Max Period [PVI]', 2, group = g_vol)
+longitudNVI = input.int(90, 'Min-Max Period [NVI]', 2, group = g_vol)
+
+// ============================================================================
+// INPUTS — STATISTICS PANEL
+// ============================================================================
+group_stat = '⎆⎆ Statistic Panel'
+chgStat = input.bool(false, '⮜ Performance || Distance to MA ⮞', inline = 'PD', group = group_stat, tooltip = 'Performance , displays values from the beginning of the month, week, year, etc\n\nDistance from/to MA - Multi TimeFrame Price Distance from/to MA')
+pmaStat = input.bool(false, '', inline = 'PD', group = group_stat)
+statSize = input.string('Small', 'Statistic Panel Text Size', options = ['Auto', 'Tiny', 'Small', 'Normal'], group = group_stat)
+textSize = statSize == 'Small' ? size.small : statSize == 'Normal' ? size.normal : statSize == 'Auto' ? size.auto : size.tiny
+maAlarm = input.bool(false, 'Enable Moving Average Alerts', group = group_stat, tooltip = 'OFF by default in BITMAN proxy profile; unrelated to the Koncorde reading used here')
+
+type_ma1 = input.string('T3', 'MA 1', options = ['VIDYA', '2Pole Super Smoother', 'Ultimate Smoother', 'Smooth LSMA', 'T3', 'SMA', 'EMA', 'Wilder', 'ALMA', 'WMA', 'VWMA', 'D_SMA', 'D_EMA', 'D_WMA', 'VAMA', 'D_T3'], inline = 'ma1', group = group_stat)
+length_ma1 = input.int(8, 'Length', minval = 1, inline = 'ma1', group = group_stat)
+source_ma1 = input.source(hlcc4, 'Source', inline = 'ma1', group = group_stat)
+
+type_ma2 = input.string('EMA', 'MA 2', options = ['VIDYA', '2Pole Super Smoother', 'Ultimate Smoother', 'Smooth LSMA', 'T3', 'SMA', 'EMA', 'Wilder', 'ALMA', 'WMA', 'VWMA', 'D_SMA', 'D_EMA', 'D_WMA', 'VAMA', 'D_T3'], inline = 'ma2', group = group_stat)
+length_ma2 = input.int(55, 'Length', minval = 1, inline = 'ma2', group = group_stat)
+source_ma2 = input.source(close, 'Source', inline = 'ma2', group = group_stat)
+
+type_ma3 = input.string('SMA', 'MA 3', options = ['VIDYA', '2Pole Super Smoother', 'Ultimate Smoother', 'Smooth LSMA', 'T3', 'SMA', 'EMA', 'Wilder', 'ALMA', 'WMA', 'VWMA', 'D_SMA', 'D_EMA', 'D_WMA', 'VAMA', 'D_T3'], inline = 'ma3', group = group_stat)
+length_ma3 = input.int(200, 'Length', minval = 1, inline = 'ma3', group = group_stat)
+source_ma3 = input.source(close, 'Source', inline = 'ma3', group = group_stat)
+
+// ============================================================================
+// CALCULATIONS
+// ============================================================================
+pvi_media = ta.ema(ta.pvi, m_pvi_nvi)
+pvi_max = ta.highest(pvi_media, longitudPVI)
+pvi_min = ta.lowest(pvi_media, longitudPVI)
+osc_pos = (ta.pvi - pvi_media) * 100 / (pvi_max - pvi_min)
+
+nvi_media = ta.ema(ta.nvi, m_pvi_nvi)
+nvi_max = ta.highest(nvi_media, longitudNVI)
+nvi_min = ta.lowest(nvi_media, longitudNVI)
+osc_neg = (ta.nvi - nvi_media) * 100 / (nvi_max - nvi_min)
+
+// Tick volume (fallback for symbols without real volume, needed by VWMA)
+tick = syminfo.mintick
+rng = close - open
+tickrng = tick
+tickrng := math.abs(rng) < tick ? nz(tickrng[1]) : rng
+tickvol = math.abs(tickrng) / tick
+volumen = nz(volume) == 0 ? tickvol : volume
+
+rsi_valor = ta.rsi(tprice, len_mfi_rsi)
+mfi_valor = ta.mfi(srcMfi, len_mfi_rsi)
+osc_bb = f_bb(tprice, length_bb, mult_bb)
+stoc = f_stoch(tprice, 21, 3)
+
+tendencia = (rsi_valor + mfi_valor + osc_bb + stoc / 3) / 2
+tiburones = ta.sma(osc_neg, 1)
+pececillos = tendencia + osc_pos
+
+ma_trend = ma(type_ma01, tendencia, length_ma01, volumen)
+
+// ============================================================================
+// PLOTS — Montaña (marrón) / Prado (verde) / Agua (celeste) / Señal (rojo)
+// ============================================================================
+zeroA = plot(show_K ? 0 : na, 'Cero', color = col_cero1, display = display.none)
+
+pVerde = plot(show_K ? pececillos : na, 'Verde', color = col_verde, style = plot.style_area, histbase = 0)
+pMarron = plot(show_K ? tendencia : na, 'Marron', color = col_marron, style = plot.style_area, histbase = 0)
+pAzul = plot(show_K ? tiburones : na, 'Azul', color = col_azul, style = plot.style_area, histbase = 0)
+
+plot(show_K ? tendencia : na, 'Lmarron', color = col_lmarron, linewidth = 1)
+plot(show_K ? pececillos : na, 'Lineav', color = col_lineav, linewidth = 1)
+plot(show_K ? tiburones : na, 'Lazul', color = col_lazul, linewidth = 1)
+plot(show_K ? ma_trend : na, 'Media', color = col_media, linewidth = 2)
+
+zeroB = plot(show_K ? 0 : na, 'Cero', color = col_cero2, display = display.none)
+
+// ============================================================================
+// MOVING AVERAGE ALERTS
+// ============================================================================
+sma20 = ma(type_ma1, source_ma1, length_ma1, volumen)
+sma50 = ma(type_ma2, source_ma2, length_ma2, volumen)
+sma200 = ma(type_ma3, source_ma2, length_ma3, volumen)
+
+txt_ma1 = type_ma1 + str.tostring(length_ma1)
+txt_ma2 = type_ma2 + str.tostring(length_ma2)
+txt_ma3 = type_ma3 + str.tostring(length_ma3)
+if maAlarm
+    alarm(f_crossingLevel(close, sma20), 'Price crossing current tf ' + txt_ma1 + '(' + str.tostring(sma20, format.mintick) + ')', timeframe.period, true)
+    alarm(f_crossingLevel(close, sma50), 'Price crossing current tf ' + txt_ma2 + '(' + str.tostring(sma50, format.mintick) + ')', timeframe.period, true)
+    alarm(f_crossingLevel(close, sma200), 'Price crossing current tf ' + txt_ma3 + '(' + str.tostring(sma200, format.mintick) + ')', timeframe.period, true)
+
+// ============================================================================
+// STATISTICS TABLE — Performance & Distance to MA
+// ============================================================================
+color upColor = #26A69A
+color dnColor = #EF5350
+color naColor = color.blue
+color upColor2 = #00FF98
+color dnColor2 = #FF9800
+
+dROR = (close / f_getPriceValue('D') - 1) * 100
+wROR = (close / f_getPriceValue('W') - 1) * 100
+mROR = (close / f_getPriceValue('M') - 1) * 100
+qROR = (close / f_getPriceValue('3M') - 1) * 100
+yROR = (close / f_getPriceValue('12M') - 1) * 100
+
+var float q1 = na
+var float q2 = na
+var float q3 = na
+var float q4 = na
+
+if month < 4
+    q1 := qROR
+    q2 := na
+    q3 := na
+    q4 := na
+    q4
+else if month > 3 and month < 7
+    q2 := qROR
+    q2
+else if month > 6 and month < 10
+    q3 := qROR
+    q3
+else if month > 9
+    q4 := qROR
+    q4
+
+var float yROR1 = na
+var float yROR2 = na
+var float yROR3 = na
+var int yr1 = na
+var int yr2 = na
+var int yr3 = na
+
+if ta.change(time('12M')) != 0
+    yROR3 := yROR2
+    yr3 := yr2
+    yROR2 := yROR1
+    yr2 := yr1
+    yROR1 := yROR[1]
+    yr1 := year[1]
+    yr1
+
+var table change = table.new(position.top_right, 4, 10, border_width = 3)
+if barstate.islast and chgStat and chart.is_standard
+    table.cell(change, 0, 0, 'PERF', text_color = naColor, bgcolor = color.new(naColor, 80), text_halign = text.align_left, text_size = textSize)
+
+    if not timeframe.isweekly and not timeframe.ismonthly
+        table.cell(change, 1, 0, str.tostring(dROR, '#.##') + '%\nDTD', text_color = dROR > 0 ? upColor2 : dnColor2, bgcolor = dROR > 0 ? color.new(upColor, 80) : color.new(dnColor, 80), text_size = textSize, tooltip = 'Day to Date')
+    if not timeframe.ismonthly
+        table.cell(change, 2, 0, na(wROR) ? '-\nWTD' : str.tostring(wROR, '#.##') + '%\nWTD', text_color = na(wROR) ? naColor : wROR > 0 ? upColor2 : dnColor2, bgcolor = na(wROR) ? color.new(naColor, 80) : wROR > 0 ? color.new(upColor, 80) : color.new(dnColor, 80), text_size = textSize, tooltip = 'Week to Date')
+    table.cell(change, 3, 0, na(mROR) ? '-\nMTD' : str.tostring(mROR, '#.##') + '%\nMTD', text_color = na(mROR) ? naColor : mROR > 0 ? upColor2 : dnColor2, bgcolor = na(mROR) ? color.new(naColor, 80) : mROR > 0 ? color.new(upColor, 80) : color.new(dnColor, 80), text_size = textSize, tooltip = 'Month to Date')
+
+    if not na(q1) and not na(q2) and not na(q3) and not na(q4)
+        table.cell(change, 0, 1, na(q1) ? '-\nQ1' : str.tostring(q1, '#.##') + '%\nQ1', text_color = na(q1) ? naColor : q1 > 0 ? upColor2 : dnColor2, bgcolor = na(q1) ? color.new(naColor, 80) : q1 > 0 ? color.new(upColor, 80) : color.new(dnColor, 80), text_size = textSize, tooltip = '1st Quarter of ' + str.tostring(year))
+        table.cell(change, 1, 1, na(q2) ? '-\nQ2' : str.tostring(q2, '#.##') + '%\nQ2', text_color = na(q2) ? naColor : q2 > 0 ? upColor2 : dnColor2, bgcolor = na(q2) ? color.new(naColor, 80) : q2 > 0 ? color.new(upColor, 80) : color.new(dnColor, 80), text_size = textSize, tooltip = '2nd Quarter of ' + str.tostring(year))
+        table.cell(change, 2, 1, na(q3) ? '-\nQ3' : str.tostring(q3, '#.##') + '%\nQ3', text_color = na(q3) ? naColor : q3 > 0 ? upColor2 : dnColor2, bgcolor = na(q3) ? color.new(naColor, 80) : q3 > 0 ? color.new(upColor, 80) : color.new(dnColor, 80), text_size = textSize, tooltip = '3rd Quarter of ' + str.tostring(year))
+        table.cell(change, 3, 1, na(q4) ? '-\nQ4' : str.tostring(q4, '#.##') + '%\nQ4', text_color = na(q4) ? naColor : q4 > 0 ? upColor2 : dnColor2, bgcolor = na(q4) ? color.new(naColor, 80) : q4 > 0 ? color.new(upColor, 80) : color.new(dnColor, 80), text_size = textSize, tooltip = '4th Quarter of ' + str.tostring(year))
+
+    if not na(yROR)
+        table.cell(change, 3, 2, str.tostring(yROR, '#.##') + '%\n' + str.tostring(year), text_color = yROR > 0 ? upColor2 : dnColor2, bgcolor = yROR > 0 ? color.new(upColor, 80) : color.new(dnColor, 80), text_size = textSize, tooltip = str.tostring(year) + ' Year to Date')
+        table.cell(change, 2, 2, na(yROR1) ? '-\n-' : str.tostring(yROR1, '#.##') + '%\n' + str.tostring(yr1), text_color = na(yROR1) ? naColor : yROR1 > 0 ? upColor2 : dnColor2, bgcolor = na(yROR1) ? color.new(naColor, 80) : yROR1 > 0 ? color.new(upColor, 80) : color.new(dnColor, 80), text_size = textSize, tooltip = na(yROR1) and na(yr1) ? '' : str.tostring(yr1) + ' Rate of Return')
+        table.cell(change, 1, 2, na(yROR2) ? '-\n-' : str.tostring(yROR2, '#.##') + '%\n' + str.tostring(yr2), text_color = na(yROR2) ? naColor : yROR2 > 0 ? upColor2 : dnColor2, bgcolor = na(yROR2) ? color.new(naColor, 80) : yROR2 > 0 ? color.new(upColor, 80) : color.new(dnColor, 80), text_size = textSize, tooltip = na(yROR2) and na(yr2) ? '' : str.tostring(yr2) + ' Rate of Return')
+        table.cell(change, 0, 2, na(yROR3) ? '-\n-' : str.tostring(yROR3, '#.##') + '%\n' + str.tostring(yr3), text_color = na(yROR3) ? naColor : yROR3 > 0 ? upColor2 : dnColor2, bgcolor = na(yROR3) ? color.new(naColor, 80) : yROR3 > 0 ? color.new(upColor, 80) : color.new(dnColor, 80), text_size = textSize, tooltip = na(yROR3) and na(yr3) ? '' : str.tostring(yr3) + ' Rate of Return')
+
+pma20 = (source_ma1 / sma20 - 1) * 100
+pma50 = (source_ma2 / sma50 - 1) * 100
+pma200 = (source_ma3 / sma200 - 1) * 100
+
+[pma204h, pma504h, pma2004h] = request.security(syminfo.tickerid, '240', [pma20, pma50, pma200])
+[pma20d, pma50d, pma200d] = request.security(syminfo.tickerid, 'D', [pma20, pma50, pma200])
+[pma20w, pma50w, pma200w] = request.security(syminfo.tickerid, 'W', [pma20, pma50, pma200])
+
+if barstate.islast and pmaStat and chart.is_standard
+    table.cell(change, 1, 3, '4H', text_color = naColor, bgcolor = color.new(naColor, 80), text_size = textSize)
+    table.cell(change, 2, 3, 'Day', text_color = naColor, bgcolor = color.new(naColor, 80), text_size = textSize)
+    table.cell(change, 3, 3, 'Week', text_color = naColor, bgcolor = color.new(naColor, 80), text_size = textSize)
+
+    table.cell(change, 0, 4, type_ma1 + ' ' + str.tostring(length_ma1), text_color = naColor, bgcolor = color.new(naColor, 80), text_halign = text.align_left, text_size = textSize)
+    table.cell(change, 1, 4, na(pma204h) ? '-' : str.tostring(pma204h, '#.##') + '%', text_color = na(pma204h) ? naColor : pma204h > 0 ? upColor2 : dnColor2, bgcolor = na(pma204h) ? color.new(naColor, 80) : pma204h > 0 ? color.new(upColor, 80) : color.new(dnColor, 80), text_size = textSize)
+    table.cell(change, 2, 4, na(pma20d) ? '-' : str.tostring(pma20d, '#.##') + '%', text_color = na(pma20d) ? naColor : pma20d > 0 ? upColor2 : dnColor2, bgcolor = na(pma20d) ? color.new(naColor, 80) : pma20d > 0 ? color.new(upColor, 80) : color.new(dnColor, 80), text_size = textSize)
+    table.cell(change, 3, 4, na(pma20w) ? '-' : str.tostring(pma20w, '#.##') + '%', text_color = na(pma20w) ? naColor : pma20w > 0 ? upColor2 : dnColor2, bgcolor = na(pma20w) ? color.new(naColor, 80) : pma20w > 0 ? color.new(upColor, 80) : color.new(dnColor, 80), text_size = textSize)
+
+    table.cell(change, 0, 5, type_ma2 + ' ' + str.tostring(length_ma2), text_color = naColor, bgcolor = color.new(naColor, 80), text_halign = text.align_left, text_size = textSize)
+    table.cell(change, 1, 5, na(pma504h) ? '-' : str.tostring(pma504h, '#.##') + '%', text_color = na(pma504h) ? naColor : pma504h > 0 ? upColor2 : dnColor2, bgcolor = na(pma504h) ? color.new(naColor, 80) : pma504h > 0 ? color.new(upColor, 80) : color.new(dnColor, 80), text_size = textSize)
+    table.cell(change, 2, 5, na(pma50d) ? '-' : str.tostring(pma50d, '#.##') + '%', text_color = na(pma50d) ? naColor : pma50d > 0 ? upColor2 : dnColor2, bgcolor = na(pma50d) ? color.new(naColor, 80) : pma50d > 0 ? color.new(upColor, 80) : color.new(dnColor, 80), text_size = textSize)
+    table.cell(change, 3, 5, na(pma50w) ? '-' : str.tostring(pma50w, '#.##') + '%', text_color = na(pma50w) ? naColor : pma50w > 0 ? upColor2 : dnColor2, bgcolor = na(pma50w) ? color.new(naColor, 80) : pma50w > 0 ? color.new(upColor, 80) : color.new(dnColor, 80), text_size = textSize)
+
+    table.cell(change, 0, 6, type_ma3 + ' ' + str.tostring(length_ma3), text_color = naColor, bgcolor = color.new(naColor, 80), text_halign = text.align_left, text_size = textSize)
+    table.cell(change, 1, 6, na(pma2004h) ? '-' : str.tostring(pma2004h, '#.##') + '%', text_color = na(pma2004h) ? naColor : pma2004h > 0 ? upColor2 : dnColor2, bgcolor = na(pma2004h) ? color.new(naColor, 80) : pma2004h > 0 ? color.new(upColor, 80) : color.new(dnColor, 80), text_size = textSize)
+    table.cell(change, 2, 6, na(pma200d) ? '-' : str.tostring(pma200d, '#.##') + '%', text_color = na(pma200d) ? naColor : pma200d > 0 ? upColor2 : dnColor2, bgcolor = na(pma200d) ? color.new(naColor, 80) : pma200d > 0 ? color.new(upColor, 80) : color.new(dnColor, 80), text_size = textSize)
+    table.cell(change, 3, 6, na(pma200w) ? '-' : str.tostring(pma200w, '#.##') + '%', text_color = na(pma200w) ? naColor : pma200w > 0 ? upColor2 : dnColor2, bgcolor = na(pma200w) ? color.new(naColor, 80) : pma200w > 0 ? color.new(upColor, 80) : color.new(dnColor, 80), text_size = textSize)
