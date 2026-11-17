@@ -120,6 +120,17 @@ class ExecutionTests(unittest.TestCase):
     def test_unknown_funding_is_not_zero(self):
         a=bars();fund=np.array([[a[1,0],.001,np.nan,8,np.nan,np.nan]])
         with self.assertRaisesRegex(ValueError,'FUNDING'):run(a,fund,np.ones(len(a)),[signal()],Config(.005,1.5,.005))
+    def test_millisecond_funding_preserves_actual_ownership(self):
+        a=bars();ff=np.array([[a[1,0]+19,.0001,100,8,99,101]])
+        t=run(a,ff,np.ones(len(a)),[signal()],Config(.005,1.5,.005))['trades'][0]
+        self.assertAlmostEqual(t['funding_high'],t['qty']*.01);self.assertAlmostEqual(t['funding_low'],t['funding_high'])
+    def test_gap_exit_before_millisecond_funding_not_charged(self):
+        a=bars();a[2,1:5]=[97,98,96,97];ff=np.array([[a[2,0]+19,.001,100,8,99,101]])
+        t=run(a,ff,np.ones(len(a)),[signal()],Config(.005,1.5,.005))['trades'][0];self.assertEqual(t['funding_high'],0)
+    def test_funding_inside_fill_interval_retains_quantity_bounds(self):
+        a=bars();a[1,2:4]=[101,98];ff=np.array([[a[1,0]+19,.001,100,8,99,101]])
+        t=run(a,ff,np.ones(len(a)),[signal()],Config(.005,1.5,.005),minutes=self.make_minutes(a))['trades'][0]
+        self.assertAlmostEqual(t['funding_high'],t['qty']*.1);self.assertAlmostEqual(t['funding_low'],t['qty']*.05)
     def test_stops_never_widen_after_TP1(self):
         a=bars(6);a[1,2:5]=[101,99.8,100.8];a[2:,1:5]=[101,101.1,100.8,101]
         t=execute(a)['trades'][0];levels=[r['level'] for r in t['stop_updates']]

@@ -1,0 +1,20 @@
+{
+  "before_trade_results": true,
+  "created_at": "2026-11-17T10:46:50.247983+00:00",
+  "reason": "Real archived settlement timestamps contain1..29ms offsets (1657rows). Preserve actual timestamps; bound ownership against fill intervals; book at closed H1. First simulation aborted during initial funding-index validation before trades.",
+  "sources": {
+    "simulator.py": {
+      "previous_sha256": "1198fcde6cd59be9e5cd14f932346c968edaae2fc15e1cb8bdc628d4e943e199",
+      "corrected_sha256": "5d6caf2ced2bd62b478f71d66b75f8fe882a1209f482dda4654336d2264f0e76"
+    },
+    "study.py": {
+      "previous_sha256": "f27a75b7d316c113fa1c05b4999f52077f05d325bc6ae32bbefe1fd42a916404",
+      "corrected_sha256": "c83378e471eaf143833565b3bcf200b09b815c9e2909883c355be09931804eae"
+    }
+  },
+  "plan_unchanged": true,
+  "detector_unchanged": true,
+  "management_parameters_unchanged": true,
+  "original_seals_preserved": true,
+  "signal_csv_sha256": "31968405c0d243ff4f6499303cac5929e65051175ee84139f620c4438e5ad038"
+}

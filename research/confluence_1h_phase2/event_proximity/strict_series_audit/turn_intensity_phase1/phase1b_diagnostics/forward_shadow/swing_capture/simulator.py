@@ -63,6 +63,7 @@ class Position:
     mae:float=0.
     fills:list=field(default_factory=list)
     stop_updates:list=field(default_factory=list)
+    funding_records:list=field(default_factory=list)
 
 def be_level(entry,side,funding_per_btc):
     fill=(entry*(1+FEE)+funding_per_btc)/(1-FEE) if side==1 else (entry*(1-FEE)-funding_per_btc)/(1+FEE)
@@ -79,15 +80,16 @@ def run(a,funding,atr,signals,config,minutes=None,marks=None,details=True):
         else:by_i[j]=s
     by_fund={}
     for row in funding:
-        if int(row[0])%H:raise ValueError('NON_H1_SETTLEMENT_REQUIRES_NEW_REVIEW')
-        by_fund.setdefault(int(row[0]),[]).append(row)
+        by_fund.setdefault(int(row[0])//H*H,[]).append(row)  # preserve actual timestamp in row.
     cash=10000.;position=None;trades=[];opportunities=[];curve=[];equity_peak=10000.;maxdd=0.;last_eq=10000.;exposure=0
     counts=dict(raw_signals=len(signals),taken=0,skipped_position=0,leverage_required=0,collision=0,invalid_risk=0,insolvent=0,no_entry_data=sum(v for j,v in multiplicity.items() if j>=len(a)))
     first=min(by_i,default=len(a))
+    bar_fills=[]
     def fill(p,amount,raw,kind,j,t,span):
         nonlocal cash
         execution=raw*(1-p.side*SLIP);gross=p.side*amount*(execution-p.entry);fee=amount*execution*FEE
         p.gross+=gross;p.exit_fees+=fee;cash+=gross-fee;p.remaining-=amount
+        bar_fills.append((amount,int(t),int(span)))
         if p.remaining<p.qty*1e-10:p.remaining=0.;p.exit_kind=kind;p.exit_i=j
         if details:p.fills.append(dict(kind=kind,qty=amount,reference=raw,fill=execution,fee=fee,window_start=int(t),window_end=int(t+span),time_is_interval=span>0))
     def excursions(p,row):
@@ -109,6 +111,7 @@ def run(a,funding,atr,signals,config,minutes=None,marks=None,details=True):
         if target:
             fill(p,min(p.qty*.5,p.remaining),p.target,'TP1',j,row[0],span);p.tp1=True
     for j in range(first,len(a)):
+        bar_fills=[]
         row=a[j];t=int(row[0]);had_position=position is not None;s=by_i.get(j);decision=None
         if s is not None:
             if j in collision:decision='CONTROL_COLLISION';counts['collision']+=multiplicity[j]
@@ -130,14 +133,7 @@ def run(a,funding,atr,signals,config,minutes=None,marks=None,details=True):
             if details:opportunities.append(dict(signal_id=s.get('signal_id','CONTROL:'+str(s['i'])),signal_i=s['i'],entry_i=j,side=s['side'],decision=decision))
         if position is not None:
             p=position;exposure+=1;owned=p.remaining;new=j==p.entry_i;gap=p.side*(row[1]-p.stop)<=0
-            pending=[]
-            for frow in by_fund.get(t,[]):
-                _,rate,mark,_,low,high=frow
-                prices=[mark] if np.isfinite(mark) else [low,high]
-                if not np.isfinite(prices).all():raise ValueError('UNKNOWN_FUNDING_BOUNDS')
-                values=[p.side*rate*x for x in prices]
-                if new or gap:values.append(0.)
-                pending.append((min(values),max(values),not np.isfinite(mark) or new or gap))
+            pending=by_fund.get(t,[])
             hitstop=(row[3]<=p.stop if p.side==1 else row[2]>=p.stop)
             hittarget=not p.tp1 and (row[2]>=p.target if p.side==1 else row[3]<=p.target)
             minute_rows=minutes.get(t) if minutes is not None and (hitstop or hittarget) and not gap else None
@@ -151,8 +147,24 @@ def run(a,funding,atr,signals,config,minutes=None,marks=None,details=True):
             else:step_bar(p,row,j,H)
             # Data from this completed H1, including missing mark bounds, affect
             # cash/BE only now. No intrahour decision uses a future range.
-            for low,high,uncertain in pending:
-                p.funding_low+=owned*low;p.funding_high+=owned*high;p.funding_per_btc+=high;p.funding_uncertain+=int(uncertain);cash-=owned*high
+            for settlement in pending:
+                when,rate,mark,_,low,high=settlement;prices=[mark] if np.isfinite(mark) else [low,high]
+                if not np.isfinite(prices).all():raise ValueError('UNKNOWN_FUNDING_BOUNDS')
+                values=[p.side*rate*x for x in prices];min_owned=max_owned=owned
+                for amount,at,span in bar_fills:
+                    if at+span<when or (span>0 and at+span<=when):min_owned-=amount;max_owned-=amount
+                    elif at<=when<=at+span:min_owned-=amount
+                if new and when==t:min_owned=0.
+                min_owned=max(0.,min_owned);max_owned=max(0.,max_owned)
+                possible=[unit*q for unit in values for q in (min_owned,max_owned)]
+                lo_cost,hi_cost=min(possible),max(possible)
+                p.funding_low+=lo_cost;p.funding_high+=hi_cost;cash-=hi_cost
+                # A still-open runner existed throughout the settlement window.
+                # Entry-at-exact-settlement remains an explicit timing bound.
+                runner_values=values+[0.] if new and when==t else values
+                if p.remaining:p.funding_per_btc+=max(runner_values)
+                p.funding_uncertain+=int(not np.isfinite(mark) or min_owned!=max_owned)
+                if details:p.funding_records.append(dict(settled_at=int(when),rate=float(rate),mark=float(mark) if np.isfinite(mark) else None,mark_low=float(low),mark_high=float(high),min_held_btc=min_owned,max_held_btc=max_owned,cost_low=lo_cost,cost_high=hi_cost,recognized_at=t+H))
             if p.remaining and j==len(a)-1:fill(p,p.remaining,float(row[4]),'END_OF_DATA',j,t+H,0)
             if not p.remaining:
                 net=p.gross-p.entry_fee-p.exit_fees-p.funding_high
@@ -163,7 +175,7 @@ def run(a,funding,atr,signals,config,minutes=None,marks=None,details=True):
                     tp1=p.tp1,be_armed=p.be,trailing_armed=p.trailing,exit_kind=p.exit_kind,ambiguous_h1=p.ambiguous_h1,ambiguous_m1=p.ambiguous_m1,h1_both=p.h1_both,resolved_m1=p.resolved_m1,gaps=p.gaps,
                     mfe_pct=p.mfe*100,mae_pct=p.mae*100,excursion_is_bar_bound=True,duration_hours=p.exit_i-p.entry_i+1,
                     regime4h=p.signal.get('regime4h'),adx_phase=p.signal.get('adx_phase'),bbwp_phase=p.signal.get('bbwp_phase'))
-                if details:trade['fills']=p.fills;trade['stop_updates']=p.stop_updates
+                if details:trade['fills']=p.fills;trade['stop_updates']=p.stop_updates;trade['funding_records']=p.funding_records
                 trades.append(trade);position=None
             elif p.tp1:
                 old_stop=p.stop

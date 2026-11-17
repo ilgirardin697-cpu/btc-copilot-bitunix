@@ -27,6 +27,12 @@ def verify_seal():
     if amendment.exists():
         fix=json.loads(amendment.read_text());assert fix['source']=='study.py' and fix['previous_sha256']==expected['study.py'] and fix['before_trade_results'] is True
         expected['study.py']=fix['corrected_sha256'];seal=dict(seal,transparent_export_amendment=fix)
+    funding_fix=HERE/'funding_amendment.json'
+    if funding_fix.exists():
+        fix=json.loads(funding_fix.read_text());assert fix['before_trade_results'] is True
+        for name,change in fix['sources'].items():
+            assert name in ('simulator.py','study.py') and expected[name]==change['previous_sha256'];expected[name]=change['corrected_sha256']
+        seal=dict(seal,transparent_funding_timestamp_amendment=fix)
     for name,value in expected.items():assert sourcehash(HERE/name)==value,('SEALED_SOURCE_CHANGED',name)
     for name,value in seal['audited_sources'].items():assert sourcehash(HERE.parents[7]/name)==value,('AUDITED_FORMULA_CHANGED',name)
     return seal
@@ -103,7 +109,7 @@ def run_study(data,minutes_path,market_folder,out):
     eligible=np.flatnonzero((a[:,0]+H>=START)&(a[:,0]+H<END)&np.isfinite(f['atr'])&(f['atr']>0))
     references=[reference(signals,eligible,cell,plan['references']['first_seed']+k) for k in range(plan['references']['replicates'])]
     write_csv(out/'reference_schedules.csv.gz',(dict(seed=plan['references']['first_seed']+k,**s) for k,ss in enumerate(references) for s in ss))
-    all_trades=[];fills=[];updates=[];opps=[];curves=[];summaries=[];subsets=[];refs=[];account_years=[];start=time.perf_counter()
+    all_trades=[];fills=[];updates=[];funding_records=[];opps=[];curves=[];summaries=[];subsets=[];refs=[];account_years=[];start=time.perf_counter()
     with gzip.open(out/'reference_trades.csv.gz','wt',encoding='utf-8',newline='') as control_file:
         cw=None
         for tp,stop,risk in product(plan['management']['tp1_price_fractions'],plan['management']['stop_atr_multipliers'],plan['management']['risk_equity_fractions']):
@@ -111,8 +117,9 @@ def run_study(data,minutes_path,market_folder,out):
             summaries.append(actual['summary']);print('ACTUAL',cfg.key,actual['summary']['n'],actual['summary']['expectancy_R'],flush=True)
             bysignal={s['signal_id']:s for s in signals}
             for t in actual['trades']:
-                tr=dict(t);ff=tr.pop('fills');uu=tr.pop('stop_updates');tr['config']=cfg.key;all_trades.append(tr)
+                tr=dict(t);ff=tr.pop('fills');uu=tr.pop('stop_updates');fr=tr.pop('funding_records');tr['config']=cfg.key;all_trades.append(tr)
                 fills.extend(dict(config=cfg.key,signal_id=t['signal_id'],**v) for v in ff);updates.extend(dict(config=cfg.key,signal_id=t['signal_id'],**v) for v in uu)
+                funding_records.extend(dict(config=cfg.key,signal_id=t['signal_id'],**v) for v in fr)
             opps.extend(dict(config=cfg.key,**v) for v in actual['opportunities']);curves.extend(dict(config=cfg.key,**v) for v in actual['equity'])
             groups=defaultdict(list)
             for t in actual['trades']:
@@ -136,6 +143,7 @@ def run_study(data,minutes_path,market_folder,out):
             print('REFERENCES_DONE',cfg.key,flush=True)
     write_csv(out/'summary.csv',summaries);write_csv(out/'trades.csv',all_trades);write_csv(out/'fills.csv',fills);write_csv(out/'stop_updates.csv',updates)
     write_csv(out/'opportunities.csv',opps);write_csv(out/'equity.csv.gz',curves);write_csv(out/'subgroups.csv',subsets);write_csv(out/'calendar_account.csv',account_years);write_csv(out/'references.csv',refs)
+    write_csv(out/'funding.csv',funding_records)
     comparisons=[]
     for actual in summaries:
         rr=[r for r in refs if r['config']==actual['config']];row=dict(config=actual['config'])
