@@ -1,0 +1,3 @@
+# Complete 100-reference raw ledger retained locally, checksummed and reproducible.
+# Commit all actual trades, every reference summary/schedule and first fixed seed.
+reference_trades.csv.gz

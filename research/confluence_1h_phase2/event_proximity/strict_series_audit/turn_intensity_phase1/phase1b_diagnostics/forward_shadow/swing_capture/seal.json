@@ -1,0 +1,17 @@
+{
+  "created_at": "2026-11-17T10:27:06.060597+00:00",
+  "before_trade_results": true,
+  "frozen_plan_commit": "3be6d3038eb4eb944ed551674206164f053c2763",
+  "plan_hash": "c68e09966e6501b1c95338ac4d44607bf26289487a5f4e8a20875e0e8c187a97",
+  "sources": {
+    "detector.py": "e22044ae654e85de3c2e0906235db629d1a5dbebcd3ead2e92dbc28db95aca02",
+    "simulator.py": "1198fcde6cd59be9e5cd14f932346c968edaae2fc15e1cb8bdc628d4e943e199",
+    "study.py": "50129592cd246ea0ebca83720ada100231941a0fcff78518885dd5811aea8587"
+  },
+  "audited_sources": {
+    "research/confluence_1h/indicators.py": "4309d799b56bb8ae257d1d060f420312c4f97e3d027b2c1a550eae8bd08331ec",
+    "research/confluence_1h_phase2/semantics.py": "5e9945dba88d90f6767e4eb9e328d980f5162b1de4952bf0c06a07bd9b3b1abf",
+    "research/confluence_1h_phase2/event_proximity/strict_series_audit/turn_intensity_phase1/detect.py": "5f3bba638bf262ab286f02832545f2ef131eecaa4bc4eb9120c3286ba6b374c1",
+    "research/confluence_1h_phase2/event_proximity/strict_series_audit/turn_intensity_phase1/protocol.json": "3fcdbd8c5c50eda66e560def8c91326055fdea1a576acf8fa8ad356c3fdf1835"
+  }
+}

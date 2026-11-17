@@ -1,0 +1,10 @@
+{
+  "file": "reference_trades.csv.gz",
+  "committed": false,
+  "reason": "Full ledger retained locally; all100 summaries and schedules plus first predeclared seed are committed. Reproduce every row with the sealed study.",
+  "bytes": 182769568,
+  "sha256": "a8961847eab3e33c323b3cd9641bf5ada6d91561c4a473815c5fb3805ed626f4",
+  "rows": 1316011,
+  "replicate_configurations": 1200,
+  "no_unfavorable_records_dropped": true
+}

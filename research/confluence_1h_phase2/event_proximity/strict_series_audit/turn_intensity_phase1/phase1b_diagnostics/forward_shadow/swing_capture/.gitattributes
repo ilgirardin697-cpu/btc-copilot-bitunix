@@ -1,0 +1,8 @@
+*.json text eol=lf
+*.md text eol=lf
+*.py text eol=lf
+*.csv text eol=lf
+*.gz binary
+*.png binary
+*.zip binary
+results/diagnostic_raw.json binary
