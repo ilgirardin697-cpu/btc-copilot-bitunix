@@ -8,6 +8,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 HERE=Path(__file__).resolve().parent
+H=3600000
 def read(p):
     op=gzip.open if p.suffix=='.gz' else open
     with op(p,'rt',encoding='utf-8',newline='') as f:return list(csv.DictReader(f))
@@ -25,7 +26,7 @@ def build(out,data):
         for risk,color in ((.005,'#1d659c'),(.01,'#bd4c2d')):
             cfg=f'TP{tp:g}_SL{sl:g}_RISK{risk:g}';rows=[r for r in curve if r['config']==cfg]
             x=[datetime.fromtimestamp(int(r['open_ms'])/1000,timezone.utc) for r in rows];panel.plot(x,[float(r['equity']) for r in rows],color=color,label=f'Riesgo{risk*100:g}%')
-        panel.axhline(10000,color='gray',lw=.6);panel.set_title(f'TP1{tp*100:g}% · SL{sl:g}ATR');panel.legend();panel.grid(alpha=.2)
+        panel.axhline(10000,color='gray',lw=.6);panel.set_title(f'TP1: {tp*100:g}% · SL{sl:g}ATR');panel.set_ylabel('Equity (USDT)');panel.legend();panel.grid(alpha=.2)
     fig.suptitle('Confluence Swing Capture · equity simulada neta · todos los escenarios');fig.tight_layout();fig.savefig(figures/'equity_all.png');plt.close(fig)
     fig,ax=plt.subplots(3,2,figsize=(13,10))
     for n,(tp,sl) in enumerate((tp,sl) for tp in (.005,.01,.02) for sl in (1.5,2.5)):
@@ -33,7 +34,7 @@ def build(out,data):
         for risk,color in ((.005,'#1d659c'),(.01,'#bd4c2d')):
             cfg=f'TP{tp:g}_SL{sl:g}_RISK{risk:g}';v=[float(r['net_R']) for r in trades if r['config']==cfg]
             panel.hist(v,bins=40,histtype='step',label=f'{risk*100:g}%',color=color)
-        panel.axvline(0,color='gray',lw=.6);panel.set_title(f'TP1{tp*100:g}% · SL{sl:g}ATR');panel.set_xlabel('Resultado neto / riesgo inicial planificado');panel.legend()
+        panel.axvline(0,color='gray',lw=.6);panel.set_title(f'TP1: {tp*100:g}% · SL{sl:g}ATR');panel.set_xlabel('Resultado neto / riesgo inicial planificado');panel.set_ylabel('Operaciones');panel.legend()
     fig.tight_layout();fig.savefig(figures/'net_R_distribution.png');plt.close(fig)
     with np.load(data,allow_pickle=False) as z:a=z['bars']
     # First-in-time positive/negative trade of each side, always the first frozen
@@ -100,12 +101,23 @@ Drawdown = máximo de equity marcado a cierres H1, incluidos PnL flotante/costes
 '''
     text+=table(performance,[('config','Configuración'),('n','Trades'),('long','LONG'),('short','SHORT'),('win','Acierto %'),('exp','Esperanza neta R'),('pf','PF'),('return_pct','Cuenta %'),('dd','DD cierre %')])
     text+='\n![Equity de todos los escenarios](figures/equity_all.png)\n'
+    costrows=[]
+    for s in summary:
+        tt=[r for r in trades if r['config']==s['config']];ff=[r for r in fills if r['config']==s['config']]
+        sides={t['signal_id']:int(t['side']) for t in tt};exit_reference=sum(sides[r['signal_id']]*float(r['qty'])*float(r['reference']) for r in ff)
+        raw=exit_reference-sum(int(t['side'])*float(t['qty'])*a[int(t['entry_i']),1] for t in tt)
+        gross=sum(float(t['gross']) for t in tt);fees=sum(float(t['entry_fee'])+float(t['exit_fees']) for t in tt);fund=sum(float(t['funding_high']) for t in tt)
+        costrows.append(dict(config=short(s['config']),raw=fmt(raw,2),slip=fmt(raw-gross,2),fees=fmt(fees,2),fund=fmt(fund,2),net=fmt(sum(float(t['net']) for t in tt),2)))
+    text+='\n### Descomposición del mismo ledger de fills\n\nEl bruto sin fricciones conserva las cantidades y decisiones simuladas; no es una estrategia alternativa ejecutada sin costes. Funding negativo significa crédito. No se rebajan costes para buscar una configuración positiva.\n'
+    text+=table(costrows,[('config','Configuración'),('raw','PnL precio antes fricción USDT'),('slip','Slippage USDT'),('fees','Comisiones USDT'),('fund','Funding conservador USDT'),('net','PnL neto USDT')])
     text+=table(dollars,[('config','Configuración'),('win','Ganancia media USDT'),('loss','Pérdida media USDT'),('exp','Esperanza USDT'),('streak','Racha pérdidas'),('mfe','MFE media % cota'),('mae','MAE media % cota'),('worst','Peor trade R')])
     text+='\n![Distribuciones netas](figures/net_R_distribution.png)\n\n## Parciales y salidas\n\nBE y trailing armados no garantizan beneficio; el resultado es el neto real del ledger simulado.\n'
     text+=table(management,[('config','Configuración'),('tp1','TP1 %'),('BE','Salida BE'),('trail','Salida trailing'),('initial','SL inicial'),('end','Final archivo'),('resolved','Orden resuelto1m'),('ambiguous','Ambiguo1m adverso'),('h1','H1 adverso sin1m'),('reject','Rechazo capital1x'),('busy','Posición ya abierta')])
     text+='\n## LONG y SHORT separados\n'+table(side_rows,[('config','Configuración'),('side','Lado'),('n','N'),('win','Acierto %'),('exp','Esperanza R'),('pf','PF'),('net','Neto total USDT')])
     text+='\n## Referencias inclusivas por régimen — misma gestión\n\n100 semillas fijas. Igual número de señales brutas por lado/mes/régimen4H/tercil causal de volatilidad; universo incluye eventos y vecinos. Muestreo sin reemplazo por celda, sin consultar retornos. Las colisiones opuestas se descartan. Cada calendario usa el mismo motor, capital, costes, funding, intrabar, parciales y restricciones. Ocupación/duración/capital pueden cambiar el N ejecutado: se publica, no se finge emparejamiento uno-a-uno de trades ejecutados.\n\nLos percentiles5/50/95 son dispersión de100 calendarios de referencia en la misma historia; **no son IC95, p-valores ni100 historias independientes**. No se escoge una semilla por su resultado.\n'
     text+=table(reference_rows,[('config','Configuración'),('actual','R observado'),('q05','Referencia P5'),('median','Referencia mediana'),('q95','Referencia P95'),('n','N real'),('nmed','N referencia mediana')])
+    stronger=sum(float(r['expectancy_R_actual'])>float(r['expectancy_R_reference_q95']) for r in comparisons)
+    text+=f'\n{stronger}/12 expectativas observadas superan el percentil95 de los calendarios de referencia. Es una comparación descriptiva de esta simulación, no una prueba de significación ni validación independiente.\n'
     text+='\n## Estabilidad por años, regímenes y contexto\n\n2022 contiene solo noviembre/diciembre y2026 enero/octubre. `subgroups.csv` agrupa trades por año de entrada/lado/régimen/fase ADX-BBWP y contextos4H/diario/semanal; siempre con N. `calendar_account.csv` muestra retorno/drawdown de cuenta por año natural, conservando equity entre años; trades que cruzan año impiden equiparar su suma a estadísticas por año de entrada. El contexto solo usa velas completamente cerradas; semanas lunes00UTC. UNKNOWN no filtra señales. SMA200 semanal solo está disponible al final de este histórico. No se promueve un subgrupo favorable a filtro nuevo.\n'
     annual=[dict(config=short(r['config']),year=r['year'],ret=fmt(r['return_pct'],2),dd=fmt(r['max_close_drawdown_pct'],2),eq=fmt(r['equity_end'],2)) for r in years]
     text+='<details><summary>Todos los años y escenarios</summary>\n\n'+table(annual,[('config','Configuración'),('year','Año'),('ret','Cuenta anual %'),('dd','DD anual cierre %'),('eq','Equity final USDT')])+'\n</details>\n'
@@ -126,7 +138,7 @@ El plan original y su hash permanecen intactos. Dos fallos técnicos detuvieron 
 
 Reproducir con Python3.12.12/NumPy2.3.5: ejecutar el módulo `swing_capture.study` con `--data <NPZ auditado> --minutes <minutes.npz> --market-folder <archivos públicos> --out <carpeta nueva>`. Los archivos y URLs/checksums están en `minute_manifest.json`. El script de descarga histórica puntual se incluye en el paquete de auditoría, sin scheduler/servicio. El motor verifica su sello y dependencias auditadas antes de calcular.
 
-Esta investigación completa una simulación concreta; no establece rentabilidad futura, validez estadística independiente ni seguridad de ejecución real. No se integra ni activa ningún detector/observer/colector. No se modifican Guardian/V8/ML RSI/readiness/Bitman/Railway/Bitunix/Telegram ni PRs previas. Sin merge, deploy, órdenes o autoridad de trading.
+Esta investigación completa una simulación concreta; no establece rentabilidad futura, validez estadística independiente ni seguridad de ejecución real. No se integra ni activa ningún detector/observer/colector. No se modifican Guardian/V8/ML RSI/Bitman/Railway/Bitunix/Telegram, los controles operativos existentes ni PRs previas. Sin merge, deploy, órdenes o autoridad de trading.
 '''
     (out/'SWING_CAPTURE_RESULTS.md').write_text(text,encoding='utf-8',newline='\n')
     (HERE/'README.md').write_text('# Confluence Swing Capture — offline research\n\nRead [SPEC.md](SPEC.md), [plan.json](plan.json) and [the complete results](results/SWING_CAPTURE_RESULTS.md). The original sources and closed observer PRs are unchanged. No runtime imports this package. No service or live capture.\n\nSHADOW ONLY. TRADE AUTHORITY: NONE.\n',newline='\n')

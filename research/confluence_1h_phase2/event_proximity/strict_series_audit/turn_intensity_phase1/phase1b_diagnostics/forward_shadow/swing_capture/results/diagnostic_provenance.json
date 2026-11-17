@@ -1,0 +1,54 @@
+{
+  "available": true,
+  "venue": "BINANCE_USDM_PERPETUAL",
+  "reference_chart_ticker_unverified": true,
+  "visual_parity": false,
+  "already_selected_diagnostic": true,
+  "used_for_parameter_choice": false,
+  "raw_sha256": "e5cb4c2bd439b74066846e4a8076cc1c1aeea1e4fc91cb433810b51a77ea29e8",
+  "unchanged_overlap": true,
+  "signals_in_diagnostic_window": [
+    {
+      "i": 36912,
+      "side": -1,
+      "available_at": 1794877200000,
+      "signal_id": "SWING:1794877200000:-1",
+      "tokens": {
+        "pece": {
+          "i": 36911,
+          "side": -1,
+          "available_at": 1794873600000
+        },
+        "adx": {
+          "i": 36911,
+          "side": -1,
+          "available_at": 1794873600000
+        },
+        "bbwp": {
+          "i": 36911,
+          "side": 1,
+          "available_at": 1794873600000
+        },
+        "ao": {
+          "i": 36912,
+          "side": -1,
+          "available_at": 1794877200000
+        }
+      },
+      "adx_phase": -1,
+      "bbwp_phase": 1,
+      "ao": 272.44058823530213,
+      "adx": 15.746217970717954,
+      "pececillos": 57.81304336383271,
+      "red": 67.41967016481975,
+      "tiburones": -1.583776972655377,
+      "bbwp": 21.0,
+      "plus_di": 20.904493858910843,
+      "minus_di": 21.348558795797967,
+      "atr": 556.4219079151852,
+      "regime4h": -1.0,
+      "regime1d": -1.0
+    }
+  ],
+  "interpretation": "23Madrid may label bar open or close. Compare UTC21/22/23 and surrounding hours. No source-image/export available; do not claim exact visual parity."
+}

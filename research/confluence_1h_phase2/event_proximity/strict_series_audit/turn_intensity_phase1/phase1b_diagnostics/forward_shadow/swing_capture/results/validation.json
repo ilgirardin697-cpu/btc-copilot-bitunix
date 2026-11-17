@@ -1,0 +1,71 @@
+{
+  "unit": {
+    "mode": "unit",
+    "returncode": 0,
+    "tests": 39,
+    "seconds": 2.09340410027653
+  },
+  "reconciliation": {
+    "primary_trade_rows_verified": 13677,
+    "primary_fills_verified": 21350,
+    "all_primary_cash_ledgers_reconcile": true,
+    "actual_and_fixed_reference_replays": 24,
+    "actual_data_signal_prefixes": 3,
+    "all_reference_rows_verified": 1316011,
+    "reference_summaries_verified": 1200,
+    "plan_unchanged": true,
+    "signal_csv_identical_before_funding_fix": true,
+    "zero_optimization": true,
+    "prospective_observations": 0,
+    "reference_ledger": {
+      "file": "reference_trades.csv.gz",
+      "committed": false,
+      "reason": "Full ledger retained locally; all100 summaries and schedules plus first predeclared seed are committed. Reproduce every row with the sealed study.",
+      "bytes": 182769568,
+      "sha256": "a8961847eab3e33c323b3cd9641bf5ada6d91561c4a473815c5fb3805ed626f4",
+      "rows": 1316011,
+      "replicate_configurations": 1200,
+      "no_unfavorable_records_dropped": true
+    },
+    "seconds": 68.8465267997235,
+    "profitability_validation": false
+  },
+  "plan_unchanged": true,
+  "market_source": "BINANCE_USDM_PERPETUAL",
+  "minute_rows": 2103840,
+  "minute_mismatched_hours": 8,
+  "signal_prefixes": 3,
+  "model_optimization": false,
+  "observer_service_created": false,
+  "production_changes": false,
+  "orders": 0,
+  "trade_authority": "NONE",
+  "final_head_CI": "VERIFY_GITHUB_ACTIONS_ON_FINAL_HEAD",
+  "core_environment": "Python3.12.12/NumPy2.3.5",
+  "charts": "separate existing matplotlib environment; CSV presentation only",
+  "initial_CI_issues": "Report literal reserved by immutable architecture guard removed; optional NumPy skip follows existing bare-V8 conventions. Dedicated numerical CI installs NumPy and executes all39 tests.",
+  "full": {
+    "mode": "full",
+    "returncode": 0,
+    "tests": 1329,
+    "seconds": 393.39972190000117
+  },
+  "audits": {
+    "mode": "audits",
+    "returncode": 0,
+    "tests": null,
+    "seconds": 3.906005499884486
+  },
+  "weekly": {
+    "mode": "weekly",
+    "returncode": 0,
+    "tests": 9,
+    "seconds": 1.616159399971366
+  },
+  "readiness": {
+    "mode": "readiness",
+    "returncode": 0,
+    "tests": 7,
+    "seconds": 2.336624799761921
+  }
+}

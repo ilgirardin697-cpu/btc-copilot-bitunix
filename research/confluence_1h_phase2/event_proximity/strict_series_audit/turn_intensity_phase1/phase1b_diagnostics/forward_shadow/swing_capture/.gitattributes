@@ -5,3 +5,4 @@
 *.gz binary
 *.png binary
 *.zip binary
+results/diagnostic_raw.json binary

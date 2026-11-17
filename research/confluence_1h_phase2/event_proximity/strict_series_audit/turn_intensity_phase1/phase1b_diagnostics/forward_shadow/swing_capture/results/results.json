@@ -1,0 +1,128 @@
+{
+  "study": "IGOD_CONFLUENCE_SWING_CAPTURE_V0",
+  "plan_hash": "c68e09966e6501b1c95338ac4d44607bf26289487a5f4e8a20875e0e8c187a97",
+  "seal": {
+    "created_at": "2026-11-17T10:27:06.060597+00:00",
+    "before_trade_results": true,
+    "frozen_plan_commit": "3be6d3038eb4eb944ed551674206164f053c2763",
+    "plan_hash": "c68e09966e6501b1c95338ac4d44607bf26289487a5f4e8a20875e0e8c187a97",
+    "sources": {
+      "detector.py": "e22044ae654e85de3c2e0906235db629d1a5dbebcd3ead2e92dbc28db95aca02",
+      "simulator.py": "1198fcde6cd59be9e5cd14f932346c968edaae2fc15e1cb8bdc628d4e943e199",
+      "study.py": "50129592cd246ea0ebca83720ada100231941a0fcff78518885dd5811aea8587"
+    },
+    "audited_sources": {
+      "research/confluence_1h/indicators.py": "4309d799b56bb8ae257d1d060f420312c4f97e3d027b2c1a550eae8bd08331ec",
+      "research/confluence_1h_phase2/semantics.py": "5e9945dba88d90f6767e4eb9e328d980f5162b1de4952bf0c06a07bd9b3b1abf",
+      "research/confluence_1h_phase2/event_proximity/strict_series_audit/turn_intensity_phase1/detect.py": "5f3bba638bf262ab286f02832545f2ef131eecaa4bc4eb9120c3286ba6b374c1",
+      "research/confluence_1h_phase2/event_proximity/strict_series_audit/turn_intensity_phase1/protocol.json": "3fcdbd8c5c50eda66e560def8c91326055fdea1a576acf8fa8ad356c3fdf1835"
+    },
+    "transparent_export_amendment": {
+      "source": "study.py",
+      "created_at": "2026-11-17T10:29:37.001335+00:00",
+      "previous_sha256": "50129592cd246ea0ebca83720ada100231941a0fcff78518885dd5811aea8587",
+      "corrected_sha256": "f27a75b7d316c113fa1c05b4999f52077f05d325bc6ae32bbefe1fd42a916404",
+      "before_trade_results": true,
+      "reason": "CSV audit records have heterogeneous keys; export union of columns without dropping any field. First attempt stopped at audit export before trade simulation.",
+      "detector_unchanged": true,
+      "simulator_unchanged": true,
+      "plan_unchanged": true,
+      "old_seal_preserved": true
+    },
+    "transparent_funding_timestamp_amendment": {
+      "before_trade_results": true,
+      "created_at": "2026-11-17T10:46:50.247983+00:00",
+      "reason": "Real archived settlement timestamps contain1..29ms offsets (1657rows). Preserve actual timestamps; bound ownership against fill intervals; book at closed H1. First simulation aborted during initial funding-index validation before trades.",
+      "sources": {
+        "simulator.py": {
+          "previous_sha256": "1198fcde6cd59be9e5cd14f932346c968edaae2fc15e1cb8bdc628d4e943e199",
+          "corrected_sha256": "5d6caf2ced2bd62b478f71d66b75f8fe882a1209f482dda4654336d2264f0e76"
+        },
+        "study.py": {
+          "previous_sha256": "f27a75b7d316c113fa1c05b4999f52077f05d325bc6ae32bbefe1fd42a916404",
+          "corrected_sha256": "c83378e471eaf143833565b3bcf200b09b815c9e2909883c355be09931804eae"
+        }
+      },
+      "plan_unchanged": true,
+      "detector_unchanged": true,
+      "management_parameters_unchanged": true,
+      "original_seals_preserved": true,
+      "signal_csv_sha256": "31968405c0d243ff4f6499303cac5929e65051175ee84139f620c4438e5ad038"
+    }
+  },
+  "venue": "BINANCE_USDM_PERPETUAL",
+  "history_sha256": "5b2544c9bf353cedb77a07781ffe9e6202b12513c0c10f3d25bca67756a4825a",
+  "rows": 36528,
+  "study_hours": 35064,
+  "raw_signals": 2050,
+  "long_signals": 1045,
+  "short_signals": 1005,
+  "minute_rows": 2103840,
+  "minute_npz_sha256": "e13e08ef719cb60e69130d1b32264faeecfd6595f33cf9e733cd73d6e5a68b33",
+  "verified_minute_hours": 35056,
+  "minute_requests_used": 1913222,
+  "reference_replicates": 100,
+  "configurations": 12,
+  "prospective_observations": 0,
+  "new_indicator_formulas": 0,
+  "parameter_search": false,
+  "diagnostic": {
+    "available": true,
+    "venue": "BINANCE_USDM_PERPETUAL",
+    "reference_chart_ticker_unverified": true,
+    "visual_parity": false,
+    "already_selected_diagnostic": true,
+    "used_for_parameter_choice": false,
+    "raw_sha256": "e5cb4c2bd439b74066846e4a8076cc1c1aeea1e4fc91cb433810b51a77ea29e8",
+    "unchanged_overlap": true,
+    "signals_in_diagnostic_window": [
+      {
+        "i": 36912,
+        "side": -1,
+        "available_at": 1794877200000,
+        "signal_id": "SWING:1794877200000:-1",
+        "tokens": {
+          "pece": {
+            "i": 36911,
+            "side": -1,
+            "available_at": 1794873600000
+          },
+          "adx": {
+            "i": 36911,
+            "side": -1,
+            "available_at": 1794873600000
+          },
+          "bbwp": {
+            "i": 36911,
+            "side": 1,
+            "available_at": 1794873600000
+          },
+          "ao": {
+            "i": 36912,
+            "side": -1,
+            "available_at": 1794877200000
+          }
+        },
+        "adx_phase": -1,
+        "bbwp_phase": 1,
+        "ao": 272.44058823530213,
+        "adx": 15.746217970717954,
+        "pececillos": 57.81304336383271,
+        "red": 67.41967016481975,
+        "tiburones": -1.583776972655377,
+        "bbwp": 21.0,
+        "plus_di": 20.904493858910843,
+        "minus_di": 21.348558795797967,
+        "atr": 556.4219079151852,
+        "regime4h": -1.0,
+        "regime1d": -1.0
+      }
+    ],
+    "interpretation": "23Madrid may label bar open or close. Compare UTC21/22/23 and surrounding hours. No source-image/export available; do not claim exact visual parity."
+  },
+  "seconds": 1032.4308489998803,
+  "python": "3.12.12 (main, Oct 10 2025, 12:42:57)  [GCC UCRT 15.2.0 64 bit (AMD64)]",
+  "numpy": "2.3.5",
+  "conclusion": "EXPLORATORY_NOT_VALIDATED",
+  "trade_authority": "NONE"
+}

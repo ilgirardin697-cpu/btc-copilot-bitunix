@@ -1,6 +1,9 @@
 import ast,json,subprocess,unittest
 from pathlib import Path
-import numpy as np
+try:
+    import numpy as np
+except ImportError as error:
+    raise unittest.SkipTest('NumPy required by dedicated research CI; never skip in its installed environment') from error
 from . import detector
 from .simulator import Config,Minutes,run,be_level,FEE,SLIP,H
 
