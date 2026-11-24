@@ -1,0 +1,24 @@
+{
+  "source": "BITMAN_DIRECTO_20261123_IGOD.md",
+  "sha256": "6113f21f5476cc13e0e89f8f99268c7bfd71a3470fdcce3f6515d23d169294b0",
+  "bytes": 7619,
+  "evidence": "USER_SUPPLIED_TRANSCRIPT_DERIVED_SUMMARY; original subtitles/frames not included",
+  "timing": "Added after initial specification commit, before any market replay or results",
+  "no_emission_rule_change": true,
+  "additional_observations": [
+    "weekly zero crosses individually identified for pececillos/tendencia/tiburones",
+    "daily timestamped sequence BBWP cooling/AO recovery/ADX cooling/Koncorde recovery, no simultaneous gate",
+    "2W confirmed price-fractal versus AO values: strict divergence, anchor remains experimental",
+    "break extension in ATR and subsequent reclaim, no fitted strong/weak threshold",
+    "LOW27 ALMA4 source profile RSI1H all color transitions, not identification of private Bitman RSI"
+  ],
+  "rsi_diagnostics": {
+    "dates": [
+      "2026-11-05",
+      "2026-11-22"
+    ],
+    "nov22_claim": "2026-11-22T16:00:00Z; opening/closing interpretation both retained",
+    "original_contract": "UNKNOWN; source says futures; Spot comparison does not certify it"
+  },
+  "future_validation": "PENDING; no independent or live capture claims"
+}
