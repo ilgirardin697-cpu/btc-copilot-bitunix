@@ -1,0 +1,59 @@
+{
+  "version": "IGOD_SEQUENTIAL_SHADOW_V0",
+  "authority": "NONE",
+  "mode": "OFFLINE_REPLAY_ONLY",
+  "base": "0017faf74f3b157aa5d2789e073a819854108a89",
+  "venue": "BINANCE_SPOT",
+  "symbol": "BTCUSDT",
+  "source_sha256": "e58e61b19e1a2509802c2b01b0f79fb542b3944ece7ed23efb3090e9ab41c690",
+  "source_bytes": 32483,
+  "window_start": "2026-11-18T00:00:00Z",
+  "window_end_exclusive": "2026-11-24T09:00:00Z",
+  "timeframes": [
+    "2W",
+    "1W",
+    "1D",
+    "4H",
+    "1H",
+    "15m"
+  ],
+  "two_week_anchor": "1970-01-05T00:00:00Z",
+  "indicator_profile": "TRADINGONE_V2 public source math; ML RSI not used",
+  "bbwp": [
+    13,
+    252,
+    5
+  ],
+  "fractal": [
+    2,
+    2
+  ],
+  "watch_hours": 2,
+  "watch": "H1 AO first slope deceleration or directional slope reversal; independent side memories",
+  "confirm": "Within watch lifetime: AO and pececillos slopes aligned, closed 15m break or later retest of known fractal; ADX/BBWP/context descriptive only",
+  "invalidate": "Opposite H1 AO slope reversal or opposite 15m structural break; expiry after 2 hours",
+  "recovery": "Record indicator/price displacement separately from known watch anchor; no optimized displacement threshold",
+  "fred": "UNVERIFIED; record sign, slope, acceleration and red-line relation only; do not emit a Fred signal",
+  "tsa": "TRADINGONE_V2 TSA119/2.8/50/100; not Hermi117/2.8/150/100 nor certified Bitman line",
+  "simulation": {
+    "initial_equity": 10000,
+    "risk_fraction": 0.005,
+    "max_drawdown_fraction": 0.05,
+    "max_notional_equity": 1,
+    "fee_per_side": 0.001,
+    "adverse_slippage_per_fill": 0.0005,
+    "stop": "Further of 1.5 H1 ATR from next-open fill and known 15m fractal plus .2 H1 ATR buffer",
+    "tp1_price_move": 0.01,
+    "partial_fraction": 0.5,
+    "trailing_atr": 1.5,
+    "max_hold_hours": 24,
+    "entry": "First following 15m open with adverse slippage; reject gaps/noncontiguous data",
+    "ambiguous": "Stop first when both touched inside same 15m; excursions are full-bar bounds",
+    "be": "Use audited cost-aware runner formula; activate BE/trail only for following 15m bar",
+    "funding": "Spot NOT_APPLICABLE, synthetic SHORT is not borrow/executable futures; futures results blocked without settlement data",
+    "averaging": "Never add in broker; pure exposure assessment includes realized loss and all lots, same campaign",
+    "halt": "No new trades after 5% marked-equity drawdown; halt latched for replay, never resets on reentry",
+    "end_of_data": "Keep open position marked and CENSORED; never invent a closing fill"
+  },
+  "scope": "Engineering reconstruction of selected/previously observed cases; not performance validation or forward capture"
+}
