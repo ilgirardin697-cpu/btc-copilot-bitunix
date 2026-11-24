@@ -1,0 +1,48 @@
+{
+  "kind": "IMPLEMENTATION_CORRECTION_NOT_RULE_AMENDMENT",
+  "reason": "Honor first AO deceleration per uninterrupted slope-sign run; no pending setup resurrection",
+  "prior_spec_commit": "daa8673",
+  "parameters_changed": false,
+  "before": {
+    "ledger_tip": "40d9b3ac0ba88069e0affc9e2dac216e831a72d1b391bab6dde0eb5b85c80aac",
+    "events": {
+      "SIM_MARK": 612,
+      "FRAME": 816,
+      "DAILY_SEQUENCE": 7,
+      "WATCH": 59,
+      "WATCH_PROGRESS": 323,
+      "EXPIRED": 20,
+      "CONFIRMED": 11,
+      "SIM_ENTRY": 9,
+      "EXHAUSTION": 11,
+      "SIM_FILL": 14,
+      "SIM_CLOSED": 9,
+      "INVALIDATED": 28,
+      "SIM_STOP_UPDATE": 31,
+      "SIM_REJECTED": 2
+    },
+    "net": -134.24014112428327
+  },
+  "after": {
+    "ledger_tip": "8f6331238340ee1826bdc344f87ceee4242e75687f5f24adb8c4c39d9ccc73d3",
+    "events": {
+      "SIM_MARK": 612,
+      "FRAME": 816,
+      "DAILY_SEQUENCE": 7,
+      "WATCH": 47,
+      "WATCH_PROGRESS": 222,
+      "EXPIRED": 11,
+      "CONFIRMED": 13,
+      "SIM_ENTRY": 10,
+      "EXHAUSTION": 13,
+      "SIM_FILL": 16,
+      "SIM_CLOSED": 10,
+      "INVALIDATED": 23,
+      "SIM_STOP_UPDATE": 32,
+      "SIM_REJECTED": 3
+    },
+    "net": -130.01406750564618
+  },
+  "preliminary_status": "EXCLUDED_BUGGY_IMPLEMENTATION; preserved locally research/cache/seq_preliminary",
+  "economic_model_selection": false
+}

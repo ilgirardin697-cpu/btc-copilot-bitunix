@@ -1,0 +1,40 @@
+{
+  "unit": {
+    "mode": "unit",
+    "returncode": 0,
+    "tests": 55,
+    "seconds": 8.546955900266767
+  },
+  "full": {
+    "mode": "full",
+    "returncode": 0,
+    "tests": 1438,
+    "seconds": 431.6063355002552
+  },
+  "audit": {
+    "mode": "audit",
+    "returncode": 0,
+    "tests": null,
+    "seconds": 4.528538799844682
+  },
+  "weekly": {
+    "mode": "weekly",
+    "returncode": 0,
+    "tests": 9,
+    "seconds": 3.8981952001340687
+  },
+  "boundary": {
+    "mode": "boundary",
+    "returncode": 0,
+    "tests": 7,
+    "seconds": 5.759218199644238
+  },
+  "replay": {
+    "mode": "replay",
+    "returncode": 0,
+    "tests": null,
+    "seconds": 13.343276100233197
+  },
+  "not_economic_validation": true,
+  "protected_files_changed": false
+}

@@ -1,0 +1,152 @@
+[
+  {
+    "id": "FRED",
+    "source": "dossier",
+    "author": "Fred/Jose Luis",
+    "reported_madrid": "02Oct00:15-00:32;18Nov13:01",
+    "documented": "Parabola lisa; ejemplo invertido BTCUSD1D",
+    "verification_pending": "Serie del area, curvatura, validacion y mercado",
+    "implementation_hypothesis": "NO FRED signal; record all layer slopes/acceleration",
+    "evidence_grade": "DERIVED_NO_ORIGINAL_MESSAGE_OR_FRAME"
+  },
+  {
+    "id": "RECOVERY",
+    "source": "dossier",
+    "author": "Jose Luis/Joanga",
+    "reported_madrid": "18Nov12:50;23Nov10:01/15:19",
+    "documented": "Indicadores4H recuperan con poco precio",
+    "verification_pending": "Original Bitman, media exacta",
+    "implementation_hypothesis": "Separate AO/price/line displacement and structure, no fitted threshold",
+    "evidence_grade": "DERIVED_NO_ORIGINAL_MESSAGE_OR_FRAME"
+  },
+  {
+    "id": "VOL_EXIT",
+    "source": "dossier",
+    "author": "SLir Valdez/El",
+    "reported_madrid": "18Nov21:10;19Nov00:53",
+    "documented": "Salida/recorte por giro volatilidad1H",
+    "verification_pending": "Linea/direccion exacta y fills",
+    "implementation_hypothesis": "Cooling/exhaustion descriptive; fixed prior partial/BE/trail model",
+    "evidence_grade": "DERIVED_NO_ORIGINAL_MESSAGE_OR_FRAME"
+  },
+  {
+    "id": "TS_FRACTALS",
+    "source": "dossier",
+    "author": "El/Hermi",
+    "reported_madrid": "23Nov20:42-20:44;14Nov20:07",
+    "documented": "Cruce y regreso en TS/fractales; Hermi117/2.8/150/100",
+    "verification_pending": "Version/ajustes de Bitman",
+    "implementation_hypothesis": "Owner TSA119/2.8 and causal2+2 pivots; price-line rejection hypothesis",
+    "evidence_grade": "DERIVED_NO_ORIGINAL_MESSAGE_OR_FRAME"
+  },
+  {
+    "id": "FALSE_FORECAST",
+    "source": "dossier",
+    "author": "Jorge Ruiz",
+    "reported_madrid": "18Nov11:38-11:40",
+    "documented": "Esperaba66176 antes de short, no ocurrio en ventana auditada",
+    "verification_pending": "Mensaje/fill",
+    "implementation_hypothesis": "Retain as failed forecast; not backfilled as entry",
+    "evidence_grade": "DERIVED_NO_ORIGINAL_MESSAGE_OR_FRAME"
+  },
+  {
+    "id": "MISSED_TARGETS",
+    "source": "dossier",
+    "author": "miembros no identificados",
+    "reported_madrid": "18-19Nov",
+    "documented": "61611/59500 no alcanzados al corte19Nov, luego alcanzados",
+    "verification_pending": "Timestamp/fuente de cada target",
+    "implementation_hypothesis": "Horizon separation; do not reinterpret earlier failure",
+    "evidence_grade": "DERIVED_NO_ORIGINAL_MESSAGE_OR_FRAME"
+  },
+  {
+    "id": "LATE_CONFIRM",
+    "source": "dossier",
+    "author": "I-GOD auditado",
+    "reported_madrid": "18Nov16:00;24Nov05:00",
+    "documented": "ML RSI alineado tarde; rojo4H despues del minimo24Nov",
+    "verification_pending": "Logs originales/config exacta",
+    "implementation_hypothesis": "Separate source message time, close time, watch and confirmation",
+    "evidence_grade": "DERIVED_NO_ORIGINAL_MESSAGE_OR_FRAME"
+  },
+  {
+    "id": "EARLY_WARNING",
+    "source": "dossier",
+    "author": "Jose Garcia/El",
+    "reported_madrid": "23Nov20:40-20:45",
+    "documented": "Short comentado despues del rechazo y antes de otro tramo",
+    "verification_pending": "Contrato, entrada, SL y fills",
+    "implementation_hypothesis": "No claimed trade; compare modeled events and subsequent price",
+    "evidence_grade": "DERIVED_NO_ORIGINAL_MESSAGE_OR_FRAME"
+  },
+  {
+    "id": "WEEKLY_ZERO",
+    "source": "directo",
+    "author": "Bitman via subtitulos",
+    "reported_madrid": "23Nov;min23:31-26:15",
+    "documented": "Area volumen semanal cruza cero y supuesto minimo primera semana",
+    "verification_pending": "Area exacta y cruce intravela vs cerrado",
+    "implementation_hypothesis": "All pececillos/tendencia/tiburones zero crossings individually; no performance claim",
+    "evidence_grade": "DERIVED_NO_ORIGINAL_MESSAGE_OR_FRAME"
+  },
+  {
+    "id": "EXHAUST_SEQUENCE",
+    "source": "directo",
+    "author": "Bitman via subtitulos",
+    "reported_madrid": "23Nov;min36:42-40:19/97:00",
+    "documented": "Volatilidad diaria primero, AO verde, ADX enfriando, Konkorde",
+    "verification_pending": "Formulas y velas aun abiertas",
+    "implementation_hypothesis": "Timestamp each token; no simultaneity or directional ADX gate",
+    "evidence_grade": "DERIVED_NO_ORIGINAL_MESSAGE_OR_FRAME"
+  },
+  {
+    "id": "2W_AO",
+    "source": "directo",
+    "author": "Bitman via subtitulos",
+    "reported_madrid": "23Nov;min48:08-60:16",
+    "documented": "Posible convergencia alcista2W no confirmada",
+    "verification_pending": "Anclaje2W/plataforma y futuras barras",
+    "implementation_hypothesis": "Confirmed price-fractal/AO divergences only; experimental anchor",
+    "evidence_grade": "DERIVED_NO_ORIGINAL_MESSAGE_OR_FRAME"
+  },
+  {
+    "id": "FAILED_LOW",
+    "source": "directo",
+    "author": "Bitman via subtitulos",
+    "reported_madrid": "23Nov;min27:03-35:36",
+    "documented": "Nuevos minimos con extension debil y recuperacion",
+    "verification_pending": "Umbral y ventana exactos",
+    "implementation_hypothesis": "Retain measured extension/ATR and reclaim delay without fitted weak threshold",
+    "evidence_grade": "DERIVED_NO_ORIGINAL_MESSAGE_OR_FRAME"
+  },
+  {
+    "id": "RSI_NOV5",
+    "source": "directo",
+    "author": "Bitman via subtitulos",
+    "reported_madrid": "05Nov;min63:50-68:47",
+    "documented": "Afirma SHORT futuros cerca77k",
+    "verification_pending": "Contrato, formula, candle time, live signal, fees/fills",
+    "implementation_hypothesis": "Spot LOW27 ALMA4 diagnostic, all transitions including failures; not same signal",
+    "evidence_grade": "DERIVED_NO_ORIGINAL_MESSAGE_OR_FRAME"
+  },
+  {
+    "id": "RSI_NOV22",
+    "source": "directo",
+    "author": "Bitman via subtitulos",
+    "reported_madrid": "22Nov17:00Madrid;min63:50-68:47",
+    "documented": "Afirma LONG futuros cerca60k",
+    "verification_pending": "Opening/closing time, contract and source config",
+    "implementation_hypothesis": "Both opening and availability interpretations, not optimized identity",
+    "evidence_grade": "DERIVED_NO_ORIGINAL_MESSAGE_OR_FRAME"
+  },
+  {
+    "id": "FE",
+    "source": "dossier",
+    "author": "Paco",
+    "reported_madrid": "18Nov09:57-09:58",
+    "documented": "FE two lines with visual30/70",
+    "verification_pending": "Source/author/parameters/license",
+    "implementation_hypothesis": "Excluded, FE_UNVERIFIED",
+    "evidence_grade": "DERIVED_NO_ORIGINAL_MESSAGE_OR_FRAME"
+  }
+]
