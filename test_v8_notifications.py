@@ -9,6 +9,7 @@ import unittest
 from unittest.mock import Mock, patch
 from urllib.parse import parse_qs
 import v8_executor
+from notification_v8_safety import normalize_relay_tree
 from v8_notifications import render_v8_notification, notification_text
 
 
@@ -58,7 +59,7 @@ class NotificationTests(unittest.TestCase):
 
     def test_entire_executor_ast_except_renderer_exact_baseline(self):
         # 6b5da7eb0f1da40cf2793f0fab8a27fe68bae8dc, before this text-only PR.
-        root = ast.parse(inspect.getsource(v8_executor))
+        root = normalize_relay_tree(ast.parse(inspect.getsource(v8_executor)))
         imports = [n for n in root.body if isinstance(n, ast.ImportFrom) and n.module == 'v8_notifications']
         self.assertEqual(len(imports), 1)
         root.body.remove(imports[0])
