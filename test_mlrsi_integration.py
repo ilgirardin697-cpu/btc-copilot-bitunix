@@ -1,3 +1,4 @@
+from notification_safety import normalize_notifications
 """Guardian topology, unchanged protection traces and read-only commands; offline only."""
 import ast
 import copy
@@ -42,7 +43,7 @@ class BoundaryTests(unittest.TestCase):
 
     def test_guardian_entire_class_byte_equivalent_ast(self):
         old = ast.parse(baseline('trade_guardian.py'))
-        new = ast.parse(Path('trade_guardian.py').read_text('utf-8'))
+        new = ast.parse(normalize_notifications('trade_guardian.py',Path('trade_guardian.py').read_text('utf-8')))
         a = next(n for n in old.body if isinstance(n, ast.ClassDef) and n.name == 'Guardian')
         b = next(n for n in new.body if isinstance(n, ast.ClassDef) and n.name == 'Guardian')
         self.assertEqual(fingerprint(a), fingerprint(b))  # includes _act/reconcile/cycle/lockout

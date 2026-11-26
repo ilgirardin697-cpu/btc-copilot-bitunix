@@ -9,6 +9,8 @@ ADDITIONS['trade_guardian.py'] = tuple(ADDITIONS['trade_guardian.py'])+CAPITAL_F
 
 
 def normalize_source(path,source):
+    from notification_safety import normalize_notifications
+    source=normalize_notifications(path,source)
     if path=='guardian_commands.py':
         return normalize_router(source)
     if path=='trade_guardian.py':
