@@ -1,5 +1,6 @@
 """Durable opportunity/incident notification lifecycle; never an execution gate."""
 import hashlib
+from contextlib import contextmanager
 import json
 import math
 import os
@@ -84,6 +85,7 @@ class Policy:
     def __init__(self,directory):
         directory=Path(directory);directory.mkdir(parents=True,exist_ok=True)
         self.lock=WriterLock(directory/'writer.lock')
+        self._transaction_id=0
         try:
             self.db=sqlite3.connect(directory/'radar.sqlite3',timeout=1)
             self.db.row_factory=sqlite3.Row
@@ -111,15 +113,41 @@ class Policy:
     def close(self):
         self.db.close();self.lock.close()
 
+    @contextmanager
+    def transaction(self):
+        """Nested savepoints keep producer memory and accepted events atomic."""
+        self._transaction_id+=1
+        name='notification_'+str(self._transaction_id)
+        self.db.execute('SAVEPOINT '+name)
+        try:
+            yield
+            self.db.execute('RELEASE SAVEPOINT '+name)
+        except BaseException:
+            self.db.execute('ROLLBACK TO SAVEPOINT '+name)
+            self.db.execute('RELEASE SAVEPOINT '+name)
+            raise
+
+    def apply_snapshot(self,proposal,now):
+        if proposal is None:return []
+        with self.transaction():
+            if self.producer('manual_copilot')!=proposal['previous']:
+                raise ValueError('PRODUCER_MEMORY_CHANGED_RETRY')
+            results=[self.ingest(e,now) for e in proposal['events']]
+            accepted={'ENQUEUE','OPPORTUNITY_MUTED','PRE_ALREADY_RECORDED','CONFIRMATION_ALREADY_RECORDED'}
+            if any(r['decision'] not in accepted for r in results):
+                raise ValueError('SNAPSHOT_NOT_ACCEPTED_RETRY')
+            self.producer('manual_copilot',proposal['memory'])
+            return results
+
     def setting(self,key,value=None):
         if value is not None:
-            with self.db:self.db.execute('INSERT OR REPLACE INTO prefs VALUES(?,?)',(key,packed(value)))
+            with self.transaction():self.db.execute('INSERT OR REPLACE INTO prefs VALUES(?,?)',(key,packed(value)))
         row=self.db.execute('SELECT value FROM prefs WHERE key=?',(key,)).fetchone()
         return json.loads(row[0]) if row else False
 
     def producer(self,key,value=None):
         if value is not None:
-            with self.db:self.db.execute('INSERT OR REPLACE INTO producer VALUES(?,?)',(key,packed(value)))
+            with self.transaction():self.db.execute('INSERT OR REPLACE INTO producer VALUES(?,?)',(key,packed(value)))
         row=self.db.execute('SELECT value FROM producer WHERE key=?',(key,)).fetchone()
         return json.loads(row[0]) if row else {}
 
@@ -129,7 +157,7 @@ class Policy:
 
     def ingest(self,event,now):
         validate(event,now)
-        with self.db:
+        with self.transaction():
             old=self.db.execute('SELECT payload,decision FROM events WHERE id=?',(event['id'],)).fetchone()
             if old:
                 if old['payload']!=packed(event):raise ValueError('EVENT_ID_COLLISION')
@@ -158,12 +186,17 @@ class Policy:
                 priority=0
                 row=self.db.execute('SELECT * FROM incidents WHERE id=?',(event['incident_id'],)).fetchone()
                 material=packed(event.get('material',{}))
-                if row and event['at']<row['event_at']:
+                if row and (event['at']<row['event_at'] or (kind=='CRITICAL' and not row['active'] and event['at']<=row['event_at'])):
                     decision='STALE_INCIDENT_NO_RESURRECTION'
                 elif kind=='RECOVERED':
                     if row and row['active']:
                         decision='ENQUEUE'
                         self.db.execute('UPDATE incidents SET active=0,event_at=? WHERE id=?',(event['at'],event['incident_id']))
+                        # Old retries must not announce a crisis AFTER its recovery.
+                        for pending in self.db.execute("SELECT id,payload FROM outbox WHERE priority=0 AND state IN ('PENDING','SENDING','UNCERTAIN')").fetchall():
+                            payload=json.loads(pending['payload'])
+                            if payload.get('kind')=='CRITICAL' and payload.get('incident_id')==event['incident_id']:
+                                self.db.execute("UPDATE outbox SET state='SUPPRESSED' WHERE id=?",(pending['id'],))
                     else:decision='NO_ACTIVE_INCIDENT'
                 else:
                     changed=not row or not row['active'] or event['severity']>row['severity'] or material!=row['material']
@@ -172,6 +205,10 @@ class Policy:
                         decision='ENQUEUE'
                         severity=max(event['severity'],row['severity']) if row and row['active'] else event['severity']
                         self.db.execute('INSERT OR REPLACE INTO incidents VALUES(?,?,?,?,?,?)',(event['incident_id'],1,severity,material,now,event['at']))
+                        for pending in self.db.execute("SELECT id,payload FROM outbox WHERE priority=0 AND state IN ('PENDING','SENDING','UNCERTAIN')").fetchall():
+                            payload=json.loads(pending['payload'])
+                            if payload.get('kind')=='RECOVERED' and payload.get('incident_id')==event['incident_id']:
+                                self.db.execute("UPDATE outbox SET state='SUPPRESSED' WHERE id=?",(pending['id'],))
                     else:
                         decision='SAME_CRITICAL_INCIDENT'
                         self.db.execute('UPDATE incidents SET event_at=? WHERE id=?',(event['at'],event['incident_id']))
@@ -181,7 +218,7 @@ class Policy:
         return dict(decision=decision,duplicate=False)
 
     def next(self,now):
-        with self.db:
+        with self.transaction():
             rows=self.db.execute("SELECT * FROM outbox WHERE state='PENDING' AND next_due<=? ORDER BY priority,rowid",(now,)).fetchall()
             for row in rows:
                 if row['priority']!=0 and now-json.loads(row['payload'])['at']>1800000:
@@ -201,7 +238,10 @@ class Policy:
         attempts=row['attempts']+1
         # A failed/ambiguous opportunity is not a reason for a message storm.
         state='SENT' if success else 'PENDING' if row['priority']==0 else 'UNCERTAIN'
-        with self.db:self.db.execute('UPDATE outbox SET state=?,next_due=? WHERE id=?',(state,now+min(300000,1000*2**min(attempts,8)),row['id']))
+        with self.transaction():
+            current=self.db.execute('SELECT state FROM outbox WHERE id=?',(row['id'],)).fetchone()
+            if current and current['state']=='SUPPRESSED':return
+            self.db.execute('UPDATE outbox SET state=?,next_due=? WHERE id=?',(state,now+min(300000,1000*2**min(attempts,8)),row['id']))
 
 
 def render(event):

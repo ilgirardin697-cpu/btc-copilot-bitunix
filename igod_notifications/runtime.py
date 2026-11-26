@@ -1,5 +1,5 @@
 """Nonblocking, disabled-by-default facade around the EXISTING Telegram sender."""
-from collections import deque
+from itertools import count
 import json
 import os
 from pathlib import Path
@@ -7,7 +7,7 @@ import queue
 import threading
 import time
 from .policy import Policy,render
-from .adapters import guardian_alert,capital_message,event,copilot_snapshot
+from .adapters import guardian_alert,capital_message,event,copilot_snapshot,safety_facts,safety_recoveries
 
 _host=None
 
@@ -21,13 +21,48 @@ def diagnostic(code):
     except Exception:pass
 
 
+class CriticalFallback:
+    """Only a bounded nonblocking enqueue runs on a protection caller."""
+    def __init__(self,sender,clock):
+        self.sender=sender;self.clock=clock;self.queue=queue.PriorityQueue(maxsize=256)
+        self.stop=threading.Event();self.sequence=count();self.seen={};self.overflow=0
+        self.thread=threading.Thread(target=self.run,daemon=True,name='guardian-critical-notification-fallback')
+
+    def submit(self,value):
+        try:
+            priority=-value.get('severity',1) if value.get('kind')=='CRITICAL' else 1
+            self.queue.put_nowait((priority,next(self.sequence),value));return True
+        except Exception:
+            self.overflow+=1;return False
+
+    def run(self):
+        from .policy import identity
+        while not self.stop.is_set():
+            try:_,_,value=self.queue.get(timeout=.1)
+            except queue.Empty:
+                if self.overflow:diagnostic('IGOD_NOTIFICATION_CRITICAL_FALLBACK_QUEUE_FULL');self.overflow=0
+                continue
+            try:
+                now=int(self.clock()*1000);iid=value.get('incident_id',value.get('id'))
+                fingerprint=identity(value.get('kind'),value.get('severity'),value.get('material'))
+                old=self.seen.get(iid)
+                if old and old[0]==fingerprint and now-old[1]<3600000:continue
+                if self.sender(value.get('text') or value['what_changed']) is not False:
+                    self.seen[iid]=(fingerprint,now)
+                else:diagnostic('IGOD_NOTIFICATION_CRITICAL_FALLBACK_NOT_QUEUED')
+            except Exception:diagnostic('IGOD_NOTIFICATION_CRITICAL_FALLBACK_FAILED')
+            finally:self.queue.task_done()
+
+
 class Host:
     def __init__(self,original,directory,clock=time.time):
         self.original=original;self.directory=Path(directory)/'notification_radar_v1';self.clock=clock
         self.queue=queue.Queue(maxsize=512);self.stop=threading.Event();self.ready=threading.Event()
         self.failed=False;self.policy=None;self.server=None;self.thread=None
+        self.fallback=CriticalFallback(original.send,clock)
 
     def start(self):
+        self.fallback.thread.start()
         self.thread=threading.Thread(target=self.run,daemon=True,name='igod-notification-radar')
         self.thread.start()
 
@@ -36,9 +71,8 @@ class Host:
             if self.failed:raise ValueError('NOTIFICATION_STORE_UNAVAILABLE')
             self.queue.put_nowait(('event',value,None));return True
         except Exception:
-            diagnostic('IGOD_NOTIFICATION_FALLBACK' if value.get('kind') in ('CRITICAL','RECOVERED') else 'IGOD_NOTIFICATION_NOT_QUEUED')
             if value.get('kind') in ('CRITICAL','RECOVERED'):
-                return bool(self.original.send(value.get('text') or value['what_changed']))
+                return self.fallback.submit(value)
             return False
 
     def snapshot(self,value):
@@ -62,7 +96,7 @@ class Host:
             try:ok=self.original._deliver(recipient,render(value))
             except Exception:ok=False
             if ok:
-                with self.policy.db:self.policy.db.execute('INSERT OR IGNORE INTO delivered VALUES(?,?)',(row['id'],recipient))
+                with self.policy.transaction():self.policy.db.execute('INSERT OR IGNORE INTO delivered VALUES(?,?)',(row['id'],recipient))
             success=bool(ok) and success
         self.policy.finish(row,success and bool(self.original._recipients),now)
 
@@ -82,7 +116,8 @@ class Host:
                         now=int(self.clock()*1000)
                         if kind=='event':result=self.policy.ingest(value,now)
                         elif kind=='snapshot':
-                            result=[self.policy.ingest(e,now) for e in copilot_snapshot(self.policy,value,now)]
+                            for e in safety_recoveries(self.policy,value.get('safety'),now):self.policy.ingest(e,now)
+                            result=self.policy.apply_snapshot(copilot_snapshot(self.policy,value,now),now)
                         elif kind=='settings':
                             if value is not None:self.policy.setting('silent',value)
                             result=self.policy.setting('silent')
@@ -93,7 +128,7 @@ class Host:
                         diagnostic('IGOD_NOTIFICATION_REJECTED')
                         if response:response.put_nowait(error)
                         elif kind=='event' and value.get('kind') in ('CRITICAL','RECOVERED'):
-                            self.original.send(value.get('text') or value['what_changed'])
+                            self.fallback.submit(value)
                     finally:self.queue.task_done()
                 row=self.policy.next(int(self.clock()*1000))
                 if row:self._deliver(row,int(self.clock()*1000))
@@ -103,7 +138,7 @@ class Host:
                 try:kind,value,response=self.queue.get_nowait()
                 except queue.Empty:break
                 if kind=='event' and value.get('kind') in ('CRITICAL','RECOVERED'):
-                    self.original.send(value.get('text') or value['what_changed'])
+                    self.fallback.submit(value)
                 if response:response.put_nowait(ValueError('NOTIFICATION_UNAVAILABLE'))
                 self.queue.task_done()
         finally:
@@ -142,12 +177,14 @@ def observer_sender(telegram):
 def after_cycle(guardian):
     if _host is not None and not _host.failed:
         value=guardian.command_snapshot.read()
-        if value is not None:_host.snapshot({'data':value.get('data',{})})
+        if value is not None:
+            facts=safety_facts(value,guardian.store.state.get('position_id'),int(_host.clock()*1000))
+            _host.snapshot({'data':value.get('data',{}),'safety':facts})
 
 
 def shutdown():
     global _host
-    if _host:_host.stop.set()
+    if _host:_host.stop.set();_host.fallback.stop.set()
     _host=None
 
 

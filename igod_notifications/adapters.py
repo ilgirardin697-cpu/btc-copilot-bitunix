@@ -30,7 +30,7 @@ def guardian_alert(key,text,now,notice=None):
         risk_state='UNKNOWN'
         for name in ('EMERGENCY','DANGER','WARNING','NORMAL'):
             if entity.endswith(name):entity=entity[:-len(name)];risk_state=name
-        return event('guardian','CRITICAL',now,'Cambio de riesgo de capital',incident_id='capital-risk:'+identity(entity),
+        return event('guardian','RECOVERED' if risk_state=='NORMAL' else 'CRITICAL',now,'Cambio de riesgo de capital',incident_id='capital-risk:'+identity(entity),
             severity=severity,material={'code':'CAPITAL_RISK','state':risk_state},text=text)
     if family in {'tpsl','lockout','unresolved','closed','confirmed','intent','response','dry'}:
         material={'code':family}
@@ -76,12 +76,12 @@ def copilot_snapshot(policy,snapshot,now):
     An already-GOOD startup does not invent a prior prealert.
     """
     if not isinstance(snapshot,dict) or not isinstance(snapshot.get('data'),dict):
-        return []
+        return None
     data=snapshot['data'];stamp=data.get('last_closed_1h')
     levels=data.get('market_levels') or {}
     reference=levels.get('reference_time')
     if type(stamp) is not int or type(reference) is not int or max(stamp,reference)>now or now-reference>=1800000:
-        return []
+        return None
     bias=data.get('bias');side={'LONG_ALLOWED':'LONG','SHORT_ALLOWED':'SHORT'}.get(bias)
     previous=policy.producer('manual_copilot')
     active=policy.active(previous['slot']) if previous.get('slot') else None
@@ -118,7 +118,34 @@ def copilot_snapshot(policy,snapshot,now):
             what_changed='Confluencia existente en vigilancia; falta confirmación de precio')
         result.append(common)
     slot=result[-1]['slot'] if result else previous.get('slot')
-    policy.producer('manual_copilot',dict(candidate=candidate,anchor=anchor,slot=slot,side=side,
-                                       reference=reference))
+    memory=dict(candidate=candidate,anchor=anchor,slot=slot,side=side,reference=reference)
     for item in result:item['id']=identity(item)
-    return result
+    return dict(events=result,memory=memory,previous=previous)
+
+
+def safety_facts(snapshot,position_id,now):
+    """Copied notification evidence only. Never infer recovery from missing data."""
+    if not isinstance(snapshot,dict) or snapshot.get('position_verified') is not True:return None
+    stamp=snapshot.get('timestamp')
+    if not isinstance(stamp,(int,float)) or not math.isfinite(stamp) or not 0<=now-int(stamp*1000)<=30000:return None
+    flat=snapshot.get('position') is None
+    if not flat and (not isinstance(position_id,str) or not position_id):return None
+    statuses=snapshot.get('sl_status')
+    return dict(verified=True,at=int(stamp*1000),flat=flat,position_ref=None if flat else identity(position_id),
+        risk=(snapshot.get('risk') or {}).get('state'),
+        stop_notice_cleared=isinstance(statuses,list) and bool(statuses) and all(x=='EXISTING_SAFER_SL_UNTOUCHED' for x in statuses))
+
+
+def safety_recoveries(policy,facts,now):
+    if not isinstance(facts,dict) or facts.get('verified') is not True or type(facts.get('flat')) is not bool or type(facts.get('at')) is not int or not 0<=now-facts['at']<=30000:return []
+    if not facts['flat'] and (not isinstance(facts.get('position_ref'),str) or not re.fullmatch('[0-9a-f]{64}',facts['position_ref']) or facts.get('risk') not in ('NORMAL','WARNING','DANGER','EMERGENCY')):return []
+    out=[]
+    for row in policy.db.execute('SELECT * FROM incidents WHERE active=1').fetchall():
+        iid=row['id'];risk=iid.startswith('capital-risk:');stop=iid.startswith('guardian:tpsl:')
+        if not (risk or stop) or facts['at']<row['event_at']:continue
+        same=iid.split(':')[-1]==facts.get('position_ref')
+        resolved=facts.get('flat') is True or not same or (risk and facts.get('risk')=='NORMAL') or (stop and facts.get('stop_notice_cleared') is True)
+        if resolved:
+            out.append(event('guardian','RECOVERED',facts['at'],'Cambio verificado del aviso de riesgo',
+                incident_id=iid,severity=row['severity'],text='El ciclo privado verificado resolvió este aviso de riesgo o cambió la posición. No certifica por sí solo cobertura del stop.'))
+    return out

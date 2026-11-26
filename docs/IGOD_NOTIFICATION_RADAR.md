@@ -3,6 +3,8 @@
 Status: DISABLED BY DEFAULT. No deployment, Railway variable change or real Telegram test performed.
 This is presentation/routing, never a trading, risk or operability gate. SHADOW ONLY. TRADE AUTHORITY: NONE.
 
+Follow-up review: [atomic acceptance, asynchronous fallback, resolved incidents, verified HEDGE cause and coordinated rollout](NOTIFICATION_PRE_ROLLOUT_REVIEW.md). The latest baseline in that review supersedes old assumptions about flag values; production was not changed.
+
 ## Read-only emitter inventory, 2026-11-26
 
 Guardian production source: `9d40020d539033cefb8f01734db8c6a6fdbba2e3`, deployment

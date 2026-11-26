@@ -9,6 +9,7 @@ from pathlib import Path
 import queue
 import sqlite3
 import subprocess
+import sys
 import tempfile
 import threading
 import time
@@ -18,7 +19,7 @@ from urllib.request import Request,urlopen
 from urllib.error import HTTPError
 
 from igod_notifications.policy import Policy,identity,packed,validate,render
-from igod_notifications.adapters import event,guardian_alert,v8_event,copilot_snapshot
+from igod_notifications.adapters import event,guardian_alert,v8_event,copilot_snapshot,safety_facts,safety_recoveries
 from igod_notifications.runtime import Host,Proxy,emit,observer_sender,daily_automatic,settings
 from igod_notifications import runtime,client
 from igod_notifications.server import handler,signature
@@ -135,11 +136,12 @@ class StateTests(unittest.TestCase):
 
     def test_late_critical_does_not_resurrect_resolved_incident(self):
         self.p.ingest(guardian_alert('blind:3','err',NOW),NOW)
+        drain(self.p)
         self.p.ingest(guardian_alert('blind:recovered','ok',NOW+100),NOW+100)
         old=guardian_alert('blind:3','old packet',NOW+1)
         result=self.p.ingest(old,NOW+200)
         self.assertEqual(result['decision'],'STALE_INCIDENT_NO_RESURRECTION')
-        self.assertEqual(len(drain(self.p,NOW+200)),2)
+        self.assertEqual(len(drain(self.p,NOW+200)),1)
 
     def test_private_failure_cause_change_is_material_and_sanitized(self):
         for i,cause in enumerate(('AMBIGUOUS_POSITIONS','AMBIGUOUS_POSITIONS','PRIVATE_AUTH_FAILED')):
@@ -148,16 +150,20 @@ class StateTests(unittest.TestCase):
         self.assertEqual(guardian_alert('blind:3','',NOW,{'cause':'secret/token?123'})['material']['code'],'PRIVATE_READ_UNVERIFIED')
 
     def test_risk_improvement_is_a_material_change_not_mark_price_noise(self):
+        notifications=[]
         for i,state in enumerate(('EMERGENCY','EMERGENCY','DANGER','NORMAL')):
             self.p.ingest(guardian_alert('risk:position123'+state,'risk '+str(i),NOW+i),NOW+i)
-        self.assertEqual(len(drain(self.p,NOW+5)),3)
+            notifications.extend(drain(self.p,NOW+i))
+        self.assertEqual(len(notifications),3)
 
     def test_recovery_once_and_new_incident_again(self):
         self.p.ingest(guardian_alert('blind:3','err',NOW),NOW)
+        self.assertEqual(len(drain(self.p)),1)
         self.p.ingest(guardian_alert('blind:recovered','ok',NOW+1),NOW+1)
         self.p.ingest(guardian_alert('blind:recovered','ok',NOW+2),NOW+2)
+        self.assertEqual([x['kind'] for x in drain(self.p,NOW+2)],['RECOVERED'])
         self.p.ingest(guardian_alert('blind:1','err',NOW+3),NOW+3)
-        self.assertEqual(len(drain(self.p,NOW+4)),3)
+        self.assertEqual(len(drain(self.p,NOW+4)),1)
 
     def test_one_hour_reminder_is_secondary_not_filter(self):
         self.p.ingest(critical(),NOW);drain(self.p)
@@ -211,7 +217,7 @@ class AdapterTests(unittest.TestCase):
         self.p=Policy(self.temp.name);self.addCleanup(lambda:self.p.close())
 
     def process(self,s,now):
-        for e in copilot_snapshot(self.p,s,now):self.p.ingest(e,now)
+        return self.p.apply_snapshot(copilot_snapshot(self.p,s,now),now)
 
     def test_100_existing_analyses_only_one_pre(self):
         for i in range(100):self.process(snapshot(NOW+i),NOW+i)
@@ -240,6 +246,70 @@ class AdapterTests(unittest.TestCase):
     def test_short_symmetry(self):
         self.process(snapshot(bias='SHORT_ALLOWED',trend4='BEAR',trend1='BEAR',momentum='RED',structure='BEARISH',flow='SELL'),NOW)
         self.assertEqual(drain(self.p)[0]['kind'],'PRE_SHORT')
+
+    def test_planner_is_pure_and_failed_validation_does_not_consume_candidate(self):
+        bad=snapshot(momentum='NEUTRAL',structure='MIXED',flow='NEUTRAL')
+        proposal=copilot_snapshot(self.p,bad,NOW)
+        self.assertEqual(self.p.producer('manual_copilot'),{})
+        with self.assertRaisesRegex(ValueError,'ISOLATED'):self.p.apply_snapshot(proposal,NOW)
+        self.assertEqual(self.p.producer('manual_copilot'),{})
+        self.assertEqual(self.p.db.execute('SELECT COUNT(*) FROM opportunities').fetchone()[0],0)
+        self.process(snapshot(),NOW);self.assertEqual(len(drain(self.p)),1)
+
+    def test_outbox_write_failure_rolls_back_entire_prealert(self):
+        def deny(action,table,*unused):
+            return sqlite3.SQLITE_DENY if action==sqlite3.SQLITE_INSERT and table=='outbox' else sqlite3.SQLITE_OK
+        self.p.db.set_authorizer(deny)
+        try:
+            with self.assertRaises(sqlite3.DatabaseError):self.process(snapshot(),NOW)
+        finally:self.p.db.set_authorizer(None)
+        for table in ('producer','events','outbox','opportunities'):
+            self.assertEqual(self.p.db.execute('SELECT COUNT(*) FROM '+table).fetchone()[0],0)
+        self.process(snapshot(),NOW);self.assertEqual(len(drain(self.p)),1)
+
+    def test_failure_after_memory_write_also_rolls_back_events(self):
+        original=self.p.producer
+        def fault(key,value=None):
+            result=original(key,value)
+            if value is not None:raise RuntimeError('simulated crash before outer commit')
+            return result
+        with patch.object(self.p,'producer',side_effect=fault):
+            with self.assertRaises(RuntimeError):self.process(snapshot(),NOW)
+        self.assertFalse(self.p.db.in_transaction)
+        self.assertEqual(self.p.producer('manual_copilot'),{})
+        self.assertEqual(self.p.db.execute('SELECT COUNT(*) FROM events').fetchone()[0],0)
+        self.process(snapshot(),NOW);self.assertEqual(len(drain(self.p)),1)
+
+    def test_real_process_exit_before_commit_leaves_retryable_opportunity(self):
+        self.p.close()
+        code="""import json,os,sys
+from igod_notifications.policy import Policy
+from igod_notifications.adapters import copilot_snapshot
+p=Policy(sys.argv[1]);original=p.producer
+def crash(key,value=None):
+    result=original(key,value)
+    if value is not None:os._exit(7)
+    return result
+p.producer=crash
+p.apply_snapshot(copilot_snapshot(p,json.loads(sys.argv[2]),1800000000000),1800000000000)
+"""
+        result=subprocess.run([sys.executable,'-B','-c',code,self.temp.name,json.dumps(snapshot())],capture_output=True,timeout=10)
+        self.p=Policy(self.temp.name)
+        self.assertEqual(result.returncode,7);self.assertEqual(self.p.producer('manual_copilot'),{})
+        self.assertEqual(self.p.db.execute('SELECT COUNT(*) FROM opportunities').fetchone()[0],0)
+        self.process(snapshot(),NOW);self.assertEqual(len(drain(self.p)),1)
+
+    def test_committed_acceptance_survives_restart_without_lost_pre_or_duplicate(self):
+        self.process(snapshot(),NOW);self.p.close();self.p=Policy(self.temp.name)
+        for _ in range(100):self.process(snapshot(),NOW)
+        self.assertEqual(len(drain(self.p)),1)
+
+    def test_old_proposal_cannot_overwrite_new_producer_memory(self):
+        old=copilot_snapshot(self.p,snapshot(),NOW)
+        self.p.producer('manual_copilot',{'reference':NOW+1})
+        with self.assertRaisesRegex(ValueError,'MEMORY_CHANGED'):self.p.apply_snapshot(old,NOW)
+        self.assertEqual(self.p.producer('manual_copilot'),{'reference':NOW+1})
+        self.assertEqual(drain(self.p),[])
 
     def test_waits_and_startup_suppressed_criticals_retained(self):
         for key in ('copilot:WAIT:CAUTION','startup:123','aligned:pWAIT','conflict:pLONG_ALLOWED','new:p'):
@@ -272,6 +342,7 @@ class RuntimeTests(unittest.TestCase):
         h=Host(original,temp.name,clock=lambda:NOW/1000);h.start();self.assertTrue(h.ready.wait(3))
         def cleanup():
             h.stop.set();h.thread.join(timeout=5)
+            h.fallback.stop.set();h.fallback.thread.join(timeout=3)
         self.addCleanup(cleanup)
         return h,original
 
@@ -316,6 +387,7 @@ class RuntimeTests(unittest.TestCase):
     def test_failed_host_critical_fallback_not_routine(self):
         h,old=self.make();h.failed=True
         h.submit(critical());h.submit(event('mlrsi','OBSERVATION',NOW,'neutral'))
+        h.fallback.queue.join()
         old.send.assert_called_once()
 
     def test_remote_private_url_no_arbitrary_host(self):
@@ -328,7 +400,32 @@ class RuntimeTests(unittest.TestCase):
         with patch.object(h.queue,'put_nowait',side_effect=queue.Full):
             self.assertTrue(h.submit(critical()))
             self.assertFalse(h.submit(event('mlrsi','OBSERVATION',NOW,'neutral')))
+        h.fallback.queue.join()
         old.send.assert_called_once()
+
+    def test_failed_host_slow_fallback_cannot_wait_on_protection_caller(self):
+        h,old=self.make();h.failed=True;entered=threading.Event();release=threading.Event()
+        old.send.side_effect=lambda *args:entered.set() or release.wait(3) or True
+        try:
+            started=time.monotonic()
+            for i in range(100):self.assertTrue(h.submit(critical(at=NOW+i)))
+            self.assertLess(time.monotonic()-started,.5);self.assertTrue(entered.wait(1))
+        finally:release.set()
+        h.fallback.queue.join();self.assertEqual(old.send.call_count,1)
+
+    def test_queue_full_fallback_does_not_log_or_send_on_caller(self):
+        h,old=self.make();caller=threading.get_ident()
+        old.send.side_effect=lambda *args:self.assertNotEqual(threading.get_ident(),caller) or True
+        with patch.object(h.queue,'put_nowait',side_effect=queue.Full),patch.object(runtime,'diagnostic') as log:
+            self.assertTrue(h.submit(critical()))
+            h.fallback.queue.join();old.send.assert_called_once();log.assert_not_called()
+
+    def test_fallback_sender_exception_is_isolated_and_sanitized(self):
+        h,old=self.make();h.failed=True;old.send.side_effect=OSError('SECRET_CANARY')
+        with patch.object(runtime,'diagnostic') as log:
+            self.assertTrue(h.submit(critical()));h.fallback.queue.join()
+            self.assertNotIn('SECRET_CANARY',str(log.call_args_list))
+        self.assertTrue(h.fallback.thread.is_alive())
 
     def test_no_telegram_secret_in_sanitized_diagnostic(self):
         with patch('builtins.print') as log:
@@ -348,6 +445,7 @@ class HTTPTests(unittest.TestCase):
 
     def cleanup_host(self):
         self.h.stop.set();self.h.thread.join(timeout=3)
+        self.h.fallback.stop.set();self.h.fallback.thread.join(timeout=3)
 
     def request(self,value,path='/events',signed=True):
         raw=packed(value).encode();headers={'Content-Type':'application/json'}
@@ -370,6 +468,92 @@ class HTTPTests(unittest.TestCase):
         self.assertEqual(err.exception.code,403)
         with self.assertRaises(HTTPError) as err:self.request(v8_event('V8 SIGNAL FLAT',NOW),path='/order')
         self.assertEqual(err.exception.code,404)
+
+
+class RecoveryTests(unittest.TestCase):
+    def setUp(self):
+        self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup)
+        self.p=Policy(self.temp.name);self.addCleanup(lambda:self.p.close())
+
+    def facts(self,at=NOW+1000,**kw):
+        value=dict(timestamp=at/1000,position_verified=True,position={'side':'LONG'},
+            risk={'state':'NORMAL'},sl_status=['EXISTING_TP_OR_UNKNOWN_UNTOUCHED'])
+        value.update(kw);return safety_facts(value,'position123',at)
+
+    def recover(self,facts,at=NOW+1000):
+        for e in safety_recoveries(self.p,facts,at):self.p.ingest(e,at)
+
+    def test_resolved_risk_inactive_after_restart_no_old_retry_or_reminder(self):
+        e=guardian_alert('risk:position123EMERGENCY','emergency',NOW);self.p.ingest(e,NOW)
+        old=self.p.next(NOW);self.p.finish(old,False,NOW)
+        self.recover(self.facts());self.p.close();self.p=Policy(self.temp.name)
+        self.assertEqual(self.p.db.execute('SELECT active FROM incidents WHERE id=?',(e['incident_id'],)).fetchone()[0],0)
+        for i in range(100):self.recover(self.facts(at=NOW+3600000+i),NOW+3600000+i)
+        self.assertEqual([x['kind'] for x in drain(self.p,NOW+3600100)],['RECOVERED'])
+
+    def test_normal_state_never_creates_an_active_crisis(self):
+        e=guardian_alert('risk:position123NORMAL','normal',NOW)
+        self.assertEqual(e['kind'],'RECOVERED');self.p.ingest(e,NOW)
+        self.assertEqual(drain(self.p),[]);self.assertEqual(self.p.db.execute('SELECT COUNT(*) FROM incidents').fetchone()[0],0)
+
+    def test_flat_verified_resolves_risk_and_tpsl_but_not_private_blindness(self):
+        for e in (guardian_alert('risk:position123EMERGENCY','risk',NOW),guardian_alert('tpsl:position123','stop',NOW),guardian_alert('blind:3','read failed',NOW,{'cause':'AMBIGUOUS_POSITIONS'})):
+            self.p.ingest(e,NOW)
+        drain(self.p)
+        self.recover(self.facts(position=None))
+        active=[r[0] for r in self.p.db.execute('SELECT id FROM incidents WHERE active=1')]
+        self.assertEqual(active,['guardian:private-read'])
+        self.assertEqual([x['kind'] for x in drain(self.p,NOW+1000)],['RECOVERED','RECOVERED'])
+
+    def test_unverified_stale_or_malformed_facts_do_not_resolve(self):
+        self.p.ingest(guardian_alert('risk:position123EMERGENCY','risk',NOW),NOW)
+        self.assertIsNone(self.facts(position_verified=False))
+        for facts in (None,{},dict(at=NOW+1,flat=True),self.facts(at=NOW-60000)):
+            self.recover(facts)
+        self.assertEqual(self.p.db.execute('SELECT active FROM incidents').fetchone()[0],1)
+
+    def test_material_stop_notice_recovery_does_not_claim_exchange_coverage(self):
+        self.p.ingest(guardian_alert('tpsl:position123','stop',NOW),NOW);drain(self.p)
+        self.recover(self.facts(sl_status=['EXISTING_SAFER_SL_UNTOUCHED']))
+        rows=drain(self.p,NOW+1000);self.assertEqual(len(rows),1)
+        self.assertIn('No certifica',rows[0]['text'])
+
+    def test_position_change_retires_previous_position_incident(self):
+        self.p.ingest(guardian_alert('risk:old-positionEMERGENCY','old',NOW),NOW)
+        self.p.ingest(guardian_alert('risk:position123EMERGENCY','current',NOW),NOW)
+        self.recover(self.facts(risk={'state':'EMERGENCY'}))
+        active=[r[0] for r in self.p.db.execute('SELECT id FROM incidents WHERE active=1')]
+        self.assertEqual(active,['capital-risk:'+identity('position123')])
+
+    def test_delayed_finish_cannot_revive_suppressed_critical(self):
+        e=guardian_alert('risk:position123EMERGENCY','emergency',NOW);self.p.ingest(e,NOW);old=self.p.next(NOW)
+        self.recover(self.facts());self.p.finish(old,False,NOW+2000)
+        rows=drain(self.p,NOW+20000);self.assertEqual([x['kind'] for x in rows],['RECOVERED'])
+
+    def test_same_timestamp_old_failure_cannot_resurrect_recovered_incident(self):
+        self.p.ingest(guardian_alert('blind:3','bad',NOW),NOW)
+        self.p.ingest(guardian_alert('blind:recovered','ok',NOW+100),NOW+100)
+        result=self.p.ingest(guardian_alert('blind:3','late',NOW+100),NOW+101)
+        self.assertEqual(result['decision'],'STALE_INCIDENT_NO_RESURRECTION')
+
+    def test_new_crisis_supersedes_undelivered_old_recovery(self):
+        self.p.ingest(guardian_alert('blind:3','bad',NOW),NOW);drain(self.p)
+        self.p.ingest(guardian_alert('blind:recovered','ok',NOW+100),NOW+100)
+        self.p.ingest(guardian_alert('blind:3','new crisis',NOW+200),NOW+200)
+        self.assertEqual([x['kind'] for x in drain(self.p,NOW+201)],['CRITICAL'])
+
+    def test_100_ambiguous_evaluations_dedup_but_private_failure_remains_active(self):
+        for i in range(100):
+            self.p.ingest(guardian_alert('blind:3','no private state '+str(i),NOW+i,{'cause':'AMBIGUOUS_POSITIONS'}),NOW+i)
+        self.recover(None)
+        self.assertEqual(len(drain(self.p,NOW+100)),1)
+        row=self.p.db.execute("SELECT * FROM incidents WHERE id='guardian:private-read'").fetchone()
+        self.assertEqual(row['active'],1);self.assertIn('AMBIGUOUS_POSITIONS',row['material'])
+        self.p.close();self.p=Policy(self.temp.name)
+        self.p.ingest(guardian_alert('blind:3','unchanged',NOW+1000,{'cause':'AMBIGUOUS_POSITIONS'}),NOW+1000)
+        self.assertEqual(drain(self.p,NOW+1000),[])
+        self.p.ingest(guardian_alert('blind:3','hourly unresolved',NOW+3600000,{'cause':'AMBIGUOUS_POSITIONS'}),NOW+3600000)
+        self.assertEqual(len(drain(self.p,NOW+3600000)),1)
 
 
 class ArchitectureTests(unittest.TestCase):
