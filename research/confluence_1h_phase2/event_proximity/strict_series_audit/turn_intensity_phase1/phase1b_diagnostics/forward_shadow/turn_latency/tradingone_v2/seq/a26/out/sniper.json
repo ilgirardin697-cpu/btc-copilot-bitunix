@@ -1,0 +1,19 @@
+{
+  "attribution": "SNIPERRBW_MEMBER_NOT_BITMAN",
+  "published": 1795629840000,
+  "published_utc": "2026-11-25T18:04:00+00:00",
+  "threshold": 59758.0,
+  "confirmation": 1795636800000,
+  "confirmation_utc": "2026-11-25T20:00:00+00:00",
+  "confirmation_close": 59879.23,
+  "claimed_confirmation_utc": "2026-11-25T20:00:00+00:00",
+  "claimed_close": 59879.23,
+  "target": 60900.0,
+  "target_touch": 1795651980000,
+  "target_touch_interval_end": 1795652040000,
+  "target_touch_utc": "2026-11-26T00:13:00+00:00",
+  "result": "PUBLIC_PRICE_RECONSTRUCTION_NOT_PROOF_OF_TRADE",
+  "stop": "UNKNOWN",
+  "entry": "NOT_EXECUTED",
+  "net_pnl": "NOT_ESTIMABLE"
+}

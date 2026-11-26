@@ -1,0 +1,77 @@
+[
+  {
+    "file": "15m.json",
+    "url": "https://data-api.binance.vision/api/v3/klines",
+    "params": {
+      "symbol": "BTCUSDT",
+      "interval": "15m",
+      "startTime": 1795509900000,
+      "endTime": 1795676399999,
+      "limit": 1000
+    },
+    "sent_at": "2026-11-26T08:36:30.685384+00:00",
+    "received_at": "2026-11-26T08:36:32.074647+00:00",
+    "status": 200,
+    "sha256": "3d92a8e89b7ba9e2a780cf61727c6bf94436d627e7f6d5fff228ca80f5e876db"
+  },
+  {
+    "file": "1h.json",
+    "url": "https://data-api.binance.vision/api/v3/klines",
+    "params": {
+      "symbol": "BTCUSDT",
+      "interval": "1h",
+      "startTime": 1795507200000,
+      "endTime": 1795676399999,
+      "limit": 1000
+    },
+    "sent_at": "2026-11-26T08:36:32.199534+00:00",
+    "received_at": "2026-11-26T08:36:32.458715+00:00",
+    "status": 200,
+    "sha256": "f8a102110fcb9793f0577c1340fb0f540d6c339ea8f4976a1f42f7802879f86c"
+  },
+  {
+    "file": "4h.json",
+    "url": "https://data-api.binance.vision/api/v3/klines",
+    "params": {
+      "symbol": "BTCUSDT",
+      "interval": "4h",
+      "startTime": 1795492800000,
+      "endTime": 1795665599999,
+      "limit": 1000
+    },
+    "sent_at": "2026-11-26T08:36:32.521570+00:00",
+    "received_at": "2026-11-26T08:36:32.780996+00:00",
+    "status": 200,
+    "sha256": "e947a2ac3196da02037fdffb7d1702cb922c86fc7af6bf2987e282ed31eb62ff"
+  },
+  {
+    "file": "1d.json",
+    "url": "https://data-api.binance.vision/api/v3/klines",
+    "params": {
+      "symbol": "BTCUSDT",
+      "interval": "1d",
+      "startTime": 1795392000000,
+      "endTime": 1795651199999,
+      "limit": 1000
+    },
+    "sent_at": "2026-11-26T08:36:32.820648+00:00",
+    "received_at": "2026-11-26T08:36:33.079349+00:00",
+    "status": 200,
+    "sha256": "22c8b2da40e70c11b0f8c3721f7b30bdd1670b73d9d3b3bbb3f86fc566094ed0"
+  },
+  {
+    "file": "1m.json",
+    "url": "https://data-api.binance.vision/api/v3/klines",
+    "params": {
+      "symbol": "BTCUSDT",
+      "interval": "1m",
+      "startTime": 1795629600000,
+      "endTime": 1795676399999,
+      "limit": 1000
+    },
+    "sent_at": "2026-11-26T08:36:33.131672+00:00",
+    "received_at": "2026-11-26T08:36:33.909023+00:00",
+    "status": 200,
+    "sha256": "86f26baa17e57426e003398bd7c5ead837a63456f4d3896215ced80e84178e16"
+  }
+]

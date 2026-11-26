@@ -1,0 +1,261 @@
+{
+  "plan_sha256": "a433c6db1c64e7a662bff504e3b191a97eb9bcf2d53e8c52363a4491ce465b39",
+  "cutoff": 1795676400000,
+  "old_replay_exact_prefix": true,
+  "old_ledger_records": 1835,
+  "new_records": 573,
+  "events": {
+    "SIM_MARK": 796,
+    "FRAME": 1059,
+    "DAILY_SEQUENCE": 9,
+    "WATCH": 62,
+    "WATCH_PROGRESS": 304,
+    "EXPIRED": 16,
+    "CONFIRMED": 19,
+    "SIM_ENTRY": 15,
+    "EXHAUSTION": 19,
+    "SIM_FILL": 23,
+    "SIM_CLOSED": 14,
+    "INVALIDATED": 27,
+    "SIM_STOP_UPDATE": 41,
+    "SIM_REJECTED": 4
+  },
+  "simulation": {
+    "completed": 14,
+    "long": 7,
+    "short": 7,
+    "net_realized": -142.84203891028804,
+    "marked_equity": 9865.329131245568,
+    "max_close_drawdown": 0.020470646082021884,
+    "halted": false,
+    "censored_open": {
+      "id": "c2cf5455b23bc868e43b",
+      "side": -1,
+      "at": 1795672800000,
+      "signal_price": 60819.55,
+      "atr": 587.2477000580215,
+      "pivot": 61126.33,
+      "thesis_level": 61126.33,
+      "entry": 60789.13023,
+      "entry_at": 1795672800000,
+      "qty": 0.04765611655832149,
+      "left": 0.04765611655832149,
+      "initial_stop": 61670.001780087034,
+      "stop": 61670.001780087034,
+      "target": 60181.238927700004,
+      "risk": 49.28578980544856,
+      "entry_fee": 2.8969738757198646,
+      "exit_fees": 0.0,
+      "gross": 0.0,
+      "tp1": false,
+      "ambiguous": false,
+      "peak": 60824.11,
+      "trough": 60380.01,
+      "mfe": 0.006730154362335255,
+      "mae": 0.0005754280389873921,
+      "stop_kind": "INITIAL_STOP"
+    },
+    "pending": [],
+    "win_rate": 0.6428571428571429,
+    "validation": "NOT_ESTIMATED_SELECTED_ENGINEERING_SAMPLE"
+  },
+  "paired_management": {
+    "BASELINE_ATR": {
+      "completed": 14,
+      "censored": 1,
+      "net_completed": -142.84203891028807
+    },
+    "BBWP_TURN_EXIT": {
+      "completed": 14,
+      "censored": 1,
+      "net_completed": -123.89995904439434
+    },
+    "KONCORDE_CROSS_EXIT": {
+      "completed": 14,
+      "censored": 1,
+      "net_completed": -178.30378121689796
+    },
+    "TP1_NET_BE": {
+      "completed": 13,
+      "censored": 2,
+      "net_completed": -179.8539989974406
+    },
+    "TP1_STRUCTURE": {
+      "completed": 14,
+      "censored": 1,
+      "net_completed": -132.3846854880188
+    }
+  },
+  "modalities": {
+    "COUNTER_TREND": 7,
+    "WITH_TREND": 6,
+    "MIXED": 2
+  },
+  "weekly": [
+    {
+      "group": "ALL",
+      "horizon": 1,
+      "n": 213,
+      "absolute_return_mean": 0.04665612766895325,
+      "absolute_return_median": 0.034090631488945866,
+      "max_absolute_excursion_mean": 0.07836345302237112,
+      "max_absolute_excursion_median": 0.06561754556546662,
+      "excursion_atr_mean": 0.8519693754122047,
+      "excursion_atr_median": 0.6801406610438896
+    },
+    {
+      "group": "ALL",
+      "horizon": 2,
+      "n": 212,
+      "absolute_return_mean": 0.07120422564144997,
+      "absolute_return_median": 0.04817209865863381,
+      "max_absolute_excursion_mean": 0.11363150645602002,
+      "max_absolute_excursion_median": 0.0927385860975607,
+      "excursion_atr_mean": 1.2364604657151148,
+      "excursion_atr_median": 1.024455671550125
+    },
+    {
+      "group": "ALL",
+      "horizon": 4,
+      "n": 210,
+      "absolute_return_mean": 0.10626977809758796,
+      "absolute_return_median": 0.0775801207879327,
+      "max_absolute_excursion_mean": 0.16530627999275918,
+      "max_absolute_excursion_median": 0.1388882573600455,
+      "excursion_atr_mean": 1.8000484300033415,
+      "excursion_atr_median": 1.605050731473528
+    },
+    {
+      "group": "RISING",
+      "horizon": 1,
+      "n": 109,
+      "absolute_return_mean": 0.042417554345971574,
+      "absolute_return_median": 0.03186039523864559,
+      "max_absolute_excursion_mean": 0.074363189386678,
+      "max_absolute_excursion_median": 0.06461936143297997,
+      "excursion_atr_mean": 0.8153672635068819,
+      "excursion_atr_median": 0.648916340386997
+    },
+    {
+      "group": "RISING",
+      "horizon": 2,
+      "n": 109,
+      "absolute_return_mean": 0.06476711142357995,
+      "absolute_return_median": 0.04220475402041246,
+      "max_absolute_excursion_mean": 0.10495152202753338,
+      "max_absolute_excursion_median": 0.08598937744609869,
+      "excursion_atr_mean": 1.1500567852683405,
+      "excursion_atr_median": 0.936110697900895
+    },
+    {
+      "group": "RISING",
+      "horizon": 4,
+      "n": 109,
+      "absolute_return_mean": 0.09204630142222567,
+      "absolute_return_median": 0.06229182992639437,
+      "max_absolute_excursion_mean": 0.15229293690265755,
+      "max_absolute_excursion_median": 0.12086219103845142,
+      "excursion_atr_mean": 1.6500479878727912,
+      "excursion_atr_median": 1.3663717147921375
+    },
+    {
+      "group": "NON_RISING",
+      "horizon": 1,
+      "n": 104,
+      "absolute_return_mean": 0.05109847855553983,
+      "absolute_return_median": 0.03886757778811051,
+      "max_absolute_excursion_mean": 0.08255603702516491,
+      "max_absolute_excursion_median": 0.06672697287368484,
+      "excursion_atr_mean": 0.8903312042360528,
+      "excursion_atr_median": 0.7071159798024405
+    },
+    {
+      "group": "NON_RISING",
+      "horizon": 2,
+      "n": 103,
+      "absolute_return_mean": 0.07801631738657454,
+      "absolute_return_median": 0.05856393678947425,
+      "max_absolute_excursion_mean": 0.12281712104538935,
+      "max_absolute_excursion_median": 0.09760914442218871,
+      "excursion_atr_mean": 1.3278973702655847,
+      "excursion_atr_median": 1.059369017024823
+    },
+    {
+      "group": "NON_RISING",
+      "horizon": 4,
+      "n": 101,
+      "absolute_return_mean": 0.12161986678684038,
+      "absolute_return_median": 0.09475112600839353,
+      "max_absolute_excursion_mean": 0.17935038293158168,
+      "max_absolute_excursion_median": 0.15913207862450274,
+      "excursion_atr_mean": 1.9619300952729455,
+      "excursion_atr_median": 1.7105475893837383
+    },
+    {
+      "group": "TURN_UP",
+      "horizon": 1,
+      "n": 30,
+      "absolute_return_mean": 0.04443309289316802,
+      "absolute_return_median": 0.03067976476752432,
+      "max_absolute_excursion_mean": 0.07914176431516011,
+      "max_absolute_excursion_median": 0.06333093587453004,
+      "excursion_atr_mean": 0.8666765770748229,
+      "excursion_atr_median": 0.63160612976289
+    },
+    {
+      "group": "TURN_UP",
+      "horizon": 2,
+      "n": 30,
+      "absolute_return_mean": 0.07386918261973544,
+      "absolute_return_median": 0.04966336154855744,
+      "max_absolute_excursion_mean": 0.1081028372316576,
+      "max_absolute_excursion_median": 0.085877951549581,
+      "excursion_atr_mean": 1.183131916359581,
+      "excursion_atr_median": 0.9927119529449114
+    },
+    {
+      "group": "TURN_UP",
+      "horizon": 4,
+      "n": 30,
+      "absolute_return_mean": 0.12324188969253846,
+      "absolute_return_median": 0.09528839648377124,
+      "max_absolute_excursion_mean": 0.17631988873822052,
+      "max_absolute_excursion_median": 0.15562102016940826,
+      "excursion_atr_mean": 1.9094317701846821,
+      "excursion_atr_median": 1.6924430027734503
+    }
+  ],
+  "sniper": {
+    "attribution": "SNIPERRBW_MEMBER_NOT_BITMAN",
+    "published": 1795629840000,
+    "published_utc": "2026-11-25T18:04:00+00:00",
+    "threshold": 59758.0,
+    "confirmation": 1795636800000,
+    "confirmation_utc": "2026-11-25T20:00:00+00:00",
+    "confirmation_close": 59879.23,
+    "claimed_confirmation_utc": "2026-11-25T20:00:00+00:00",
+    "claimed_close": 59879.23,
+    "target": 60900.0,
+    "target_touch": 1795651980000,
+    "target_touch_interval_end": 1795652040000,
+    "target_touch_utc": "2026-11-26T00:13:00+00:00",
+    "result": "PUBLIC_PRICE_RECONSTRUCTION_NOT_PROOF_OF_TRADE",
+    "stop": "UNKNOWN",
+    "entry": "NOT_EXECUTED",
+    "net_pnl": "NOT_ESTIMABLE"
+  },
+  "concordance": {
+    "1h": 846,
+    "4h": 210,
+    "1d": 34,
+    "1w": 4,
+    "2w": 2
+  },
+  "conclusion": "SOURCE_ALIGNMENT_ONLY; ECONOMIC_EDGE_NOT_ESTABLISHED; NO_INDEPENDENT_VALIDATION",
+  "vidiq_calls": 0,
+  "vidiq_credits": 0,
+  "murphy": "NOT_AVAILABLE_NOT_CITED",
+  "exchange_stop": "NOT_VERIFIED; no private account calls; warning is not exchange protection",
+  "authority": "NONE",
+  "production_changes": false
+}
