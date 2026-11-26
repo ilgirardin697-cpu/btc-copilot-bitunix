@@ -1,0 +1,17 @@
+name: V8 silent notification relay
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  relay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m compileall -q igod_notifications notification_v8_safety.py
+      - run: python -m unittest discover -v
+      - run: git diff --check HEAD^ HEAD

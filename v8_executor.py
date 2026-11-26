@@ -35,7 +35,7 @@ def finite(value):
     return number
 
 
-def telegram(message):
+def _legacy_telegram(message):
     message = notification_text(message)
     token = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
     chats = {os.getenv(k, "").strip() for k in ("TELEGRAM_CHAT_ID", "TELEGRAM_ALERT_CHAT_ID")}
@@ -49,6 +49,11 @@ def telegram(message):
                 json.load(response)
         except Exception:
             print("V8 notification unavailable", flush=True)
+
+
+def telegram(message):
+    from igod_notifications.client import dispatch_v8
+    return dispatch_v8(message, _legacy_telegram)
 
 
 class LiveExecutor:
