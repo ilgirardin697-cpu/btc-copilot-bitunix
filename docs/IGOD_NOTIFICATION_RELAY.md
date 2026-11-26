@@ -21,3 +21,5 @@ V8_LIVE_EXECUTION stays false; this patch neither reads nor writes production va
 One V8 service writer on its own existing /data volume; spool lives under /data/v8/.
 Rollback notification flag only; preserve spool and every real order/position.
 SHADOW ONLY. TRADE AUTHORITY: NONE. No deployment performed.
+
+The shared notification SDK now includes transactional producer acceptance and risk-incident recovery used by the Guardian companion. The V8 client and executor wrapper have not changed. The updated SDK hash manifest must match PR #59. Follow-up rollout and flags are documented there in `docs/NOTIFICATION_PRE_ROLLOUT_REVIEW.md`; no variable or infrastructure change is performed by this PR.
