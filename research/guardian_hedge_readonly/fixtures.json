@@ -1,0 +1,13 @@
+{
+  "provenance": "Field layout from documented/observed HEDGE CROSS replies; IDs and every financial value replaced. These are anonymized-shape synthetic fixtures, not a real account snapshot.",
+  "positions": [
+    {"positionId":"10001","symbol":"BTCUSDT","side":"BUY","positionMode":"HEDGE","marginMode":"CROSS","qty":"0.02","avgOpenPrice":"60000","leverage":10,"margin":"120","liqPrice":"50000","realizedPNL":"-2","unrealizedPNL":"20","fee":"0.5","funding":"-0.1","subAccountId":1},
+    {"positionId":"10002","symbol":"BTCUSDT","side":"SELL","positionMode":"HEDGE","marginMode":"CROSS","qty":"0.02","avgOpenPrice":"62000","leverage":10,"margin":"124","liqPrice":"70000","realizedPNL":"3","unrealizedPNL":"20","fee":"0.6","funding":"0.1","subAccountId":1}
+  ],
+  "orders": {
+    "10001":[{"id":"20001","positionId":"10001","symbol":"BTCUSDT","slPrice":"59000","slQty":"0.02","slStopType":"MARK_PRICE","slOrderType":"MARKET","tpPrice":"65000","tpQty":"0.02"}],
+    "10002":[{"id":"20002","positionId":"10002","symbol":"BTCUSDT","slPrice":"63000","slQty":"0.02","slStopType":"MARK_PRICE","slOrderType":"MARKET","tpPrice":"57000","tpQty":"0.02"}]
+  },
+  "mark":"61000",
+  "last":"61005"
+}
