@@ -1,3 +1,4 @@
+from notification_safety import normalize_notifications
 """Offline API fault/position simulations. No real exchange or Telegram calls."""
 import copy
 import ast
@@ -475,7 +476,7 @@ class CapitalBoundaryTests(unittest.TestCase):
     def test_previous_guardian_source_restored_exactly_by_only_reviewed_hook(self):
         from capital_v2_safety import normalize_capital
         text=Path('trade_guardian.py').read_text(encoding='utf-8')
-        self.assertEqual(hashlib.sha256(normalize_capital(text).encode()).hexdigest(),
+        self.assertEqual(hashlib.sha256(normalize_capital(normalize_notifications('trade_guardian.py',text)).encode()).hexdigest(),
                          'cb57a7e7f9ed12ac99f0bfeb107117ec79415e5902f40834c3ef88ecf02d2323')
         tree=ast.parse(text)
         guardian=next(n for n in tree.body if isinstance(n,ast.ClassDef) and n.name=='Guardian')

@@ -41,6 +41,9 @@ class DailyPlanBridge:
         if name not in COMMANDS:
             return False
         command=name+(' '+parts[1] if len(parts)>1 else '')
+        from igod_notifications.runtime import settings
+        if settings(command,self.reply):
+            return True
         if not self.url or type(identifier) is not int:
             return bool(self.reply(UNAVAILABLE))
         self.start()
@@ -64,7 +67,11 @@ class DailyPlanBridge:
             if not isinstance(text,str) or not text or len(text)>3900:
                 raise ValueError('DAILY_TEXT_INVALID')
             if not self.stopped.is_set():
-                accepted=bool(self.reply(text))
+                if path=='/notifications':
+                    from igod_notifications.runtime import daily_automatic
+                    accepted=bool(daily_automatic(self.reply,text))
+                else:
+                    accepted=bool(self.reply(text))
                 try:
                     print('IGOD_DAILY_REPLY_QUEUED' if accepted else 'IGOD_DAILY_REPLY_NOT_QUEUED',flush=True)
                 except Exception:

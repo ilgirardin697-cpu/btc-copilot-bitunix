@@ -4,6 +4,7 @@ import json
 import os
 import time
 from uuid import uuid4
+from igod_notifications.runtime import install as install_notifications, emit as emit_notification, observer_sender, after_cycle as notifications_after_cycle, shutdown as shutdown_notifications
 from guardian_bitunix import Bitunix
 from guardian_market import Market
 from guardian_risk import Config, SafetyError, risk, catastrophic_stop, assess_orders
@@ -39,7 +40,7 @@ class Guardian:
         self.command_snapshot = SnapshotCache()
         self.audit = audit
 
-    def alert(self, key, text, cooldown=300):
+    def alert(self, key, text, cooldown=300, notice=None):
         last = self.store.state.setdefault('alerts', {}).get(key, 0)
         if last and self.clock() - last < cooldown:
             return
@@ -62,7 +63,7 @@ class Guardian:
         self.store.state['alerts'][key] = self.clock()
         self.store.save()
         try:
-            self.telegram.send(text if text.startswith(DECISION_PREFIXES) else 'I-GOD TRADE GUARDIAN\n' + text)
+            emit_notification(self.telegram, key, text if text.startswith(DECISION_PREFIXES) else 'I-GOD TRADE GUARDIAN\n' + text, notice=notice)
         except Exception:
             Telegram._diagnostic('TELEGRAM_SEND_NOT_OK')
 
@@ -159,7 +160,8 @@ class Guardian:
         if warning_codes and (changed or due):
             self.alert('tpsl:' + position.position_id,
                        '⚠️ STOP PROTECTOR NO VERIFICADO\n' + render_risk(details, warning_codes, target)
-                       + '\nLa orden manual se respeta; no se cancela ni reemplaza.', cooldown=0)
+                       + '\nLa orden manual se respeta; no se cancela ni reemplaza.', cooldown=0,
+                       notice={'orders': signature, 'target': target, 'risk': details['state']})
             row.update(sent_at=self.clock(), sent_target=target)
         self.store.state['tpsl_notice'] = row
 
@@ -246,7 +248,8 @@ class Guardian:
                     '🚫 NO MUTATION\n⚠️ Revisa Bitunix manualmente si tienes una posición abierta.'),
             }
             stage = min(self._failures, 3)
-            self.alert('blind:' + str(stage), stages[stage], cooldown=0 if self._failures <= 3 else 300)
+            self.alert('blind:' + str(stage), stages[stage], cooldown=0 if self._failures <= 3 else 300,
+                       notice={'cause': str(error)})
             mark, details = None, None
         if now >= self._bias_due:
             self.bias = self.market.bias()
@@ -325,9 +328,10 @@ def main():
             print('COPILOT_AUDIT_UNAVAILABLE', flush=True)
         guardian = Guardian(client, store, Market(client), Telegram(os.getenv('TELEGRAM_BOT_TOKEN', ''),
                             os.getenv('TELEGRAM_CHAT_ID', ''), alert_chat_id=os.getenv('TELEGRAM_ALERT_CHAT_ID', '')), audit=audit)
+        install_notifications(guardian)
         try:
             from mlrsi_guardian_host import MLRSIHost
-            mlrsi = MLRSIHost(send=guardian.telegram.send, logger=Telegram._diagnostic)
+            mlrsi = MLRSIHost(send=observer_sender(guardian.telegram), logger=Telegram._diagnostic)
             mlrsi.start()
         except Exception:
             Telegram._diagnostic('MLRSI_HOST_UNAVAILABLE')
@@ -346,6 +350,10 @@ def main():
                 after_cycle()
             except Exception:
                 pass
+            try:
+                notifications_after_cycle(guardian)
+            except Exception:
+                pass
             time.sleep(max(0, 10 - (time.monotonic() - started)))
     except KeyboardInterrupt:
         pass
@@ -353,6 +361,7 @@ def main():
         print('GUARDIAN STOPPED — SAFE FAILURE; NO NEW MUTATION', flush=True)
         raise SystemExit(1) from None
     finally:
+        shutdown_notifications()
         try:
             from bitman_weekly_forward.host import shutdown
             shutdown()
