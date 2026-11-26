@@ -1,0 +1,150 @@
+{
+  "base": "5c6cc6a78a16520deda2d21f562fa6cf0a4cbaad",
+  "scope": "REVIEW_ONLY_NOT_DEPLOYED",
+  "tests": {
+    "unit": {
+      "mode": "unit",
+      "returncode": 0,
+      "tests": 62,
+      "seconds": 4.293543400242925
+    },
+    "full": {
+      "mode": "full",
+      "returncode": 0,
+      "tests": 1205,
+      "seconds": 335.01848579989746
+    },
+    "audit": {
+      "mode": "audit",
+      "returncode": 0,
+      "tests": null,
+      "seconds": 7.332597199827433
+    },
+    "boundary": {
+      "mode": "boundary",
+      "returncode": 0,
+      "tests": 7,
+      "seconds": 3.1734909997321665
+    },
+    "weekly": {
+      "mode": "weekly",
+      "returncode": 0,
+      "tests": 9,
+      "seconds": 3.176973999943584
+    }
+  },
+  "protected_files_unchanged": {
+    "bitman_manual/frozen/__init__.py": "790579cf2c40056e278b0f54b9d3d39d1fe01adcd608e082348b443e1a45efcf",
+    "bitman_manual/frozen/confirmed.py": "8362f8e33a20886b52a5151cce68cff221f9012d5969ec7b9130b99c01d736c9",
+    "bitman_manual/frozen/constants.py": "19a0862ead10c817178644875ae404278806119cb6190cf55ba01750b5bf1aa7",
+    "bitman_manual/frozen/core.py": "315837f01d857970ac0e4cfb99a0c1c123a502c0246a1ca5eb500b69c7bde5d3",
+    "bitman_manual/frozen/geometry.py": "8a0b828afe68feb36ac981410e0ff38401b3d52ab4fb3b142c4dae987d4b6e33",
+    "bitman_manual/frozen/indicators.py": "5a0c37e737375d7278f84490d8b4f8e1779189ead5f7e77bda6d468d86e037b5",
+    "bitman_manual/frozen/levels.py": "f2175c1320e491e7ba00b9e5c3f0b511ef021afc61a72599c9b3d310d8a7249e",
+    "bitman_manual/frozen/market.py": "689d4dbc8df3eea8c45838ef04b7eb0d0dc732c35f722abf87a78a5ad93f0188",
+    "bitman_manual/frozen/provenance.json": "5d3f387d1623770f9943c8c79d131cf70c1e176a5e61b45dfca6c541d5f4c97b",
+    "bitman_manual/readiness.py": "f2d29add2867b73d0c27a25cd8c39528bdf6cba44dc8a9d8837bfd3cd76076ba",
+    "bitman_market_data_service.py": "d06b5ee904aac8da66f81cf475704da5b5cea41585078c845bd05e2125bf91ee",
+    "bitman_weekly_forward/__init__.py": "c3744c2f389fea9a960fc9a592b3c826c713007a79dbfda3fb030f2404ddb0e8",
+    "bitman_weekly_forward/bootstrap_manifest.json": "7dd2fda345aaea97dfed141f115b351e758e7385de8f03687d1e359bdec899dc",
+    "bitman_weekly_forward/bootstrap_v1.csv": "b1b0757caffdaf306620d9446d2e8ef785cf6a19fd9d1a1f36c9eb78d587a1cf",
+    "bitman_weekly_forward/features.py": "ab5a9fe3da20c1c1729890e2d00af73a6c736284e739d67c10f67574391ebff7",
+    "bitman_weekly_forward/host.py": "3c83cbeb8a42d20739f951380f140a079ccf9edc9f00e90a73687c1732157961",
+    "bitman_weekly_forward/journal.py": "56b45971bb0f2e2c77a352eede4a598ec954f5a6a310bc077a9265e465cace6e",
+    "bitman_weekly_forward/market.py": "68b584ef61b7c101ecbd8962b4250bfbdc0e15a3eca166049515c52e6fcb438b",
+    "bitman_weekly_forward/models.py": "8bb42525e3e6f9df56e68e58e1a672321729b11a17ec3bb1f7d73a3c2477ec0b",
+    "bitman_weekly_forward/observer.py": "4b1fef7299c175f703688cfe2f27378011456973ef96d33bf4feb3ff42e6bb3c",
+    "bitman_weekly_forward/outcomes.py": "b9ea5c3171b386b5584bada22d75b2eda14b3611cbe9f69c90c87f4fbe493a72",
+    "bitman_weekly_forward/protocol.py": "de681304e58efc64c01483975c8f411ae2404a9187ef569d2956a27464c14538",
+    "bitman_weekly_forward/protocol_v1.json": "2be9d6710668b8ec4deddb6e6b32ad4bd59d37addefdd840a493205d4b9fa09a",
+    "bitman_weekly_forward/render.py": "ee6c9d3c8befcbee55699e8fac1feb5f98996e744ed78d2ab4624d74bd6a0a22",
+    "bitman_weekly_forward/safety.py": "25e93b9d975dc462b6fe714948c0a575a0c0fcf6d5d340a92cb9d7fce697ab9d",
+    "bitman_weekly_forward/worker.py": "636358752af09b31ed3030da72cef12391e756339f609e677a16ebc88529cc71",
+    "guardian_bitunix.py": "17b6043196c81eb6b18c5abedbc399ddf34614aedfe6f4556c12863984743f87",
+    "guardian_capital_v2/__init__.py": "7e502cbc28c10c171d36646e7efecaf95730429871be19761e11b86aee0f88be",
+    "guardian_capital_v2/accounting.py": "3cf799ab4ba967636c87d4a308151c018ad9f5b6cf321c39ad549df5c5539f89",
+    "guardian_capital_v2/campaigns.py": "768717a3530c49d8251a08cdb1089e0b5c834525e554243a585e6669f1b8d9d3",
+    "guardian_capital_v2/client.py": "399cd48562e4cd283050d91b914c44ecaaebeec6bb5c50f38ab608fb76ed66db",
+    "guardian_capital_v2/controller.py": "8466356c927c35271fcb459b72374496029b2107cbc2f6f6d6e7babf13d36af9",
+    "guardian_capital_v2/global_policy.py": "1f0c7770332d6f995eab635fc74391402b8d4a910f8f59b21c885b24810448a9",
+    "guardian_capital_v2/host.py": "c5f304915fe3d86ecff995d6f683278a3cc93037a4c975e335c967c3fac65f49",
+    "guardian_capital_v2/journal.py": "55153897c1366edf51a379e84ee0ad081aab32787de326ac87363964f07b6985",
+    "guardian_capital_v2/policy.py": "460ce1d9350052cd2a97b11b42bdcb13e722649097b0ede238a3660cda1c6d15",
+    "guardian_risk.py": "6a5e48b4ea56b4c1caa6f00ec3de5ca6fc89e775753c79014f89afc3ad4a0510",
+    "igod_notifications/__init__.py": "9b47ff4be55b8bbacf4e641070209b7b2c659c0cfc5c6e0abba3d7016459cfc3",
+    "igod_notifications/adapters.py": "ff56c51f8a2b21eb793b7a6b12d6f03ed2ae9e1b82d42263e230c41d28af13ee",
+    "igod_notifications/client.py": "eb262c2471b64715306570b0b5e886b9225befeb037739053fd9df5ed4844a64",
+    "igod_notifications/policy.py": "21c1b11416d2af8d2a25b0f7b74c7899120ae1e5fc58fde9385483a3aa8a1df1",
+    "mlrsi_guardian_host.py": "714bd251e8d46acb7836ac764ef5a34151ae8ce9ed51fb2cfa2d1c67b97b058a",
+    "mlrsi_math.py": "d1d67cd501f8ef5d7de0ad7fc2cfc26e71521b16e1a3c375cd04237df3cf7e17",
+    "mlrsi_observer.py": "7c119ebe918edc398c4803d4b1d6c56ff6dd04d7be41c186d165395adbdc090c",
+    "mlrsi_public.py": "10ac385dfdd7542987355f65d0de1b5b67c3e4b78e18e4bec675d8848a39d283",
+    "mlrsi_telegram.py": "11829938c1b122610413984ae89f244a39b1479cac23d3a9563593bcd95405f5",
+    "trend_v8.py": "e5e26f93bca7c6c15cef2d98165c38e8806cc67762840b619ab0f5308af5bf31"
+  },
+  "exact_passive_ast_only": true,
+  "readiness": {
+    "combinations": 900,
+    "status_counts": {
+      "WAIT": 780,
+      "WATCH_LONG": 59,
+      "READY_LONG": 1,
+      "WATCH_SHORT": 59,
+      "READY_SHORT": 1
+    },
+    "normalized_results_sha256": "1ffcf53c6b056e7bdf3b780f1fc4ebce49616363a66467e573c5c1a2ef71f014"
+  },
+  "weekly_v1_hash": "d4fe75fce89e8f248123409c293b1114f9af2eb16b8aee5572b40802a54aefe8",
+  "actual_get_only_capture": {
+    "status": "READ_COMPLETE_FINANCIAL_RECONCILIATION_PENDING",
+    "read_complete": true,
+    "source_hash": "7103db188013ed1e7828e89ba7b93304e91a1a6d4d04172586cb975b258bc395",
+    "started_at": 1795723891.170045,
+    "completed_at": 1795723893.711506,
+    "request_count": 7,
+    "methods": [
+      "GET"
+    ],
+    "position_count": 2,
+    "pnl_reconciled": false,
+    "risk_reasons": [
+      "LIQUIDATION_DIRECTION_UNVERIFIED",
+      "PNL_ACCOUNT_POSITION_MISMATCH",
+      "STOP_ABSENT"
+    ],
+    "account_margin_and_available_present": true,
+    "raw_account_values_excluded": true,
+    "production_modified": false,
+    "positions": [
+      {
+        "symbol": "BTCUSDT",
+        "side": "LONG",
+        "mode": "HEDGE",
+        "margin_mode": "CROSS",
+        "coverage": "ABSENT",
+        "tp_orders": 2,
+        "sl_orders": 0,
+        "liquidation_state": "REPORTED_REFERENCE"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "mode": "HEDGE",
+        "margin_mode": "CROSS",
+        "coverage": "ABSENT",
+        "tp_orders": 1,
+        "sl_orders": 0,
+        "liquidation_state": "DIRECTIONAL_INTERPRETATION_UNVERIFIED"
+      }
+    ]
+  },
+  "railway_mutations": 0,
+  "bitunix_mutations": 0,
+  "telegram_messages_sent_by_this_review": 0,
+  "limitations": [
+    "Financial PnL reconciliation remains pending; actual AMBIGUOUS_POSITIONS must not be cleared.",
+    "No SL returned by the complete TP/SL endpoint for either observed ID; other uninspected mechanisms are not certified.",
+    "CROSS liquidation interpretation/headroom is not independently certified.",
+    "Feature remains disabled and not deployed; no new SSH access was used."
+  ]
+}

@@ -115,6 +115,9 @@ class Host:
                     try:
                         now=int(self.clock()*1000)
                         if kind=='event':result=self.policy.ingest(value,now)
+                        elif kind=='hedge':
+                            from guardian_hedge.notifications import apply
+                            result=apply(self.policy,value,now)
                         elif kind=='snapshot':
                             for e in safety_recoveries(self.policy,value.get('safety'),now):self.policy.ingest(e,now)
                             result=self.policy.apply_snapshot(copilot_snapshot(self.policy,value,now),now)
@@ -129,6 +132,9 @@ class Host:
                         if response:response.put_nowait(error)
                         elif kind=='event' and value.get('kind') in ('CRITICAL','RECOVERED'):
                             self.fallback.submit(value)
+                        elif kind=='hedge':
+                            self.fallback.submit(event('guardian','CRITICAL',now,'Lectura HEDGE/CROSS no verificable',
+                                incident_id='guardian:hedge-notifications',severity=3,material={'code':'HEDGE_NOTIFICATION_UNVERIFIABLE'},text='No se pudo verificar el estado de las notificaciones HEDGE/CROSS. Revisa Bitunix.'))
                     finally:self.queue.task_done()
                 row=self.policy.next(int(self.clock()*1000))
                 if row:self._deliver(row,int(self.clock()*1000))

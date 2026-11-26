@@ -581,7 +581,9 @@ class ArchitectureTests(unittest.TestCase):
         for name in files:
             if name.startswith(('guardian_capital_v2/','bitman_manual/frozen/','bitman_weekly_forward/')) or name in ('guardian_signals.py','guardian_risk.py','guardian_bitunix.py','guardian_telegram.py','mlrsi_math.py','mlrsi_observer.py','mlrsi_public.py','guardian_commands.py','live_auto.py','trend_v8.py'):
                 old=subprocess.check_output(['git','show','9d40020d539033cefb8f01734db8c6a6fdbba2e3:'+name],cwd=root)
-                self.assertEqual((root/name).read_bytes().replace(b'\r\n',b'\n'),old.replace(b'\r\n',b'\n'),name)
+                from guardian_hedge_safety import normalize_readonly
+                current=normalize_readonly(name,(root/name).read_text('utf-8')).encode('utf-8')
+                self.assertEqual(current,old.replace(b'\r\n',b'\n'),name)
 
     def test_exact_notification_normalization_and_no_risk_escape(self):
         from notification_safety import normalize_notifications

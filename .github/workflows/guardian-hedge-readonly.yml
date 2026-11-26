@@ -1,0 +1,22 @@
+name: Guardian HEDGE CROSS read-only
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  readonly:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements.txt tzdata
+      - run: python -m compileall -q guardian_hedge guardian_hedge_safety.py
+      - run: python -m unittest test_guardian_hedge test_notification_radar test_guardian_commands test_igod_daily_integration -v
+      - run: python -m unittest research.guardian_hedge_readonly.test_report -v
+      - run: python mlrsi_safety_audit.py
+      - run: python test_bitman_weekly_boundary.py --require-v8 -v
+      - run: python test_bitman_readiness_boundary.py --require-v8 -v
+      - run: git diff --check HEAD^ HEAD

@@ -16,6 +16,8 @@ NEW_ML='MLRSIHost(send=observer_sender(guardian.telegram), logger=Telegram._diag
 
 
 def normalize_notifications(path,source):
+    from guardian_hedge_safety import normalize_readonly
+    source=normalize_readonly(path,source)
     if path!='trade_guardian.py' or IMPORT not in source:
         return source
     for fragment in (IMPORT,INSTALL,AFTER,SHUTDOWN):

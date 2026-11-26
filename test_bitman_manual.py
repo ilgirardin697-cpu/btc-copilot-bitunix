@@ -519,6 +519,8 @@ class ProvenanceAndSafetyTests(unittest.TestCase):
     def test_existing_commands_ast_is_exact_and_mutations_not_hidden(self):
         self.assertTrue(verify_command_extension())
         source = (ROOT / 'guardian_commands.py').read_text('utf-8')
+        from guardian_hedge_safety import normalize_readonly
+        source = normalize_readonly('guardian_commands.py', source)
         original = ast.parse(subprocess.check_output(['git', 'show', PRODUCTION_BASE + ':guardian_commands.py']).decode('utf-8'))
         for old, new in (("!= self._owner", "== self._owner"), ('return False  # never log', 'return True  # never log'),
                          ('return copy.deepcopy(self._value)', 'return self._value'),

@@ -8,6 +8,8 @@ FRAGMENTS = json.loads(Path(__file__).with_name('daily_router_extension.json').r
 
 
 def normalize_router(source):
+    from guardian_hedge_safety import normalize_readonly
+    source=normalize_readonly('guardian_commands.py',source)
     for fragment in FRAGMENTS:
         if source.count(fragment) != 1:
             raise AssertionError('Daily router differs from exact reviewed extension')
@@ -17,7 +19,8 @@ def normalize_router(source):
 
 def strip_router(tree):
     """Only remove exact AST nodes from these passive fragments; no hash reset."""
-    tree = copy.deepcopy(tree)
+    from guardian_hedge_safety import strip_readonly
+    tree = strip_readonly(tree)
     def fingerprint(node):
         return ast.dump(node, include_attributes=False)
     for fragment in reversed(FRAGMENTS):

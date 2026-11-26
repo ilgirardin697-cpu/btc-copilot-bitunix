@@ -15,6 +15,7 @@ from guardian_signals import volatility_state, current_entry_quality
 from guardian_commands import SnapshotCache, TelegramCommands
 from copilot_audit import ForwardAudit, runtime_git_sha
 from guardian_capital_v2.host import before_guardian_cycle, owner_reply as capital_owner_reply
+from guardian_hedge.host import install as install_hedge_readonly, after_cycle as hedge_readonly_after_cycle, intercept_ambiguous, shutdown as shutdown_hedge_readonly
 
 
 def _safe_order_number(value):
@@ -41,6 +42,8 @@ class Guardian:
         self.audit = audit
 
     def alert(self, key, text, cooldown=300, notice=None):
+        if intercept_ambiguous(self, key, notice):
+            return  # Read-only evidence; never unblocks the protection client.
         last = self.store.state.setdefault('alerts', {}).get(key, 0)
         if last and self.clock() - last < cooldown:
             return
@@ -329,6 +332,7 @@ def main():
         guardian = Guardian(client, store, Market(client), Telegram(os.getenv('TELEGRAM_BOT_TOKEN', ''),
                             os.getenv('TELEGRAM_CHAT_ID', ''), alert_chat_id=os.getenv('TELEGRAM_ALERT_CHAT_ID', '')), audit=audit)
         install_notifications(guardian)
+        install_hedge_readonly(guardian)
         try:
             from mlrsi_guardian_host import MLRSIHost
             mlrsi = MLRSIHost(send=observer_sender(guardian.telegram), logger=Telegram._diagnostic)
@@ -351,6 +355,10 @@ def main():
             except Exception:
                 pass
             try:
+                hedge_readonly_after_cycle(guardian)
+            except Exception:
+                pass
+            try:
                 notifications_after_cycle(guardian)
             except Exception:
                 pass
@@ -361,6 +369,7 @@ def main():
         print('GUARDIAN STOPPED — SAFE FAILURE; NO NEW MUTATION', flush=True)
         raise SystemExit(1) from None
     finally:
+        shutdown_hedge_readonly()
         shutdown_notifications()
         try:
             from bitman_weekly_forward.host import shutdown

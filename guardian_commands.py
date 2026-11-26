@@ -33,6 +33,7 @@ class SnapshotCache:
     def __init__(self):
         self._lock = threading.Lock()
         self._value = None
+        self._readonly_value = None
 
     def publish(self, value):
         with self._lock:
@@ -40,7 +41,15 @@ class SnapshotCache:
 
     def read(self):
         with self._lock:
-            return copy.deepcopy(self._value)
+            value = copy.deepcopy(self._value)
+            if self._readonly_value is not None:
+                value = value or {}
+                value['hedge_readonly'] = copy.deepcopy(self._readonly_value)
+            return value
+
+    def publish_readonly(self, value):
+        with self._lock:
+            self._readonly_value = copy.deepcopy(value)
 
 
 def _position(snapshot, compact=False):
@@ -279,6 +288,12 @@ def render_command(command, snapshot, now):
         return render_stats((snapshot or {}).get('audit_stats'), now_ms=int(now * 1000))
     if not snapshot:
         return NO_DATA
+    if 'hedge_readonly' in snapshot:
+        if command in ('/position', '/risk'):
+            from guardian_hedge.render import render_view
+            return render_view(command, snapshot['hedge_readonly'], now)
+        if 'timestamp' not in snapshot:
+            return NO_DATA
     age = now - snapshot['timestamp']
     if not math.isfinite(age) or age < 0:
         return NO_DATA

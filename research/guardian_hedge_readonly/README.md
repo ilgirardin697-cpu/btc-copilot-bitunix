@@ -1,8 +1,8 @@
 # HEDGE/CROSS: review of read-only inventory support
 
-Status: **OFFLINE REVIEW ONLY — NOT INTEGRATED — TRADE AUTHORITY NONE**.
+Status: **ARCHIVED OFFLINE PROTOTYPE — TRADE AUTHORITY NONE**. The subsequent passive runtime implementation is documented in [GUARDIAN_HEDGE_READONLY.md](../../docs/GUARDIAN_HEDGE_READONLY.md), disabled by default and not deployed. Runtime never imports this research package.
 
-This branch starts at the reviewed notification SHA `5c6cc6a78a16520deda2d21f562fa6cf0a4cbaad`. It changes only this research directory. It does not fix, bypass or replace the deployed Guardian's fail-closed position parser. No new PR or service is created by this study.
+This branch starts at the reviewed notification SHA `5c6cc6a78a16520deda2d21f562fa6cf0a4cbaad`. The original prototype at `3110b72…` changed only this research directory. It does not fix, bypass or replace the deployed Guardian's fail-closed position parser. The archived prototype created no service; the subsequent implementation is submitted separately for review on this same branch.
 
 ## Verified cause and additional finding
 

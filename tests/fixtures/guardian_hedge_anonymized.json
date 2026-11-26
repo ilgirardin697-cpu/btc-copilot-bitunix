@@ -1,0 +1,13 @@
+{
+  "provenance":"Observed/documented HEDGE CROSS field layout; every ID and financial value replaced. Synthetic anonymized-shape data, not real balances.",
+  "positions":[
+    {"positionId":"10001","symbol":"BTCUSDT","side":"BUY","positionMode":"HEDGE","marginMode":"CROSS","qty":"0.02","avgOpenPrice":"60000","leverage":10,"margin":"120","liqPrice":"50000","realizedPNL":"-2","unrealizedPNL":"20","fee":"0.5","funding":"-0.1","subAccountId":1},
+    {"positionId":"10002","symbol":"BTCUSDT","side":"SELL","positionMode":"HEDGE","marginMode":"CROSS","qty":"0.02","avgOpenPrice":"62000","leverage":10,"margin":"124","liqPrice":"70000","realizedPNL":"3","unrealizedPNL":"20","fee":"0.6","funding":"0.1","subAccountId":1}
+  ],
+  "orders":[
+    {"id":"20001","positionId":"10001","symbol":"BTCUSDT","slPrice":"59000","slQty":"0.02","slStopType":"MARK_PRICE","slOrderType":"MARKET","slOrderPrice":"0","tpPrice":"65000","tpQty":"0.02","tpStopType":"MARK_PRICE","tpOrderType":"MARKET","tpOrderPrice":"0"},
+    {"id":"20002","positionId":"10002","symbol":"BTCUSDT","slPrice":"63000","slQty":"0.02","slStopType":"MARK_PRICE","slOrderType":"MARKET","slOrderPrice":"0","tpPrice":"57000","tpQty":"0.02","tpStopType":"MARK_PRICE","tpOrderType":"MARKET","tpOrderPrice":"0"}
+  ],
+  "account":{"marginCoin":"USDT","available":"1000","frozen":"0","margin":"244","positionMode":"HEDGE","crossUnrealizedPNL":"40","isolationUnrealizedPNL":"0","bonus":"0"},
+  "tickers":[{"symbol":"BTCUSDT","markPrice":"61000","lastPrice":"61005"}]
+}
