@@ -6,6 +6,10 @@ from email.utils import formatdate
 import hashlib,json,os,queue,subprocess,tempfile,threading,time,unittest
 from pathlib import Path
 from unittest.mock import Mock,patch
+try:
+    import requests
+except ImportError:
+    raise unittest.SkipTest('HEDGE dependencies are installed and tested by its dedicated workflow') from None
 from guardian_hedge.model import build_view,Unverified,positions,account
 from guardian_hedge.client import Reader,ACCOUNT,POSITIONS,TPSL,TICKER
 from guardian_hedge.render import render_view

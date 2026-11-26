@@ -91,3 +91,5 @@ Pruebas técnicas no constituyen evidencia de rentabilidad ni cobertura efectiva
 1205 tests de descubrimiento global, 0 fallos; 62 específicos HEDGE incluidos en ese total. Auditoría Guardian/ML RSI y hashes V8 OK; boundaries semanal 9/9 y readiness 7/7. Readiness conserva 900 estados (780/59/59/1/1) y hash `1ffcf53c6b056e7bdf3b780f1fc4ebce49616363a66467e573c5c1a2ef71f014`. V1 semanal conserva `d4fe75fce89e8f248123409c293b1114f9af2eb16b8aee5572b40802a54aefe8`. No hay refreeze.
 
 Evidencia técnica y listado SHA256 de archivos protegidos sin cambios: [GUARDIAN_HEDGE_READONLY_VALIDATION.json](GUARDIAN_HEDGE_READONLY_VALIDATION.json). Los tests son offline y no certifican protección real ni rentabilidad.
+
+El workflow mínimo V8 ejecuta discovery sin instalar dependencias Guardian. Como los demás módulos Guardian, el nuevo módulo se omite explícitamente solo si falta `requests`; no se añaden dependencias ni se modifica V8 para ello. El workflow HEDGE instala las dependencias y exige sus 62 tests; la suite global con dependencias ejecutó 1.205 sin skips ni fallos.
