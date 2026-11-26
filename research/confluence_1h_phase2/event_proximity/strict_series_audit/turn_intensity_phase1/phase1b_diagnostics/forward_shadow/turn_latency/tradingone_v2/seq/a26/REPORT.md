@@ -40,7 +40,7 @@ En las15 entradas congeladas, contexto cerrado4H+D1 según DMI y close/TSA:6WITH
 
 ## RSI: tres referencias y dos implementaciones sin buscar una coincidencia ganadora
 
-Se conserva todo el historial de estados/transiciones de out/rsi.csv. TradingOne originalLOW27/ALMA4sigma1offset0 y operativoLOW29/EMA4V4 se ejecutan con los mismos LOWSpot y anclaje de carga. No se cambia MLRSIoperativo ni se identifica el RSI privado de Bitman. El resultado original del5Nov/22Nov sigue intacto: GREEN22Nov13UTC, ya verde a17Madrid, no un nuevo cruce a esa hora; RED5Nov17UTC. Las tres declaraciones no son una cohorte independiente y las horas de los dos SHORT permanecen desconocidas.
+Se conservan todas las velas del tramo 18–26 de noviembre y de los días 5 y 22, junto con sus estados y transiciones, en out/rsi.csv. TradingOne originalLOW27/ALMA4sigma1offset0 y operativoLOW29/EMA4V4 se ejecutan con los mismos LOWSpot y anclaje de carga. No se cambia MLRSIoperativo ni se identifica el RSI privado de Bitman. El resultado original del5Nov/22Nov sigue intacto: GREEN22Nov13UTC, ya verde a17Madrid, no un nuevo cruce a esa hora; RED5Nov17UTC. Las tres declaraciones no son una cohorte independiente y las horas de los dos SHORT permanecen desconocidas.
 
 Transiciones completas del25Nov en cualquiera de las dos implementaciones:
 
@@ -126,3 +126,5 @@ Revisar primero la política de notificaciones y comprobar la protección real d
 ![Reconstrucción pública del caso SniperRBW](out/sniper.png)
 
 Las 200 observaciones H1 de la nueva hipótesis están en [member.csv](out/member.csv), con todas las confirmaciones desconocidas marcadas explícitamente; no son 200 señales.
+
+La CI numérica instala NumPy y ejecuta las 15 pruebas del addendum; el workflow mínimo de V8, que no instala NumPy, omite solamente ese módulo numérico según la separación existente. No se omiten los guards de V8 ni sus pruebas operativas.

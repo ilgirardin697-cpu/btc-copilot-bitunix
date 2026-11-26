@@ -12,5 +12,6 @@
   "numerical_values_changed": false,
   "ledger_bytes_changed": false,
   "plan_hash_changed": false,
-  "source_bytes_changed": false
+  "source_bytes_changed": false,
+  "ci_only_followup": "NumPy dependency gate in slim V8 CI; mandatory numerical research CI still runs all15 tests; no math/results/plan change"
 }

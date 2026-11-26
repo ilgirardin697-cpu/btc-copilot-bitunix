@@ -4,6 +4,10 @@ import gzip,hashlib,json,subprocess
 from pathlib import Path
 from types import SimpleNamespace
 import unittest
+try:
+    import numpy
+except ImportError:
+    raise unittest.SkipTest("Numerical addendum is mandatory in the dedicated research CI with NumPy installed") from None
 from . import run as r
 from .member import observe
 
