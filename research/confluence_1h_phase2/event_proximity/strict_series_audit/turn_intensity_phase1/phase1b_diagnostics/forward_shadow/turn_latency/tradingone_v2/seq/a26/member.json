@@ -1,0 +1,41 @@
+{
+  "version": "MEMBER_CONFIRMED_IMPULSE_HYPOTHESIS_20261126",
+  "attribution": "USER_SUPPLIED_MEMBER_TEXT_NOT_OFFICIAL_BITMAN_RULE",
+  "original_text": "15 min, 1h, 4h, cuando tienes impulso confirmado con ADX en ángulo de 90º o más, OA confirmado, Konkorde confirmado, y volatilidad por encima de 50% tienes entrada. 1 hora te da la entrada si quieres afinarla solo debes bajar a 15 o incluso a 5 para afinar más y 4h te da la continuidad del movimiento. Solo se tradea impulsos confirmados y con volatilidad. Retrocesos no entran en la Bitman Strategy",
+  "status": "PRIORITY_HYPOTHESIS_NOT_IMPLEMENTED_AS_SIGNAL",
+  "preserved": [
+    "previous research/results",
+    "PR58 entry and exit rules",
+    "new source alignment plan"
+  ],
+  "known": {
+    "entry_timeframe": "1H_CLOSED",
+    "continuity": "4H_CLOSED",
+    "optional_refinement": [
+      "15m",
+      "5m"
+    ],
+    "volatility_level": "STRICTLY_GREATER_THAN_50"
+  },
+  "unknown": [
+    "exact AO confirmation",
+    "exact Koncorde series/confirmation",
+    "private volatility formula and value identity",
+    "mathematical ADX intensity threshold",
+    "definition of confirmed4Hcontinuity",
+    "refinement/expiry/stop/fill rules"
+  ],
+  "adx": {
+    "angle": "UNIDENTIFIABLE_FROM_SCREEN_ANGLE; 90deg literal is vertical/undefined slope",
+    "invariant_observables": [
+      "ADX[t]-ADX[t-1] points per1Hbar",
+      "ADX[t]-2ADX[t-1]+ADX[t-2] points per1Hbar squared"
+    ],
+    "threshold": null,
+    "direction": "ADX is not direction; preserve plus/minusDI separately"
+  },
+  "bbwp": "Record existing CLOSE/SMA13/252>50 proxy only. Not an assertion of private Bitman volatility parity.",
+  "outside_sample": "NOT_EXECUTED; incomplete signal specification and no virgin historical holdout. No criteria relaxed.",
+  "profitability": "NOT_ESTABLISHED",
+  "live_use": false
+}

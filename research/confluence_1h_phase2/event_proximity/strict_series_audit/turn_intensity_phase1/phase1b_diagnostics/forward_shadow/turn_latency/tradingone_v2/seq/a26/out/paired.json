@@ -1,0 +1,3718 @@
+[
+  {
+    "id": "d21ebc7b765524ef4dc2",
+    "policy": "BASELINE_ATR",
+    "side": 1,
+    "entry_at": 1794986100000,
+    "entry": 64814.401005,
+    "qty": 0.05520227431944193,
+    "initial_stop": 64069.5278802187,
+    "risk": 50.0,
+    "completed": true,
+    "net": -50.0,
+    "net_R": -1.0,
+    "marked_net": -50.0,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795005900000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795005000000,
+        "window_end": 1795005900000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.05520227431944193,
+        "price": 64037.493116278594,
+        "gross": -42.88708239413749,
+        "fee": 3.535015261734185
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "d21ebc7b765524ef4dc2",
+    "policy": "BBWP_TURN_EXIT",
+    "side": 1,
+    "entry_at": 1794986100000,
+    "entry": 64814.401005,
+    "qty": 0.05520227431944193,
+    "initial_stop": 64069.5278802187,
+    "risk": 50.0,
+    "completed": true,
+    "net": -50.0,
+    "net_R": -1.0,
+    "marked_net": -50.0,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795005900000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795005000000,
+        "window_end": 1795005900000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.05520227431944193,
+        "price": 64037.493116278594,
+        "gross": -42.88708239413749,
+        "fee": 3.535015261734185
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "d21ebc7b765524ef4dc2",
+    "policy": "KONCORDE_CROSS_EXIT",
+    "side": 1,
+    "entry_at": 1794986100000,
+    "entry": 64814.401005,
+    "qty": 0.05520227431944193,
+    "initial_stop": 64069.5278802187,
+    "risk": 50.0,
+    "completed": true,
+    "net": -33.26339863141475,
+    "net_R": -0.6652679726282951,
+    "marked_net": -33.26339863141475,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "KONCORDE_CROSS_EXIT",
+    "exit_at": 1794999600000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1794999600000,
+        "window_end": 1794999600000,
+        "reason": "KONCORDE_CROSS_EXIT",
+        "qty": 0.05520227431944193,
+        "price": 64340.983415,
+        "gross": -26.133727670828936,
+        "fee": 3.5517686164574935
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "d21ebc7b765524ef4dc2",
+    "policy": "TP1_NET_BE",
+    "side": 1,
+    "entry_at": 1794986100000,
+    "entry": 64814.401005,
+    "qty": 0.05520227431944193,
+    "initial_stop": 64069.5278802187,
+    "risk": 50.0,
+    "completed": true,
+    "net": -50.0,
+    "net_R": -1.0,
+    "marked_net": -50.0,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795005900000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795005000000,
+        "window_end": 1795005900000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.05520227431944193,
+        "price": 64037.493116278594,
+        "gross": -42.88708239413749,
+        "fee": 3.535015261734185
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "d21ebc7b765524ef4dc2",
+    "policy": "TP1_STRUCTURE",
+    "side": 1,
+    "entry_at": 1794986100000,
+    "entry": 64814.401005,
+    "qty": 0.05520227431944193,
+    "initial_stop": 64069.5278802187,
+    "risk": 50.0,
+    "completed": true,
+    "net": -50.0,
+    "net_R": -1.0,
+    "marked_net": -50.0,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795005900000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795005000000,
+        "window_end": 1795005900000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.05520227431944193,
+        "price": 64037.493116278594,
+        "gross": -42.88708239413749,
+        "fee": 3.535015261734185
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "13876a3a258f71bcc471",
+    "policy": "BASELINE_ATR",
+    "side": -1,
+    "entry_at": 1795042800000,
+    "entry": 62223.582645,
+    "qty": 0.053133344844128357,
+    "initial_stop": 63003.14635233561,
+    "risk": 49.75,
+    "completed": true,
+    "net": -49.74999999999999,
+    "net_R": -0.9999999999999999,
+    "marked_net": -49.74999999999999,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795045500000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795044600000,
+        "window_end": 1795045500000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.053133344844128357,
+        "price": 63034.647925511774,
+        "gross": -43.094611240531655,
+        "fee": 3.3492416853544373
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "13876a3a258f71bcc471",
+    "policy": "BBWP_TURN_EXIT",
+    "side": -1,
+    "entry_at": 1795042800000,
+    "entry": 62223.582645,
+    "qty": 0.053133344844128357,
+    "initial_stop": 63003.14635233561,
+    "risk": 49.75,
+    "completed": true,
+    "net": -49.74999999999999,
+    "net_R": -0.9999999999999999,
+    "marked_net": -49.74999999999999,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795045500000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795044600000,
+        "window_end": 1795045500000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.053133344844128357,
+        "price": 63034.647925511774,
+        "gross": -43.094611240531655,
+        "fee": 3.3492416853544373
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "13876a3a258f71bcc471",
+    "policy": "KONCORDE_CROSS_EXIT",
+    "side": -1,
+    "entry_at": 1795042800000,
+    "entry": 62223.582645,
+    "qty": 0.053133344844128357,
+    "initial_stop": 63003.14635233561,
+    "risk": 49.75,
+    "completed": true,
+    "net": -49.74999999999999,
+    "net_R": -0.9999999999999999,
+    "marked_net": -49.74999999999999,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795045500000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795044600000,
+        "window_end": 1795045500000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.053133344844128357,
+        "price": 63034.647925511774,
+        "gross": -43.094611240531655,
+        "fee": 3.3492416853544373
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "13876a3a258f71bcc471",
+    "policy": "TP1_NET_BE",
+    "side": -1,
+    "entry_at": 1795042800000,
+    "entry": 62223.582645,
+    "qty": 0.053133344844128357,
+    "initial_stop": 63003.14635233561,
+    "risk": 49.75,
+    "completed": true,
+    "net": -49.74999999999999,
+    "net_R": -0.9999999999999999,
+    "marked_net": -49.74999999999999,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795045500000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795044600000,
+        "window_end": 1795045500000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.053133344844128357,
+        "price": 63034.647925511774,
+        "gross": -43.094611240531655,
+        "fee": 3.3492416853544373
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "13876a3a258f71bcc471",
+    "policy": "TP1_STRUCTURE",
+    "side": -1,
+    "entry_at": 1795042800000,
+    "entry": 62223.582645,
+    "qty": 0.053133344844128357,
+    "initial_stop": 63003.14635233561,
+    "risk": 49.75,
+    "completed": true,
+    "net": -49.74999999999999,
+    "net_R": -0.9999999999999999,
+    "marked_net": -49.74999999999999,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795045500000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795044600000,
+        "window_end": 1795045500000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.053133344844128357,
+        "price": 63034.647925511774,
+        "gross": -43.094611240531655,
+        "fee": 3.3492416853544373
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "14d66caeae66344398a8",
+    "policy": "BASELINE_ATR",
+    "side": 1,
+    "entry_at": 1795051800000,
+    "entry": 62705.347004999996,
+    "qty": 0.04940000447624592,
+    "initial_stop": 61858.76005836879,
+    "risk": 49.50125,
+    "completed": true,
+    "net": 24.40258235803151,
+    "net_R": 0.4929690130659632,
+    "marked_net": 24.40258235803151,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "TRAIL_STOP",
+    "exit_at": 1795102200000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795060800000,
+        "window_end": 1795061700000,
+        "reason": "TP1",
+        "qty": 0.02470000223812296,
+        "price": 63300.73427481247,
+        "gross": 14.706066896918077,
+        "fee": 1.563528278262695
+      },
+      {
+        "at": 1795101300000,
+        "window_end": 1795102200000,
+        "reason": "TRAIL_STOP",
+        "qty": 0.02470000223812296,
+        "price": 63349.979853725185,
+        "gross": 15.922432806279737,
+        "fee": 1.5647446441720565
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795061700000,
+        "old": 61858.76005836879,
+        "new": 62862.31439243645
+      },
+      {
+        "effective_at": 1795064400000,
+        "old": 62862.31439243645,
+        "new": 62866.84850519359
+      },
+      {
+        "effective_at": 1795065300000,
+        "old": 62866.84850519359,
+        "new": 62871.07039767977
+      },
+      {
+        "effective_at": 1795068900000,
+        "old": 62871.07039767977,
+        "new": 62902.8917978455
+      },
+      {
+        "effective_at": 1795071600000,
+        "old": 62902.8917978455,
+        "new": 62903.531797845506
+      },
+      {
+        "effective_at": 1795072500000,
+        "old": 62903.531797845506,
+        "new": 63038.24774085654
+      },
+      {
+        "effective_at": 1795076100000,
+        "old": 63038.24774085654,
+        "new": 63061.08754508107
+      },
+      {
+        "effective_at": 1795079700000,
+        "old": 63061.08754508107,
+        "new": 63152.18200614671
+      },
+      {
+        "effective_at": 1795083300000,
+        "old": 63152.18200614671,
+        "new": 63180.76829142194
+      },
+      {
+        "effective_at": 1795086000000,
+        "old": 63180.76829142194,
+        "new": 63219.34829142194
+      },
+      {
+        "effective_at": 1795086900000,
+        "old": 63219.34829142194,
+        "new": 63253.54698489181
+      },
+      {
+        "effective_at": 1795088700000,
+        "old": 63253.54698489181,
+        "new": 63351.396984891806
+      },
+      {
+        "effective_at": 1795089600000,
+        "old": 63351.396984891806,
+        "new": 63354.33698489181
+      },
+      {
+        "effective_at": 1795090500000,
+        "old": 63354.33698489181,
+        "new": 63364.78541454239
+      },
+      {
+        "effective_at": 1795094100000,
+        "old": 63364.78541454239,
+        "new": 63374.23574207508
+      },
+      {
+        "effective_at": 1795097700000,
+        "old": 63374.23574207508,
+        "new": 63381.67068906972
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "14d66caeae66344398a8",
+    "policy": "BBWP_TURN_EXIT",
+    "side": 1,
+    "entry_at": 1795051800000,
+    "entry": 62705.347004999996,
+    "qty": 0.04940000447624592,
+    "initial_stop": 61858.76005836879,
+    "risk": 49.50125,
+    "completed": true,
+    "net": 34.575544995454266,
+    "net_R": 0.6984782201551327,
+    "marked_net": 34.575544995454266,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "BBWP_TURN_EXIT",
+    "exit_at": 1795086000000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795060800000,
+        "window_end": 1795061700000,
+        "reason": "TP1",
+        "qty": 0.02470000223812296,
+        "price": 63300.73427481247,
+        "gross": 14.706066896918077,
+        "fee": 1.563528278262695
+      },
+      {
+        "at": 1795086000000,
+        "window_end": 1795086000000,
+        "reason": "BBWP_TURN_EXIT",
+        "qty": 0.02470000223812296,
+        "price": 63762.25292500001,
+        "gross": 26.105578589485702,
+        "fee": 1.5749277899552627
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795061700000,
+        "old": 61858.76005836879,
+        "new": 62862.31439243645
+      },
+      {
+        "effective_at": 1795064400000,
+        "old": 62862.31439243645,
+        "new": 62866.84850519359
+      },
+      {
+        "effective_at": 1795065300000,
+        "old": 62866.84850519359,
+        "new": 62871.07039767977
+      },
+      {
+        "effective_at": 1795068900000,
+        "old": 62871.07039767977,
+        "new": 62902.8917978455
+      },
+      {
+        "effective_at": 1795071600000,
+        "old": 62902.8917978455,
+        "new": 62903.531797845506
+      },
+      {
+        "effective_at": 1795072500000,
+        "old": 62903.531797845506,
+        "new": 63038.24774085654
+      },
+      {
+        "effective_at": 1795076100000,
+        "old": 63038.24774085654,
+        "new": 63061.08754508107
+      },
+      {
+        "effective_at": 1795079700000,
+        "old": 63061.08754508107,
+        "new": 63152.18200614671
+      },
+      {
+        "effective_at": 1795083300000,
+        "old": 63152.18200614671,
+        "new": 63180.76829142194
+      },
+      {
+        "effective_at": 1795086000000,
+        "old": 63180.76829142194,
+        "new": 63219.34829142194
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "14d66caeae66344398a8",
+    "policy": "KONCORDE_CROSS_EXIT",
+    "side": 1,
+    "entry_at": 1795051800000,
+    "entry": 62705.347004999996,
+    "qty": 0.04940000447624592,
+    "initial_stop": 61858.76005836879,
+    "risk": 49.50125,
+    "completed": true,
+    "net": -0.4101151324080643,
+    "net_R": -0.008284944974279727,
+    "marked_net": -0.4101151324080643,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "KONCORDE_CROSS_EXIT",
+    "exit_at": 1795053600000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795053600000,
+        "window_end": 1795053600000,
+        "reason": "KONCORDE_CROSS_EXIT",
+        "qty": 0.04940000447624592,
+        "price": 62822.573000000004,
+        "gross": 5.7909646777327755,
+        "fee": 3.103435387409286
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "14d66caeae66344398a8",
+    "policy": "TP1_NET_BE",
+    "side": 1,
+    "entry_at": 1795051800000,
+    "entry": 62705.347004999996,
+    "qty": 0.04940000447624592,
+    "initial_stop": 61858.76005836879,
+    "risk": 49.50125,
+    "completed": true,
+    "net": 11.59371640728949,
+    "net_R": 0.23421057866800313,
+    "marked_net": 11.59371640728949,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "NET_BE_STOP",
+    "exit_at": 1795103100000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795060800000,
+        "window_end": 1795061700000,
+        "reason": "TP1",
+        "qty": 0.02470000223812296,
+        "price": 63300.73427481247,
+        "gross": 14.706066896918077,
+        "fee": 1.563528278262695
+      },
+      {
+        "at": 1795102200000,
+        "window_end": 1795103100000,
+        "reason": "NET_BE_STOP",
+        "qty": 0.02470000223812296,
+        "price": 62830.88323524023,
+        "gross": 3.100745167899335,
+        "fee": 1.551922956533676
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795061700000,
+        "old": 61858.76005836879,
+        "new": 62862.31439243645
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "14d66caeae66344398a8",
+    "policy": "TP1_STRUCTURE",
+    "side": 1,
+    "entry_at": 1795051800000,
+    "entry": 62705.347004999996,
+    "qty": 0.04940000447624592,
+    "initial_stop": 61858.76005836879,
+    "risk": 49.50125,
+    "completed": true,
+    "net": 32.13584173990866,
+    "net_R": 0.649192530287794,
+    "marked_net": 32.13584173990866,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "NET_BE_STOP",
+    "exit_at": 1795091400000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795060800000,
+        "window_end": 1795061700000,
+        "reason": "TP1",
+        "qty": 0.02470000223812296,
+        "price": 63300.73427481247,
+        "gross": 14.706066896918077,
+        "fee": 1.563528278262695
+      },
+      {
+        "at": 1795090500000,
+        "window_end": 1795091400000,
+        "reason": "NET_BE_STOP",
+        "qty": 0.02470000223812296,
+        "price": 63663.38065051992,
+        "gross": 23.663433188539155,
+        "fee": 1.572485644554316
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795061700000,
+        "old": 61858.76005836879,
+        "new": 62862.31439243645
+      },
+      {
+        "effective_at": 1795070700000,
+        "old": 62862.31439243645,
+        "new": 63185.7069063794
+      },
+      {
+        "effective_at": 1795071600000,
+        "old": 63185.7069063794,
+        "new": 63187.89969878087
+      },
+      {
+        "effective_at": 1795075200000,
+        "old": 63187.89969878087,
+        "new": 63190.94500601081
+      },
+      {
+        "effective_at": 1795077000000,
+        "old": 63190.94500601081,
+        "new": 63422.615006010805
+      },
+      {
+        "effective_at": 1795078800000,
+        "old": 63422.615006010805,
+        "new": 63426.436934152895
+      },
+      {
+        "effective_at": 1795081500000,
+        "old": 63426.436934152895,
+        "new": 63460.28693415289
+      },
+      {
+        "effective_at": 1795082400000,
+        "old": 63460.28693415289,
+        "new": 63464.09843885626
+      },
+      {
+        "effective_at": 1795086000000,
+        "old": 63464.09843885626,
+        "new": 63468.65826465224
+      },
+      {
+        "effective_at": 1795086900000,
+        "old": 63468.65826465224,
+        "new": 63695.228264652236
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "79688e03cd55dc2a145b",
+    "policy": "BASELINE_ATR",
+    "side": -1,
+    "entry_at": 1795107600000,
+    "entry": 62746.680965,
+    "qty": 0.031401592850236804,
+    "initial_stop": 64167.92883435928,
+    "risk": 49.623262911790164,
+    "completed": true,
+    "net": 11.52781593414587,
+    "net_R": 0.23230668959914236,
+    "marked_net": 11.52781593414587,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "TRAIL_STOP",
+    "exit_at": 1795129200000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795118400000,
+        "window_end": 1795119300000,
+        "reason": "TP1",
+        "qty": 0.015700796425118402,
+        "price": 62150.27376242767,
+        "gross": 9.364068074062489,
+        "fee": 0.9758087961092543
+      },
+      {
+        "at": 1795128300000,
+        "window_end": 1795129200000,
+        "reason": "TRAIL_STOP",
+        "qty": 0.015700796425118402,
+        "price": 62358.867118006936,
+        "gross": 6.088986262480108,
+        "fee": 0.9790838779208367
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795119300000,
+        "old": 64167.92883435928,
+        "new": 62590.0179620829
+      },
+      {
+        "effective_at": 1795123800000,
+        "old": 62590.0179620829,
+        "new": 62399.44326637375
+      },
+      {
+        "effective_at": 1795124700000,
+        "old": 62399.44326637375,
+        "new": 62327.703266373755
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "79688e03cd55dc2a145b",
+    "policy": "BBWP_TURN_EXIT",
+    "side": -1,
+    "entry_at": 1795107600000,
+    "entry": 62746.680965,
+    "qty": 0.031401592850236804,
+    "initial_stop": 64167.92883435928,
+    "risk": 49.623262911790164,
+    "completed": true,
+    "net": 11.52781593414587,
+    "net_R": 0.23230668959914236,
+    "marked_net": 11.52781593414587,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "TRAIL_STOP",
+    "exit_at": 1795129200000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795118400000,
+        "window_end": 1795119300000,
+        "reason": "TP1",
+        "qty": 0.015700796425118402,
+        "price": 62150.27376242767,
+        "gross": 9.364068074062489,
+        "fee": 0.9758087961092543
+      },
+      {
+        "at": 1795128300000,
+        "window_end": 1795129200000,
+        "reason": "TRAIL_STOP",
+        "qty": 0.015700796425118402,
+        "price": 62358.867118006936,
+        "gross": 6.088986262480108,
+        "fee": 0.9790838779208367
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795119300000,
+        "old": 64167.92883435928,
+        "new": 62590.0179620829
+      },
+      {
+        "effective_at": 1795123800000,
+        "old": 62590.0179620829,
+        "new": 62399.44326637375
+      },
+      {
+        "effective_at": 1795124700000,
+        "old": 62399.44326637375,
+        "new": 62327.703266373755
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "79688e03cd55dc2a145b",
+    "policy": "KONCORDE_CROSS_EXIT",
+    "side": -1,
+    "entry_at": 1795107600000,
+    "entry": 62746.680965,
+    "qty": 0.031401592850236804,
+    "initial_stop": 64167.92883435928,
+    "risk": 49.623262911790164,
+    "completed": true,
+    "net": 11.52781593414587,
+    "net_R": 0.23230668959914236,
+    "marked_net": 11.52781593414587,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "TRAIL_STOP",
+    "exit_at": 1795129200000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795118400000,
+        "window_end": 1795119300000,
+        "reason": "TP1",
+        "qty": 0.015700796425118402,
+        "price": 62150.27376242767,
+        "gross": 9.364068074062489,
+        "fee": 0.9758087961092543
+      },
+      {
+        "at": 1795128300000,
+        "window_end": 1795129200000,
+        "reason": "TRAIL_STOP",
+        "qty": 0.015700796425118402,
+        "price": 62358.867118006936,
+        "gross": 6.088986262480108,
+        "fee": 0.9790838779208367
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795119300000,
+        "old": 64167.92883435928,
+        "new": 62590.0179620829
+      },
+      {
+        "effective_at": 1795123800000,
+        "old": 62590.0179620829,
+        "new": 62399.44326637375
+      },
+      {
+        "effective_at": 1795124700000,
+        "old": 62399.44326637375,
+        "new": 62327.703266373755
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "79688e03cd55dc2a145b",
+    "policy": "TP1_NET_BE",
+    "side": -1,
+    "entry_at": 1795107600000,
+    "entry": 62746.680965,
+    "qty": 0.031401592850236804,
+    "initial_stop": 64167.92883435928,
+    "risk": 49.623262911790164,
+    "completed": true,
+    "net": 7.403086413769842,
+    "net_R": 0.14918580478936858,
+    "marked_net": 7.403086413769842,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "NET_BE_STOP",
+    "exit_at": 1795137300000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795118400000,
+        "window_end": 1795119300000,
+        "reason": "TP1",
+        "qty": 0.015700796425118402,
+        "price": 62150.27376242767,
+        "gross": 9.364068074062489,
+        "fee": 0.9758087961092543
+      },
+      {
+        "at": 1795136400000,
+        "window_end": 1795137300000,
+        "reason": "NET_BE_STOP",
+        "qty": 0.015700796425118402,
+        "price": 62621.31297106394,
+        "gross": 1.9683773510155416,
+        "fee": 0.9832044868323013
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795119300000,
+        "old": 64167.92883435928,
+        "new": 62590.0179620829
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "79688e03cd55dc2a145b",
+    "policy": "TP1_STRUCTURE",
+    "side": -1,
+    "entry_at": 1795107600000,
+    "entry": 62746.680965,
+    "qty": 0.031401592850236804,
+    "initial_stop": 64167.92883435928,
+    "risk": 49.623262911790164,
+    "completed": true,
+    "net": 9.397745292832305,
+    "net_R": 0.18938184918508175,
+    "marked_net": 9.397745292832305,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "STRUCTURE_STOP",
+    "exit_at": 1795137300000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795118400000,
+        "window_end": 1795119300000,
+        "reason": "TP1",
+        "qty": 0.015700796425118402,
+        "price": 62150.27376242767,
+        "gross": 9.364068074062489,
+        "fee": 0.9758087961092543
+      },
+      {
+        "at": 1795136400000,
+        "window_end": 1795137300000,
+        "reason": "STRUCTURE_STOP",
+        "qty": 0.015700796425118402,
+        "price": 62494.397994339466,
+        "gross": 3.9610435638651547,
+        "fee": 0.9812118206194518
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795119300000,
+        "old": 64167.92883435928,
+        "new": 62590.0179620829
+      },
+      {
+        "effective_at": 1795131900000,
+        "old": 62590.0179620829,
+        "new": 62469.843494569504
+      },
+      {
+        "effective_at": 1795132800000,
+        "old": 62469.843494569504,
+        "new": 62467.56967352882
+      },
+      {
+        "effective_at": 1795136400000,
+        "old": 62467.56967352882,
+        "new": 62463.166411133905
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "cac62d28a9f9dcd37988",
+    "policy": "BASELINE_ATR",
+    "side": 1,
+    "entry_at": 1795158000000,
+    "entry": 62087.038005,
+    "qty": 0.04434833812770037,
+    "initial_stop": 61120.53258281313,
+    "risk": 49.6809019914609,
+    "completed": true,
+    "net": -49.68090199146089,
+    "net_R": -0.9999999999999999,
+    "marked_net": -49.68090199146089,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795187700000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795186800000,
+        "window_end": 1795187700000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.04434833812770037,
+        "price": 61089.97231652173,
+        "gross": -44.21820628816281,
+        "fee": 2.7092387485049607
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "cac62d28a9f9dcd37988",
+    "policy": "BBWP_TURN_EXIT",
+    "side": 1,
+    "entry_at": 1795158000000,
+    "entry": 62087.038005,
+    "qty": 0.04434833812770037,
+    "initial_stop": 61120.53258281313,
+    "risk": 49.6809019914609,
+    "completed": true,
+    "net": -8.521933769775757,
+    "net_R": -0.17153339468837536,
+    "marked_net": -8.521933769775757,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "BBWP_TURN_EXIT",
+    "exit_at": 1795172400000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795172400000,
+        "window_end": 1795172400000,
+        "reason": "BBWP_TURN_EXIT",
+        "qty": 0.04434833812770037,
+        "price": 62018.984995000006,
+        "gross": -3.018037898087597,
+        "fee": 2.7504389168950363
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "cac62d28a9f9dcd37988",
+    "policy": "KONCORDE_CROSS_EXIT",
+    "side": 1,
+    "entry_at": 1795158000000,
+    "entry": 62087.038005,
+    "qty": 0.04434833812770037,
+    "initial_stop": 61120.53258281313,
+    "risk": 49.6809019914609,
+    "completed": true,
+    "net": -29.973384452651647,
+    "net_R": -0.6033180407594742,
+    "marked_net": -29.973384452651647,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "KONCORDE_CROSS_EXIT",
+    "exit_at": 1795179600000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795179600000,
+        "window_end": 1795179600000,
+        "reason": "KONCORDE_CROSS_EXIT",
+        "qty": 0.04434833812770037,
+        "price": 61534.797210000004,
+        "gross": -24.49096150456997,
+        "fee": 2.7289659932885537
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "cac62d28a9f9dcd37988",
+    "policy": "TP1_NET_BE",
+    "side": 1,
+    "entry_at": 1795158000000,
+    "entry": 62087.038005,
+    "qty": 0.04434833812770037,
+    "initial_stop": 61120.53258281313,
+    "risk": 49.6809019914609,
+    "completed": true,
+    "net": -49.68090199146089,
+    "net_R": -0.9999999999999999,
+    "marked_net": -49.68090199146089,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795187700000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795186800000,
+        "window_end": 1795187700000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.04434833812770037,
+        "price": 61089.97231652173,
+        "gross": -44.21820628816281,
+        "fee": 2.7092387485049607
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "cac62d28a9f9dcd37988",
+    "policy": "TP1_STRUCTURE",
+    "side": 1,
+    "entry_at": 1795158000000,
+    "entry": 62087.038005,
+    "qty": 0.04434833812770037,
+    "initial_stop": 61120.53258281313,
+    "risk": 49.6809019914609,
+    "completed": true,
+    "net": -49.68090199146089,
+    "net_R": -0.9999999999999999,
+    "marked_net": -49.68090199146089,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795187700000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795186800000,
+        "window_end": 1795187700000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.04434833812770037,
+        "price": 61089.97231652173,
+        "gross": -44.21820628816281,
+        "fee": 2.7092387485049607
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "532c103d2a29840d0b87",
+    "policy": "BASELINE_ATR",
+    "side": 1,
+    "entry_at": 1795219200000,
+    "entry": 58980.985755,
+    "qty": 0.03716873512372934,
+    "initial_stop": 57796.68453179862,
+    "risk": 49.43249748150359,
+    "completed": true,
+    "net": -49.43249748150359,
+    "net_R": -1.0,
+    "marked_net": -49.43249748150359,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795232700000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795231800000,
+        "window_end": 1795232700000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.03716873512372934,
+        "price": 57767.78618953273,
+        "gross": -45.093093301076564,
+        "fee": 2.147155543562972
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "532c103d2a29840d0b87",
+    "policy": "BBWP_TURN_EXIT",
+    "side": 1,
+    "entry_at": 1795219200000,
+    "entry": 58980.985755,
+    "qty": 0.03716873512372934,
+    "initial_stop": 57796.68453179862,
+    "risk": 49.43249748150359,
+    "completed": true,
+    "net": -49.43249748150359,
+    "net_R": -1.0,
+    "marked_net": -49.43249748150359,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795232700000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795231800000,
+        "window_end": 1795232700000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.03716873512372934,
+        "price": 57767.78618953273,
+        "gross": -45.093093301076564,
+        "fee": 2.147155543562972
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "532c103d2a29840d0b87",
+    "policy": "KONCORDE_CROSS_EXIT",
+    "side": 1,
+    "entry_at": 1795219200000,
+    "entry": 58980.985755,
+    "qty": 0.03716873512372934,
+    "initial_stop": 57796.68453179862,
+    "risk": 49.43249748150359,
+    "completed": true,
+    "net": -49.43249748150359,
+    "net_R": -1.0,
+    "marked_net": -49.43249748150359,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795232700000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795231800000,
+        "window_end": 1795232700000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.03716873512372934,
+        "price": 57767.78618953273,
+        "gross": -45.093093301076564,
+        "fee": 2.147155543562972
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "532c103d2a29840d0b87",
+    "policy": "TP1_NET_BE",
+    "side": 1,
+    "entry_at": 1795219200000,
+    "entry": 58980.985755,
+    "qty": 0.03716873512372934,
+    "initial_stop": 57796.68453179862,
+    "risk": 49.43249748150359,
+    "completed": true,
+    "net": -49.43249748150359,
+    "net_R": -1.0,
+    "marked_net": -49.43249748150359,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795232700000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795231800000,
+        "window_end": 1795232700000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.03716873512372934,
+        "price": 57767.78618953273,
+        "gross": -45.093093301076564,
+        "fee": 2.147155543562972
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "532c103d2a29840d0b87",
+    "policy": "TP1_STRUCTURE",
+    "side": 1,
+    "entry_at": 1795219200000,
+    "entry": 58980.985755,
+    "qty": 0.03716873512372934,
+    "initial_stop": 57796.68453179862,
+    "risk": 49.43249748150359,
+    "completed": true,
+    "net": -49.43249748150359,
+    "net_R": -1.0,
+    "marked_net": -49.43249748150359,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795232700000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795231800000,
+        "window_end": 1795232700000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.03716873512372934,
+        "price": 57767.78618953273,
+        "gross": -45.093093301076564,
+        "fee": 2.147155543562972
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "69b93cb00c0ae231dca6",
+    "policy": "BASELINE_ATR",
+    "side": -1,
+    "entry_at": 1795312800000,
+    "entry": 60082.853545000005,
+    "qty": 0.046227865421828086,
+    "initial_stop": 60995.223264934306,
+    "risk": 49.185334994096074,
+    "completed": true,
+    "net": 18.141030446712843,
+    "net_R": 0.3688300679235058,
+    "marked_net": 18.141030446712843,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "TRAIL_STOP",
+    "exit_at": 1795336200000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795314600000,
+        "window_end": 1795315500000,
+        "reason": "TP1",
+        "qty": 0.023113932710914043,
+        "price": 59511.76602205477,
+        "gross": 13.200078577398761,
+        "fee": 1.3755509553414347
+      },
+      {
+        "at": 1795335300000,
+        "window_end": 1795336200000,
+        "reason": "TRAIL_STOP",
+        "qty": 0.023113932710914043,
+        "price": 59629.78120228161,
+        "gross": 10.472283642769247,
+        "fee": 1.378278750276064
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795315500000,
+        "old": 60995.223264934306,
+        "new": 59932.84146284002
+      },
+      {
+        "effective_at": 1795324500000,
+        "old": 59932.84146284002,
+        "new": 59871.310045443024
+      },
+      {
+        "effective_at": 1795325400000,
+        "old": 59871.310045443024,
+        "new": 59703.05004544302
+      },
+      {
+        "effective_at": 1795326300000,
+        "old": 59703.05004544302,
+        "new": 59697.37004544302
+      },
+      {
+        "effective_at": 1795327200000,
+        "old": 59697.37004544302,
+        "new": 59668.880045443024
+      },
+      {
+        "effective_at": 1795328100000,
+        "old": 59668.880045443024,
+        "new": 59664.45539933995
+      },
+      {
+        "effective_at": 1795331700000,
+        "old": 59664.45539933995,
+        "new": 59639.74322795853
+      },
+      {
+        "effective_at": 1795335300000,
+        "old": 59639.74322795853,
+        "new": 59599.981211675775
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "69b93cb00c0ae231dca6",
+    "policy": "BBWP_TURN_EXIT",
+    "side": -1,
+    "entry_at": 1795312800000,
+    "entry": 60082.853545000005,
+    "qty": 0.046227865421828086,
+    "initial_stop": 60995.223264934306,
+    "risk": 49.185334994096074,
+    "completed": true,
+    "net": 18.141030446712843,
+    "net_R": 0.3688300679235058,
+    "marked_net": 18.141030446712843,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "TRAIL_STOP",
+    "exit_at": 1795336200000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795314600000,
+        "window_end": 1795315500000,
+        "reason": "TP1",
+        "qty": 0.023113932710914043,
+        "price": 59511.76602205477,
+        "gross": 13.200078577398761,
+        "fee": 1.3755509553414347
+      },
+      {
+        "at": 1795335300000,
+        "window_end": 1795336200000,
+        "reason": "TRAIL_STOP",
+        "qty": 0.023113932710914043,
+        "price": 59629.78120228161,
+        "gross": 10.472283642769247,
+        "fee": 1.378278750276064
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795315500000,
+        "old": 60995.223264934306,
+        "new": 59932.84146284002
+      },
+      {
+        "effective_at": 1795324500000,
+        "old": 59932.84146284002,
+        "new": 59871.310045443024
+      },
+      {
+        "effective_at": 1795325400000,
+        "old": 59871.310045443024,
+        "new": 59703.05004544302
+      },
+      {
+        "effective_at": 1795326300000,
+        "old": 59703.05004544302,
+        "new": 59697.37004544302
+      },
+      {
+        "effective_at": 1795327200000,
+        "old": 59697.37004544302,
+        "new": 59668.880045443024
+      },
+      {
+        "effective_at": 1795328100000,
+        "old": 59668.880045443024,
+        "new": 59664.45539933995
+      },
+      {
+        "effective_at": 1795331700000,
+        "old": 59664.45539933995,
+        "new": 59639.74322795853
+      },
+      {
+        "effective_at": 1795335300000,
+        "old": 59639.74322795853,
+        "new": 59599.981211675775
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "69b93cb00c0ae231dca6",
+    "policy": "KONCORDE_CROSS_EXIT",
+    "side": -1,
+    "entry_at": 1795312800000,
+    "entry": 60082.853545000005,
+    "qty": 0.046227865421828086,
+    "initial_stop": 60995.223264934306,
+    "risk": 49.185334994096074,
+    "completed": true,
+    "net": 18.141030446712843,
+    "net_R": 0.3688300679235058,
+    "marked_net": 18.141030446712843,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "TRAIL_STOP",
+    "exit_at": 1795336200000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795314600000,
+        "window_end": 1795315500000,
+        "reason": "TP1",
+        "qty": 0.023113932710914043,
+        "price": 59511.76602205477,
+        "gross": 13.200078577398761,
+        "fee": 1.3755509553414347
+      },
+      {
+        "at": 1795335300000,
+        "window_end": 1795336200000,
+        "reason": "TRAIL_STOP",
+        "qty": 0.023113932710914043,
+        "price": 59629.78120228161,
+        "gross": 10.472283642769247,
+        "fee": 1.378278750276064
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795315500000,
+        "old": 60995.223264934306,
+        "new": 59932.84146284002
+      },
+      {
+        "effective_at": 1795324500000,
+        "old": 59932.84146284002,
+        "new": 59871.310045443024
+      },
+      {
+        "effective_at": 1795325400000,
+        "old": 59871.310045443024,
+        "new": 59703.05004544302
+      },
+      {
+        "effective_at": 1795326300000,
+        "old": 59703.05004544302,
+        "new": 59697.37004544302
+      },
+      {
+        "effective_at": 1795327200000,
+        "old": 59697.37004544302,
+        "new": 59668.880045443024
+      },
+      {
+        "effective_at": 1795328100000,
+        "old": 59668.880045443024,
+        "new": 59664.45539933995
+      },
+      {
+        "effective_at": 1795331700000,
+        "old": 59664.45539933995,
+        "new": 59639.74322795853
+      },
+      {
+        "effective_at": 1795335300000,
+        "old": 59639.74322795853,
+        "new": 59599.981211675775
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "69b93cb00c0ae231dca6",
+    "policy": "TP1_NET_BE",
+    "side": -1,
+    "entry_at": 1795312800000,
+    "entry": 60082.853545000005,
+    "qty": 0.046227865421828086,
+    "initial_stop": 60995.223264934306,
+    "risk": 49.185334994096074,
+    "completed": true,
+    "net": 10.435776588138342,
+    "net_R": 0.2121725223461626,
+    "marked_net": 10.435776588138342,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "NET_BE_STOP",
+    "exit_at": 1795336200000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795314600000,
+        "window_end": 1795315500000,
+        "reason": "TP1",
+        "qty": 0.023113932710914043,
+        "price": 59511.76602205477,
+        "gross": 13.200078577398761,
+        "fee": 1.3755509553414347
+      },
+      {
+        "at": 1795335300000,
+        "window_end": 1795336200000,
+        "reason": "NET_BE_STOP",
+        "qty": 0.023113932710914043,
+        "price": 59962.80788357144,
+        "gross": 2.774727340497019,
+        "fee": 1.3859763065783364
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795315500000,
+        "old": 60995.223264934306,
+        "new": 59932.84146284002
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "69b93cb00c0ae231dca6",
+    "policy": "TP1_STRUCTURE",
+    "side": -1,
+    "entry_at": 1795312800000,
+    "entry": 60082.853545000005,
+    "qty": 0.046227865421828086,
+    "initial_stop": 60995.223264934306,
+    "risk": 49.185334994096074,
+    "completed": true,
+    "net": 22.729280038113508,
+    "net_R": 0.4621149788009333,
+    "marked_net": 22.729280038113508,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "STRUCTURE_STOP",
+    "exit_at": 1795335300000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795314600000,
+        "window_end": 1795315500000,
+        "reason": "TP1",
+        "qty": 0.023113932710914043,
+        "price": 59511.76602205477,
+        "gross": 13.200078577398761,
+        "fee": 1.3755509553414347
+      },
+      {
+        "at": 1795334400000,
+        "window_end": 1795335300000,
+        "reason": "STRUCTURE_STOP",
+        "qty": 0.023113932710914043,
+        "price": 59431.47371463755,
+        "gross": 15.055949568244438,
+        "fee": 1.373695084350589
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795315500000,
+        "old": 60995.223264934306,
+        "new": 59932.84146284002
+      },
+      {
+        "effective_at": 1795323600000,
+        "old": 59932.84146284002,
+        "new": 59788.0693393924
+      },
+      {
+        "effective_at": 1795327200000,
+        "old": 59788.0693393924,
+        "new": 59787.479386578656
+      },
+      {
+        "effective_at": 1795330800000,
+        "old": 59787.479386578656,
+        "new": 59784.18443039447
+      },
+      {
+        "effective_at": 1795332600000,
+        "old": 59784.18443039447,
+        "new": 59407.074430394474
+      },
+      {
+        "effective_at": 1795334400000,
+        "old": 59407.074430394474,
+        "new": 59401.77282822344
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "7611d0ed9366683e88e1",
+    "policy": "BASELINE_ATR",
+    "side": 1,
+    "entry_at": 1795341600000,
+    "entry": 61153.54149,
+    "qty": 0.018444190207875275,
+    "initial_stop": 58630.98282668489,
+    "risk": 49.276040146329635,
+    "completed": true,
+    "net": 4.221553661798456,
+    "net_R": 0.08567152817600954,
+    "marked_net": 4.221553661798456,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "NET_BE_STOP",
+    "exit_at": 1795405500000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795403700000,
+        "window_end": 1795404600000,
+        "reason": "TP1",
+        "qty": 0.009222095103937638,
+        "price": 61734.194366447555,
+        "gross": 5.3548360489742715,
+        "fee": 0.5693186116123505
+      },
+      {
+        "at": 1795404600000,
+        "window_end": 1795405500000,
+        "reason": "NET_BE_STOP",
+        "qty": 0.009222095103937638,
+        "price": 61275.971002492486,
+        "gross": 1.1290566077343984,
+        "fee": 0.5650928321711106
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795404600000,
+        "old": 58630.98282668489,
+        "new": 61306.62431464981
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "7611d0ed9366683e88e1",
+    "policy": "BBWP_TURN_EXIT",
+    "side": 1,
+    "entry_at": 1795341600000,
+    "entry": 61153.54149,
+    "qty": 0.018444190207875275,
+    "initial_stop": 58630.98282668489,
+    "risk": 49.276040146329635,
+    "completed": true,
+    "net": -8.830438773092274,
+    "net_R": -0.17920349822894638,
+    "marked_net": -8.830438773092274,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "BBWP_TURN_EXIT",
+    "exit_at": 1795370400000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795370400000,
+        "window_end": 1795370400000,
+        "reason": "BBWP_TURN_EXIT",
+        "qty": 0.018444190207875275,
+        "price": 60796.72643,
+        "gross": -6.581164835674444,
+        "fee": 1.121346386291078
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "7611d0ed9366683e88e1",
+    "policy": "KONCORDE_CROSS_EXIT",
+    "side": 1,
+    "entry_at": 1795341600000,
+    "entry": 61153.54149,
+    "qty": 0.018444190207875275,
+    "initial_stop": 58630.98282668489,
+    "risk": 49.276040146329635,
+    "completed": true,
+    "net": -12.72295721854731,
+    "net_R": -0.25819763886800445,
+    "marked_net": -12.72295721854731,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "KONCORDE_CROSS_EXIT",
+    "exit_at": 1795402800000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795402800000,
+        "window_end": 1795402800000,
+        "reason": "KONCORDE_CROSS_EXIT",
+        "qty": 0.018444190207875275,
+        "price": 60585.47211,
+        "gross": -10.477579695989794,
+        "fee": 1.1174499714307626
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "7611d0ed9366683e88e1",
+    "policy": "TP1_NET_BE",
+    "side": 1,
+    "entry_at": 1795341600000,
+    "entry": 61153.54149,
+    "qty": 0.018444190207875275,
+    "initial_stop": 58630.98282668489,
+    "risk": 49.276040146329635,
+    "completed": true,
+    "net": 4.221553661798456,
+    "net_R": 0.08567152817600954,
+    "marked_net": 4.221553661798456,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "NET_BE_STOP",
+    "exit_at": 1795405500000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795403700000,
+        "window_end": 1795404600000,
+        "reason": "TP1",
+        "qty": 0.009222095103937638,
+        "price": 61734.194366447555,
+        "gross": 5.3548360489742715,
+        "fee": 0.5693186116123505
+      },
+      {
+        "at": 1795404600000,
+        "window_end": 1795405500000,
+        "reason": "NET_BE_STOP",
+        "qty": 0.009222095103937638,
+        "price": 61275.971002492486,
+        "gross": 1.1290566077343984,
+        "fee": 0.5650928321711106
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795404600000,
+        "old": 58630.98282668489,
+        "new": 61306.62431464981
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "7611d0ed9366683e88e1",
+    "policy": "TP1_STRUCTURE",
+    "side": 1,
+    "entry_at": 1795341600000,
+    "entry": 61153.54149,
+    "qty": 0.018444190207875275,
+    "initial_stop": 58630.98282668489,
+    "risk": 49.276040146329635,
+    "completed": true,
+    "net": 4.221553661798456,
+    "net_R": 0.08567152817600954,
+    "marked_net": 4.221553661798456,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "NET_BE_STOP",
+    "exit_at": 1795405500000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795403700000,
+        "window_end": 1795404600000,
+        "reason": "TP1",
+        "qty": 0.009222095103937638,
+        "price": 61734.194366447555,
+        "gross": 5.3548360489742715,
+        "fee": 0.5693186116123505
+      },
+      {
+        "at": 1795404600000,
+        "window_end": 1795405500000,
+        "reason": "NET_BE_STOP",
+        "qty": 0.009222095103937638,
+        "price": 61275.971002492486,
+        "gross": 1.1290566077343984,
+        "fee": 0.5650928321711106
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795404600000,
+        "old": 58630.98282668489,
+        "new": 61306.62431464981
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "60e581934907f5ad9efb",
+    "policy": "BASELINE_ATR",
+    "side": 1,
+    "entry_at": 1795442400000,
+    "entry": 63872.870474999996,
+    "qty": 0.01595347991939167,
+    "initial_stop": 60938.06387391533,
+    "risk": 49.29714791463863,
+    "completed": true,
+    "net": 3.813844423889725,
+    "net_R": 0.07736440311909437,
+    "marked_net": 3.813844423889725,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "NET_BE_STOP",
+    "exit_at": 1795445100000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795443300000,
+        "window_end": 1795444200000,
+        "reason": "TP1",
+        "qty": 0.007976739959695835,
+        "price": 64479.34338016013,
+        "gross": 4.8376766570636445,
+        "fee": 0.5143349549154724
+      },
+      {
+        "at": 1795444200000,
+        "window_end": 1795445100000,
+        "reason": "NET_BE_STOP",
+        "qty": 0.007976739959695835,
+        "price": 64000.744089564556,
+        "gross": 1.0200145710878676,
+        "fee": 0.5105172928294966
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795444200000,
+        "old": 60938.06387391533,
+        "new": 64032.760469799454
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "60e581934907f5ad9efb",
+    "policy": "BBWP_TURN_EXIT",
+    "side": 1,
+    "entry_at": 1795442400000,
+    "entry": 63872.870474999996,
+    "qty": 0.01595347991939167,
+    "initial_stop": 60938.06387391533,
+    "risk": 49.29714791463863,
+    "completed": true,
+    "net": 3.813844423889725,
+    "net_R": 0.07736440311909437,
+    "marked_net": 3.813844423889725,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "NET_BE_STOP",
+    "exit_at": 1795445100000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795443300000,
+        "window_end": 1795444200000,
+        "reason": "TP1",
+        "qty": 0.007976739959695835,
+        "price": 64479.34338016013,
+        "gross": 4.8376766570636445,
+        "fee": 0.5143349549154724
+      },
+      {
+        "at": 1795444200000,
+        "window_end": 1795445100000,
+        "reason": "NET_BE_STOP",
+        "qty": 0.007976739959695835,
+        "price": 64000.744089564556,
+        "gross": 1.0200145710878676,
+        "fee": 0.5105172928294966
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795444200000,
+        "old": 60938.06387391533,
+        "new": 64032.760469799454
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "60e581934907f5ad9efb",
+    "policy": "KONCORDE_CROSS_EXIT",
+    "side": 1,
+    "entry_at": 1795442400000,
+    "entry": 63872.870474999996,
+    "qty": 0.01595347991939167,
+    "initial_stop": 60938.06387391533,
+    "risk": 49.29714791463863,
+    "completed": true,
+    "net": 3.813844423889725,
+    "net_R": 0.07736440311909437,
+    "marked_net": 3.813844423889725,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "NET_BE_STOP",
+    "exit_at": 1795445100000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795443300000,
+        "window_end": 1795444200000,
+        "reason": "TP1",
+        "qty": 0.007976739959695835,
+        "price": 64479.34338016013,
+        "gross": 4.8376766570636445,
+        "fee": 0.5143349549154724
+      },
+      {
+        "at": 1795444200000,
+        "window_end": 1795445100000,
+        "reason": "NET_BE_STOP",
+        "qty": 0.007976739959695835,
+        "price": 64000.744089564556,
+        "gross": 1.0200145710878676,
+        "fee": 0.5105172928294966
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795444200000,
+        "old": 60938.06387391533,
+        "new": 64032.760469799454
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "60e581934907f5ad9efb",
+    "policy": "TP1_NET_BE",
+    "side": 1,
+    "entry_at": 1795442400000,
+    "entry": 63872.870474999996,
+    "qty": 0.01595347991939167,
+    "initial_stop": 60938.06387391533,
+    "risk": 49.29714791463863,
+    "completed": true,
+    "net": 3.813844423889725,
+    "net_R": 0.07736440311909437,
+    "marked_net": 3.813844423889725,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "NET_BE_STOP",
+    "exit_at": 1795445100000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795443300000,
+        "window_end": 1795444200000,
+        "reason": "TP1",
+        "qty": 0.007976739959695835,
+        "price": 64479.34338016013,
+        "gross": 4.8376766570636445,
+        "fee": 0.5143349549154724
+      },
+      {
+        "at": 1795444200000,
+        "window_end": 1795445100000,
+        "reason": "NET_BE_STOP",
+        "qty": 0.007976739959695835,
+        "price": 64000.744089564556,
+        "gross": 1.0200145710878676,
+        "fee": 0.5105172928294966
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795444200000,
+        "old": 60938.06387391533,
+        "new": 64032.760469799454
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "60e581934907f5ad9efb",
+    "policy": "TP1_STRUCTURE",
+    "side": 1,
+    "entry_at": 1795442400000,
+    "entry": 63872.870474999996,
+    "qty": 0.01595347991939167,
+    "initial_stop": 60938.06387391533,
+    "risk": 49.29714791463863,
+    "completed": true,
+    "net": 3.813844423889725,
+    "net_R": 0.07736440311909437,
+    "marked_net": 3.813844423889725,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "NET_BE_STOP",
+    "exit_at": 1795445100000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795443300000,
+        "window_end": 1795444200000,
+        "reason": "TP1",
+        "qty": 0.007976739959695835,
+        "price": 64479.34338016013,
+        "gross": 4.8376766570636445,
+        "fee": 0.5143349549154724
+      },
+      {
+        "at": 1795444200000,
+        "window_end": 1795445100000,
+        "reason": "NET_BE_STOP",
+        "qty": 0.007976739959695835,
+        "price": 64000.744089564556,
+        "gross": 1.0200145710878676,
+        "fee": 0.5105172928294966
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795444200000,
+        "old": 60938.06387391533,
+        "new": 64032.760469799454
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "1d59ccaf0935e9cffd7e",
+    "policy": "BASELINE_ATR",
+    "side": -1,
+    "entry_at": 1795463100000,
+    "entry": 61004.14267000001,
+    "qty": 0.016571342270735492,
+    "initial_stop": 63823.36568582353,
+    "risk": 49.31621713675808,
+    "completed": true,
+    "net": 6.7425051427398754,
+    "net_R": 0.13671983647980002,
+    "marked_net": 6.7425051427398754,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "TRAIL_STOP",
+    "exit_at": 1795493700000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795487400000,
+        "window_end": 1795488300000,
+        "reason": "TP1",
+        "qty": 0.008285671135367746,
+        "price": 60424.29829392165,
+        "gross": 4.804399809877752,
+        "fee": 0.5006558642487972
+      },
+      {
+        "at": 1795492800000,
+        "window_end": 1795493700000,
+        "reason": "TRAIL_STOP",
+        "qty": 0.008285671135367746,
+        "price": 60527.27233156446,
+        "gross": 3.951190798488458,
+        "fee": 0.5015090732601865
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795488300000,
+        "old": 63823.36568582353,
+        "new": 60851.830355881015
+      },
+      {
+        "effective_at": 1795490100000,
+        "old": 60851.830355881015,
+        "new": 60616.14381965464
+      },
+      {
+        "effective_at": 1795491000000,
+        "old": 60616.14381965464,
+        "new": 60497.023819654634
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "MIXED"
+  },
+  {
+    "id": "1d59ccaf0935e9cffd7e",
+    "policy": "BBWP_TURN_EXIT",
+    "side": -1,
+    "entry_at": 1795463100000,
+    "entry": 61004.14267000001,
+    "qty": 0.016571342270735492,
+    "initial_stop": 63823.36568582353,
+    "risk": 49.31621713675808,
+    "completed": true,
+    "net": 10.24533240831515,
+    "net_R": 0.20774773498753907,
+    "marked_net": 10.24533240831515,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "BBWP_TURN_EXIT",
+    "exit_at": 1795489200000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795487400000,
+        "window_end": 1795488300000,
+        "reason": "TP1",
+        "qty": 0.008285671135367746,
+        "price": 60424.29829392165,
+        "gross": 4.804399809877752,
+        "fee": 0.5006558642487972
+      },
+      {
+        "at": 1795489200000,
+        "window_end": 1795489200000,
+        "reason": "BBWP_TURN_EXIT",
+        "qty": 0.008285671135367746,
+        "price": 60104.93745,
+        "gross": 7.450518736126093,
+        "fee": 0.4980097453225488
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795488300000,
+        "old": 63823.36568582353,
+        "new": 60851.830355881015
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "MIXED"
+  },
+  {
+    "id": "1d59ccaf0935e9cffd7e",
+    "policy": "KONCORDE_CROSS_EXIT",
+    "side": -1,
+    "entry_at": 1795463100000,
+    "entry": 61004.14267000001,
+    "qty": 0.016571342270735492,
+    "initial_stop": 63823.36568582353,
+    "risk": 49.31621713675808,
+    "completed": true,
+    "net": 6.7425051427398754,
+    "net_R": 0.13671983647980002,
+    "marked_net": 6.7425051427398754,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "TRAIL_STOP",
+    "exit_at": 1795493700000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795487400000,
+        "window_end": 1795488300000,
+        "reason": "TP1",
+        "qty": 0.008285671135367746,
+        "price": 60424.29829392165,
+        "gross": 4.804399809877752,
+        "fee": 0.5006558642487972
+      },
+      {
+        "at": 1795492800000,
+        "window_end": 1795493700000,
+        "reason": "TRAIL_STOP",
+        "qty": 0.008285671135367746,
+        "price": 60527.27233156446,
+        "gross": 3.951190798488458,
+        "fee": 0.5015090732601865
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795488300000,
+        "old": 63823.36568582353,
+        "new": 60851.830355881015
+      },
+      {
+        "effective_at": 1795490100000,
+        "old": 60851.830355881015,
+        "new": 60616.14381965464
+      },
+      {
+        "effective_at": 1795491000000,
+        "old": 60616.14381965464,
+        "new": 60497.023819654634
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "MIXED"
+  },
+  {
+    "id": "1d59ccaf0935e9cffd7e",
+    "policy": "TP1_NET_BE",
+    "side": -1,
+    "entry_at": 1795463100000,
+    "entry": 61004.14267000001,
+    "qty": 0.016571342270735492,
+    "initial_stop": 63823.36568582353,
+    "risk": 49.31621713675808,
+    "completed": true,
+    "net": 12.646388738477762,
+    "net_R": 0.25643468766893146,
+    "marked_net": 12.646388738477762,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "TIME_EXIT_24H",
+    "exit_at": 1795549500000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795487400000,
+        "window_end": 1795488300000,
+        "reason": "TP1",
+        "qty": 0.008285671135367746,
+        "price": 60424.29829392165,
+        "gross": 4.804399809877752,
+        "fee": 0.5006558642487972
+      },
+      {
+        "at": 1795549500000,
+        "window_end": 1795549500000,
+        "reason": "TIME_EXIT_24H",
+        "qty": 0.008285671135367746,
+        "price": 59815.442775,
+        "gross": 9.849176408616215,
+        "fee": 0.49561108765005873
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795488300000,
+        "old": 63823.36568582353,
+        "new": 60851.830355881015
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "MIXED"
+  },
+  {
+    "id": "1d59ccaf0935e9cffd7e",
+    "policy": "TP1_STRUCTURE",
+    "side": -1,
+    "entry_at": 1795463100000,
+    "entry": 61004.14267000001,
+    "qty": 0.016571342270735492,
+    "initial_stop": 63823.36568582353,
+    "risk": 49.31621713675808,
+    "completed": true,
+    "net": 6.051185444908125,
+    "net_R": 0.12270173578252508,
+    "marked_net": 6.051185444908125,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "STRUCTURE_STOP",
+    "exit_at": 1795525200000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795487400000,
+        "window_end": 1795488300000,
+        "reason": "TP1",
+        "qty": 0.008285671135367746,
+        "price": 60424.29829392165,
+        "gross": 4.804399809877752,
+        "fee": 0.5006558642487972
+      },
+      {
+        "at": 1795524300000,
+        "window_end": 1795525200000,
+        "reason": "STRUCTURE_STOP",
+        "qty": 0.008285671135367746,
+        "price": 60610.62454980723,
+        "gross": 3.260561729725469,
+        "fee": 0.5021997023289495
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795488300000,
+        "old": 63823.36568582353,
+        "new": 60851.830355881015
+      },
+      {
+        "effective_at": 1795498200000,
+        "old": 60851.830355881015,
+        "new": 60829.29157518478
+      },
+      {
+        "effective_at": 1795500000000,
+        "old": 60829.29157518478,
+        "new": 60825.787462671586
+      },
+      {
+        "effective_at": 1795506300000,
+        "old": 60825.787462671586,
+        "new": 60754.055643909334
+      },
+      {
+        "effective_at": 1795507200000,
+        "old": 60754.055643909334,
+        "new": 60749.066097915806
+      },
+      {
+        "effective_at": 1795510800000,
+        "old": 60749.066097915806,
+        "new": 60747.11594806468
+      },
+      {
+        "effective_at": 1795513500000,
+        "old": 60747.11594806468,
+        "new": 60686.31594806468
+      },
+      {
+        "effective_at": 1795514400000,
+        "old": 60686.31594806468,
+        "new": 60684.65509463149
+      },
+      {
+        "effective_at": 1795524300000,
+        "old": 60684.65509463149,
+        "new": 60580.334382615925
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "MIXED"
+  },
+  {
+    "id": "5334d23d1e4c34feeee4",
+    "policy": "BASELINE_ATR",
+    "side": -1,
+    "entry_at": 1795517100000,
+    "entry": 59676.65674500001,
+    "qty": 0.04258958546979304,
+    "initial_stop": 60684.65509463149,
+    "risk": 49.34992966247178,
+    "completed": true,
+    "net": -49.34992966247178,
+    "net_R": -1.0,
+    "marked_net": -49.34992966247178,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795531500000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795530600000,
+        "window_end": 1795531500000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.04258958546979304,
+        "price": 60714.9974221788,
+        "gross": -44.222499017468955,
+        "fee": 2.585826572010148
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "5334d23d1e4c34feeee4",
+    "policy": "BBWP_TURN_EXIT",
+    "side": -1,
+    "entry_at": 1795517100000,
+    "entry": 59676.65674500001,
+    "qty": 0.04258958546979304,
+    "initial_stop": 60684.65509463149,
+    "risk": 49.34992966247178,
+    "completed": true,
+    "net": -38.248288218918645,
+    "net_R": -0.7750424059470262,
+    "marked_net": -38.248288218918645,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "BBWP_TURN_EXIT",
+    "exit_at": 1795521600000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795521600000,
+        "window_end": 1795521600000,
+        "reason": "BBWP_TURN_EXIT",
+        "qty": 0.04258958546979304,
+        "price": 60454.592189999996,
+        "gross": -33.13194812480848,
+        "fee": 2.5747360211174875
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "5334d23d1e4c34feeee4",
+    "policy": "KONCORDE_CROSS_EXIT",
+    "side": -1,
+    "entry_at": 1795517100000,
+    "entry": 59676.65674500001,
+    "qty": 0.04258958546979304,
+    "initial_stop": 60684.65509463149,
+    "risk": 49.34992966247178,
+    "completed": true,
+    "net": -49.34992966247178,
+    "net_R": -1.0,
+    "marked_net": -49.34992966247178,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795531500000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795530600000,
+        "window_end": 1795531500000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.04258958546979304,
+        "price": 60714.9974221788,
+        "gross": -44.222499017468955,
+        "fee": 2.585826572010148
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "5334d23d1e4c34feeee4",
+    "policy": "TP1_NET_BE",
+    "side": -1,
+    "entry_at": 1795517100000,
+    "entry": 59676.65674500001,
+    "qty": 0.04258958546979304,
+    "initial_stop": 60684.65509463149,
+    "risk": 49.34992966247178,
+    "completed": true,
+    "net": -49.34992966247178,
+    "net_R": -1.0,
+    "marked_net": -49.34992966247178,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795531500000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795530600000,
+        "window_end": 1795531500000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.04258958546979304,
+        "price": 60714.9974221788,
+        "gross": -44.222499017468955,
+        "fee": 2.585826572010148
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "5334d23d1e4c34feeee4",
+    "policy": "TP1_STRUCTURE",
+    "side": -1,
+    "entry_at": 1795517100000,
+    "entry": 59676.65674500001,
+    "qty": 0.04258958546979304,
+    "initial_stop": 60684.65509463149,
+    "risk": 49.34992966247178,
+    "completed": true,
+    "net": -49.34992966247178,
+    "net_R": -1.0,
+    "marked_net": -49.34992966247178,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "INITIAL_STOP",
+    "exit_at": 1795531500000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795530600000,
+        "window_end": 1795531500000,
+        "reason": "INITIAL_STOP",
+        "qty": 0.04258958546979304,
+        "price": 60714.9974221788,
+        "gross": -44.222499017468955,
+        "fee": 2.585826572010148
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "82cca8c3cdca46931777",
+    "policy": "BASELINE_ATR",
+    "side": -1,
+    "entry_at": 1795539600000,
+    "entry": 59387.541375,
+    "qty": 0.031049102823122184,
+    "initial_stop": 60818.36444046122,
+    "risk": 49.10318001415942,
+    "completed": true,
+    "net": 6.928110146062252,
+    "net_R": 0.14109290160157567,
+    "marked_net": 6.928110146062252,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "NET_BE_STOP",
+    "exit_at": 1795596300000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795591800000,
+        "window_end": 1795592700000,
+        "reason": "TP1",
+        "qty": 0.015524551411561092,
+        "price": 58823.062794230624,
+        "gross": 8.763276747879233,
+        "fee": 0.9132016625345197
+      },
+      {
+        "at": 1795595400000,
+        "window_end": 1795596300000,
+        "reason": "NET_BE_STOP",
+        "qty": 0.015524551411561092,
+        "price": 59268.88494867633,
+        "gross": 1.8420877907739623,
+        "fee": 0.9201228514916251
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795592700000,
+        "old": 60818.36444046122,
+        "new": 59239.265316018325
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "82cca8c3cdca46931777",
+    "policy": "BBWP_TURN_EXIT",
+    "side": -1,
+    "entry_at": 1795539600000,
+    "entry": 59387.541375,
+    "qty": 0.031049102823122184,
+    "initial_stop": 60818.36444046122,
+    "risk": 49.10318001415942,
+    "completed": true,
+    "net": -27.014217121389617,
+    "net_R": -0.5501520902230728,
+    "marked_net": -27.014217121389617,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "BBWP_TURN_EXIT",
+    "exit_at": 1795543200000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795543200000,
+        "window_end": 1795543200000,
+        "reason": "BBWP_TURN_EXIT",
+        "qty": 0.031049102823122184,
+        "price": 60138.064005,
+        "gross": -23.30305430995007,
+        "fee": 1.8672329328747481
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "82cca8c3cdca46931777",
+    "policy": "KONCORDE_CROSS_EXIT",
+    "side": -1,
+    "entry_at": 1795539600000,
+    "entry": 59387.541375,
+    "qty": 0.031049102823122184,
+    "initial_stop": 60818.36444046122,
+    "risk": 49.10318001415942,
+    "completed": true,
+    "net": -23.220542697156755,
+    "net_R": -0.4728928491079573,
+    "marked_net": -23.220542697156755,
+    "remaining": 0.0,
+    "tp1": false,
+    "exit_reason": "KONCORDE_CROSS_EXIT",
+    "exit_at": 1795561200000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795561200000,
+        "window_end": 1795561200000,
+        "reason": "KONCORDE_CROSS_EXIT",
+        "qty": 0.031049102823122184,
+        "price": 60016.003005,
+        "gross": -19.513169770256905,
+        "fee": 1.863443048335055
+      }
+    ],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "82cca8c3cdca46931777",
+    "policy": "TP1_NET_BE",
+    "side": -1,
+    "entry_at": 1795539600000,
+    "entry": 59387.541375,
+    "qty": 0.031049102823122184,
+    "initial_stop": 60818.36444046122,
+    "risk": 49.10318001415942,
+    "completed": true,
+    "net": 6.928110146062252,
+    "net_R": 0.14109290160157567,
+    "marked_net": 6.928110146062252,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "NET_BE_STOP",
+    "exit_at": 1795596300000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795591800000,
+        "window_end": 1795592700000,
+        "reason": "TP1",
+        "qty": 0.015524551411561092,
+        "price": 58823.062794230624,
+        "gross": 8.763276747879233,
+        "fee": 0.9132016625345197
+      },
+      {
+        "at": 1795595400000,
+        "window_end": 1795596300000,
+        "reason": "NET_BE_STOP",
+        "qty": 0.015524551411561092,
+        "price": 59268.88494867633,
+        "gross": 1.8420877907739623,
+        "fee": 0.9201228514916251
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795592700000,
+        "old": 60818.36444046122,
+        "new": 59239.265316018325
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "82cca8c3cdca46931777",
+    "policy": "TP1_STRUCTURE",
+    "side": -1,
+    "entry_at": 1795539600000,
+    "entry": 59387.541375,
+    "qty": 0.031049102823122184,
+    "initial_stop": 60818.36444046122,
+    "risk": 49.10318001415942,
+    "completed": true,
+    "net": 6.928110146062252,
+    "net_R": 0.14109290160157567,
+    "marked_net": 6.928110146062252,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "NET_BE_STOP",
+    "exit_at": 1795596300000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795591800000,
+        "window_end": 1795592700000,
+        "reason": "TP1",
+        "qty": 0.015524551411561092,
+        "price": 58823.062794230624,
+        "gross": 8.763276747879233,
+        "fee": 0.9132016625345197
+      },
+      {
+        "at": 1795595400000,
+        "window_end": 1795596300000,
+        "reason": "NET_BE_STOP",
+        "qty": 0.015524551411561092,
+        "price": 59268.88494867633,
+        "gross": 1.8420877907739623,
+        "fee": 0.9201228514916251
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795592700000,
+        "old": 60818.36444046122,
+        "new": 59239.265316018325
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "bd9307264a0b10466d01",
+    "policy": "BASELINE_ATR",
+    "side": -1,
+    "entry_at": 1795608000000,
+    "entry": 58611.01983,
+    "qty": 0.05138969540093212,
+    "initial_stop": 59419.43037552889,
+    "risk": 49.13782056488973,
+    "completed": true,
+    "net": 11.316853758569778,
+    "net_R": 0.2303084188201861,
+    "marked_net": 11.316853758569778,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "NET_BE_STOP",
+    "exit_at": 1795617000000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795614300000,
+        "window_end": 1795615200000,
+        "reason": "TP1",
+        "qty": 0.02569484770046606,
+        "price": 58053.92208651585,
+        "gross": 14.31454167309849,
+        "fee": 1.4916866864277476
+      },
+      {
+        "at": 1795616100000,
+        "window_end": 1795617000000,
+        "reason": "NET_BE_STOP",
+        "qty": 0.02569484770046606,
+        "price": 58493.91489527473,
+        "gross": 3.0089934627388355,
+        "fee": 1.5029922346381073
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795615200000,
+        "old": 59419.43037552889,
+        "new": 58464.68255399773
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "bd9307264a0b10466d01",
+    "policy": "BBWP_TURN_EXIT",
+    "side": -1,
+    "entry_at": 1795608000000,
+    "entry": 58611.01983,
+    "qty": 0.05138969540093212,
+    "initial_stop": 59419.43037552889,
+    "risk": 49.13782056488973,
+    "completed": true,
+    "net": 11.316853758569778,
+    "net_R": 0.2303084188201861,
+    "marked_net": 11.316853758569778,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "NET_BE_STOP",
+    "exit_at": 1795617000000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795614300000,
+        "window_end": 1795615200000,
+        "reason": "TP1",
+        "qty": 0.02569484770046606,
+        "price": 58053.92208651585,
+        "gross": 14.31454167309849,
+        "fee": 1.4916866864277476
+      },
+      {
+        "at": 1795616100000,
+        "window_end": 1795617000000,
+        "reason": "NET_BE_STOP",
+        "qty": 0.02569484770046606,
+        "price": 58493.91489527473,
+        "gross": 3.0089934627388355,
+        "fee": 1.5029922346381073
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795615200000,
+        "old": 59419.43037552889,
+        "new": 58464.68255399773
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "bd9307264a0b10466d01",
+    "policy": "KONCORDE_CROSS_EXIT",
+    "side": -1,
+    "entry_at": 1795608000000,
+    "entry": 58611.01983,
+    "qty": 0.05138969540093212,
+    "initial_stop": 59419.43037552889,
+    "risk": 49.13782056488973,
+    "completed": true,
+    "net": 11.316853758569778,
+    "net_R": 0.2303084188201861,
+    "marked_net": 11.316853758569778,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "NET_BE_STOP",
+    "exit_at": 1795617000000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795614300000,
+        "window_end": 1795615200000,
+        "reason": "TP1",
+        "qty": 0.02569484770046606,
+        "price": 58053.92208651585,
+        "gross": 14.31454167309849,
+        "fee": 1.4916866864277476
+      },
+      {
+        "at": 1795616100000,
+        "window_end": 1795617000000,
+        "reason": "NET_BE_STOP",
+        "qty": 0.02569484770046606,
+        "price": 58493.91489527473,
+        "gross": 3.0089934627388355,
+        "fee": 1.5029922346381073
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795615200000,
+        "old": 59419.43037552889,
+        "new": 58464.68255399773
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "bd9307264a0b10466d01",
+    "policy": "TP1_NET_BE",
+    "side": -1,
+    "entry_at": 1795608000000,
+    "entry": 58611.01983,
+    "qty": 0.05138969540093212,
+    "initial_stop": 59419.43037552889,
+    "risk": 49.13782056488973,
+    "completed": true,
+    "net": 11.316853758569778,
+    "net_R": 0.2303084188201861,
+    "marked_net": 11.316853758569778,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "NET_BE_STOP",
+    "exit_at": 1795617000000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795614300000,
+        "window_end": 1795615200000,
+        "reason": "TP1",
+        "qty": 0.02569484770046606,
+        "price": 58053.92208651585,
+        "gross": 14.31454167309849,
+        "fee": 1.4916866864277476
+      },
+      {
+        "at": 1795616100000,
+        "window_end": 1795617000000,
+        "reason": "NET_BE_STOP",
+        "qty": 0.02569484770046606,
+        "price": 58493.91489527473,
+        "gross": 3.0089934627388355,
+        "fee": 1.5029922346381073
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795615200000,
+        "old": 59419.43037552889,
+        "new": 58464.68255399773
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "bd9307264a0b10466d01",
+    "policy": "TP1_STRUCTURE",
+    "side": -1,
+    "entry_at": 1795608000000,
+    "entry": 58611.01983,
+    "qty": 0.05138969540093212,
+    "initial_stop": 59419.43037552889,
+    "risk": 49.13782056488973,
+    "completed": true,
+    "net": 11.316853758569778,
+    "net_R": 0.2303084188201861,
+    "marked_net": 11.316853758569778,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "NET_BE_STOP",
+    "exit_at": 1795617000000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795614300000,
+        "window_end": 1795615200000,
+        "reason": "TP1",
+        "qty": 0.02569484770046606,
+        "price": 58053.92208651585,
+        "gross": 14.31454167309849,
+        "fee": 1.4916866864277476
+      },
+      {
+        "at": 1795616100000,
+        "window_end": 1795617000000,
+        "reason": "NET_BE_STOP",
+        "qty": 0.02569484770046606,
+        "price": 58493.91489527473,
+        "gross": 3.0089934627388355,
+        "fee": 1.5029922346381073
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795615200000,
+        "old": 59419.43037552889,
+        "new": 58464.68255399773
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "WITH_TREND"
+  },
+  {
+    "id": "d6349ae46b01a99f2cad",
+    "policy": "BASELINE_ATR",
+    "side": 1,
+    "entry_at": 1795626900000,
+    "entry": 59284.897634999994,
+    "qty": 0.02178011669337834,
+    "initial_stop": 57171.226615218344,
+    "risk": 49.194404833682576,
+    "completed": true,
+    "net": 18.276994353197896,
+    "net_R": 0.3715258760623108,
+    "marked_net": 18.276994353197896,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "TRAIL_STOP",
+    "exit_at": 1795653900000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795627800000,
+        "window_end": 1795628700000,
+        "reason": "TP1",
+        "qty": 0.01089005834668917,
+        "price": 59847.80773804433,
+        "gross": 6.130123866093615,
+        "fee": 0.6517461181887384
+      },
+      {
+        "at": 1795653000000,
+        "window_end": 1795653900000,
+        "reason": "TRAIL_STOP",
+        "qty": 0.01089005834668917,
+        "price": 60639.363729990975,
+        "gross": 14.75021480306402,
+        "fee": 0.6603662091257086
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795628700000,
+        "old": 57171.226615218344,
+        "new": 59433.302770138805
+      },
+      {
+        "effective_at": 1795642200000,
+        "old": 59433.302770138805,
+        "new": 59457.50818003915
+      },
+      {
+        "effective_at": 1795644900000,
+        "old": 59457.50818003915,
+        "new": 59496.280452893494
+      },
+      {
+        "effective_at": 1795648500000,
+        "old": 59496.280452893494,
+        "new": 59543.945777686815
+      },
+      {
+        "effective_at": 1795651200000,
+        "old": 59543.945777686815,
+        "new": 59614.595777686816
+      },
+      {
+        "effective_at": 1795652100000,
+        "old": 59614.595777686816,
+        "new": 60047.31857928062
+      },
+      {
+        "effective_at": 1795653000000,
+        "old": 60047.31857928062,
+        "new": 60669.698579280615
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "d6349ae46b01a99f2cad",
+    "policy": "BBWP_TURN_EXIT",
+    "side": 1,
+    "entry_at": 1795626900000,
+    "entry": 59284.897634999994,
+    "qty": 0.02178011669337834,
+    "initial_stop": 57171.226615218344,
+    "risk": 49.194404833682576,
+    "completed": true,
+    "net": 18.276994353197896,
+    "net_R": 0.3715258760623108,
+    "marked_net": 18.276994353197896,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "TRAIL_STOP",
+    "exit_at": 1795653900000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795627800000,
+        "window_end": 1795628700000,
+        "reason": "TP1",
+        "qty": 0.01089005834668917,
+        "price": 59847.80773804433,
+        "gross": 6.130123866093615,
+        "fee": 0.6517461181887384
+      },
+      {
+        "at": 1795653000000,
+        "window_end": 1795653900000,
+        "reason": "TRAIL_STOP",
+        "qty": 0.01089005834668917,
+        "price": 60639.363729990975,
+        "gross": 14.75021480306402,
+        "fee": 0.6603662091257086
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795628700000,
+        "old": 57171.226615218344,
+        "new": 59433.302770138805
+      },
+      {
+        "effective_at": 1795642200000,
+        "old": 59433.302770138805,
+        "new": 59457.50818003915
+      },
+      {
+        "effective_at": 1795644900000,
+        "old": 59457.50818003915,
+        "new": 59496.280452893494
+      },
+      {
+        "effective_at": 1795648500000,
+        "old": 59496.280452893494,
+        "new": 59543.945777686815
+      },
+      {
+        "effective_at": 1795651200000,
+        "old": 59543.945777686815,
+        "new": 59614.595777686816
+      },
+      {
+        "effective_at": 1795652100000,
+        "old": 59614.595777686816,
+        "new": 60047.31857928062
+      },
+      {
+        "effective_at": 1795653000000,
+        "old": 60047.31857928062,
+        "new": 60669.698579280615
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "d6349ae46b01a99f2cad",
+    "policy": "KONCORDE_CROSS_EXIT",
+    "side": 1,
+    "entry_at": 1795626900000,
+    "entry": 59284.897634999994,
+    "qty": 0.02178011669337834,
+    "initial_stop": 57171.226615218344,
+    "risk": 49.194404833682576,
+    "completed": true,
+    "net": 18.276994353197896,
+    "net_R": 0.3715258760623108,
+    "marked_net": 18.276994353197896,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "TRAIL_STOP",
+    "exit_at": 1795653900000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795627800000,
+        "window_end": 1795628700000,
+        "reason": "TP1",
+        "qty": 0.01089005834668917,
+        "price": 59847.80773804433,
+        "gross": 6.130123866093615,
+        "fee": 0.6517461181887384
+      },
+      {
+        "at": 1795653000000,
+        "window_end": 1795653900000,
+        "reason": "TRAIL_STOP",
+        "qty": 0.01089005834668917,
+        "price": 60639.363729990975,
+        "gross": 14.75021480306402,
+        "fee": 0.6603662091257086
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795628700000,
+        "old": 57171.226615218344,
+        "new": 59433.302770138805
+      },
+      {
+        "effective_at": 1795642200000,
+        "old": 59433.302770138805,
+        "new": 59457.50818003915
+      },
+      {
+        "effective_at": 1795644900000,
+        "old": 59457.50818003915,
+        "new": 59496.280452893494
+      },
+      {
+        "effective_at": 1795648500000,
+        "old": 59496.280452893494,
+        "new": 59543.945777686815
+      },
+      {
+        "effective_at": 1795651200000,
+        "old": 59543.945777686815,
+        "new": 59614.595777686816
+      },
+      {
+        "effective_at": 1795652100000,
+        "old": 59614.595777686816,
+        "new": 60047.31857928062
+      },
+      {
+        "effective_at": 1795653000000,
+        "old": 60047.31857928062,
+        "new": 60669.698579280615
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "d6349ae46b01a99f2cad",
+    "policy": "TP1_NET_BE",
+    "side": 1,
+    "entry_at": 1795626900000,
+    "entry": 59284.897634999994,
+    "qty": 0.02178011669337834,
+    "initial_stop": 57171.226615218344,
+    "risk": 49.194404833682576,
+    "completed": false,
+    "net": 4.187145759259588,
+    "net_R": 0.0851142680436032,
+    "marked_net": 18.039107930069306,
+    "remaining": 0.01089005834668917,
+    "tp1": true,
+    "exit_reason": "TP1",
+    "exit_at": 1795628700000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795627800000,
+        "window_end": 1795628700000,
+        "reason": "TP1",
+        "qty": 0.01089005834668917,
+        "price": 59847.80773804433,
+        "gross": 6.130123866093615,
+        "fee": 0.6517461181887384
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795628700000,
+        "old": 57171.226615218344,
+        "new": 59433.302770138805
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "d6349ae46b01a99f2cad",
+    "policy": "TP1_STRUCTURE",
+    "side": 1,
+    "entry_at": 1795626900000,
+    "entry": 59284.897634999994,
+    "qty": 0.02178011669337834,
+    "initial_stop": 57171.226615218344,
+    "risk": 49.194404833682576,
+    "completed": true,
+    "net": 19.234229141334655,
+    "net_R": 0.3909840805344047,
+    "marked_net": 19.234229141334655,
+    "remaining": 0.0,
+    "tp1": true,
+    "exit_reason": "STRUCTURE_STOP",
+    "exit_at": 1795673700000,
+    "ambiguous": false,
+    "fills": [
+      {
+        "at": 1795627800000,
+        "window_end": 1795628700000,
+        "reason": "TP1",
+        "qty": 0.01089005834668917,
+        "price": 59847.80773804433,
+        "gross": 6.130123866093615,
+        "fee": 0.6517461181887384
+      },
+      {
+        "at": 1795672800000,
+        "window_end": 1795673700000,
+        "reason": "STRUCTURE_STOP",
+        "qty": 0.01089005834668917,
+        "price": 60727.3515947584,
+        "gross": 15.708407784181896,
+        "fee": 0.6613244021068266
+      }
+    ],
+    "stop_updates": [
+      {
+        "effective_at": 1795628700000,
+        "old": 57171.226615218344,
+        "new": 59433.302770138805
+      },
+      {
+        "effective_at": 1795639500000,
+        "old": 59433.302770138805,
+        "new": 59713.70178995434
+      },
+      {
+        "effective_at": 1795640400000,
+        "old": 59713.70178995434,
+        "new": 59715.35309067189
+      },
+      {
+        "effective_at": 1795648500000,
+        "old": 59715.35309067189,
+        "new": 59914.878103691575
+      },
+      {
+        "effective_at": 1795657500000,
+        "old": 59914.878103691575,
+        "new": 60322.00310981569
+      },
+      {
+        "effective_at": 1795658400000,
+        "old": 60322.00310981569,
+        "new": 60324.38660197172
+      },
+      {
+        "effective_at": 1795662000000,
+        "old": 60324.38660197172,
+        "new": 60326.940416116595
+      },
+      {
+        "effective_at": 1795664700000,
+        "old": 60326.940416116595,
+        "new": 60487.2004161166
+      },
+      {
+        "effective_at": 1795665600000,
+        "old": 60487.2004161166,
+        "new": 60492.13524353684
+      },
+      {
+        "effective_at": 1795667400000,
+        "old": 60492.13524353684,
+        "new": 60517.66524353684
+      },
+      {
+        "effective_at": 1795669200000,
+        "old": 60517.66524353684,
+        "new": 60521.56172614135
+      },
+      {
+        "effective_at": 1795671900000,
+        "old": 60521.56172614135,
+        "new": 60753.21172614135
+      },
+      {
+        "effective_at": 1795672800000,
+        "old": 60753.21172614135,
+        "new": 60757.730459988394
+      }
+    ],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "COUNTER_TREND"
+  },
+  {
+    "id": "c2cf5455b23bc868e43b",
+    "policy": "BASELINE_ATR",
+    "side": -1,
+    "entry_at": 1795672800000,
+    "entry": 60789.13023,
+    "qty": 0.04765611655832149,
+    "initial_stop": 61670.001780087034,
+    "risk": 49.28578980544856,
+    "completed": false,
+    "net": -2.8969738757198646,
+    "net_R": -0.0587790900207833,
+    "marked_net": 8.171170155857354,
+    "remaining": 0.04765611655832149,
+    "tp1": false,
+    "exit_reason": null,
+    "exit_at": null,
+    "ambiguous": false,
+    "fills": [],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "MIXED"
+  },
+  {
+    "id": "c2cf5455b23bc868e43b",
+    "policy": "BBWP_TURN_EXIT",
+    "side": -1,
+    "entry_at": 1795672800000,
+    "entry": 60789.13023,
+    "qty": 0.04765611655832149,
+    "initial_stop": 61670.001780087034,
+    "risk": 49.28578980544856,
+    "completed": false,
+    "net": -2.8969738757198646,
+    "net_R": -0.0587790900207833,
+    "marked_net": 8.171170155857354,
+    "remaining": 0.04765611655832149,
+    "tp1": false,
+    "exit_reason": null,
+    "exit_at": null,
+    "ambiguous": false,
+    "fills": [],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "MIXED"
+  },
+  {
+    "id": "c2cf5455b23bc868e43b",
+    "policy": "KONCORDE_CROSS_EXIT",
+    "side": -1,
+    "entry_at": 1795672800000,
+    "entry": 60789.13023,
+    "qty": 0.04765611655832149,
+    "initial_stop": 61670.001780087034,
+    "risk": 49.28578980544856,
+    "completed": false,
+    "net": -2.8969738757198646,
+    "net_R": -0.0587790900207833,
+    "marked_net": 8.171170155857354,
+    "remaining": 0.04765611655832149,
+    "tp1": false,
+    "exit_reason": null,
+    "exit_at": null,
+    "ambiguous": false,
+    "fills": [],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "MIXED"
+  },
+  {
+    "id": "c2cf5455b23bc868e43b",
+    "policy": "TP1_NET_BE",
+    "side": -1,
+    "entry_at": 1795672800000,
+    "entry": 60789.13023,
+    "qty": 0.04765611655832149,
+    "initial_stop": 61670.001780087034,
+    "risk": 49.28578980544856,
+    "completed": false,
+    "net": -2.8969738757198646,
+    "net_R": -0.0587790900207833,
+    "marked_net": 8.171170155857354,
+    "remaining": 0.04765611655832149,
+    "tp1": false,
+    "exit_reason": null,
+    "exit_at": null,
+    "ambiguous": false,
+    "fills": [],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "MIXED"
+  },
+  {
+    "id": "c2cf5455b23bc868e43b",
+    "policy": "TP1_STRUCTURE",
+    "side": -1,
+    "entry_at": 1795672800000,
+    "entry": 60789.13023,
+    "qty": 0.04765611655832149,
+    "initial_stop": 61670.001780087034,
+    "risk": 49.28578980544856,
+    "completed": false,
+    "net": -2.8969738757198646,
+    "net_R": -0.0587790900207833,
+    "marked_net": 8.171170155857354,
+    "remaining": 0.04765611655832149,
+    "tp1": false,
+    "exit_reason": null,
+    "exit_at": null,
+    "ambiguous": false,
+    "fills": [],
+    "stop_updates": [],
+    "funding": "NOT_APPLICABLE_SPOT",
+    "shorts": "SYNTHETIC_BORROW_OR_FUTURES_COSTS_NOT_MODELED",
+    "portfolio": "INDEPENDENT_PAIRED_TRADES_NOT_COMPOUNDED",
+    "modality": "MIXED"
+  }
+]

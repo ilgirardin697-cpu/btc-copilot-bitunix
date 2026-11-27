@@ -1,0 +1,8 @@
+{
+  "file": "audit.zip",
+  "sha256": "f5ade3b1765ceb277ed78990aac2064875355c48c578167c1091f8dd04e057de",
+  "bytes": 2422852,
+  "files": 72,
+  "requires": "Repository checkout for full inherited safety/regression suites; no private data",
+  "old_sources_read_only": true
+}

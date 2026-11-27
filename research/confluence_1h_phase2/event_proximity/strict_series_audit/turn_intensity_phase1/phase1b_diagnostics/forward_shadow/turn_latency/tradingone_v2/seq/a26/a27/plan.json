@@ -1,0 +1,19 @@
+{
+  "review": "BITMAN_SOURCES_20261127",
+  "parent_pr58_head": "1e3005fdc8465a4778ce235f7f59484617d1cba0",
+  "status": "SOURCE_AUDIT_AND_CONTROLLED_MATH_NOT_A_NEW_STRATEGY",
+  "apk_execution": false,
+  "new_downloads": false,
+  "datasets": ["existing a26/d/1h.csv.gz", "existing a26/d/4h.csv.gz"],
+  "same_input_comparison": ["LOW27_SMA4_LOREN_APK_DEFAULT", "LOW27_ALMA4_SIGMA1_OFFSET0_TRADINGONE", "LOW29_EMA4_OPERATIONAL_PARAMETER_REFERENCE"],
+  "threshold_comparison": "Literal original control flow / initial per-bar percentiles versus conventional three-means, diagnostic only. Fixed identical load anchor per comparison.",
+  "fe": {"length": 27, "smoothing": "HMA5", "falling": "strict", "minimum": ">38.2", "recent_high": "max including current and previous6 >=50", "cooldown": "shared across both sides, difference>10", "trend_filter": "Ninguno"},
+  "incremental_comparison": "Retained/rejected raw ML threshold crosses and shared-cooldown counts. No return, profit, trade or edge selection; predictive incremental value is not established by retention.",
+  "trend_rejection": "Descriptive own observation only: high>=current mean and both open/close<mean (down); low<=mean and both open/close>mean (up). Uses closed same-timeframe bar. No assumed original Bitman definition, no outcome tuning.",
+  "external_parity": "NOT_CERTIFIED_WITHOUT_MATCHED_PLATFORM_EXPORTS_AND_HISTORY",
+  "negative_results": "All existing PR58 and a26 artifacts preserved byte-for-byte; no new exit-management search.",
+  "channels_26nov": "Derived transcript review only; exact time/price anchors and scale absent. No numeric floor-break signal inferred.",
+  "divergence_intelligence": "EXCLUDED",
+  "mode": "SHADOW ONLY",
+  "trade_authority": "NONE"
+}

@@ -1,0 +1,80 @@
+{
+  "available_at": 1795676400000,
+  "adx_points_per_hour": -0.28626255857440697,
+  "adx_acceleration_points_per_hour2": -1.2632281396864506,
+  "bbwp_proxy": 45.23809523809524,
+  "bbwp_proxy_gt50": false,
+  "ao_confirmation": "UNSPECIFIED",
+  "koncorde_confirmation": "UNSPECIFIED",
+  "directional_di": {
+    "plus": 26.0539843115194,
+    "minus": 15.795856471287184
+  },
+  "closed_context": {
+    "15m": {
+      "available_at": 1795676400000,
+      "ao": -89.65652941175358,
+      "ao_slope": -99.95749999998952,
+      "adx": 28.74102216858676,
+      "adx_slope": -1.985690578344741,
+      "pececillos": 29.12398423385656,
+      "bbwp": 44.84126984126984,
+      "structure": [
+        "RETEST_UP"
+      ]
+    },
+    "1h": {
+      "available_at": 1795676400000,
+      "ao": 1203.4511470588186,
+      "ao_slope": -49.74394117648626,
+      "adx": 28.233162047968403,
+      "adx_slope": -0.28626255857440697,
+      "pececillos": 96.4915670348759,
+      "bbwp": 45.23809523809524,
+      "structure": []
+    },
+    "4h": {
+      "available_at": 1795665600000,
+      "ao": -505.9089999999924,
+      "ao_slope": 422.33373529412347,
+      "adx": 21.838608426205337,
+      "adx_slope": -1.464859651418113,
+      "pececillos": 52.480704483633694,
+      "bbwp": 64.68253968253968,
+      "structure": []
+    },
+    "1d": {
+      "available_at": 1795651200000,
+      "ao": -11882.907117647046,
+      "ao_slope": 442.8220000000074,
+      "adx": 49.87043344474503,
+      "adx_slope": 0.574225177082262,
+      "pececillos": -5.7944111837651135,
+      "bbwp": 84.52380952380952,
+      "structure": []
+    },
+    "1w": {
+      "available_at": 1795392000000,
+      "ao": 968.5252647058805,
+      "ao_slope": -4094.3497352941195,
+      "adx": 24.846819340237726,
+      "adx_slope": 1.0733368187089987,
+      "pececillos": -6.569095398598989,
+      "bbwp": 51.58730158730159,
+      "structure": []
+    },
+    "2w": {
+      "available_at": 1795392000000,
+      "ao": -5310.949000000008,
+      "ao_slope": -1269.9921764705941,
+      "adx": 18.180018905524935,
+      "adx_slope": 0.5253417571495191,
+      "pececillos": 26.1002416441574,
+      "bbwp": null,
+      "structure": []
+    }
+  },
+  "refinement5m": "DATA_NOT_CAPTURED",
+  "combination": "NOT_EVALUABLE_WITHOUT_CONFIRMATION_DEFINITIONS",
+  "trade_authority": "NONE"
+}

@@ -1,0 +1,100 @@
+{
+  "version": "PR58_SOURCE_ALIGNMENT_20261126",
+  "parent_head": "96a81117b2480d9e6ab8bd2c028f3cc90f6b7ae5",
+  "sources": {
+    "BITMAN_AUDITORIA_20261126.md": {
+      "sha256": "d384c1311a19c560b6696f38ad3e8b5447b9669c42b0d70deb025a00458314de",
+      "bytes": 14058
+    },
+    "BITMAN_DIRECTO_20261125_IGOD.md": {
+      "sha256": "d36483fdba5361d3dceb599b67b496fdf794065be803ac47b32242fd68a6236f",
+      "bytes": 7660
+    },
+    "BITMAN_AUDITORIA_18_24_NOV_2026.md": {
+      "sha256": "e58e61b19e1a2509802c2b01b0f79fb542b3944ece7ed23efb3090e9ab41c690",
+      "bytes": 32483
+    },
+    "BITMAN_DIRECTO_20261123_IGOD.md": {
+      "sha256": "6113f21f5476cc13e0e89f8f99268c7bfd71a3470fdcce3f6515d23d169294b0",
+      "bytes": 7619
+    },
+    "TradingOne-2.0-diseno.json": {
+      "sha256": "516783defe6d16fd926c350f6bfdcd3cec9d6550b0d8230aa9d7036115015ac9",
+      "bytes": 551795
+    }
+  },
+  "source_grade": "USER_SUPPLIED_DERIVED_AUDITS_AND_TRANSCRIPT_SUMMARIES; not independent original captions/frames/fills",
+  "vidiq_additional_calls": 0,
+  "vidiq_additional_credits": 0,
+  "murphy": "Manual not located locally; no quotations or claimed page-level verification",
+  "cutoff": "2026-11-26T07:00:00Z",
+  "new_window_start": "2026-11-24T09:00:00Z",
+  "data": "Append-only extension of exact previous public Spot prefix; verify overlap, preserve prior raw data/results",
+  "rules_changed": false,
+  "indicators_changed": false,
+  "entry_model_changed": false,
+  "daily": "Record BBWP cooling / AO recovery / ADX pending or cooling / pececillos recovery / confirmed H1 structure as separate timestamped tokens, no new emission gate",
+  "weekly": {
+    "profile": "Existing TRADINGONE_V2 BBWP13/252",
+    "groups": [
+      "ALL",
+      "RISING",
+      "NON_RISING",
+      "TURN_UP"
+    ],
+    "horizons_weeks": [
+      1,
+      2,
+      4
+    ],
+    "outcomes": [
+      "absolute_terminal_return",
+      "max_absolute_excursion",
+      "excursion_atr"
+    ],
+    "purpose": "Magnitude only; old observed overlapping history, descriptive not validation"
+  },
+  "modalities": "WITH_TREND if closed4H and1D DMI direction AND close-vs-TSA direction align with trade; COUNTER_TREND if both oppose; otherwise MIXED/UNKNOWN; observational no entry filtering",
+  "rsi": {
+    "references": [
+      "SHORT 2026-11-05 UNKNOWN_TIME",
+      "LONG 2026-11-22 17:00MADRID open/close unknown",
+      "SHORT 2026-11-25 UNKNOWN_TIME"
+    ],
+    "comparators": [
+      "TRADINGONE_V2 LOW27 ALMA4 sigma1 offset0 original",
+      "IGOD operational LOW29 EMA4 V4 on identical Spot inputs"
+    ],
+    "selection": "All hourly states and transitions, never choose the transition matching a claimed move",
+    "contract": "Bitman futures contract and settings UNKNOWN"
+  },
+  "sniper": {
+    "source": "SniperRBW member claim, not Bitman signal",
+    "published": "2026-11-25T18:04:00Z",
+    "threshold": 59758.0,
+    "claimed_confirmation": "2026-11-25T20:00:00Z",
+    "claimed_close": 59879.23,
+    "target": 60900.0,
+    "analysis": "First H1 close above threshold after publication; first1m target touch AFTER confirmation; no invented stop/fill/PnL"
+  },
+  "management": {
+    "cohort": "Exact unchanged baseline engine entries, qty and initial stop; paired independent counterfactuals, not comparable compounded portfolios",
+    "policies": [
+      "BASELINE_ATR",
+      "BBWP_TURN_EXIT",
+      "KONCORDE_CROSS_EXIT",
+      "TP1_NET_BE",
+      "TP1_STRUCTURE"
+    ],
+    "bbwp": "First closed H1 BBWP negative turn after entry -> full remaining exit at next15m open",
+    "koncorde": "First closed H1 pececillos/EMA15(tendencia) cross against trade -> next15m open exit",
+    "partial_be": "Original1% price TP1 closes50%; cost-aware BE only, no ATR trailing",
+    "structural": "Original TP1/BE plus monotonic confirmed15m fractal trailing with existing.2H1ATR buffer; following-bar effective",
+    "costs": "Unchanged .1%fee/.05%slip per fill; Spot funding N/A, futures/borrow not zero assumptions",
+    "ambiguity": "Adverse stop first within15m; no retroactive same-bar exit from newly closed signal"
+  },
+  "capital": "Historical warning/failed private read NEVER exchange stop verification; no private requests here; audit simulator invariants and preserve real protection source hashes",
+  "new_validation": "NONE. Observed source-selected reconstruction and descriptive comparison only; no optimization or best-policy selection",
+  "authority": "NONE",
+  "deployment": "NONE"
+}

@@ -1,0 +1,223 @@
+{
+  "plan_sha256": "2cd6bc47fee1966071fd730ec9b9ae73503f5560a3d9af77381f143692763f6e",
+  "source_commit": "1e3005fdc8465a4778ce235f7f59484617d1cba0",
+  "venue": "BINANCE_SPOT",
+  "symbol": "BTCUSDT",
+  "rows": 1846,
+  "first_open": "2026-09-10T09:00:00+00:00",
+  "available_through": "2026-11-26T07:00:00+00:00",
+  "load_anchor": 1845,
+  "source_manifest_sha256": "6d06142ec123429a1201cf754e5748f3ff63ee7edec131cffa1b67af1147d582",
+  "profiles": [
+    {
+      "profile": "LOREN_APK_DEFAULT_LOW27_SMA4",
+      "final_rsi": 57.18252763380095,
+      "final_seed": [
+        42.40899891961878,
+        47.650622170773126,
+        53.07058343387135
+      ],
+      "final_lloyd": [
+        38.057008095632426,
+        49.262320918777974,
+        63.8127933489425
+      ],
+      "apk_finite_threshold_differences": {
+        "paired": 1813,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "different_gt_1e_9": 0,
+        "availability_differences": 3
+      },
+      "raw_crosses": {
+        "UP": 26,
+        "DOWN": 43
+      },
+      "ml_only_after_cooldown": 53,
+      "ml_fe_after_cooldown": 33,
+      "incremental_predictive_value": "NOT_ESTABLISHED_BY_GATE_COUNTS"
+    },
+    {
+      "profile": "TRADINGONE_LOW27_ALMA4",
+      "final_rsi": 57.29685829222776,
+      "final_seed": [
+        42.396163844493095,
+        47.7012307303128,
+        53.10839607465219
+      ],
+      "final_lloyd": [
+        38.007321492884586,
+        49.17475319163546,
+        63.60085711412565
+      ],
+      "apk_finite_threshold_differences": {
+        "paired": 1813,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "different_gt_1e_9": 0,
+        "availability_differences": 3
+      },
+      "raw_crosses": {
+        "UP": 26,
+        "DOWN": 42
+      },
+      "ml_only_after_cooldown": 55,
+      "ml_fe_after_cooldown": 32,
+      "incremental_predictive_value": "NOT_ESTABLISHED_BY_GATE_COUNTS",
+      "literal_existing_comparison": {
+        "value": {
+          "paired": 1816,
+          "max_abs": 2.842170943040401e-14,
+          "mean_abs": 3.52336857682803e-15,
+          "different_gt_1e_9": 0,
+          "availability_differences": 0
+        },
+        "lower": {
+          "paired": 1816,
+          "max_abs": 1.4210854715202004e-14,
+          "mean_abs": 2.8914707143541524e-15,
+          "different_gt_1e_9": 0,
+          "availability_differences": 0
+        },
+        "upper": {
+          "paired": 1816,
+          "max_abs": 2.842170943040401e-14,
+          "mean_abs": 3.368817706439682e-15,
+          "different_gt_1e_9": 0,
+          "availability_differences": 0
+        }
+      }
+    },
+    {
+      "profile": "OPERATIONAL_PARAMS_LOW29_EMA4",
+      "final_rsi": 55.873341983743146,
+      "final_seed": [
+        42.80552749688435,
+        47.53553301467986,
+        52.74542740836074
+      ],
+      "final_lloyd": [
+        38.83639726608524,
+        49.47311219516251,
+        63.96773832397394
+      ],
+      "apk_finite_threshold_differences": {
+        "paired": 1814,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "different_gt_1e_9": 0,
+        "availability_differences": 3
+      },
+      "raw_crosses": {
+        "DOWN": 43,
+        "UP": 26
+      },
+      "ml_only_after_cooldown": 54,
+      "ml_fe_after_cooldown": 32,
+      "incremental_predictive_value": "NOT_ESTABLISHED_BY_GATE_COUNTS",
+      "literal_existing_comparison": {
+        "value": {
+          "paired": 1817,
+          "max_abs": 1.4210854715202004e-14,
+          "mean_abs": 4.692632266990205e-16,
+          "different_gt_1e_9": 0,
+          "availability_differences": 0
+        },
+        "lower": {
+          "paired": 1817,
+          "max_abs": 1.4210854715202004e-14,
+          "mean_abs": 3.2066320491099734e-16,
+          "different_gt_1e_9": 0,
+          "availability_differences": 0
+        },
+        "upper": {
+          "paired": 1817,
+          "max_abs": 1.4210854715202004e-14,
+          "mean_abs": 5.27921130036398e-16,
+          "different_gt_1e_9": 0,
+          "availability_differences": 0
+        }
+      }
+    }
+  ],
+  "cross_profile_rsi": {
+    "LOREN_APK_DEFAULT_LOW27_SMA4": {
+      "paired": 1816,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "different_gt_1e_9": 0,
+      "availability_differences": 0
+    },
+    "TRADINGONE_LOW27_ALMA4": {
+      "paired": 1816,
+      "max_abs": 1.0316851768405044,
+      "mean_abs": 0.13296495576876113,
+      "different_gt_1e_9": 1816,
+      "availability_differences": 0
+    },
+    "OPERATIONAL_PARAMS_LOW29_EMA4": {
+      "paired": 1816,
+      "max_abs": 5.947084365639441,
+      "mean_abs": 0.7100551498262334,
+      "different_gt_1e_9": 1816,
+      "availability_differences": 1
+    }
+  },
+  "bbwp_generic_apk_vs_tradingone": {
+    "paired": 1832,
+    "max_abs": 33.33333333333333,
+    "mean_abs": 0.2977914472609042,
+    "different_gt_1e_9": 929,
+    "availability_differences": 2
+  },
+  "trend_speed": [
+    {
+      "tf": "1h",
+      "rows": 1846,
+      "mean_same_parameters": {
+        "paired": 1846,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "different_gt_1e_9": 0,
+        "availability_differences": 0
+      },
+      "parameter118_vs119": {
+        "paired": 1846,
+        "max_abs": 28.895714678335935,
+        "mean_abs": 6.811507332107473,
+        "different_gt_1e_9": 1845,
+        "availability_differences": 0
+      },
+      "own_descriptive_touch_rejections": {
+        "DOWN": 62,
+        "UP": 59
+      }
+    },
+    {
+      "tf": "4h",
+      "rows": 611,
+      "mean_same_parameters": {
+        "paired": 611,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "different_gt_1e_9": 0,
+        "availability_differences": 0
+      },
+      "parameter118_vs119": {
+        "paired": 611,
+        "max_abs": 51.30485512217274,
+        "mean_abs": 22.49229026139002,
+        "different_gt_1e_9": 610,
+        "availability_differences": 0
+      },
+      "own_descriptive_touch_rejections": {
+        "UP": 13,
+        "DOWN": 12
+      }
+    }
+  ],
+  "original_js_executed": false,
+  "external_parity_certified": false,
+  "pnl_or_profitability_evaluated": false,
+  "conclusion": "SOURCE_DIFFERENCES_ESTABLISHED_PRIVATE_BITMAN_PARITY_NOT_PROVEN"
+}
