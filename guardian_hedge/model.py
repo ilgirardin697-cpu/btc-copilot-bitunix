@@ -13,7 +13,8 @@ ACCOUNT_POSITION_MODE_MISMATCH BONUS_ACCOUNT_RECONCILIATION_UNVERIFIED TICKER_SC
 RESPONSE_SCHEMA RESPONSE_TOTAL GET_SCOPE_BLOCKED CREDENTIALS_UNAVAILABLE READ_DEADLINE LOCAL_CLOCK_JUMP HTTP_UNAVAILABLE
 RESPONSE_TOO_LARGE EXCHANGE_TIME_UNVERIFIED API_AUTH_OR_SCHEMA_UNVERIFIED READ_UNAVAILABLE ORDERS_INCOMPLETE ORDERS_CHANGED
 ORDERS_TOTAL_INVALID ORDER_ASSET_SCOPE ORDERS_SNAPSHOT_TOO_LARGE POSITIONS_CHANGED_DURING_READ ORDERS_CHANGED_DURING_READ
-ACCOUNT_CHANGED_DURING_READ READ_INVALIDATED_DURING_COLLECTION READ_PENDING READ_STALE LEGACY_PRIVATE_READ_FAILED'''.split())
+ACCOUNT_CHANGED_DURING_READ READ_INVALIDATED_DURING_COLLECTION READ_PENDING READ_STALE LEGACY_PRIVATE_READ_FAILED
+REGULAR_ORDER_SCHEMA REGULAR_ORDER_ID_INVALID_OR_DUPLICATE'''.split())
 
 class Unverified(ValueError):
     def __init__(self,code):super().__init__(code if code in ERROR_CODES else 'READ_UNAVAILABLE')
@@ -72,6 +73,7 @@ def account(raw):
     # Same component convention as the audited V2 reader. Realized PnL/fees/funding
     # already affect the wallet; never add them again or allocate this per side.
     result['equity_components']=result['wallet_components']+result['crossUnrealizedPNL']+result['isolationUnrealizedPNL']
+    result['equity_components_certified']=False  # REST does not return an authoritative equity field.
     result['available_plus_cross_pnl']=result['available']+result['crossUnrealizedPNL']
     return result
 
@@ -107,7 +109,7 @@ def coverage(p,rows,mark,last):
                 if not (price<reference if p['side']=='LONG' else price>reference):raise Unverified('SL_TRIGGER_PASSED')
                 if order_type!='MARKET':raise Unverified('LIMIT_SL_FILL_UNVERIFIED')
                 liq=p['liquidation']
-                if liq is not None and liq>0 and ((liq<mark and p['side']=='LONG') or (liq>mark and p['side']=='SHORT')):
+                if p['margin_mode']=='ISOLATION' and liq is not None and liq>0 and ((liq<mark and p['side']=='LONG') or (liq>mark and p['side']=='SHORT')):
                     if not (price>liq if p['side']=='LONG' else price<liq):raise Unverified('SL_BEYOND_LIQUIDATION_REFERENCE')
                 out['covered_qty']+=qty
             except Unverified as error:
@@ -120,7 +122,25 @@ def coverage(p,rows,mark,last):
         if sum((x['qty'] for x in out['sl']),ZERO)>p['qty']:out['status']='UNVERIFIABLE';out['issues'].append('SL_OVERCOVERAGE_REQUIRES_REVIEW')
     return out
 
-def build_view(raw_positions,raw_account,raw_orders,tickers,*,started_at,completed_at):
+def regular_inventory(rows,assets):
+    if not isinstance(rows,list):raise Unverified('REGULAR_ORDER_SCHEMA')
+    seen=set();result=[]
+    for row in rows:
+        if not isinstance(row,dict) or row.get('symbol') not in assets:raise Unverified('REGULAR_ORDER_SCHEMA')
+        oid=row.get('orderId')
+        if not isinstance(oid,str) or not oid.isascii() or not oid.isdecimal() or oid in seen:
+            raise Unverified('REGULAR_ORDER_ID_INVALID_OR_DUPLICATE')
+        seen.add(oid)
+        # Attached SL may protect only future fills. Never count it as coverage
+        # of an existing position, even if an optional positionId is returned.
+        raw=row.get('slPrice');has_sl=raw not in (None,'','0',0)
+        if has_sl:positive(raw)
+        result.append(dict(order_id=oid,symbol=row['symbol'],attached_sl=has_sl,
+            type=str(row.get('orderType',row.get('type','UNVERIFIED'))),
+            reduce_only=row.get('reduceOnly') if type(row.get('reduceOnly')) is bool else None))
+    return result
+
+def build_view(raw_positions,raw_account,raw_orders,tickers,*,started_at,completed_at,regular_orders=None):
     parsed=positions(raw_positions);acc=account(raw_account)
     if any(p['position_mode']!=acc['position_mode'] for p in parsed):raise Unverified('ACCOUNT_POSITION_MODE_MISMATCH')
     if acc['bonus']!=0:raise Unverified('BONUS_ACCOUNT_RECONCILIATION_UNVERIFIED')
@@ -133,11 +153,17 @@ def build_view(raw_positions,raw_account,raw_orders,tickers,*,started_at,complet
         prices[s]=(positive(row.get('markPrice')),positive(row.get('lastPrice')))
     required={p['symbol'] for p in parsed}|{'BTCUSDT'}
     if set(prices)!=required:raise Unverified('TICKER_SCOPE_INCOMPLETE')
+    inventory=regular_inventory(regular_orders,required) if regular_orders is not None else None
     orders=partition_orders(raw_orders,parsed);gross=ZERO;net={};reasons=set();minimum=None
     for p in parsed:
         mark,last=prices[p['symbol']];p['mark']=mark;p['notional']=p['qty']*mark
         gross+=p['notional'];net[p['symbol']]=net.get(p['symbol'],ZERO)+p['notional']*(1 if p['side']=='LONG' else -1)
         p['coverage']=coverage(p,orders[p['position_id']],mark,last)
+        p['coverage']['scope']='PENDING_TPSL_POSITION_ID'
+        p['coverage']['other_modalities_verified']=False
+        uncertain=inventory is None or any(o['symbol']==p['symbol'] and (o['attached_sl'] or o['type'] not in ('MARKET','LIMIT')) for o in inventory)
+        if uncertain and p['coverage']['status']=='ABSENT':
+            p['coverage']['status']='UNVERIFIABLE';p['coverage']['issues'].append('OTHER_STOP_MODALITIES_NOT_RESOLVED')
         p['liquidation_distance']=None;p['liquidation_state']='UNAVAILABLE'
         liq=p['liquidation']
         if liq is None:reasons.add('LIQUIDATION_UNAVAILABLE')
@@ -145,9 +171,13 @@ def build_view(raw_positions,raw_account,raw_orders,tickers,*,started_at,complet
         else:
             distance=abs(mark-liq)/mark;p['liquidation_distance']=distance
             minimum=distance if minimum is None else min(minimum,distance)
-            expected=liq<mark if p['side']=='LONG' else liq>mark
-            p['liquidation_state']='REPORTED_REFERENCE' if expected else 'DIRECTIONAL_INTERPRETATION_UNVERIFIED'
-            if not expected:reasons.add('LIQUIDATION_DIRECTION_UNVERIFIED')
+            if p['margin_mode']=='CROSS':
+                p['liquidation_state']='CROSS_ACCOUNT_REFERENCE'
+                reasons.add('CROSS_LIQUIDATION_SCOPE_UNVERIFIED')
+            else:
+                expected=liq<mark if p['side']=='LONG' else liq>mark
+                p['liquidation_state']='REPORTED_REFERENCE' if expected else 'DIRECTIONAL_INTERPRETATION_UNVERIFIED'
+                if not expected:reasons.add('LIQUIDATION_DIRECTION_UNVERIFIED')
             if distance<=NEAR_LIQUIDATION:reasons.add('LIQUIDATION_REFERENCE_WITHIN_2_PERCENT')
         if p['coverage']['status']!='FULL_REGISTERED':reasons.add('STOP_'+p['coverage']['status'])
     sums={k:sum((p[k] for p in parsed),ZERO) for k in ('realized','unrealized','fees','funding','margin')}
@@ -156,9 +186,10 @@ def build_view(raw_positions,raw_account,raw_orders,tickers,*,started_at,complet
     pnl_consistent=cross==acc['crossUnrealizedPNL'] and isolated==acc['isolationUnrealizedPNL']
     if not pnl_consistent:reasons.add('PNL_ACCOUNT_POSITION_MISMATCH')
     if acc['equity_components']<=0 or acc['available_plus_cross_pnl']<=0:reasons.add('NONPOSITIVE_ACCOUNT_RESOURCES')
-    status='CRITICAL_REFERENCE' if reasons & {'NONPOSITIVE_ACCOUNT_RESOURCES','LIQUIDATION_REFERENCE_WITHIN_2_PERCENT'} else 'UNPROTECTED' if reasons & {'STOP_ABSENT','STOP_INSUFFICIENT'} else 'UNVERIFIED' if reasons else 'COVERAGE_REGISTERED'
+    status='CRITICAL_REFERENCE' if reasons & {'NONPOSITIVE_ACCOUNT_RESOURCES','LIQUIDATION_REFERENCE_WITHIN_2_PERCENT'} else 'COVERAGE_INCOMPLETE' if reasons & {'STOP_ABSENT','STOP_INSUFFICIENT'} else 'UNVERIFIED' if reasons else 'COVERAGE_REGISTERED'
     return dict(schema=1,read_complete=True,started_at=started_at,completed_at=completed_at,
         scope='MAIN_ACCOUNT_ALL_USDT_POSITIONS',positions=parsed,account=acc,position_sums=sums,
         gross_notional=gross,net_notional_by_symbol=net,risk=dict(status=status,reasons=sorted(reasons),
             nearest_liquidation_reference=minimum,maintenance_headroom=None,liquidation_risk_certified=False),
-        pnl_reconciled=pnl_consistent,trade_authority='NONE',protection_execution=False)
+        pnl_reconciled=pnl_consistent,pnl_difference=dict(cross=acc['crossUnrealizedPNL']-cross,isolated=acc['isolationUnrealizedPNL']-isolated),
+        regular_inventory=inventory,other_stop_modalities_verified=False,trade_authority='NONE',protection_execution=False)

@@ -1,0 +1,59 @@
+{
+  "reviewed_previous_head": "e50f3680fd0866322fd1ef310a4356bcbaf2580e",
+  "base": "5c6cc6a78a16520deda2d21f562fa6cf0a4cbaad",
+  "scope": "REVIEW_ONLY_NOT_DEPLOYED",
+  "tests": {
+    "unit": {
+      "mode": "unit",
+      "returncode": 0,
+      "tests": 74,
+      "seconds": 2.3692002003081143
+    },
+    "full": {
+      "mode": "full",
+      "returncode": 0,
+      "tests": 1217,
+      "seconds": 190.13990429975092
+    },
+    "audit": {
+      "mode": "audit",
+      "returncode": 0,
+      "tests": null,
+      "seconds": 4.370221400167793
+    },
+    "boundary": {
+      "mode": "boundary",
+      "returncode": 0,
+      "tests": 7,
+      "seconds": 1.4278460000641644
+    },
+    "weekly": {
+      "mode": "weekly",
+      "returncode": 0,
+      "tests": 9,
+      "seconds": 1.417310199700296
+    }
+  },
+  "protected_file_count": 47,
+  "protected_hashes_reference": "GUARDIAN_HEDGE_READONLY_VALIDATION.json",
+  "protected_sources_unchanged": true,
+  "exact_passive_ast_only": true,
+  "readiness": {
+    "combinations": 900,
+    "status_counts": {
+      "WAIT": 780,
+      "WATCH_LONG": 59,
+      "READY_LONG": 1,
+      "WATCH_SHORT": 59,
+      "READY_SHORT": 1
+    },
+    "normalized_results_sha256": "1ffcf53c6b056e7bdf3b780f1fc4ebce49616363a66467e573c5c1a2ef71f014"
+  },
+  "weekly_v1_hash": "d4fe75fce89e8f248123409c293b1114f9af2eb16b8aee5572b40802a54aefe8",
+  "railway_mutations": 0,
+  "bitunix_mutations": 0,
+  "telegram_messages_sent": 0,
+  "reconciliation": "NOT_RECONCILED_NO_TOLERANCE_ADDED",
+  "other_stop_modalities_verified": false,
+  "evidence": "GUARDIAN_HEDGE_RECONCILIATION_20261127.json"
+}

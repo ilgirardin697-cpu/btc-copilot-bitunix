@@ -28,7 +28,7 @@ class Host:
     def read(self):
         with self.lock:
             value=copy.deepcopy(self.value);error=self.error
-        if value and value.get('read_complete') is True and 0<=self.clock()-value['completed_at']<=30:return value
+        if value and value.get('read_complete') is True and 0<=self.clock()-value.get('observed_at',value['started_at'])<=30:return value
         return dict(read_complete=False,completed_at=self.clock(),error=error if error else 'READ_STALE')
 
     def legacy(self,cause):
@@ -94,6 +94,7 @@ def after_cycle(guardian):
     from igod_notifications.policy import identity
     facts=dict(verified=value.get('read_complete') is True,at=int(value['completed_at']*1000),legacy_cause=_host.legacy_cause)
     if facts['verified']:
+        facts['observed_at']=int(value.get('observed_at',value['started_at'])*1000)
         facts['managed']=any(p['position_mode']=='HEDGE' for p in value['positions']) and len(value['positions'])>1
         facts['account_confirmed']=value.get('consistency_confirmed') is True
         facts['positions']=[dict(ref=identity(p['position_id']),side=p['side'],symbol=p['symbol'],coverage=p['coverage']['status'],

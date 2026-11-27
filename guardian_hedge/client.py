@@ -11,6 +11,7 @@ ORIGIN='https://fapi.bitunix.com'
 POSITIONS='/api/v1/futures/position/get_pending_positions'
 ACCOUNT='/api/v1/futures/account'
 TPSL='/api/v1/futures/tpsl/get_pending_orders'
+REGULAR='/api/v1/futures/trade/get_pending_orders'
 TICKER='/api/v1/futures/market/tickers'
 
 def fingerprint(value):
@@ -33,7 +34,7 @@ class Reader:
 
     def get(self,path,params):
         valid=(path==POSITIONS and params=={'includeSubAccounts':'false'}) or (path==ACCOUNT and params=={'marginCoin':'USDT'})
-        if path==TPSL:
+        if path in (TPSL,REGULAR):
             valid=(set(params)=={'symbol','limit','skip'} and symbol(params['symbol'])==params['symbol'] and params['limit']==100
                    and type(params['skip']) is int and 0<=params['skip']<1000 and params['skip']%100==0)
         if path==TICKER:
@@ -81,12 +82,12 @@ class Reader:
         positions(data)  # Whole response, never pick the first side or silently drop assets.
         return data
 
-    def order_rows(self,symbols):
+    def order_rows(self,symbols,path=TPSL):
         result=[]
         for name in sorted(symbols):
             expected=None;pages=[];complete=False
             for skip in range(0,1000,100):
-                page,total=rows(self.get(TPSL,dict(symbol=name,limit=100,skip=skip)),'orderList')
+                page,total=rows(self.get(path,dict(symbol=name,limit=100,skip=skip)),'orderList')
                 if len(page)>100:raise Unverified('ORDERS_INCOMPLETE')
                 if total is not None:
                     if expected is not None and expected!=total:raise Unverified('ORDERS_CHANGED')
@@ -107,20 +108,33 @@ class Reader:
         raw=self.position_rows();parsed=positions(raw);assets={p['symbol'] for p in parsed}|{'BTCUSDT'}
         quotes=self.get(TICKER,{'symbols':','.join(sorted(assets))})
         orders1=self.order_rows(assets)
+        regular1=self.order_rows(assets,REGULAR)
         after=self.position_rows()
         # Require stable identity, size, modes, entry, realized costs and margin.
         def shape(data):
             return [{k:v for k,v in p.items() if k not in ('unrealized','liquidation')} for p in positions(data)]
         if shape(raw)!=shape(after):raise Unverified('POSITIONS_CHANGED_DURING_READ')
         orders2=self.order_rows(assets)
+        regular2=self.order_rows(assets,REGULAR)
         canonical_orders=lambda data:sorted(data,key=lambda row:str(row.get('id','')))
         if fingerprint(canonical_orders(orders1))!=fingerprint(canonical_orders(orders2)):raise Unverified('ORDERS_CHANGED_DURING_READ')
+        by_id=lambda data:sorted(data,key=lambda row:str(row.get('orderId','')))
+        if fingerprint(by_id(regular1))!=fingerprint(by_id(regular2)):raise Unverified('ORDERS_CHANGED_DURING_READ')
         acc2=self.get(ACCOUNT,{'marginCoin':'USDT'});a2=account(acc2)
         for k in ('available','frozen','margin','bonus','position_mode'):
             if a1[k]!=a2[k]:raise Unverified('ACCOUNT_CHANGED_DURING_READ')
+        # Value exposure and SL triggers with a NEW quote after the second
+        # positions/orders/account read. HTTP Date is not a market event time.
+        final_quotes=self.get(TICKER,{'symbols':','.join(sorted(assets))})
         complete=self.clock()
         if not 0<=complete-start<=15:raise Unverified('READ_DEADLINE')
-        result=build_view(after,acc2,orders2,quotes,started_at=start,completed_at=complete)
+        result=build_view(after,acc2,orders2,final_quotes,started_at=start,completed_at=complete,regular_orders=regular2)
         result['evidence']=list(self.evidence);result['source_hash']=fingerprint(self.evidence)
+        result['observed_at']=min(row['requested_at'] for row in self.evidence)
+        result['component_times']={name:{k:next(row for row in reversed(self.evidence) if row['path']==path)[k]
+            for k in ('requested_at','received_at','exchange_time')} for name,path in
+            (('ticker',TICKER),('positions',POSITIONS),('account',ACCOUNT),('tpsl',TPSL),('regular_orders',REGULAR))}
+        result['ticker_event_time_verified']=False
+        result['ticker_changed_during_read']=fingerprint(quotes)!=fingerprint(final_quotes)
         result['account_pnl_changed_during_read']=any(a1[k]!=a2[k] for k in ('crossUnrealizedPNL','isolationUnrealizedPNL'))
         return result

@@ -25,6 +25,9 @@ def apply(policy,facts,now):
             policy.producer('hedge_readonly',dict(previous,at=at))
             return out  # No resolution, no deletion of prior IDs, no fake flat state.
         if type(facts.get('managed')) is not bool or not isinstance(facts.get('positions'),list):raise ValueError('HEDGE_NOTIFICATION_SCHEMA')
+        observed=facts.get('observed_at')
+        if type(observed) is not int or observed>at or not 0<=now-observed<=30000:
+            raise ValueError('HEDGE_NOTIFICATION_OLDEST_COMPONENT_STALE')
         ids=[]
         for p in facts['positions']:
             if not isinstance(p,dict) or not re.fullmatch('[0-9a-f]{64}',p.get('ref','')) or p.get('coverage') not in ('ABSENT','INSUFFICIENT','UNVERIFIABLE','FULL_REGISTERED'):
@@ -45,14 +48,14 @@ def apply(policy,facts,now):
         for p in facts['positions']:
             iid='guardian:hedge-stop:'+p['ref']
             if p['coverage']!='FULL_REGISTERED':
-                label={'ABSENT':'SIN STOP REGISTRADO','INSUFFICIENT':'STOP INSUFICIENTE','UNVERIFIABLE':'STOP NO VERIFICABLE'}[p['coverage']]
+                label={'ABSENT':'SIN SL EN TP/SL CONSULTADOS','INSUFFICIENT':'STOP INSUFICIENTE','UNVERIFIABLE':'STOP NO VERIFICABLE'}[p['coverage']]
                 wanted[iid]=('STOP_'+p['coverage'],3,{'code':'STOP_'+p['coverage'],'coverage_fingerprint':p.get('coverage_fingerprint')},
-                    p['side']+' '+p['symbol']+' · ref '+p['ref'][:12]+': '+label+'.\nSHADOW ONLY · Sin órdenes automáticas. Consulta /risk.')
+                    p['side']+' '+p['symbol']+' · ref '+p['ref'][:12]+': '+label+'. Otras modalidades no verificadas.\nSHADOW ONLY · Sin órdenes automáticas. Consulta /risk.')
         reasons=facts.get('risk_reasons',[])
         if not isinstance(reasons,list) or any(not isinstance(r,str) or not re.fullmatch('[A-Z0-9_]{1,80}',r) for r in reasons):raise ValueError('HEDGE_NOTIFICATION_RISK_INVALID')
         # A PnL mismatch is visible on /risk; its cause is not presumed to be
         # timing. No price/PnL/account amount is used for notification dedupe.
-        meaningful=sorted(set(reasons)-{'PNL_ACCOUNT_POSITION_MISMATCH','STOP_ABSENT','STOP_INSUFFICIENT','STOP_UNVERIFIABLE'})
+        meaningful=sorted(set(reasons)-{'PNL_ACCOUNT_POSITION_MISMATCH','CROSS_LIQUIDATION_SCOPE_UNVERIFIED','STOP_ABSENT','STOP_INSUFFICIENT','STOP_UNVERIFIABLE'})
         if meaningful:
             severity=3 if set(meaningful)&{'NONPOSITIVE_ACCOUNT_RESOURCES','LIQUIDATION_REFERENCE_WITHIN_2_PERCENT'} else 2
             wanted['guardian:hedge-account-risk']=('ACCOUNT_RISK_UNVERIFIED',severity,{'code':'ACCOUNT_RISK_UNVERIFIED','reasons':meaningful},

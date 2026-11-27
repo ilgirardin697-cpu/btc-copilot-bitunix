@@ -1,0 +1,424 @@
+{
+  "three_frame_get_audit": {
+    "methods": [
+      "GET"
+    ],
+    "frames": [
+      {
+        "start": "2026-11-27T10:05:04.711546+00:00",
+        "end": "2026-11-27T10:05:07.572957+00:00",
+        "seconds": 2.8614115715026855,
+        "requests": 8,
+        "position_count": 2,
+        "position_shape_stable": true,
+        "account_wallet_fields_stable": true,
+        "account_floating_fields_stable": false,
+        "cross_pnl_exact": false,
+        "isolated_pnl_exact": true,
+        "account_cross_pnl_zero": false,
+        "positions_cross_pnl_zero": false,
+        "delta_equals_fees": false,
+        "delta_equals_funding": false,
+        "delta_equals_realized": false,
+        "net_btc_direction": "UP",
+        "shared_liq_price": false,
+        "ticker_has_event_timestamp": false,
+        "first_ticker_age_at_end": 2.3604960441589355,
+        "final_ticker_age_at_end": 0.0,
+        "tpsl_orders": 3,
+        "regular_orders": 0,
+        "regular_attached_sl": 0,
+        "regular_reduce_only": 0,
+        "regular_types": [],
+        "regular_position_id_present": 0,
+        "legs": [
+          {
+            "side": "SHORT",
+            "implicit_mark_within_sampled_marks": true,
+            "liq_positive": true,
+            "liq_below_both_marks": true,
+            "sl_count": 0,
+            "tp_count": 1
+          },
+          {
+            "side": "LONG",
+            "implicit_mark_within_sampled_marks": true,
+            "liq_positive": true,
+            "liq_below_both_marks": true,
+            "sl_count": 0,
+            "tp_count": 2
+          }
+        ],
+        "source_hash": "639ee11e4836b0590f12011b91e962e2132eda272fc252c50bb3d329b3c8d007"
+      },
+      {
+        "start": "2026-11-27T10:05:09.584315+00:00",
+        "end": "2026-11-27T10:05:11.939814+00:00",
+        "seconds": 2.355499505996704,
+        "requests": 8,
+        "position_count": 2,
+        "position_shape_stable": true,
+        "account_wallet_fields_stable": true,
+        "account_floating_fields_stable": false,
+        "cross_pnl_exact": false,
+        "isolated_pnl_exact": true,
+        "account_cross_pnl_zero": false,
+        "positions_cross_pnl_zero": false,
+        "delta_equals_fees": false,
+        "delta_equals_funding": false,
+        "delta_equals_realized": false,
+        "net_btc_direction": "UP",
+        "shared_liq_price": false,
+        "ticker_has_event_timestamp": false,
+        "first_ticker_age_at_end": 2.0492708683013916,
+        "final_ticker_age_at_end": 0.0,
+        "tpsl_orders": 3,
+        "regular_orders": 0,
+        "regular_attached_sl": 0,
+        "regular_reduce_only": 0,
+        "regular_types": [],
+        "regular_position_id_present": 0,
+        "legs": [
+          {
+            "side": "SHORT",
+            "implicit_mark_within_sampled_marks": true,
+            "liq_positive": true,
+            "liq_below_both_marks": true,
+            "sl_count": 0,
+            "tp_count": 1
+          },
+          {
+            "side": "LONG",
+            "implicit_mark_within_sampled_marks": true,
+            "liq_positive": true,
+            "liq_below_both_marks": true,
+            "sl_count": 0,
+            "tp_count": 2
+          }
+        ],
+        "source_hash": "810b70a1644cacbc7723db08168de5af9a6702dabbce3c2cbf1dbd033ab38bbc"
+      },
+      {
+        "start": "2026-11-27T10:05:13.942111+00:00",
+        "end": "2026-11-27T10:05:17.665600+00:00",
+        "seconds": 3.7234883308410645,
+        "requests": 8,
+        "position_count": 2,
+        "position_shape_stable": true,
+        "account_wallet_fields_stable": true,
+        "account_floating_fields_stable": false,
+        "cross_pnl_exact": false,
+        "isolated_pnl_exact": true,
+        "account_cross_pnl_zero": false,
+        "positions_cross_pnl_zero": false,
+        "delta_equals_fees": false,
+        "delta_equals_funding": false,
+        "delta_equals_realized": false,
+        "net_btc_direction": "UP",
+        "shared_liq_price": false,
+        "ticker_has_event_timestamp": false,
+        "first_ticker_age_at_end": 2.8752429485321045,
+        "final_ticker_age_at_end": 0.0,
+        "tpsl_orders": 3,
+        "regular_orders": 0,
+        "regular_attached_sl": 0,
+        "regular_reduce_only": 0,
+        "regular_types": [],
+        "regular_position_id_present": 0,
+        "legs": [
+          {
+            "side": "SHORT",
+            "implicit_mark_within_sampled_marks": true,
+            "liq_positive": true,
+            "liq_below_both_marks": true,
+            "sl_count": 0,
+            "tp_count": 1
+          },
+          {
+            "side": "LONG",
+            "implicit_mark_within_sampled_marks": true,
+            "liq_positive": true,
+            "liq_below_both_marks": true,
+            "sl_count": 0,
+            "tp_count": 2
+          }
+        ],
+        "source_hash": "74e1975907d32e6239750e51f952ffb80ea4e8b9d8d1cf01f5f0a16d0794d065"
+      }
+    ],
+    "raw_payloads_private": true,
+    "credentials_saved": false,
+    "production_modified": false,
+    "limitations": [
+      "No atomic snapshot across REST endpoints",
+      "Ticker has no documented event timestamp",
+      "Other stop products not fully mapped by public REST"
+    ]
+  },
+  "offline_original_hash_check": {
+    "integrity": "ALL_ORIGINAL_RESPONSE_HASHES_MATCH",
+    "frames": [
+      {
+        "frame": 0,
+        "account_fields": [
+          "available",
+          "bonus",
+          "crossUnrealizedPNL",
+          "frozen",
+          "isolationUnrealizedPNL",
+          "margin",
+          "marginCoin",
+          "positionMode",
+          "transfer"
+        ],
+        "position_fields": [
+          "avgOpenPrice",
+          "ctime",
+          "entryValue",
+          "fee",
+          "funding",
+          "leverage",
+          "liqPrice",
+          "margin",
+          "marginCoin",
+          "marginMode",
+          "marginRate",
+          "mtime",
+          "positionId",
+          "positionMode",
+          "qty",
+          "realizedPNL",
+          "side",
+          "subAccountId",
+          "symbol",
+          "unrealizedPNL"
+        ],
+        "manual_panel_chars": {
+          "/position": 2121,
+          "/risk": 2132
+        },
+        "both_real_ids_visible": true,
+        "position_mark_same_exactly": true,
+        "account_pre_implied_within_sampled_marks": false,
+        "account_post_implied_within_sampled_marks": false,
+        "account_post_implied_within_sampled_last": true,
+        "account_pre_equals_pre_mark": false,
+        "account_pre_equals_pre_last": false,
+        "account_post_equals_post_mark": false,
+        "account_post_equals_post_last": false,
+        "position_pnl_matches_pre_mark": false,
+        "position_pnl_matches_post_mark": true,
+        "position_mtime_is_quote_time": false
+      },
+      {
+        "frame": 1,
+        "account_fields": [
+          "available",
+          "bonus",
+          "crossUnrealizedPNL",
+          "frozen",
+          "isolationUnrealizedPNL",
+          "margin",
+          "marginCoin",
+          "positionMode",
+          "transfer"
+        ],
+        "position_fields": [
+          "avgOpenPrice",
+          "ctime",
+          "entryValue",
+          "fee",
+          "funding",
+          "leverage",
+          "liqPrice",
+          "margin",
+          "marginCoin",
+          "marginMode",
+          "marginRate",
+          "mtime",
+          "positionId",
+          "positionMode",
+          "qty",
+          "realizedPNL",
+          "side",
+          "subAccountId",
+          "symbol",
+          "unrealizedPNL"
+        ],
+        "manual_panel_chars": {
+          "/position": 2121,
+          "/risk": 2132
+        },
+        "both_real_ids_visible": true,
+        "position_mark_same_exactly": true,
+        "account_pre_implied_within_sampled_marks": false,
+        "account_post_implied_within_sampled_marks": false,
+        "account_post_implied_within_sampled_last": false,
+        "account_pre_equals_pre_mark": false,
+        "account_pre_equals_pre_last": false,
+        "account_post_equals_post_mark": false,
+        "account_post_equals_post_last": false,
+        "position_pnl_matches_pre_mark": true,
+        "position_pnl_matches_post_mark": false,
+        "position_mtime_is_quote_time": false
+      },
+      {
+        "frame": 2,
+        "account_fields": [
+          "available",
+          "bonus",
+          "crossUnrealizedPNL",
+          "frozen",
+          "isolationUnrealizedPNL",
+          "margin",
+          "marginCoin",
+          "positionMode",
+          "transfer"
+        ],
+        "position_fields": [
+          "avgOpenPrice",
+          "ctime",
+          "entryValue",
+          "fee",
+          "funding",
+          "leverage",
+          "liqPrice",
+          "margin",
+          "marginCoin",
+          "marginMode",
+          "marginRate",
+          "mtime",
+          "positionId",
+          "positionMode",
+          "qty",
+          "realizedPNL",
+          "side",
+          "subAccountId",
+          "symbol",
+          "unrealizedPNL"
+        ],
+        "manual_panel_chars": {
+          "/position": 2121,
+          "/risk": 2132
+        },
+        "both_real_ids_visible": true,
+        "position_mark_same_exactly": true,
+        "account_pre_implied_within_sampled_marks": false,
+        "account_post_implied_within_sampled_marks": false,
+        "account_post_implied_within_sampled_last": true,
+        "account_pre_equals_pre_mark": false,
+        "account_pre_equals_pre_last": false,
+        "account_post_equals_post_mark": false,
+        "account_post_equals_post_last": false,
+        "position_pnl_matches_pre_mark": false,
+        "position_pnl_matches_post_mark": true,
+        "position_mtime_is_quote_time": false
+      }
+    ],
+    "inference": "Compatibility with changing marks is diagnostic only, never a monetary tolerance or a reconciliation override.",
+    "raw_values_excluded": true
+  },
+  "final_reader_get": {
+    "status": "READ_COMPLETE_FINANCIAL_RECONCILIATION_PENDING",
+    "read_complete": true,
+    "source_hash": "61f63a4a07852e8b30408b16a350dd738ae825b5d439cd3e1d5031971442a22c",
+    "started_at": 1795774315.6347322,
+    "completed_at": 1795774319.831036,
+    "request_count": 10,
+    "methods": [
+      "GET"
+    ],
+    "position_count": 2,
+    "pnl_reconciled": false,
+    "risk_reasons": [
+      "CROSS_LIQUIDATION_SCOPE_UNVERIFIED",
+      "PNL_ACCOUNT_POSITION_MISMATCH",
+      "STOP_ABSENT"
+    ],
+    "account_margin_and_available_present": true,
+    "raw_account_values_excluded": true,
+    "production_modified": false,
+    "regular_orders": 0,
+    "component_times": {
+      "ticker": {
+        "requested_at": 1795774319.5299327,
+        "received_at": 1795774319.831036,
+        "exchange_time": 1795774318.0
+      },
+      "positions": {
+        "requested_at": 1795774317.582081,
+        "received_at": 1795774317.908062,
+        "exchange_time": 1795774316.0
+      },
+      "account": {
+        "requested_at": 1795774319.228766,
+        "received_at": 1795774319.5299327,
+        "exchange_time": 1795774318.0
+      },
+      "tpsl": {
+        "requested_at": 1795774317.9092631,
+        "received_at": 1795774318.9176714,
+        "exchange_time": 1795774316.0
+      },
+      "regular_orders": {
+        "requested_at": 1795774318.918675,
+        "received_at": 1795774319.228766,
+        "exchange_time": 1795774317.0
+      }
+    },
+    "observed_at": 1795774315.6347322,
+    "ticker_event_time_verified": false,
+    "positions": [
+      {
+        "symbol": "BTCUSDT",
+        "side": "LONG",
+        "mode": "HEDGE",
+        "margin_mode": "CROSS",
+        "coverage": "ABSENT",
+        "tp_orders": 2,
+        "sl_orders": 0,
+        "liquidation_state": "CROSS_ACCOUNT_REFERENCE"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "mode": "HEDGE",
+        "margin_mode": "CROSS",
+        "coverage": "ABSENT",
+        "tp_orders": 1,
+        "sl_orders": 0,
+        "liquidation_state": "CROSS_ACCOUNT_REFERENCE"
+      }
+    ]
+  },
+  "rendered_safety_flags": {
+    "captured_at": "2026-11-27T10:13:44.207565+00:00",
+    "provenance": "READ_ONLY_RENDERED_VARIABLES_NOT_INDEPENDENT_RUNTIME_ENV",
+    "guardian_mode": "SHADOW",
+    "guardian_flags": {
+      "GUARDIAN_ALLOW_PLACE_SL": {
+        "present": true,
+        "effective": "false"
+      },
+      "GUARDIAN_ALLOW_FLASH_CLOSE": {
+        "present": true,
+        "effective": "false"
+      },
+      "GUARDIAN_CAPITAL_V2_ENABLED": {
+        "present": false,
+        "effective": "false"
+      },
+      "GUARDIAN_CAPITAL_V2_EXECUTION": {
+        "present": false,
+        "effective": "false"
+      },
+      "GUARDIAN_HEDGE_READONLY_ENABLED": {
+        "present": false,
+        "effective": "false"
+      }
+    },
+    "v8_live_execution": "false",
+    "railway_mutations": 0,
+    "bitunix_requests": 0
+  }
+}

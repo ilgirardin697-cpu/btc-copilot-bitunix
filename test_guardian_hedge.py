@@ -11,7 +11,7 @@ try:
 except ImportError:
     raise unittest.SkipTest('HEDGE dependencies are installed and tested by its dedicated workflow') from None
 from guardian_hedge.model import build_view,Unverified,positions,account
-from guardian_hedge.client import Reader,ACCOUNT,POSITIONS,TPSL,TICKER
+from guardian_hedge.client import Reader,ACCOUNT,POSITIONS,TPSL,TICKER,REGULAR
 from guardian_hedge.render import render_view
 from guardian_hedge import host
 from guardian_hedge.notifications import apply
@@ -26,17 +26,17 @@ NOW=2_000_000_000
 def fixture():return json.loads((ROOT/'tests/fixtures/guardian_hedge_anonymized.json').read_text())
 def view(f=None):
     f=f or fixture()
-    return build_view(f['positions'],f['account'],f['orders'],f['tickers'],started_at=NOW-2,completed_at=NOW)
+    return build_view(f['positions'],f['account'],f['orders'],f['tickers'],started_at=NOW-2,completed_at=NOW,regular_orders=f.get('regular_orders',[]))
 def facts(v=None,at=NOW*1000):
     v=v or view()
-    return dict(verified=True,at=at,managed=True,account_confirmed=v['pnl_reconciled'],legacy_cause='AMBIGUOUS_POSITIONS',
+    return dict(verified=True,at=at,observed_at=at-2000,managed=True,account_confirmed=v['pnl_reconciled'],legacy_cause='AMBIGUOUS_POSITIONS',
         positions=[dict(ref=identity(p['position_id']),side=p['side'],symbol=p['symbol'],coverage=p['coverage']['status'],coverage_fingerprint='fixture') for p in v['positions']],risk_reasons=v['risk']['reasons'])
 
 class HTTP:
     def __init__(self,f=None):self.f=f or fixture();self.calls=[];self.override=None;self.counts={}
     def get(self,url,**kw):
         path=url.removeprefix('https://fapi.bitunix.com');self.calls.append((url,kw));self.counts[path]=self.counts.get(path,0)+1
-        data={ACCOUNT:self.f['account'],POSITIONS:self.f['positions'],TPSL:self.f['orders'],TICKER:self.f['tickers']}[path]
+        data={ACCOUNT:self.f['account'],POSITIONS:self.f['positions'],TPSL:self.f['orders'],TICKER:self.f['tickers'],REGULAR:{'orderList':self.f.get('regular_orders',[]),'total':len(self.f.get('regular_orders',[]))}}[path]
         if self.override is not None:data=self.override(path,self.counts[path],deepcopy(data))
         body={'code':0,'data':deepcopy(data)}
         return Mock(status_code=200,headers={'Date':formatdate(NOW,usegmt=True)},content=json.dumps(body).encode(),json=Mock(return_value=body))
@@ -57,7 +57,7 @@ class ModelTests(unittest.TestCase):
         self.assertEqual([p['coverage']['sl'][0]['id'] for p in v['positions']],['20001','20002'])
     def test_tp_only_is_absent_stop(self):
         self.f['orders'][0]['slPrice']='0';v=view(self.f)
-        self.assertEqual(v['positions'][0]['coverage']['status'],'ABSENT');self.assertEqual(v['risk']['status'],'UNPROTECTED')
+        self.assertEqual(v['positions'][0]['coverage']['status'],'ABSENT');self.assertEqual(v['risk']['status'],'COVERAGE_INCOMPLETE')
         self.assertEqual(v['positions'][1]['coverage']['status'],'FULL_REGISTERED')
     def test_partial_insufficient_stop(self):
         self.f['orders'][0]['slQty']='0.01';self.assertEqual(view(self.f)['positions'][0]['coverage']['status'],'INSUFFICIENT')
@@ -72,7 +72,8 @@ class ModelTests(unittest.TestCase):
         self.f['orders'].append(dict(self.f['orders'][0],id='20003'))
         self.assertEqual(view(self.f)['positions'][0]['coverage']['status'],'UNVERIFIABLE')
     def test_stop_beyond_liquidation_rejected(self):
-        self.f['orders'][0]['slPrice']='49000';self.assertEqual(view(self.f)['positions'][0]['coverage']['status'],'UNVERIFIABLE')
+        self.f['positions'][0]['marginMode']='ISOLATION';self.f['orders'][0]['slPrice']='49000'
+        self.assertEqual(view(self.f)['positions'][0]['coverage']['status'],'UNVERIFIABLE')
     def test_duplicate_or_orphan_order_rejects_entire_view(self):
         for bad in (dict(self.f['orders'][0]),dict(self.f['orders'][0],id='20003',positionId='999')):
             f=fixture();f['orders'].append(bad)
@@ -100,7 +101,32 @@ class ModelTests(unittest.TestCase):
         self.assertEqual(v['positions'][0]['liquidation_state'],'UNAVAILABLE');self.assertIn('LIQUIDATION_UNAVAILABLE',v['risk']['reasons'])
     def test_cross_unexpected_reference_not_invented_liquidation(self):
         self.f['positions'][1]['liqPrice']='50000';v=view(self.f)
-        self.assertIn('LIQUIDATION_DIRECTION_UNVERIFIED',v['risk']['reasons']);self.assertFalse(v['risk']['liquidation_risk_certified'])
+        self.assertIn('CROSS_LIQUIDATION_SCOPE_UNVERIFIED',v['risk']['reasons']);self.assertFalse(v['risk']['liquidation_risk_certified'])
+        self.assertEqual(v['positions'][1]['liquidation_state'],'CROSS_ACCOUNT_REFERENCE')
+    def test_shared_cross_reference_not_used_as_independent_sl_boundary(self):
+        self.f['positions'][0]['liqPrice']='58500';self.f['positions'][1]['liqPrice']='58500'
+        v=view(self.f);self.assertTrue(all(p['coverage']['status']=='FULL_REGISTERED' for p in v['positions']))
+        self.assertFalse(v['risk']['liquidation_risk_certified'])
+    def test_missing_regular_inventory_cannot_imply_absolute_absence(self):
+        self.f['orders']=[]
+        v=build_view(self.f['positions'],self.f['account'],[],self.f['tickers'],started_at=NOW-2,completed_at=NOW)
+        self.assertTrue(all(p['coverage']['status']=='UNVERIFIABLE' for p in v['positions']))
+    def test_regular_attached_sl_never_covers_existing_position(self):
+        self.f['orders']=[];self.f['regular_orders']=[dict(orderId='30001',symbol='BTCUSDT',orderType='LIMIT',reduceOnly=False,slPrice='59000')]
+        v=view(self.f);self.assertTrue(all(p['coverage']['status']=='UNVERIFIABLE' and p['coverage']['covered_qty']==0 for p in v['positions']))
+        self.assertFalse(v['other_stop_modalities_verified'])
+    def test_trailing_not_silently_classified_as_plain_limit_coverage(self):
+        self.f['orders']=[];self.f['regular_orders']=[dict(orderId='30001',symbol='BTCUSDT',orderType='TRAILING',reduceOnly=True)]
+        self.assertTrue(all(p['coverage']['status']=='UNVERIFIABLE' for p in view(self.f)['positions']))
+    def test_regular_duplicate_id_and_invalid_sl_rejected(self):
+        r=dict(orderId='30001',symbol='BTCUSDT',orderType='LIMIT',reduceOnly=True,slPrice='59000')
+        for data in ([r,r],[dict(r,slPrice='NaN')]):
+            f=fixture();f['regular_orders']=data
+            with self.assertRaises(Unverified):view(f)
+    def test_equity_is_estimate_and_pnl_difference_is_not_absorbed(self):
+        self.f['account']['crossUnrealizedPNL']='40.000000001';v=view(self.f)
+        self.assertFalse(v['account']['equity_components_certified']);self.assertFalse(v['pnl_reconciled'])
+        self.assertEqual(v['pnl_difference']['cross'],Decimal('0.000000001'))
     def test_two_percent_reference_unchanged_no_action(self):
         self.f['positions'][0]['liqPrice']='60000';v=view(self.f)
         self.assertEqual(v['risk']['status'],'CRITICAL_REFERENCE');self.assertFalse(v['protection_execution'])
@@ -144,6 +170,28 @@ class ClientTests(unittest.TestCase):
     def test_balance_change_fails_closed(self):
         self.http.override=lambda path,n,data:dict(data,available='900') if path==ACCOUNT and n==2 else data
         with self.assertRaisesRegex(Unverified,'ACCOUNT_CHANGED'):self.reader.collect()
+    def test_final_ticker_follows_second_private_reads_and_is_used(self):
+        def change(path,n,data):
+            if path==TICKER and n==2:data[0]['markPrice']='61001'
+            return data
+        self.http.override=change;v=self.reader.collect()
+        self.assertTrue(all(p['mark']==Decimal('61001') for p in v['positions']))
+        paths=[url.removeprefix('https://fapi.bitunix.com') for url,kw in self.http.calls]
+        self.assertEqual(paths[-1],TICKER);self.assertEqual(paths.count(REGULAR),2)
+        self.assertFalse(v['ticker_event_time_verified']);self.assertTrue(v['ticker_changed_during_read'])
+        self.assertEqual(v['observed_at'],NOW);self.assertIn('received_at',v['component_times']['ticker'])
+    def test_regular_orders_changed_between_reads_rejects_complete_view(self):
+        def change(path,n,data):
+            if path==REGULAR and n==2:return {'orderList':[dict(orderId='30001',symbol='BTCUSDT',orderType='LIMIT',slPrice='59000')],'total':1}
+            return data
+        self.http.override=change
+        with self.assertRaisesRegex(Unverified,'ORDERS_CHANGED'):self.reader.collect()
+    def test_failed_final_ticker_never_reuses_first_quote(self):
+        def change(path,n,data):
+            if path==TICKER and n==2:raise TimeoutError('PRIVATE_SECRET')
+            return data
+        self.http.override=change
+        with self.assertRaisesRegex(Unverified,'READ_UNAVAILABLE'):self.reader.collect()
     def test_http_redirect_auth_bad_date_timeout_all_unverified(self):
         for response in (Mock(status_code=302),Mock(status_code=451),Mock(status_code=200,content=b'{}',headers={},json=lambda:{})):
             self.reader._http=Mock(get=Mock(return_value=response))
@@ -172,8 +220,18 @@ class NotificationTests(unittest.TestCase):
         f=fixture();f['orders'][0]['slPrice']='0';value=facts(view(f))
         for i in range(100):apply(self.p,value,NOW*1000+i)
         self.assertEqual(self.count(),1)
+    def test_static_cross_scope_limit_does_not_generate_routine_alerts(self):
+        for i in range(100):apply(self.p,facts(),NOW*1000+i)
+        self.assertEqual(self.count(),0)
+        f=fixture();f['positions'][0]['liqPrice']='60000'
+        apply(self.p,facts(view(f),NOW*1000+101),NOW*1000+101)
+        self.assertEqual(self.count(),1)  # Actual critical proximity remains unsilenced.
     def test_read_failure_never_resolves_existing_incidents(self):
         self.blind();apply(self.p,dict(verified=False,at=NOW*1000+1,legacy_cause='AMBIGUOUS_POSITIONS'),NOW*1000+1)
+        self.assertEqual(self.p.db.execute("SELECT active FROM incidents WHERE id='guardian:private-read'").fetchone()[0],1)
+    def test_queued_completed_recently_but_old_component_cannot_recover(self):
+        self.blind();v=facts(at=NOW*1000);v['observed_at']=NOW*1000-31000
+        with self.assertRaisesRegex(ValueError,'OLDEST_COMPONENT'):apply(self.p,v,NOW*1000)
         self.assertEqual(self.p.db.execute("SELECT active FROM incidents WHERE id='guardian:private-read'").fetchone()[0],1)
     def test_stale_future_and_older_evidence_rejected(self):
         self.blind();v=facts(at=NOW*1000-31000)
@@ -284,6 +342,9 @@ class HostAndRenderTests(unittest.TestCase):
     def test_cache_failure_and_clock_jump_never_reuse_last_good_as_fresh(self):
         reader=Mock();reader.collect.return_value=view();h=host.Host(reader,clock=lambda:NOW);h.refresh();self.assertTrue(h.read()['read_complete'])
         reader.collect.side_effect=RuntimeError('PRIVATE_SECRET');h.refresh();self.assertFalse(h.read()['read_complete']);self.assertNotIn('PRIVATE_SECRET',str(h.read()))
+    def test_oldest_component_expires_even_if_completion_is_recent(self):
+        v=view();v['observed_at']=NOW-31;h=host.Host(Mock(collect=Mock(return_value=v)),clock=lambda:NOW);h.refresh()
+        self.assertFalse(h.read()['read_complete']);self.assertIn('NO VERIFICABLE',render_view('/risk',v,NOW))
     def test_invalidating_old_inflight_snapshot_prevents_recovery(self):
         reader=Mock(collect=Mock(return_value=view()));h=host.Host(reader,clock=lambda:NOW);h.legacy('HTTP_FAILURE_OR_STALE');h.refresh();self.assertFalse(h.read()['read_complete'])
     def test_only_exact_ambiguity_and_complete_hedge_can_be_intercepted(self):

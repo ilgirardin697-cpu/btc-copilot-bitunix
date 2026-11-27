@@ -6,7 +6,7 @@ SHADOW ONLY. TRADE AUTHORITY: NONE. No reequilibrios, promediados, entradas, cie
 
 ## Límite de arquitectura
 
-`guardian_hedge.client.Reader` solo tiene GET a un origen fijo y cuatro endpoints autorizados: cuenta USDT, posiciones de la cuenta principal, ticker y TP/SL pendientes. No importa ni reutiliza clientes con capacidad de órdenes. No permite URL arbitraria, proxy ambiental, redirecciones, datos de subcuentas, endpoints de trading ni reintentos de mutaciones. El transporte no contiene POST/PUT/PATCH/DELETE.
+`guardian_hedge.client.Reader` solo tiene GET a un origen fijo y cinco endpoints autorizados: cuenta USDT, posiciones de la cuenta principal, ticker, TP/SL pendientes y órdenes ordinarias pendientes. No importa ni reutiliza clientes con capacidad de órdenes. No permite URL arbitraria, proxy ambiental, redirecciones, datos de subcuentas, endpoints de trading ni reintentos de mutaciones. El transporte no contiene POST/PUT/PATCH/DELETE.
 
 El host usa una sesión propia y un thread pasivo; nunca comparte el exchange client del protector. La instalación solo crea el lector: el thread y su primer GET arrancan después de completar un ciclo existente de protección. Refresca después de cada captura, con espera de 15 segundos. La captura completa tiene presupuesto de 15 segundos, límite de posiciones/páginas/bytes y un ritmo máximo propio de aproximadamente 6,7 GET/s. El caller del ciclo solo copia una caché y encola hechos de notificación; no espera red, SQLite ni logger. Un fallo no interrumpe Guardian.
 
@@ -24,7 +24,7 @@ El cliente/las reglas de protección antiguos permanecen congelados y seguirán 
 
 Las llamadas no son una transacción atómica del exchange. El PnL flotante puede actualizarse entre ellas. **No se atribuye automáticamente un descuadre a latencia**: se muestra `PNL_ACCOUNT_POSITION_MISMATCH`. No se introdujo tolerancia monetaria para hacer coincidir valores.
 
-La caché caduca a los 30 segundos, sin usar datos anteriores como actuales tras fallos. Para retirar la incidencia genérica se necesitan **dos capturas distintas consecutivas** completas, estables y con cuadre exacto del PnL agregado. Cambios de cantidad/entrada/cobertura reinician esa comprobación. Datos viejos, incompletos, funding/comisiones tardíos, fallos de autenticación o un PnL sin cuadrar nunca autorizan retirar AMBIGUOUS_POSITIONS. Esto es una regla técnica de consistencia, no un filtro de señales de mercado.
+La caché caduca a los 30 segundos desde la solicitud del componente más antiguo (también al procesar la cola de notificaciones), sin usar datos anteriores como actuales tras fallos. Para retirar la incidencia genérica se necesitan **dos capturas distintas consecutivas** completas, estables y con cuadre exacto del PnL agregado. Cambios de cantidad/entrada/cobertura reinician esa comprobación. Datos viejos, incompletos, funding/comisiones tardíos, fallos de autenticación o un PnL sin cuadrar nunca autorizan retirar AMBIGUOUS_POSITIONS. Esto es una regla técnica de consistencia, no un filtro de señales de mercado. El ticker se consulta de nuevo después de la segunda lectura privada; se conservan tiempos por componente y se declara que HTTP Date no verifica el timestamp del precio de mercado.
 
 ## Paneles manuales
 
@@ -38,14 +38,14 @@ Equity por componentes = available + frozen + margin + crossUnrealizedPNL + isol
 
 | Estado | Evidencia |
 |---|---|
-| ABSENT | Respuesta completa sin SL registrado para ese positionId; TP no cuenta como stop |
+| ABSENT | Sin SL en los TP/SL consultados para ese positionId, tras inventariar también órdenes ordinarias; no es ausencia absoluta de cualquier producto del exchange |
 | INSUFFICIENT | Cantidad explícita de SL válido menor que la posición |
 | UNVERIFIABLE | Cantidad cero/ausente, trigger desconocido o pasado, LIMIT no garantizado, exceso/solapamiento no resuelto o datos incoherentes |
 | FULL_REGISTERED | Cantidad explícita cubierta por órdenes MARKET registradas, triggers válidos y binding exacto por ID |
 
 Se suman solo cantidades explícitas de SL por posición, sin duplicar IDs. Exceso de cobertura queda para revisión. FULL_REGISTERED no significa fill garantizado ni riesgo global normal; gaps/fallos de exchange siguen siendo posibles. No se mueven stops ni se cancelan órdenes manuales.
 
-La referencia de liquidación ≤0 conserva la semántica oficial de no estimación actual; un dato ausente sigue siendo desconocido. Se muestra cada referencia positiva sin inventar una liquidación agregada. En CROSS una referencia al lado no esperado del mark no se trata como liquidación ya ocurrida. La proximidad absoluta del 2% se presenta como referencia crítica, sin cambiar el umbral del protector V2 ni autorizar cierres.
+La referencia de liquidación ≤0 conserva la semántica oficial de no estimación actual; un dato ausente sigue siendo desconocido. Se muestra cada referencia positiva sin inventar una liquidación agregada. En CROSS toda referencia positiva se etiqueta CROSS_ACCOUNT_REFERENCE: no se trata como liquidación aislada independiente ni se usa para certificar una frontera individual del SL. La proximidad absoluta del 2% se presenta como referencia crítica, sin cambiar el umbral del protector V2 ni autorizar cierres.
 
 El riesgo agregado combina exposición bruta, disponible, equity por componentes, cobertura de todos los IDs, coherencia de la cuenta y referencias cercanas/no verificables. No se inventa margen de mantenimiento ni headroom: `liquidation_risk_certified=false` es explícito incluso con stops registrados. No se llama NORMAL a una cuenta solo por tener neto cero.
 
@@ -93,3 +93,7 @@ Pruebas técnicas no constituyen evidencia de rentabilidad ni cobertura efectiva
 Evidencia técnica y listado SHA256 de archivos protegidos sin cambios: [GUARDIAN_HEDGE_READONLY_VALIDATION.json](GUARDIAN_HEDGE_READONLY_VALIDATION.json). Los tests son offline y no certifican protección real ni rentabilidad.
 
 El workflow mínimo V8 ejecuta discovery sin instalar dependencias Guardian. Como los demás módulos Guardian, el nuevo módulo se omite explícitamente solo si falta `requests`; no se añaden dependencias ni se modifica V8 para ello. El workflow HEDGE instala las dependencias y exige sus 62 tests; la suite global con dependencias ejecutó 1.205 sin skips ni fallos.
+
+## Addendum de revisión del 27/11/2026
+
+Los resultados de e50f368 y del 26/11 anteriores se conservan como evidencia histórica. La revisión actual amplía solo GET/interpretación/temporalidad, sin tolerancias monetarias nuevas: [reconciliación](GUARDIAN_HEDGE_RECONCILIATION_20261127.md), [evidencia sanitizada](GUARDIAN_HEDGE_RECONCILIATION_20261127.json) y [rollout propuesto](GUARDIAN_HEDGE_READONLY_ROLLOUT.md). Los importes e IDs reales permanecen fuera de Git en originales con ACL restrictiva. No se certifica protección global ni se activa este código.
