@@ -32,6 +32,7 @@
   "profitability_claim": false,
   "railway_mutations_in_source_audit": 0,
   "pr61": "CLOSED_WITHOUT_MERGE_OWNER_MANUAL_VALIDATION",
+  "first_head_ci_issue": "V8 job has no NumPy; new research test import now uses the same optional-discovery SkipTest pattern as existing research. Confluence CI explicitly requires NumPy and runs all24 tests.",
   "previous_negative_artifacts": "UNCHANGED",
   "readiness_combinations": 900,
   "readiness_hash": "1ffcf53c6b056e7bdf3b780f1fc4ebce49616363a66467e573c5c1a2ef71f014",
