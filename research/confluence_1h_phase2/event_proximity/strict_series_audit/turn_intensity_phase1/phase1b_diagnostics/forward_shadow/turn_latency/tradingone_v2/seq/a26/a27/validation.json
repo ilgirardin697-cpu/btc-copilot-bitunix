@@ -1,0 +1,46 @@
+{
+  "source_audit_tests": 24,
+  "source_audit_failed": 0,
+  "full_last_local_attempt": {
+    "tests": 1477,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "success": false,
+    "timezone": "EXPLICIT_LOCAL_TZDATA"
+  },
+  "corrected_failed_guard_rerun": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "success": true,
+    "timezone": "EXPLICIT_LOCAL_TZDATA"
+  },
+  "final_full_verification": "REQUIRED_ON_FINAL_HEAD_IN_CI",
+  "initial_run": {
+    "tests": 1470,
+    "failures": 8,
+    "errors": 12,
+    "reason": "Missing local tzdata and attempted workflow edit rejected by historical guards. Workflow restored, all addendum files moved under allowed seq/a26/a27 path; no guards relaxed."
+  },
+  "note": "Second local full run:1476 pass,1 historical path guard failed. All new files then nested under a26/a27 without changing that guard; failed case and24 source tests rerun successfully. Full final-HEAD CI remains authoritative; this file does not claim an all-green local full command. Original workflows and all older sources unchanged.",
+  "readiness_guard_tests": 7,
+  "weekly_guard_tests": 9,
+  "mlrsi_safety": "PASS_V8_HASHES_GUARDIAN_AST_UNCHANGED",
+  "source_execution": false,
+  "profitability_claim": false,
+  "railway_mutations_in_source_audit": 0,
+  "pr61": "CLOSED_WITHOUT_MERGE_OWNER_MANUAL_VALIDATION",
+  "previous_negative_artifacts": "UNCHANGED",
+  "readiness_combinations": 900,
+  "readiness_hash": "1ffcf53c6b056e7bdf3b780f1fc4ebce49616363a66467e573c5c1a2ef71f014",
+  "readiness_counts": {
+    "WAIT": 780,
+    "WATCH_LONG": 59,
+    "READY_LONG": 1,
+    "WATCH_SHORT": 59,
+    "READY_SHORT": 1
+  },
+  "weekly_protocol_hash": "d4fe75fce89e8f248123409c293b1114f9af2eb16b8aee5572b40802a54aefe8"
+}

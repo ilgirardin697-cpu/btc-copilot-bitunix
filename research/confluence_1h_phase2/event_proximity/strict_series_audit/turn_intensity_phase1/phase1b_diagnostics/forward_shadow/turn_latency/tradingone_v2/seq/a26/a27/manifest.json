@@ -1,0 +1,20 @@
+{
+  "files": {
+    "__init__.py": "dee11259c8eb6c27e52f077045627f00cca6146a81813c844b92a1b6e1997a24",
+    "audit.py": "2b5d51fafa35c46b5c2e48a31600c267e66f43a34dafc951fe55836a19028e8f",
+    "out/fe_gate_counts.csv": "2def7b86e393830cef3bfcf7c9c4d93303b640835d092d970fd8f79f51d713f3",
+    "out/profiles.csv.gz": "00da70c0d21acc14881087227400a032f1e5ffdfbf3d64b70a9c4a3dc943bc6b",
+    "out/summary.json": "9f6a7552f0fabb01ed8b3f0711259616e1277da4a145981dd7c7c3d2398d1b66",
+    "out/ts.csv.gz": "8a7ff5468f7075b793830422d88448035d95d51209acdd41b7214ed5e31d777b",
+    "plan.json": "2cd6bc47fee1966071fd730ec9b9ae73503f5560a3d9af77381f143692763f6e",
+    "README.md": "36d3b53c99f938b471174115a86a6740bd67c3b63e9a0c194de442e0551fa1a2",
+    "run.py": "35a9118f07f746a68c42c33c2271545839cb2dddb0986f774d6085f8cfd6e826",
+    "source_inventory.json": "13cb5758b3daf212a5badafc32397a347a878ef0fe23295754a217ff16362c09",
+    "test_sources.py": "a72c6789f575882061d3ecbaf151ed3e5231c6af85ea6daae6aee0cf4105b61d",
+    "validation.json": "5943bc77bac900de4976fe21b40371fd4e49f3f8c4eee7c9980d4fc0080522df"
+  },
+  "algorithm": "SHA256",
+  "source_bytes_not_included": true,
+  "deterministic_gzip": true,
+  "previous_protocols_not_refrozen": true
+}

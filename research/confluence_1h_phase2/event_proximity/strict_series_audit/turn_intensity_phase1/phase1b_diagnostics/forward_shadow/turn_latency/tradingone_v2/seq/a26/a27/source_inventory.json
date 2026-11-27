@@ -1,0 +1,193 @@
+{
+  "review": "STATIC_ONLY",
+  "apk_sha256": "25bf86bed8b30d1f15c6af1c7f719d7f17afac4fdd29bff46319603801d3bce3",
+  "files": {
+    "assets/public/bitacor/data/indicators/machine-learning-rsi.js": {
+      "bytes": 13483,
+      "sha256": "f78da27bf14901923086e3203bbb74131c3b59e4c24c44942c6d9229be14184d",
+      "lines": 348,
+      "locators": {
+        "visible thresholds": [
+          6
+        ],
+        "clusterRsiValues": [
+          260,
+          307
+        ],
+        "firstClusterIndex": [
+          294,
+          302
+        ],
+        "accumulated.length > 3": [
+          305
+        ],
+        "longSignal =": [
+          321
+        ]
+      }
+    },
+    "assets/public/bitacor/data/indicators/machine-learning-rsi-settings.js": {
+      "bytes": 849,
+      "sha256": "cc7db10c0df4319ceb10ce8d7d3fca8bd0fcf73ef12ba074c815f0e0f274564e",
+      "lines": 17,
+      "locators": {
+        "source:": [
+          3
+        ],
+        "thresholdMethod:": [
+          6
+        ]
+      }
+    },
+    "assets/public/bitacor/data/indicators/trend-speed-mean.js": {
+      "bytes": 754,
+      "sha256": "367e1f7a6de1d23a9e30ac2a78f1dad91df6c07594f45b5e04c600cd26e4125a",
+      "lines": 12,
+      "locators": {
+        "export function": [
+          2
+        ],
+        "const alpha": [
+          9
+        ]
+      }
+    },
+    "assets/public/bitacor/data/indicators/adx-rsi-suite.js": {
+      "bytes": 8225,
+      "sha256": "774422a4ddaacab98d8e37fae9f8d9ef6c2469f8608b369980536d448463410f",
+      "lines": 159,
+      "locators": {
+        "trendLength:": [
+          16
+        ],
+        "suiteBbwp": [
+          65,
+          139
+        ],
+        "round(point.rsi)": [
+          26,
+          27
+        ]
+      }
+    },
+    "assets/public/bitacor/charts/indicators/index.js": {
+      "bytes": 151376,
+      "sha256": "94e42cb66cf687a9f0ce529ea9e7d284019348c4cdd477de486110dd0b8a6bc5",
+      "lines": 3770,
+      "locators": {
+        "export function bbwp(": [
+          760
+        ],
+        "export function konkorde(": [
+          1259
+        ],
+        "export function choppiness(": [
+          1775
+        ]
+      }
+    },
+    "assets/public/app.js": {
+      "bytes": 34112,
+      "sha256": "3b300109c5b0728bf662e5848a03d1ce0a687f2829e8cca097d8ec0bd18c940c",
+      "lines": 251,
+      "locators": {
+        "function nativeCandles": [
+          41
+        ],
+        "worker.postMessage": [
+          50
+        ],
+        "lastClosed:": [
+          48
+        ]
+      }
+    },
+    "assets/public/markets.js": {
+      "bytes": 3215,
+      "sha256": "7754f9980ee90dbf76db902f07ddd787f609c67745773f47d2e22cfeeda113f6",
+      "lines": 42,
+      "locators": {
+        "EXCHANGES=": [
+          1
+        ],
+        "page<5": [
+          20
+        ],
+        "limit:": [
+          24,
+          27
+        ],
+        "Futuros USDT": [
+          41
+        ]
+      }
+    },
+    "assets/public/indicator-worker.js": {
+      "bytes": 549,
+      "sha256": "442cf50488455ba661faa225e8fb2be27dc84c01ac8afc6e5e8e74006ef2b328",
+      "lines": 13,
+      "locators": {
+        "def.compute": [
+          8
+        ]
+      }
+    },
+    "ml rsi + FE.txt": {
+      "bytes": 11817,
+      "sha256": "4b3f867a85b3ab402b6f42b18afb7b94be9358e2f08220a7b400e91c2b97bff9",
+      "lines": 221,
+      "locators": {
+        "array.new_float(3)": [
+          80,
+          104,
+          115
+        ],
+        "fe_cayendo": [
+          169,
+          187,
+          188
+        ],
+        "fe_no_agotado": [
+          170,
+          187,
+          188
+        ],
+        "fe_recarga_previa": [
+          171,
+          187,
+          188
+        ],
+        "cooldown_bars": [
+          8,
+          187,
+          188
+        ],
+        "request.security": [
+          156,
+          159
+        ],
+        "calc_trend_speed": [
+          131,
+          152,
+          156,
+          159
+        ]
+      }
+    },
+    "BITMAN_DIRECTO_20261126_IGOD.md": {
+      "bytes": 4473,
+      "sha256": "add6c740e79b0ca2ece2fe16aeb16d8a7a5912babdfac6238283ee668a323543",
+      "lines": 27,
+      "locators": {}
+    }
+  },
+  "installed": false,
+  "apk_dex_js_executed": false,
+  "raw_originals_redistributed": false,
+  "publisher_signature_certified": false,
+  "tradingone_platform_parity_certified": false,
+  "lupa_url": "https://es.tradingview.com/script/7m7X3VfI-LUPA-INDICATOR-4-4/",
+  "lupa_access": "WEB_TOOL_UNAVAILABLE_NO_CODE_OR_LICENSE_INFERRED",
+  "copyright": "Headers recorded as claims; full redistribution rights not established. Original assets stay in ignored cache.",
+  "previous_artifacts": "All existing files unchanged. No V1 protocol refreeze or indicator modification."
+}
